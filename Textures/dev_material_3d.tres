@@ -1,0 +1,13 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://cmia50cfqxxo4"]
+
+[ext_resource type="Texture2D" uid="uid://eqp04wybmg" path="res://Textures/devTex.svg" id="1_3jxsn"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0gbf8"]
+transparency = 1
+albedo_color = Color(0.62908286, 0.62908286, 0.62908286, 1)
+albedo_texture = ExtResource("1_3jxsn")
+uv1_triplanar = true
+
+[resource]
+next_pass = SubResource("StandardMaterial3D_0gbf8")
+albedo_color = Color(0.16497248, 0.49238974, 0.43831292, 1)

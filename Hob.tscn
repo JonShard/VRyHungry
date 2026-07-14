@@ -1,11 +1,17 @@
 [gd_scene format=3 uid="uid://j7caslh27nor"]
 
 [ext_resource type="Script" uid="uid://bsn8vhv5adxdo" path="res://hob.gd" id="1_7jc4g"]
+[ext_resource type="Texture2D" uid="uid://b7n8d4krwbcvl" path="res://Textures/5.png" id="2_0sasq"]
 [ext_resource type="Script" uid="uid://cquqe4f1m1sw6" path="res://addons/godot-xr-tools/objects/snap_zone.gd" id="2_er1dp"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_24d3s"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m5xe2"]
+albedo_texture = ExtResource("2_0sasq")
+uv1_triplanar = true
+
 [sub_resource type="BoxMesh" id="BoxMesh_i5j2u"]
+material = SubResource("StandardMaterial3D_m5xe2")
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_vlqg6"]
 
