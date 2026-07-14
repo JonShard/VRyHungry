@@ -18,10 +18,12 @@ tracker = &"left_hand"
 [node name="LeftHand" parent="XRControllerLeftHand" unique_id=1805508372 instance=ExtResource("1_jr1t4")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.009340696, -0.0074635968, 0.024033919)
 
-[node name="MovementDirect" parent="XRControllerLeftHand/LeftHand" unique_id=1865515938 instance=ExtResource("2_q1xvu")]
+[node name="MovementDirect" parent="XRControllerLeftHand" unique_id=1865515938 instance=ExtResource("2_q1xvu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.009340696, -0.0074635968, 0.024033919)
 strafe = true
 
-[node name="FunctionPickup" parent="XRControllerLeftHand/LeftHand" unique_id=2133415351 instance=ExtResource("3_rd8py")]
+[node name="FunctionPickup" parent="XRControllerLeftHand" unique_id=2133415351 instance=ExtResource("3_rd8py")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.009340696, -0.0074635968, 0.024033919)
 
 [node name="XRControllerRightHand" type="XRController3D" parent="." unique_id=202756852]
 tracker = &"right_hand"
@@ -29,11 +31,13 @@ tracker = &"right_hand"
 [node name="RightHand" parent="XRControllerRightHand" unique_id=1112462503 instance=ExtResource("2_gshht")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0074635968, 0.024033919)
 
-[node name="MovementTurn" parent="XRControllerRightHand/RightHand" unique_id=154529119 instance=ExtResource("4_rd8py")]
+[node name="MovementTurn" parent="XRControllerRightHand" unique_id=154529119 instance=ExtResource("4_rd8py")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0074635968, 0.024033919)
 turn_mode = 2
 smooth_turn_speed = 3.5
 
-[node name="FunctionPickup" parent="XRControllerRightHand/RightHand" unique_id=1876210450 instance=ExtResource("3_rd8py")]
+[node name="FunctionPickup" parent="XRControllerRightHand" unique_id=1876210450 instance=ExtResource("3_rd8py")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0074635968, 0.024033919)
 
 [node name="PlayerBody" type="CharacterBody3D" parent="." unique_id=1444632058 groups=["player_body"] instance=ExtResource("4_6xr3x")]
 process_priority = -100
