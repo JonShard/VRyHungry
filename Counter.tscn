@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://efaec6ymgabo"]
+
+[ext_resource type="Script" uid="uid://cquqe4f1m1sw6" path="res://addons/godot-xr-tools/objects/snap_zone.gd" id="1_dlkho"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_24d3s"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_i5j2u"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_vlqg6"]
+
+[node name="Counter" type="StaticBody3D" unique_id=1487893288]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=692568688]
+shape = SubResource("BoxShape3D_24d3s")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CollisionShape3D" unique_id=127773521]
+mesh = SubResource("BoxMesh_i5j2u")
+
+[node name="Label3D" type="Label3D" parent="CollisionShape3D" unique_id=149978729]
+transform = Transform3D(0.9999992, 0, 0, 0, 0.99999946, 0, 0, 0, 0.9999992, 0.002797456, 0.6309581, -0.2812457)
+text = "Counter"
+
+[node name="XRToolsSnapZone" type="Area3D" parent="." unique_id=186065581]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5270121, 0)
+collision_layer = 0
+collision_mask = 65536
+script = ExtResource("1_dlkho")
+snap_mode = 1
+metadata/_custom_type_script = "uid://cquqe4f1m1sw6"
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="XRToolsSnapZone" unique_id=1196349092]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -0.000975132, 0)
+shape = SubResource("SphereShape3D_vlqg6")
