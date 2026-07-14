@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://j5s5wus7tuhb"]
+
+[ext_resource type="PackedScene" uid="uid://bq86r4yll8po" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/left_fullglove_low.tscn" id="1_jr1t4"]
+[ext_resource type="PackedScene" uid="uid://xqimcf20s2jp" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/right_fullglove_low.tscn" id="2_gshht"]
+[ext_resource type="PackedScene" uid="uid://bl2nuu3qhlb5k" path="res://addons/godot-xr-tools/functions/movement_direct.tscn" id="2_q1xvu"]
+[ext_resource type="PackedScene" uid="uid://b4ysuy43poobf" path="res://addons/godot-xr-tools/functions/function_pickup.tscn" id="3_rd8py"]
+[ext_resource type="PackedScene" uid="uid://diyu06cw06syv" path="res://addons/godot-xr-tools/player/player_body.tscn" id="4_6xr3x"]
+[ext_resource type="PackedScene" uid="uid://b6bk2pj8vbj28" path="res://addons/godot-xr-tools/functions/movement_turn.tscn" id="4_rd8py"]
+[ext_resource type="Script" uid="uid://ck4yn3hxuobj7" path="res://addons/godot-xr-tools/player/player_body.gd" id="5_rd8py"]
+
+[node name="XROrigin3D" type="XROrigin3D" unique_id=2055526621]
+
+[node name="XRCamera3D" type="XRCamera3D" parent="." unique_id=983614103]
+
+[node name="XRControllerLeftHand" type="XRController3D" parent="." unique_id=1171100950]
+tracker = &"left_hand"
+
+[node name="LeftHand" parent="XRControllerLeftHand" unique_id=1805508372 instance=ExtResource("1_jr1t4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.009340696, -0.0074635968, 0.024033919)
+
+[node name="MovementDirect" parent="XRControllerLeftHand/LeftHand" unique_id=1865515938 instance=ExtResource("2_q1xvu")]
+strafe = true
+
+[node name="FunctionPickup" parent="XRControllerLeftHand/LeftHand" unique_id=2133415351 instance=ExtResource("3_rd8py")]
+
+[node name="XRControllerRightHand" type="XRController3D" parent="." unique_id=202756852]
+tracker = &"right_hand"
+
+[node name="RightHand" parent="XRControllerRightHand" unique_id=1112462503 instance=ExtResource("2_gshht")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0074635968, 0.024033919)
+
+[node name="MovementTurn" parent="XRControllerRightHand/RightHand" unique_id=154529119 instance=ExtResource("4_rd8py")]
+turn_mode = 2
+smooth_turn_speed = 3.5
+
+[node name="FunctionPickup" parent="XRControllerRightHand/RightHand" unique_id=1876210450 instance=ExtResource("3_rd8py")]
+
+[node name="PlayerBody" type="CharacterBody3D" parent="." unique_id=1444632058 groups=["player_body"] instance=ExtResource("4_6xr3x")]
+process_priority = -100
+process_physics_priority = -100
+collision_layer = 524288
+collision_mask = 1023
+script = ExtResource("5_rd8py")
