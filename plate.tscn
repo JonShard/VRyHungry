@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://bp3v1jl8pctro"]
+
+[ext_resource type="PackedScene" uid="uid://du31pqeytu8as" path="res://Prefabs/container.tscn" id="1_s5yhh"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_kek77"]
+height = 0.0635376
+radius = 0.20996094
+
+[node name="Plate" unique_id=190487773 instance=ExtResource("1_s5yhh")]
+
+[node name="CollisionShape3D" parent="." index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.007171631, 0)
+shape = SubResource("CylinderShape3D_kek77")
+
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="." index="1" unique_id=1767596918]
+autosmooth = true
+smoothing_angle = 103.9
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="CSGCombiner3D" index="0" unique_id=410722205]
+radius = 0.2
+height = 0.03
+sides = 16
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="CSGCombiner3D/CSGCylinder3D" index="0" unique_id=1041060379]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.010312311, 0)
+operation = 2
+radius = 0.15
+height = 0.03
+sides = 16
+
+[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="CSGCombiner3D" index="1" unique_id=1827566539]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.027119078, 0)
+radius = 0.15
+height = 0.02
+
+[node name="GrabPointHandLeft" parent="." index="2" unique_id=317886291]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1699356, 0.04601878, -0.08606844)
+
+[node name="GrabPointHandRight" parent="." index="3" unique_id=248026585]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.16517048, 0.042291984, -0.08604182)
+
+[node name="CombinableItem" parent="." index="4" unique_id=158282297]
+id = &"plate"

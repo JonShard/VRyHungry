@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://du31pqeytu8as"]
+
+[ext_resource type="PackedScene" uid="uid://c8l60rnugru40" path="res://addons/godot-xr-tools/objects/pickable.tscn" id="1_gc2lj"]
+[ext_resource type="PackedScene" uid="uid://c25yxb0vt53vc" path="res://addons/godot-xr-tools/objects/grab_points/grab_point_hand_left.tscn" id="2_2yi8i"]
+[ext_resource type="Animation" uid="uid://db62hs5s4n2b3" path="res://addons/godot-xr-tools/hands/animations/left/Grip 4.res" id="3_ruxut"]
+[ext_resource type="Script" uid="uid://dvobm6vcfnqe8" path="res://addons/godot-xr-tools/hands/poses/hand_pose_settings.gd" id="4_wcdop"]
+[ext_resource type="PackedScene" uid="uid://ctw7nbntd5pcj" path="res://addons/godot-xr-tools/objects/grab_points/grab_point_hand_right.tscn" id="5_faibp"]
+[ext_resource type="Animation" uid="uid://d1xnpyc08njjx" path="res://addons/godot-xr-tools/hands/animations/right/Grip 4.res" id="6_uv6q4"]
+[ext_resource type="Script" uid="uid://dounic663dn5q" path="res://combinable_item.gd" id="7_tl02b"]
+[ext_resource type="Script" uid="uid://coidnv8b2yvxr" path="res://combine_recipe.gd" id="8_78en8"]
+[ext_resource type="PackedScene" uid="uid://cucc3gaqu2nab" path="res://Charcoal.tscn" id="9_tbb42"]
+[ext_resource type="Script" uid="uid://e3im02nq5cye" path="res://combine_zone.gd" id="10_gdify"]
+
+[sub_resource type="Resource" id="Resource_2hcq0"]
+script = ExtResource("4_wcdop")
+closed_pose = ExtResource("3_ruxut")
+metadata/_custom_type_script = "uid://dvobm6vcfnqe8"
+
+[sub_resource type="Resource" id="Resource_dlngj"]
+script = ExtResource("4_wcdop")
+closed_pose = ExtResource("6_uv6q4")
+metadata/_custom_type_script = "uid://dvobm6vcfnqe8"
+
+[sub_resource type="Resource" id="Resource_recipe_cube"]
+script = ExtResource("8_78en8")
+ingredient_id = &"cube"
+result = ExtResource("9_tbb42")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_u2x4d"]
+size = Vector3(0.16, 0.16, 0.16)
+
+[node name="Container" unique_id=190487773 instance=ExtResource("1_gc2lj")]
+
+[node name="GrabPointHandLeft" parent="." index="1" unique_id=317886291 instance=ExtResource("2_2yi8i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.067650706, 0.04601878, -0.08606844)
+hand_pose = SubResource("Resource_2hcq0")
+
+[node name="GrabPointHandRight" parent="." index="2" unique_id=248026585 instance=ExtResource("5_faibp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06531982, 0.042291984, -0.08604182)
+hand_pose = SubResource("Resource_dlngj")
+
+[node name="CombinableItem" type="Node" parent="." index="3" unique_id=158282297]
+script = ExtResource("7_tl02b")
+id = &"None"
+recipes = Array[ExtResource("8_78en8")]([SubResource("Resource_recipe_cube")])
+
+[node name="CombineZone" type="Area3D" parent="." index="4" unique_id=1782955181]
+script = ExtResource("10_gdify")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CombineZone" index="0" unique_id=819250076]
+shape = SubResource("BoxShape3D_u2x4d")

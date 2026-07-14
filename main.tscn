@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://efaec6ymgabo" path="res://Counter.tscn" id="4_7mycd"]
 [ext_resource type="Sky" uid="uid://c1abtpwhdm2d5" path="res://Textures/sky/NightSkyHDRI009_16K.tres" id="6_7mycd"]
 [ext_resource type="PackedScene" uid="uid://dpot5qie20vf6" path="res://burger.tscn" id="8_5vw27"]
+[ext_resource type="PackedScene" uid="uid://bp3v1jl8pctro" path="res://plate.tscn" id="9_kek77"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vlqg6"]
 size = Vector3(5, 0.1, 5)
@@ -30,6 +31,7 @@ sdfgi_enabled = true
 script = ExtResource("1_0xm2m")
 
 [node name="XROrigin3D" parent="." unique_id=2055526621 instance=ExtResource("2_h2yge")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8820953, 0)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1376644384]
 transform = Transform3D(-0.8660254, -0.43301278, 0.24999999, 0.3022632, -0.05510214, 0.9516306, -0.39829266, 0.8997021, 0.17860365, 0, 0, 0)
@@ -66,5 +68,8 @@ light_color = Color(1, 0.38431373, 0, 1)
 light_energy = 1.784
 shadow_enabled = true
 
-[node name="PickableObject3" parent="." unique_id=1428188966 instance=ExtResource("8_5vw27")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.572903, -1.1190817)
+[node name="burger" parent="." unique_id=1554047278 instance=ExtResource("8_5vw27")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.482068, -1.2252241)
+
+[node name="Plate" parent="." unique_id=190487773 instance=ExtResource("9_kek77")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.22971058, 1.699144, -1.8499806)
