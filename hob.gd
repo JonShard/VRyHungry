@@ -40,7 +40,7 @@ func convert_item(cookable: CookableItem) -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	print("Picked obj:", snap_zone.picked_up_object)
+	#print("Picked obj:", snap_zone.picked_up_object)
 	
 	# Find the CookableItem in held object
 	var cookable = null
