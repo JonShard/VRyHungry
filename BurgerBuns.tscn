@@ -27,18 +27,19 @@ albedo_color = Color(0.6784191, 0.54546416, 0.016760282, 1)
 [node name="BurgerBuns" unique_id=1088240294 instance=ExtResource("1_g1t48")]
 
 [node name="CollisionShape3D" parent="." index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.06281482, 0)
 shape = SubResource("CylinderShape3D_vlqg6")
 
 [node name="GrabPointHandRight" parent="." index="1" unique_id=141610509 instance=ExtResource("2_rwqhn")]
-transform = Transform3D(0.9978254, -0.06591213, 0, 0.06591213, 0.9978254, 0, 0, 0, 1, 0.08952884, 0.011579245, -0.056857675)
+transform = Transform3D(0.9978254, -0.06591213, 0, 0.06591213, 0.9978254, 0, 0, 0, 1, 0.08952884, 0.07439406, -0.056857675)
 hand_pose = SubResource("Resource_wkb0k")
 
 [node name="GrabPointHandLeft" parent="." index="2" unique_id=826213104 instance=ExtResource("5_wqyr2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.08001605, 0.013311127, -0.05340144)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.08001605, 0.07612594, -0.05340144)
 hand_pose = SubResource("Resource_j68hc")
 
 [node name="CSGCombiner3DBuns" type="CSGCombiner3D" parent="." index="3" unique_id=178629624]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.021904588, -0.03773828, -0.0044593215)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.021904588, 0.025076538, -0.0044593215)
 autosmooth = true
 smoothing_angle = 138.9
 
