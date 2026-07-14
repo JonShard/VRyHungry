@@ -1,0 +1,69 @@
+[gd_scene format=3 uid="uid://do6mrslyqe5qe"]
+
+[ext_resource type="Script" uid="uid://b4ldkd3ngs0vp" path="res://main.gd" id="1_2yrrf"]
+[ext_resource type="PackedScene" uid="uid://j5s5wus7tuhb" path="res://XROrigin.tscn" id="2_lc11c"]
+[ext_resource type="Material" uid="uid://cmia50cfqxxo4" path="res://Textures/dev_material_3d.tres" id="3_wlcqk"]
+[ext_resource type="PackedScene" uid="uid://j7caslh27nor" path="res://Hob.tscn" id="4_cposl"]
+[ext_resource type="PackedScene" uid="uid://efaec6ymgabo" path="res://Counter.tscn" id="5_rbb5l"]
+[ext_resource type="PackedScene" uid="uid://e4i6o5oriecx" path="res://PickupCube.tscn" id="6_65p64"]
+[ext_resource type="Sky" uid="uid://c1abtpwhdm2d5" path="res://Textures/sky/NightSkyHDRI009_16K.tres" id="7_a81vl"]
+[ext_resource type="PackedScene" uid="uid://c0lknik4noobs" path="res://BurgerBuns.tscn" id="8_wlcqk"]
+[ext_resource type="PackedScene" uid="uid://c6rift56ql3f8" path="res://BurgerBunsDispenser.tscn" id="9_wlcqk"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vlqg6"]
+size = Vector3(5, 0.1, 5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_24d3s"]
+material = ExtResource("3_wlcqk")
+size = Vector3(5, 0.1, 5)
+
+[sub_resource type="Environment" id="Environment_bvwq1"]
+background_mode = 2
+sky = ExtResource("7_a81vl")
+reflected_light_source = 2
+ssr_enabled = true
+ssao_enabled = true
+ssil_enabled = true
+sdfgi_enabled = true
+
+[node name="Main" type="Node3D" unique_id=1312265607]
+script = ExtResource("1_2yrrf")
+
+[node name="XROrigin3D" parent="." unique_id=2055526621 instance=ExtResource("2_lc11c")]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1376644384]
+transform = Transform3D(-0.8660254, -0.43301278, 0.24999999, 0.3022632, -0.05510214, 0.9516306, -0.39829266, 0.8997021, 0.17860365, 0, 0, 0)
+
+[node name="Floor" type="StaticBody3D" parent="." unique_id=122279514]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor" unique_id=958841648]
+shape = SubResource("BoxShape3D_vlqg6")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor/CollisionShape3D" unique_id=1939997056]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00018164515, 0.0006352663, -0.002532661)
+mesh = SubResource("BoxMesh_24d3s")
+
+[node name="Hob" parent="." unique_id=1687971542 instance=ExtResource("4_cposl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.29336345, 0.8981018, -1.484)
+
+[node name="Counter" parent="." unique_id=1487893288 instance=ExtResource("5_rbb5l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.73186195, 0.8981018, -1.484)
+
+[node name="PickableObject" parent="." unique_id=1675596942 instance=ExtResource("6_65p64")]
+transform = Transform3D(1, 0, -2.2351742e-08, -2.9802322e-08, 1.0000001, 0, -2.6077032e-08, 1.4901161e-08, 1, -0.70505303, 1.5761534, -1.0317149)
+
+[node name="PickableObject2" parent="." unique_id=713087634 instance=ExtResource("6_65p64")]
+transform = Transform3D(1, 0, -2.2351742e-08, -2.9802322e-08, 1.0000001, 0, -2.6077032e-08, 1.4901161e-08, 1, 0.28315204, 1.5607953, -1.0657519)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1177077250]
+environment = SubResource("Environment_bvwq1")
+
+[node name="BurgerBuns" parent="." unique_id=1088240294 instance=ExtResource("8_wlcqk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8162017, 1.6081157, -1.4714175)
+
+[node name="BurgerBunsDispenser" parent="." unique_id=1720683779 instance=ExtResource("9_wlcqk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.832131, 0.40028095, -1.4813508)
+
+[node name="BurgerBuns2" parent="." unique_id=1909843084 instance=ExtResource("8_wlcqk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1282921, 1.4976386, -1.0923254)

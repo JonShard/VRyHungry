@@ -1,0 +1,173 @@
+[gd_scene format=3 uid="uid://c6rift56ql3f8"]
+
+[ext_resource type="Script" uid="uid://0y6wnjcsum6" path="res://item_dispenser.gd" id="1_myl3s"]
+[ext_resource type="Script" uid="uid://cquqe4f1m1sw6" path="res://addons/godot-xr-tools/objects/snap_zone.gd" id="1_p30r1"]
+[ext_resource type="PackedScene" uid="uid://c0lknik4noobs" path="res://BurgerBuns.tscn" id="2_1q74o"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_xmbo2"]
+radius = 0.3
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_24d3s"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vlqg6"]
+albedo_color = Color(0.6784191, 0.54546416, 0.016760282, 1)
+
+[node name="BurgerBunsDispenser" type="StaticBody3D" unique_id=1720683779]
+script = ExtResource("1_myl3s")
+item_scene = ExtResource("2_1q74o")
+
+[node name="XRToolsSnapZone" type="Area3D" parent="." unique_id=805334513]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00070536137, 1.0162505, -0.002165556)
+collision_layer = 65536
+collision_mask = 65536
+script = ExtResource("1_p30r1")
+snap_mode = 1
+initial_object = NodePath("../../BurgerBuns")
+metadata/_custom_type_script = "uid://cquqe4f1m1sw6"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="XRToolsSnapZone" unique_id=1104626493]
+shape = SubResource("SphereShape3D_xmbo2")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1470079357]
+shape = SubResource("CylinderShape3D_24d3s")
+
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="." unique_id=1746426494]
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="CSGCombiner3D" unique_id=858311379]
+radius = 0.4
+sides = 32
+
+[node name="CSGCombiner3DBuns" type="CSGCombiner3D" parent="CSGCombiner3D" unique_id=1459017790]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.108142376, 1.0341886, -0.19146484)
+autosmooth = true
+smoothing_angle = 138.9
+
+[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="CSGCombiner3D/CSGCombiner3DBuns" unique_id=1328221793]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.004122257, 0)
+radius = 0.1
+height = 0.04
+sides = 16
+material = SubResource("StandardMaterial3D_vlqg6")
+
+[node name="CSGCylinder3D3" type="CSGCylinder3D" parent="CSGCombiner3D/CSGCombiner3DBuns" unique_id=686624728]
+transform = Transform3D(0.82770383, -0.5611652, 0, 0.5611652, 0.82770383, 0, 0, 0, 1, -0.048392475, 0.029736161, 0)
+radius = 0.1
+height = 0.04
+sides = 16
+material = SubResource("StandardMaterial3D_vlqg6")
+
+[node name="CSGCylinder3D4" type="CSGCylinder3D" parent="CSGCombiner3D/CSGCombiner3DBuns/CSGCylinder3D3" unique_id=1113894081]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9604645e-08, 0.040259957, 0)
+radius = 0.1
+height = 0.04
+sides = 16
+cone = true
+material = SubResource("StandardMaterial3D_vlqg6")
+
+[node name="CSGCombiner3DBuns2" type="CSGCombiner3D" parent="CSGCombiner3D" unique_id=1636439623]
+transform = Transform3D(0.42896286, 0, -0.90332216, 0, 1, 0, 0.90332216, 0, 0.42896286, 0.13564643, 1.0341886, 0.20497215)
+autosmooth = true
+smoothing_angle = 138.9
+
+[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="CSGCombiner3D/CSGCombiner3DBuns2" unique_id=190780737]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.004122257, 0)
+radius = 0.1
+height = 0.04
+sides = 16
+material = SubResource("StandardMaterial3D_vlqg6")
+
+[node name="CSGCylinder3D3" type="CSGCylinder3D" parent="CSGCombiner3D/CSGCombiner3DBuns2" unique_id=557804311]
+transform = Transform3D(0.82770383, -0.5611652, 0, 0.5611652, 0.82770383, 0, 0, 0, 1, -0.048392475, 0.029736161, 0)
+radius = 0.1
+height = 0.04
+sides = 16
+material = SubResource("StandardMaterial3D_vlqg6")
+
+[node name="CSGCylinder3D4" type="CSGCylinder3D" parent="CSGCombiner3D/CSGCombiner3DBuns2/CSGCylinder3D3" unique_id=605379447]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9604645e-08, 0.040259957, 0)
+radius = 0.1
+height = 0.04
+sides = 16
+cone = true
+material = SubResource("StandardMaterial3D_vlqg6")
+
+[node name="CSGCombiner3DBuns3" type="CSGCombiner3D" parent="CSGCombiner3D" unique_id=1594575583]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.17070979, 1.0341885, 0.07147646)
+autosmooth = true
+smoothing_angle = 138.9
+
+[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="CSGCombiner3D/CSGCombiner3DBuns3" unique_id=1686142490]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.004122257, 0)
+radius = 0.1
+height = 0.04
+sides = 16
+material = SubResource("StandardMaterial3D_vlqg6")
+
+[node name="CSGCylinder3D3" type="CSGCylinder3D" parent="CSGCombiner3D/CSGCombiner3DBuns3" unique_id=1773290691]
+transform = Transform3D(0.82770383, -0.5611652, 0, 0.5611652, 0.82770383, 0, 0, 0, 1, -0.048392475, 0.029736161, 0)
+radius = 0.1
+height = 0.04
+sides = 16
+material = SubResource("StandardMaterial3D_vlqg6")
+
+[node name="CSGCylinder3D4" type="CSGCylinder3D" parent="CSGCombiner3D/CSGCombiner3DBuns3/CSGCylinder3D3" unique_id=801922493]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9604645e-08, 0.040259957, 0)
+radius = 0.1
+height = 0.04
+sides = 16
+cone = true
+material = SubResource("StandardMaterial3D_vlqg6")
+
+[node name="CSGCombiner3DBuns4" type="CSGCombiner3D" parent="CSGCombiner3D" unique_id=2055085730]
+transform = Transform3D(0.95670986, 0, 0.29104328, 0, 1, 0, -0.29104328, 0, 0.95670986, -0.14758292, 1.0341886, -0.1304872)
+autosmooth = true
+smoothing_angle = 138.9
+
+[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="CSGCombiner3D/CSGCombiner3DBuns4" unique_id=547208858]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.004122257, 0)
+radius = 0.1
+height = 0.04
+sides = 16
+material = SubResource("StandardMaterial3D_vlqg6")
+
+[node name="CSGCylinder3D3" type="CSGCylinder3D" parent="CSGCombiner3D/CSGCombiner3DBuns4" unique_id=185898007]
+transform = Transform3D(0.82770383, -0.5611652, 0, 0.5611652, 0.82770383, 0, 0, 0, 1, -0.048392475, 0.029736161, 0)
+radius = 0.1
+height = 0.04
+sides = 16
+material = SubResource("StandardMaterial3D_vlqg6")
+
+[node name="CSGCylinder3D4" type="CSGCylinder3D" parent="CSGCombiner3D/CSGCombiner3DBuns4/CSGCylinder3D3" unique_id=2117029178]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9604645e-08, 0.040259957, 0)
+radius = 0.1
+height = 0.04
+sides = 16
+cone = true
+material = SubResource("StandardMaterial3D_vlqg6")
+
+[node name="CSGCombiner3DBuns5" type="CSGCombiner3D" parent="CSGCombiner3D" unique_id=546748728]
+transform = Transform3D(0.20608562, 0, -0.978534, 0, 1, 0, 0.978534, 0, 0.20608562, -0.082762055, 1.0341886, 0.2722176)
+autosmooth = true
+smoothing_angle = 138.9
+
+[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="CSGCombiner3D/CSGCombiner3DBuns5" unique_id=102374914]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.004122257, 0)
+radius = 0.1
+height = 0.04
+sides = 16
+material = SubResource("StandardMaterial3D_vlqg6")
+
+[node name="CSGCylinder3D3" type="CSGCylinder3D" parent="CSGCombiner3D/CSGCombiner3DBuns5" unique_id=189923990]
+transform = Transform3D(0.82770383, -0.5611652, 0, 0.5611652, 0.82770383, 0, 0, 0, 1, -0.048392475, 0.029736161, 0)
+radius = 0.1
+height = 0.04
+sides = 16
+material = SubResource("StandardMaterial3D_vlqg6")
+
+[node name="CSGCylinder3D4" type="CSGCylinder3D" parent="CSGCombiner3D/CSGCombiner3DBuns5/CSGCylinder3D3" unique_id=1980594001]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9604645e-08, 0.040259957, 0)
+radius = 0.1
+height = 0.04
+sides = 16
+cone = true
+material = SubResource("StandardMaterial3D_vlqg6")
