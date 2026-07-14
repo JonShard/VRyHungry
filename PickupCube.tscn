@@ -6,6 +6,8 @@
 [ext_resource type="Script" uid="uid://dvobm6vcfnqe8" path="res://addons/godot-xr-tools/hands/poses/hand_pose_settings.gd" id="4_hc3f7"]
 [ext_resource type="PackedScene" uid="uid://ctw7nbntd5pcj" path="res://addons/godot-xr-tools/objects/grab_points/grab_point_hand_right.tscn" id="5_a0a5b"]
 [ext_resource type="Animation" uid="uid://d1xnpyc08njjx" path="res://addons/godot-xr-tools/hands/animations/right/Grip 4.res" id="6_bdp75"]
+[ext_resource type="Script" uid="uid://bs7cxydoxk1cx" path="res://cookable_item.gd" id="7_hc3f7"]
+[ext_resource type="PackedScene" uid="uid://cucc3gaqu2nab" path="res://Charcoal.tscn" id="8_a0a5b"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_m1xbq"]
 size = Vector3(0.1, 0.1, 0.1)
@@ -37,10 +39,13 @@ mesh = SubResource("BoxMesh_vlqg6")
 
 [node name="GrabPointHandLeft" parent="." index="2" unique_id=1571481674 instance=ExtResource("2_pxnkq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.067650706, 0.04601878, -0.08606844)
-visible = true
 hand_pose = SubResource("Resource_lc22d")
 
 [node name="GrabPointHandRight" parent="." index="3" unique_id=514404634 instance=ExtResource("5_a0a5b")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06531982, 0.042291984, -0.08604182)
-visible = true
 hand_pose = SubResource("Resource_qyiot")
+
+[node name="CookableItem" type="Node" parent="." index="4" unique_id=1139889801]
+script = ExtResource("7_hc3f7")
+cooking_time = 2.0
+turns_into = ExtResource("8_a0a5b")
