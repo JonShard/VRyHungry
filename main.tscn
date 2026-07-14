@@ -19,6 +19,7 @@ size = Vector3(5, 0.1, 5)
 background_mode = 2
 sky = ExtResource("6_7mycd")
 reflected_light_source = 2
+tonemap_mode = 3
 ssr_enabled = true
 ssao_enabled = true
 ssil_enabled = true
@@ -56,3 +57,10 @@ transform = Transform3D(1, 0, -2.2351742e-08, -2.9802322e-08, 1.0000001, 0, -2.6
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1177077250]
 environment = SubResource("Environment_bvwq1")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=812168256]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2856425, 1.4939771, -1.4959787)
+visible = false
+light_color = Color(1, 0.38431373, 0, 1)
+light_energy = 1.784
+shadow_enabled = true
