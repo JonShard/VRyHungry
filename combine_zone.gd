@@ -8,7 +8,7 @@ extends Area3D
 ## incoming item is consumed.
 
 # The pickable this zone belongs to (its parent).
-@onready var _item: XRToolsPickable = get_parent() as XRToolsPickable
+@onready var _item: XRToolsPickable = get_parent().get_parent() as XRToolsPickable
 
 # The base item's recipe data.
 @onready var _combinable: CombinableItem = _find_combinable(_item)
@@ -28,7 +28,7 @@ func _ready() -> void:
 	set_deferred("monitorable", false)
 
 	if not _item:
-		push_error("CombineZone must be a child of an XRToolsPickable.")
+		push_error("CombineZone must be a grand child of an XRToolsPickable.")
 		return
 	if not _combinable:
 		push_error("CombineZone requires a CombinableItem sibling on ", _item.name, ".")

@@ -74,7 +74,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1282921, 1.4976386, -1.092
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6570369, 1.4458435, -1.135189)
 
 [node name="burger" parent="." unique_id=1417604760 instance=ExtResource("11_65p64")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9129968, 1.4235804, -1.0793439)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.04444152, 1.4235804, -1.1413177)
 
 [node name="burger2" parent="." unique_id=1584460510 instance=ExtResource("11_65p64")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.40345573, 1.4235804, -1.0793439)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.23121053, 1.4235804, -1.3225337)
+
+[node name="burger3" parent="." unique_id=1884095916 instance=ExtResource("11_65p64")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.22395861, 1.4235804, -1.1413177)
+
+[node name="burger4" parent="." unique_id=1844818864 instance=ExtResource("11_65p64")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.40808713, 1.4235804, -1.1413177)

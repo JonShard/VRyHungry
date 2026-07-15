@@ -44,21 +44,21 @@ smoothing_angle = 138.9
 
 [node name="CSGCylinder3D2" type="CSGCylinder3D" parent="CSGCombiner3D/CSGCombiner3DBuns" unique_id=1328221793]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.004122257, 0)
-radius = 0.1
+radius = 0.085
 height = 0.04
 sides = 16
 material = SubResource("StandardMaterial3D_vlqg6")
 
 [node name="CSGCylinder3D3" type="CSGCylinder3D" parent="CSGCombiner3D/CSGCombiner3DBuns" unique_id=686624728]
 transform = Transform3D(0.82770383, -0.5611652, 0, 0.5611652, 0.82770383, 0, 0, 0, 1, -0.048392475, 0.029736161, 0)
-radius = 0.1
+radius = 0.085
 height = 0.04
 sides = 16
 material = SubResource("StandardMaterial3D_vlqg6")
 
 [node name="CSGCylinder3D4" type="CSGCylinder3D" parent="CSGCombiner3D/CSGCombiner3DBuns/CSGCylinder3D3" unique_id=1113894081]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9604645e-08, 0.040259957, 0)
-radius = 0.1
+radius = 0.085
 height = 0.04
 sides = 16
 cone = true
@@ -71,21 +71,21 @@ smoothing_angle = 138.9
 
 [node name="CSGCylinder3D2" type="CSGCylinder3D" parent="CSGCombiner3D/CSGCombiner3DBuns2" unique_id=190780737]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.004122257, 0)
-radius = 0.1
+radius = 0.085
 height = 0.04
 sides = 16
 material = SubResource("StandardMaterial3D_vlqg6")
 
 [node name="CSGCylinder3D3" type="CSGCylinder3D" parent="CSGCombiner3D/CSGCombiner3DBuns2" unique_id=557804311]
 transform = Transform3D(0.82770383, -0.5611652, 0, 0.5611652, 0.82770383, 0, 0, 0, 1, -0.048392475, 0.029736161, 0)
-radius = 0.1
+radius = 0.085
 height = 0.04
 sides = 16
 material = SubResource("StandardMaterial3D_vlqg6")
 
 [node name="CSGCylinder3D4" type="CSGCylinder3D" parent="CSGCombiner3D/CSGCombiner3DBuns2/CSGCylinder3D3" unique_id=605379447]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9604645e-08, 0.040259957, 0)
-radius = 0.1
+radius = 0.085
 height = 0.04
 sides = 16
 cone = true
@@ -98,21 +98,21 @@ smoothing_angle = 138.9
 
 [node name="CSGCylinder3D2" type="CSGCylinder3D" parent="CSGCombiner3D/CSGCombiner3DBuns3" unique_id=1686142490]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.004122257, 0)
-radius = 0.1
+radius = 0.085
 height = 0.04
 sides = 16
 material = SubResource("StandardMaterial3D_vlqg6")
 
 [node name="CSGCylinder3D3" type="CSGCylinder3D" parent="CSGCombiner3D/CSGCombiner3DBuns3" unique_id=1773290691]
 transform = Transform3D(0.82770383, -0.5611652, 0, 0.5611652, 0.82770383, 0, 0, 0, 1, -0.048392475, 0.029736161, 0)
-radius = 0.1
+radius = 0.085
 height = 0.04
 sides = 16
 material = SubResource("StandardMaterial3D_vlqg6")
 
 [node name="CSGCylinder3D4" type="CSGCylinder3D" parent="CSGCombiner3D/CSGCombiner3DBuns3/CSGCylinder3D3" unique_id=801922493]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9604645e-08, 0.040259957, 0)
-radius = 0.1
+radius = 0.085
 height = 0.04
 sides = 16
 cone = true
@@ -125,21 +125,21 @@ smoothing_angle = 138.9
 
 [node name="CSGCylinder3D2" type="CSGCylinder3D" parent="CSGCombiner3D/CSGCombiner3DBuns4" unique_id=547208858]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.004122257, 0)
-radius = 0.1
+radius = 0.085
 height = 0.04
 sides = 16
 material = SubResource("StandardMaterial3D_vlqg6")
 
 [node name="CSGCylinder3D3" type="CSGCylinder3D" parent="CSGCombiner3D/CSGCombiner3DBuns4" unique_id=185898007]
 transform = Transform3D(0.82770383, -0.5611652, 0, 0.5611652, 0.82770383, 0, 0, 0, 1, -0.048392475, 0.029736161, 0)
-radius = 0.1
+radius = 0.085
 height = 0.04
 sides = 16
 material = SubResource("StandardMaterial3D_vlqg6")
 
 [node name="CSGCylinder3D4" type="CSGCylinder3D" parent="CSGCombiner3D/CSGCombiner3DBuns4/CSGCylinder3D3" unique_id=2117029178]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9604645e-08, 0.040259957, 0)
-radius = 0.1
+radius = 0.085
 height = 0.04
 sides = 16
 cone = true
@@ -152,21 +152,21 @@ smoothing_angle = 138.9
 
 [node name="CSGCylinder3D2" type="CSGCylinder3D" parent="CSGCombiner3D/CSGCombiner3DBuns5" unique_id=102374914]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.004122257, 0)
-radius = 0.1
+radius = 0.085
 height = 0.04
 sides = 16
 material = SubResource("StandardMaterial3D_vlqg6")
 
 [node name="CSGCylinder3D3" type="CSGCylinder3D" parent="CSGCombiner3D/CSGCombiner3DBuns5" unique_id=189923990]
 transform = Transform3D(0.82770383, -0.5611652, 0, 0.5611652, 0.82770383, 0, 0, 0, 1, -0.048392475, 0.029736161, 0)
-radius = 0.1
+radius = 0.085
 height = 0.04
 sides = 16
 material = SubResource("StandardMaterial3D_vlqg6")
 
 [node name="CSGCylinder3D4" type="CSGCylinder3D" parent="CSGCombiner3D/CSGCombiner3DBuns5/CSGCylinder3D3" unique_id=1980594001]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9604645e-08, 0.040259957, 0)
-radius = 0.1
+radius = 0.085
 height = 0.04
 sides = 16
 cone = true
