@@ -9,6 +9,8 @@
 [ext_resource type="Sky" uid="uid://c1abtpwhdm2d5" path="res://Textures/sky/NightSkyHDRI009_16K.tres" id="7_a81vl"]
 [ext_resource type="PackedScene" uid="uid://c0lknik4noobs" path="res://BurgerBuns.tscn" id="8_wlcqk"]
 [ext_resource type="PackedScene" uid="uid://c6rift56ql3f8" path="res://BurgerBunsDispenser.tscn" id="9_wlcqk"]
+[ext_resource type="PackedScene" uid="uid://bp3v1jl8pctro" path="res://plate.tscn" id="10_rbb5l"]
+[ext_resource type="PackedScene" uid="uid://dpot5qie20vf6" path="res://burger.tscn" id="11_65p64"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vlqg6"]
 size = Vector3(5, 0.1, 5)
@@ -51,10 +53,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.29336345, 0.8981018, -1.484
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.73186195, 0.8981018, -1.484)
 
 [node name="PickableObject" parent="." unique_id=1675596942 instance=ExtResource("6_65p64")]
-transform = Transform3D(1, 0, -2.2351742e-08, -2.9802322e-08, 1.0000001, 0, -2.6077032e-08, 1.4901161e-08, 1, -0.70505303, 1.5761534, -1.0317149)
+transform = Transform3D(1, 0, -2.2351742e-08, -2.9802322e-08, 1.0000001, 0, -2.6077032e-08, 1.4901161e-08, 1, 0.5842906, 1.5761534, -1.8163961)
 
 [node name="PickableObject2" parent="." unique_id=713087634 instance=ExtResource("6_65p64")]
-transform = Transform3D(1, 0, -2.2351742e-08, -2.9802322e-08, 1.0000001, 0, -2.6077032e-08, 1.4901161e-08, 1, 0.28315204, 1.5607953, -1.0657519)
+transform = Transform3D(1, 0, -2.2351742e-08, -2.9802322e-08, 1.0000001, 0, -2.6077032e-08, 1.4901161e-08, 1, -0.14558735, 1.5607953, -1.8242048)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1177077250]
 environment = SubResource("Environment_bvwq1")
@@ -67,3 +69,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.832131, 0.40028095, -1.481
 
 [node name="BurgerBuns2" parent="." unique_id=1909843084 instance=ExtResource("8_wlcqk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1282921, 1.4976386, -1.0923254)
+
+[node name="Plate" parent="." unique_id=190487773 instance=ExtResource("10_rbb5l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6570369, 1.4458435, -1.135189)
+
+[node name="burger" parent="." unique_id=1417604760 instance=ExtResource("11_65p64")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9129968, 1.4235804, -1.0793439)
+
+[node name="burger2" parent="." unique_id=1584460510 instance=ExtResource("11_65p64")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.40345573, 1.4235804, -1.0793439)

@@ -1,0 +1,75 @@
+[gd_scene format=3 uid="uid://cfc4ho67u4r5e"]
+
+[ext_resource type="PackedScene" uid="uid://c8l60rnugru40" path="res://addons/godot-xr-tools/objects/pickable.tscn" id="1_ut7mg"]
+[ext_resource type="PackedScene" uid="uid://c25yxb0vt53vc" path="res://addons/godot-xr-tools/objects/grab_points/grab_point_hand_left.tscn" id="3_pkevi"]
+[ext_resource type="Animation" uid="uid://db62hs5s4n2b3" path="res://addons/godot-xr-tools/hands/animations/left/Grip 4.res" id="4_dq7qw"]
+[ext_resource type="Script" uid="uid://dvobm6vcfnqe8" path="res://addons/godot-xr-tools/hands/poses/hand_pose_settings.gd" id="5_ychvb"]
+[ext_resource type="PackedScene" uid="uid://ctw7nbntd5pcj" path="res://addons/godot-xr-tools/objects/grab_points/grab_point_hand_right.tscn" id="6_etdv2"]
+[ext_resource type="Animation" uid="uid://d1xnpyc08njjx" path="res://addons/godot-xr-tools/hands/animations/right/Grip 4.res" id="7_rl64h"]
+[ext_resource type="Script" uid="uid://bs7cxydoxk1cx" path="res://cookable_item.gd" id="8_w5t5h"]
+[ext_resource type="PackedScene" uid="uid://cucc3gaqu2nab" path="res://Charcoal.tscn" id="9_e6kn1"]
+[ext_resource type="Script" uid="uid://dounic663dn5q" path="res://combinable_item.gd" id="10_nq1op"]
+[ext_resource type="Script" uid="uid://coidnv8b2yvxr" path="res://combine_recipe.gd" id="11_rjayc"]
+[ext_resource type="PackedScene" uid="uid://e4i6o5oriecx" path="res://PickupCube.tscn" id="11_ut7mg"]
+[ext_resource type="Script" uid="uid://e3im02nq5cye" path="res://combine_zone.gd" id="12_4dmro"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_fco8w"]
+height = 0.063323975
+radius = 0.12011719
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6l01i"]
+albedo_color = Color(0.29, 0.101500005, 0, 1)
+
+[sub_resource type="Resource" id="Resource_lc22d"]
+script = ExtResource("5_ychvb")
+closed_pose = ExtResource("4_dq7qw")
+metadata/_custom_type_script = "uid://dvobm6vcfnqe8"
+
+[sub_resource type="Resource" id="Resource_qyiot"]
+script = ExtResource("5_ychvb")
+closed_pose = ExtResource("7_rl64h")
+metadata/_custom_type_script = "uid://dvobm6vcfnqe8"
+
+[sub_resource type="Resource" id="Resource_recipe_cube"]
+script = ExtResource("11_rjayc")
+ingredient_id = &"burger_buns"
+result = ExtResource("11_ut7mg")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_combine"]
+size = Vector3(0.16, 0.16, 0.16)
+
+[node name="CookedBurger" unique_id=1675596942 instance=ExtResource("1_ut7mg")]
+
+[node name="CollisionShape3D" parent="." index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0005453825, 0)
+shape = SubResource("CylinderShape3D_fco8w")
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="." index="1" unique_id=59319982]
+radius = 0.08300781
+height = 0.03
+sides = 16
+material = SubResource("StandardMaterial3D_6l01i")
+
+[node name="GrabPointHandLeft" parent="." index="2" unique_id=1571481674 instance=ExtResource("3_pkevi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.067650706, 0.04601878, -0.08606844)
+hand_pose = SubResource("Resource_lc22d")
+
+[node name="GrabPointHandRight" parent="." index="3" unique_id=514404634 instance=ExtResource("6_etdv2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06531982, 0.042291984, -0.08604182)
+hand_pose = SubResource("Resource_qyiot")
+
+[node name="CookableItem" type="Node" parent="." index="4" unique_id=1139889801]
+script = ExtResource("8_w5t5h")
+cooking_time = 2.0
+turns_into = ExtResource("9_e6kn1")
+
+[node name="CombinableItem" type="Node" parent="." index="5" unique_id=1265358312]
+script = ExtResource("10_nq1op")
+id = &"cooked_burger"
+recipes = Array[ExtResource("11_rjayc")]([SubResource("Resource_recipe_cube")])
+
+[node name="CombineZone" type="Area3D" parent="." index="6" unique_id=1412308162]
+script = ExtResource("12_4dmro")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CombineZone" index="0" unique_id=1926800015]
+shape = SubResource("BoxShape3D_combine")

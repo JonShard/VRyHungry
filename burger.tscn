@@ -8,9 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://ctw7nbntd5pcj" path="res://addons/godot-xr-tools/objects/grab_points/grab_point_hand_right.tscn" id="6_mvnl5"]
 [ext_resource type="Animation" uid="uid://d1xnpyc08njjx" path="res://addons/godot-xr-tools/hands/animations/right/Grip 4.res" id="7_wqxjj"]
 [ext_resource type="Script" uid="uid://bs7cxydoxk1cx" path="res://cookable_item.gd" id="8_t4l03"]
-[ext_resource type="PackedScene" uid="uid://cucc3gaqu2nab" path="res://Charcoal.tscn" id="9_x1g8b"]
-[ext_resource type="Script" uid="uid://dounic663dn5q" path="res://combinable_item.gd" id="10_qe0ug"]
-[ext_resource type="Script" uid="uid://coidnv8b2yvxr" path="res://combine_recipe.gd" id="11_dq5p0"]
+[ext_resource type="PackedScene" uid="uid://cfc4ho67u4r5e" path="res://cooked_burger.tscn" id="9_r8jvx"]
 [ext_resource type="Script" uid="uid://e3im02nq5cye" path="res://combine_zone.gd" id="12_7llnd"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_fco8w"]
@@ -29,11 +27,6 @@ metadata/_custom_type_script = "uid://dvobm6vcfnqe8"
 script = ExtResource("5_w8sii")
 closed_pose = ExtResource("7_wqxjj")
 metadata/_custom_type_script = "uid://dvobm6vcfnqe8"
-
-[sub_resource type="Resource" id="Resource_recipe_cube"]
-script = ExtResource("11_dq5p0")
-ingredient_id = &"cube"
-result = ExtResource("9_x1g8b")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_combine"]
 size = Vector3(0.16, 0.16, 0.16)
@@ -61,14 +54,9 @@ hand_pose = SubResource("Resource_qyiot")
 [node name="CookableItem" type="Node" parent="." index="4" unique_id=1139889801]
 script = ExtResource("8_t4l03")
 cooking_time = 2.0
-turns_into = ExtResource("9_x1g8b")
+turns_into = ExtResource("9_r8jvx")
 
-[node name="CombinableItem" type="Node" parent="." index="5" unique_id=1265358312]
-script = ExtResource("10_qe0ug")
-id = &"burger"
-recipes = Array[ExtResource("11_dq5p0")]([SubResource("Resource_recipe_cube")])
-
-[node name="CombineZone" type="Area3D" parent="." index="6" unique_id=1412308162]
+[node name="CombineZone" type="Area3D" parent="." index="5" unique_id=1412308162]
 script = ExtResource("12_7llnd")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CombineZone" index="0" unique_id=1926800015]
