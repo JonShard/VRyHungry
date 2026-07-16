@@ -1,0 +1,168 @@
+{
+	"categories": [
+		{
+			"uuid": "bf4ec62e-526e-4027-876f-0b22bd17f79a",
+			"title": "Task",
+			"color": "569eff"
+		}
+	],
+	"stages": [
+		{
+			"uuid": "94333de9-ebf5-4f38-b95b-9477f4bb9dde",
+			"title": "Todo",
+			"tasks": [
+				"eee1990e-f957-4499-84b6-e68003fcb78e",
+				"854c7e1e-7521-4bcd-83ff-bb3fecec3142",
+				"4ab36c89-a377-4f25-86a1-ac276aadf4a2",
+				"cde44fb1-3fdf-4ea0-8267-d28d894e4e7d"
+			]
+		},
+		{
+			"uuid": "211e4050-31cd-4425-a2ba-8ca56b4764cd",
+			"title": "Doing",
+			"tasks": [
+				"d9cebd68-792e-4d01-a916-7df5f128b4a8"
+			]
+		},
+		{
+			"uuid": "fab8a81b-7ca9-4026-96bb-ed66ea58ef2e",
+			"title": "Done",
+			"tasks": []
+		}
+	],
+	"tasks": [
+		{
+			"uuid": "eee1990e-f957-4499-84b6-e68003fcb78e",
+			"title": "Implement YAML-based Recipe System & Static RecipeManager",
+			"description": "Description: Move all recipe definitions out of hardcoded scripts and into a centralized recipes.yaml file. Create a static RecipeManager class to load this file at startup and handle recipe lookups (including handling symmetry so that combining A + B is the same as B + A).",
+			"category": "bf4ec62e-526e-4027-876f-0b22bd17f79a",
+			"steps": [
+				{
+					"details": "Create recipes.yaml with structures for combining, cooking, augmenting, chopping, and rolling.",
+					"done": false
+				},
+				{
+					"details": " Create static RecipeManager that parses the YAML on game start.",
+					"done": false
+				},
+				{
+					"details": "Implement RecipeManager.getCombination(item_a, item_b) which returns the resulting product regardless of input order (symmetry).",
+					"done": false
+				},
+				{
+					"details": "Implement lookup helper functions for other recipe types (e.g., get_cooking_recipe(item_id)).",
+					"done": false
+				}
+			]
+		},
+		{
+			"uuid": "854c7e1e-7521-4bcd-83ff-bb3fecec3142",
+			"title": "Create Interactive Counter Stations (Chopping, Rolling, etc.)",
+			"description": "Description: Implement a base Counter class (and/or specific station child classes like ChopCounter, RollCounter) that interact with the player. These stations should query the RecipeManager to see if the placed item can be processed and require a \"work\" threshold to be met via hand gestures (action inputs) before converting the item.",
+			"category": "bf4ec62e-526e-4027-876f-0b22bd17f79a",
+			"steps": [
+				{
+					"details": "Station detects placed FoodItem.",
+					"done": false
+				},
+				{
+					"details": "Station queries RecipeManager to check if a valid recipe exists for the interaction type (e.g., Chopping).",
+					"done": false
+				},
+				{
+					"details": "Implement a \"work\" accumulator that increases when the player performs hand gestures/inputs.",
+					"done": false
+				},
+				{
+					"details": "Item converts into the recipe output once accumulated work reaches the required threshold (e.g., work: 50 for lettuce).",
+					"done": false
+				}
+			]
+		},
+		{
+			"uuid": "4ab36c89-a377-4f25-86a1-ac276aadf4a2",
+			"title": "Implement Plate Container System & Dynamic Combination Logic",
+			"description": "Description: Create a Plate item that acts as a dynamic container holding a list of FoodItems. Expand the combination logic so plates can accept specific items (e.g., adding Chips to a plate with a Hamburger to make a combo, or adding Cheese to a hamburger on a plate to toggle its has_cheese attribute).",
+			"category": "bf4ec62e-526e-4027-876f-0b22bd17f79a",
+			"steps": [
+				{
+					"details": "Plate class holds a list of FoodItems.",
+					"done": false
+				},
+				{
+					"details": "Implement logic for adding items to the plate, checking if the plate's current contents can legally accept the incoming item.",
+					"done": false
+				},
+				{
+					"details": "Support both appending new items to the plate (e.g., [Hamburger] + [Chips] -> [Hamburger, Chips]) and augmenting existing items on the plate (e.g., toggling has_cheese = true on the burger).",
+					"done": false
+				}
+			]
+		},
+		{
+			"uuid": "cde44fb1-3fdf-4ea0-8267-d28d894e4e7d",
+			"title": "Implement Dirty Plates & Sink Station",
+			"description": "Description: Add a state to plates to handle the cleaning loop. Plates should become \"dirty\" after being cleared by a customer. Dirty plates must be cleaned at a Sink station before they can be used again.",
+			"category": "bf4ec62e-526e-4027-876f-0b22bd17f79a",
+			"steps": [
+				{
+					"details": "Add is_dirty boolean property to Plate.",
+					"done": false
+				},
+				{
+					"details": "Add is_dirty boolean property to Plate.",
+					"done": false
+				},
+				{
+					"details": " Create a Sink station interaction.",
+					"done": false
+				},
+				{
+					"details": "Processing a dirty plate in the Sink resets is_dirty to false and makes it usable again.",
+					"done": false
+				}
+			]
+		},
+		{
+			"uuid": "d9cebd68-792e-4d01-a916-7df5f128b4a8",
+			"title": "Implement Multiplayer Synchronization (Network Architecture)",
+			"description": "Establish the client-server (or P2P) networking model for the game. Focus on syncing critical game state: physics objects (FoodItems), player actions (gestures/work progress), and station states (Chopping progress).",
+			"category": "bf4ec62e-526e-4027-876f-0b22bd17f79a",
+			"steps": [
+				{
+					"details": "Choose a networking model (e.g., Server-Authoritative or Peer-to-Peer).",
+					"done": false
+				},
+				{
+					"details": "Implement basic state synchronization for FoodItems (Position, Rotation, and state changes like is_dirty).",
+					"done": false
+				},
+				{
+					"details": "Synchronize player gesture/work progress across all clients (so players see the same progress bar on stations).",
+					"done": false
+				},
+				{
+					"details": "Ensure \"Authority\" logic: Determine who owns the RecipeManager data and how conflicts are handled (e.g., if two players try to grab the same item).",
+					"done": false
+				},
+				{
+					"details": "Test latency handling for high-frequency inputs like the \"wave arms\" gesture.",
+					"done": false
+				}
+			]
+		}
+	],
+	"layout": {
+		"columns": [
+			[
+				"94333de9-ebf5-4f38-b95b-9477f4bb9dde"
+			],
+			[
+				"211e4050-31cd-4425-a2ba-8ca56b4764cd"
+			],
+			[
+				"fab8a81b-7ca9-4026-96bb-ed66ea58ef2e"
+			]
+		]
+	}
+}
