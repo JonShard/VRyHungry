@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://cucc3gaqu2nab" path="res://Items/Charcoal.tscn" id="8_a0a5b"]
 [ext_resource type="PackedScene" uid="uid://7earnjgdmwgx" path="res://Prefabs/cookable_item.tscn" id="10_65ccv"]
 [ext_resource type="Script" uid="uid://coidnv8b2yvxr" path="res://Prefabs/combine_recipe.gd" id="11_recipe"]
+[ext_resource type="PackedScene" uid="uid://bfj80jh13t6e5" path="res://Prefabs/food_item.tscn" id="11_vjw41"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_m1xbq"]
 size = Vector3(0.1, 0.1, 0.1)
@@ -37,7 +38,7 @@ ingredient_id = &"cube"
 result = ExtResource("8_a0a5b")
 metadata/_custom_type_script = "uid://coidnv8b2yvxr"
 
-[node name="PickableObject" unique_id=1675596942 instance=ExtResource("1_dbtw8")]
+[node name="PickableObject" unique_id=1675596942 groups=["platalbe_item"] instance=ExtResource("1_dbtw8")]
 
 [node name="CollisionShape3D" parent="." index="0"]
 shape = SubResource("BoxShape3D_m1xbq")
@@ -58,3 +59,7 @@ id = &"cube"
 recipes = Array[ExtResource("11_recipe")]([SubResource("Resource_i8ixk")])
 
 [node name="CookableItem" parent="." index="5" unique_id=280820828 instance=ExtResource("10_65ccv")]
+
+[node name="FoodItem" parent="." index="6" unique_id=63948206 instance=ExtResource("11_vjw41")]
+id = "cube"
+type = 1

@@ -7,6 +7,7 @@
 [sub_resource type="BoxMesh" id="BoxMesh_i5j2u"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_dlkho"]
+radius = 0.3
 
 [node name="Counter" type="StaticBody3D" unique_id=1487893288 groups=["station"]]
 
