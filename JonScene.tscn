@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://c6rift56ql3f8" path="res://BurgerBunsDispenser.tscn" id="9_wlcqk"]
 [ext_resource type="PackedScene" uid="uid://bp3v1jl8pctro" path="res://plate.tscn" id="10_rbb5l"]
 [ext_resource type="PackedScene" uid="uid://dpot5qie20vf6" path="res://burger.tscn" id="11_65p64"]
+[ext_resource type="PackedScene" uid="uid://b3m2ag8g5rj4r" path="res://hamburger.tscn" id="12_65p64"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vlqg6"]
 size = Vector3(5, 0.1, 5)
@@ -71,10 +72,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.832131, 0.40028095, -1.481
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1282921, 1.4976386, -1.0923254)
 
 [node name="Plate" parent="." unique_id=190487773 instance=ExtResource("10_rbb5l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6570369, 1.4458435, -1.135189)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.53572595, 1.4458435, -1.135189)
 
 [node name="burger" parent="." unique_id=1417604760 instance=ExtResource("11_65p64")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.04444152, 1.4235804, -1.1413177)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.91607785, 1.4235804, -1.0899508)
 
 [node name="burger2" parent="." unique_id=1584460510 instance=ExtResource("11_65p64")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.23121053, 1.4235804, -1.3225337)
@@ -84,3 +85,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.22395861, 1.4235804, -1.14
 
 [node name="burger4" parent="." unique_id=1844818864 instance=ExtResource("11_65p64")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.40808713, 1.4235804, -1.1413177)
+
+[node name="Hamburger" parent="." unique_id=761091445 instance=ExtResource("12_65p64")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5295425, 1.994761, -1.1201752)

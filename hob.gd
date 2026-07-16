@@ -16,7 +16,7 @@ func _ready() -> void:
 		print("Hob is empty")
 
 func convert_item(cookable: CookableItem) -> void:
-	print("Converting ", cookable)
+	print("Hob converting ", cookable)
 	
 	var old_pickable = snap_zone.picked_up_object
 	if not old_pickable:
@@ -39,9 +39,7 @@ func convert_item(cookable: CookableItem) -> void:
 	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	#print("Picked obj:", snap_zone.picked_up_object)
-	
+func _process(delta: float) -> void:	
 	# Find the CookableItem in held object
 	var cookable = null
 	if snap_zone.picked_up_object:

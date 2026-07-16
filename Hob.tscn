@@ -15,7 +15,7 @@ material = SubResource("StandardMaterial3D_m5xe2")
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_vlqg6"]
 
-[node name="Hob" type="StaticBody3D" unique_id=1687971542]
+[node name="Hob" type="StaticBody3D" unique_id=1687971542 groups=["station"]]
 script = ExtResource("1_7jc4g")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1283846023]

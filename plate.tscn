@@ -1,43 +1,85 @@
 [gd_scene format=3 uid="uid://bp3v1jl8pctro"]
 
+[ext_resource type="Script" uid="uid://bfrlpbsqg5lqr" path="res://addons/godot-xr-tools/objects/pickable.gd" id="1_nq5sa"]
 [ext_resource type="PackedScene" uid="uid://du31pqeytu8as" path="res://Prefabs/container.tscn" id="1_s5yhh"]
+[ext_resource type="PackedScene" uid="uid://c25yxb0vt53vc" path="res://addons/godot-xr-tools/objects/grab_points/grab_point_hand_left.tscn" id="2_3bkoa"]
+[ext_resource type="Animation" uid="uid://db62hs5s4n2b3" path="res://addons/godot-xr-tools/hands/animations/left/Grip 4.res" id="3_6v47p"]
+[ext_resource type="Script" uid="uid://dvobm6vcfnqe8" path="res://addons/godot-xr-tools/hands/poses/hand_pose_settings.gd" id="4_dhtvl"]
+[ext_resource type="PackedScene" uid="uid://ctw7nbntd5pcj" path="res://addons/godot-xr-tools/objects/grab_points/grab_point_hand_right.tscn" id="5_vlcpl"]
+[ext_resource type="Animation" uid="uid://d1xnpyc08njjx" path="res://addons/godot-xr-tools/hands/animations/right/Grip 4.res" id="6_el51w"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_kek77"]
 height = 0.0635376
 radius = 0.20996094
 
-[node name="Plate" unique_id=190487773 instance=ExtResource("1_s5yhh")]
+[sub_resource type="Resource" id="Resource_2hcq0"]
+script = ExtResource("4_dhtvl")
+closed_pose = ExtResource("3_6v47p")
+metadata/_custom_type_script = "uid://dvobm6vcfnqe8"
 
-[node name="CollisionShape3D" parent="." index="0"]
+[sub_resource type="Resource" id="Resource_dlngj"]
+script = ExtResource("4_dhtvl")
+closed_pose = ExtResource("6_el51w")
+metadata/_custom_type_script = "uid://dvobm6vcfnqe8"
+
+[node name="Plate" type="RigidBody3D" unique_id=190487773]
+collision_layer = 4
+collision_mask = 196615
+freeze_mode = 1
+script = ExtResource("1_nq5sa")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1365637864]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.007171631, 0)
 shape = SubResource("CylinderShape3D_kek77")
 
-[node name="CSGCombiner3D" type="CSGCombiner3D" parent="." index="1" unique_id=1767596918]
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="." unique_id=1767596918]
 autosmooth = true
 smoothing_angle = 103.9
 
-[node name="CSGCylinder3D" type="CSGCylinder3D" parent="CSGCombiner3D" index="0" unique_id=410722205]
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="CSGCombiner3D" unique_id=410722205]
 radius = 0.2
 height = 0.03
 sides = 16
 
-[node name="CSGCylinder3D" type="CSGCylinder3D" parent="CSGCombiner3D/CSGCylinder3D" index="0" unique_id=1041060379]
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="CSGCombiner3D/CSGCylinder3D" unique_id=1041060379]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.010312311, 0)
 operation = 2
 radius = 0.15
 height = 0.03
 sides = 16
 
-[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="CSGCombiner3D" index="1" unique_id=1827566539]
+[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="CSGCombiner3D" unique_id=1827566539]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.027119078, 0)
 radius = 0.15
 height = 0.02
 
-[node name="GrabPointHandLeft" parent="." index="2" unique_id=317886291]
+[node name="GrabPointHandLeft" parent="." unique_id=317886291 instance=ExtResource("2_3bkoa")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1699356, 0.04601878, -0.08606844)
+hand_pose = SubResource("Resource_2hcq0")
 
-[node name="GrabPointHandRight" parent="." index="3" unique_id=248026585]
+[node name="GrabPointHandRight" parent="." unique_id=248026585 instance=ExtResource("5_vlcpl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.16517048, 0.042291984, -0.08604182)
+hand_pose = SubResource("Resource_dlngj")
 
-[node name="CombinableItem" parent="." index="4" unique_id=158282297]
-id = &"plate"
+[node name="Container" parent="." unique_id=377793422 node_paths=PackedStringArray("meal_positions", "side_positions") instance=ExtResource("1_s5yhh")]
+target_group = "platalbe_item"
+meal_positions = [NodePath("MealPositions/Slot1")]
+side_positions = [NodePath("SidePositions/Slot1"), NodePath("SidePositions/Slot2"), NodePath("SidePositions/Slot3"), NodePath("SidePositions/Slot4")]
+
+[node name="MealPositions" type="Node3D" parent="Container" unique_id=1682052877]
+
+[node name="Slot1" type="Node3D" parent="Container/MealPositions" unique_id=306927548]
+
+[node name="SidePositions" type="Node3D" parent="Container" unique_id=1112098031]
+
+[node name="Slot1" type="Node3D" parent="Container/SidePositions" unique_id=1314895915]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.05862564, 0, -0.098608926)
+
+[node name="Slot2" type="Node3D" parent="Container/SidePositions" unique_id=46117678]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.090641126, 0, -0.08815916)
+
+[node name="Slot3" type="Node3D" parent="Container/SidePositions" unique_id=1994697744]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.08457637, 0, 0.08950478)
+
+[node name="Slot4" type="Node3D" parent="Container/SidePositions" unique_id=379534402]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06938871, 0, 0.072598234)

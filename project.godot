@@ -33,6 +33,11 @@ enabled=PackedStringArray("res://addons/godot-xr-tools/plugin.cfg")
 
 import/blender/enabled=false
 
+[global_group]
+
+platalbe_item="Meals, sides, augments for meals"
+station="Hobs, Counters ..."
+
 [layer_names]
 
 3d_physics/layer_1="Static World"
@@ -55,6 +60,7 @@ import/blender/enabled=false
 [rendering]
 
 rendering_device/driver.windows="d3d12"
+renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
 
 [xr]

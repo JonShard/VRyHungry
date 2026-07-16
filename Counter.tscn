@@ -8,7 +8,7 @@
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_dlkho"]
 
-[node name="Counter" type="StaticBody3D" unique_id=1487893288]
+[node name="Counter" type="StaticBody3D" unique_id=1487893288 groups=["station"]]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=692568688]
 shape = SubResource("BoxShape3D_24d3s")
@@ -20,7 +20,7 @@ mesh = SubResource("BoxMesh_i5j2u")
 transform = Transform3D(0.9999992, 0, 0, 0, 0.99999946, 0, 0, 0, 0.9999992, 0.002797456, 0.6309581, -0.2812457)
 text = "Counter"
 
-[node name="XRToolsSnapZone" type="Area3D" parent="." unique_id=1647380272]
+[node name="XRToolsSnapZone" type="Area3D" parent="." unique_id=1647380272 groups=["station"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5270121, 0)
 collision_layer = 65536
 collision_mask = 65536

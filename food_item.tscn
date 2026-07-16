@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://bfj80jh13t6e5"]
+
+[ext_resource type="Script" uid="uid://5tpoohkopryv" path="res://food_item.gd" id="1_0na5k"]
+
+[node name="FoodItem" type="Node" unique_id=63948206]
+script = ExtResource("1_0na5k")
+id = "hamburger"
+item_type = "Meal"
