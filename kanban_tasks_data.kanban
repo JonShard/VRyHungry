@@ -13,21 +13,24 @@
 			"tasks": [
 				"eee1990e-f957-4499-84b6-e68003fcb78e",
 				"854c7e1e-7521-4bcd-83ff-bb3fecec3142",
-				"4ab36c89-a377-4f25-86a1-ac276aadf4a2",
-				"cde44fb1-3fdf-4ea0-8267-d28d894e4e7d"
+				"4e2ca8d1-84e1-4913-ad8f-834007d52160",
+				"a4dd35ae-dc8e-42a3-9044-bf1cb1af281a"
 			]
 		},
 		{
 			"uuid": "211e4050-31cd-4425-a2ba-8ca56b4764cd",
 			"title": "Doing",
 			"tasks": [
-				"d9cebd68-792e-4d01-a916-7df5f128b4a8"
+				"d9cebd68-792e-4d01-a916-7df5f128b4a8",
+				"cde44fb1-3fdf-4ea0-8267-d28d894e4e7d"
 			]
 		},
 		{
 			"uuid": "fab8a81b-7ca9-4026-96bb-ed66ea58ef2e",
 			"title": "Done",
-			"tasks": []
+			"tasks": [
+				"4ab36c89-a377-4f25-86a1-ac276aadf4a2"
+			]
 		}
 	],
 	"tasks": [
@@ -87,34 +90,22 @@
 			"steps": [
 				{
 					"details": "Plate class holds a list of FoodItems.",
-					"done": false
+					"done": true
 				},
 				{
 					"details": "Implement logic for adding items to the plate, checking if the plate's current contents can legally accept the incoming item.",
-					"done": false
-				},
-				{
-					"details": "Support both appending new items to the plate (e.g., [Hamburger] + [Chips] -> [Hamburger, Chips]) and augmenting existing items on the plate (e.g., toggling has_cheese = true on the burger).",
-					"done": false
+					"done": true
 				}
 			]
 		},
 		{
 			"uuid": "cde44fb1-3fdf-4ea0-8267-d28d894e4e7d",
-			"title": "Implement Dirty Plates & Sink Station",
+			"title": "Implement Dirty Plates",
 			"description": "Description: Add a state to plates to handle the cleaning loop. Plates should become \"dirty\" after being cleared by a customer. Dirty plates must be cleaned at a Sink station before they can be used again.",
 			"category": "bf4ec62e-526e-4027-876f-0b22bd17f79a",
 			"steps": [
 				{
 					"details": "Add is_dirty boolean property to Plate.",
-					"done": false
-				},
-				{
-					"details": "Add is_dirty boolean property to Plate.",
-					"done": false
-				},
-				{
-					"details": " Create a Sink station interaction.",
 					"done": false
 				},
 				{
@@ -150,6 +141,20 @@
 					"done": false
 				}
 			]
+		},
+		{
+			"uuid": "4e2ca8d1-84e1-4913-ad8f-834007d52160",
+			"title": "Containers support augmentation",
+			"description": "For example, adding cheese top a Hamburger.\nburger.cheese = true\n\nA plate with a burger need to support adding cheese where the container looks for the first meal or side that accepts the cheese",
+			"category": "bf4ec62e-526e-4027-876f-0b22bd17f79a",
+			"steps": []
+		},
+		{
+			"uuid": "a4dd35ae-dc8e-42a3-9044-bf1cb1af281a",
+			"title": "Sink Station",
+			"description": "",
+			"category": "bf4ec62e-526e-4027-876f-0b22bd17f79a",
+			"steps": []
 		}
 	],
 	"layout": {
