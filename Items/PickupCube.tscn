@@ -6,10 +6,10 @@
 [ext_resource type="Script" uid="uid://dvobm6vcfnqe8" path="res://addons/godot-xr-tools/hands/poses/hand_pose_settings.gd" id="4_hc3f7"]
 [ext_resource type="PackedScene" uid="uid://ctw7nbntd5pcj" path="res://addons/godot-xr-tools/objects/grab_points/grab_point_hand_right.tscn" id="5_a0a5b"]
 [ext_resource type="Animation" uid="uid://d1xnpyc08njjx" path="res://addons/godot-xr-tools/hands/animations/right/Grip 4.res" id="6_bdp75"]
-[ext_resource type="PackedScene" uid="uid://3lr2dhy62rhk" path="res://combinable_item.tscn" id="7_bdp75"]
-[ext_resource type="PackedScene" uid="uid://cucc3gaqu2nab" path="res://Charcoal.tscn" id="8_a0a5b"]
-[ext_resource type="PackedScene" uid="uid://7earnjgdmwgx" path="res://cookable_item.tscn" id="10_65ccv"]
-[ext_resource type="Script" uid="uid://coidnv8b2yvxr" path="res://combine_recipe.gd" id="11_recipe"]
+[ext_resource type="PackedScene" uid="uid://3lr2dhy62rhk" path="res://Prefabs/combinable_item.tscn" id="7_bdp75"]
+[ext_resource type="PackedScene" uid="uid://cucc3gaqu2nab" path="res://Items/Charcoal.tscn" id="8_a0a5b"]
+[ext_resource type="PackedScene" uid="uid://7earnjgdmwgx" path="res://Prefabs/cookable_item.tscn" id="10_65ccv"]
+[ext_resource type="Script" uid="uid://coidnv8b2yvxr" path="res://Prefabs/combine_recipe.gd" id="11_recipe"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_m1xbq"]
 size = Vector3(0.1, 0.1, 0.1)

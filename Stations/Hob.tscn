@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://j7caslh27nor"]
 
-[ext_resource type="Script" uid="uid://bsn8vhv5adxdo" path="res://hob.gd" id="1_7jc4g"]
+[ext_resource type="Script" uid="uid://bsn8vhv5adxdo" path="res://Stations/hob.gd" id="1_7jc4g"]
 [ext_resource type="Texture2D" uid="uid://b7n8d4krwbcvl" path="res://Textures/5.png" id="2_0sasq"]
 [ext_resource type="Script" uid="uid://cquqe4f1m1sw6" path="res://addons/godot-xr-tools/objects/snap_zone.gd" id="2_er1dp"]
 

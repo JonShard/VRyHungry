@@ -28,8 +28,9 @@ func _on_body_entered (body) -> void:
 	var picked_by = xr_pickable.get_picked_up_by()
 	if picked_by and picked_by.is_in_group("station"):
 		print("Container in station")
-		var food_item = get_node("FoodItem") 
+		var food_item = body.get_node("FoodItem") 
 		if food_item.type == FoodItem.Type.MEAL or food_item.type == FoodItem.Type.SIDE:
+			print("Food is meal or side!")
 			# if we're full of that type:
 			# return 
 			# body disble pickable

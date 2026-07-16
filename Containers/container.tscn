@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://du31pqeytu8as"]
 
-[ext_resource type="Script" uid="uid://6lyhyial1fh5" path="res://Prefabs/container.gd" id="1_r4cle"]
+[ext_resource type="Script" uid="uid://6lyhyial1fh5" path="res://Containers/container.gd" id="1_r4cle"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_vlqg6"]
 radius = 0.2

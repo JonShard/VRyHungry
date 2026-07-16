@@ -3,12 +3,12 @@
 [ext_resource type="Script" uid="uid://b4ldkd3ngs0vp" path="res://main.gd" id="1_0xm2m"]
 [ext_resource type="PackedScene" uid="uid://j5s5wus7tuhb" path="res://XROrigin.tscn" id="2_h2yge"]
 [ext_resource type="Material" uid="uid://cmia50cfqxxo4" path="res://Textures/dev_material_3d.tres" id="3_272bh"]
-[ext_resource type="PackedScene" uid="uid://e4i6o5oriecx" path="res://PickupCube.tscn" id="3_h2yge"]
-[ext_resource type="PackedScene" uid="uid://j7caslh27nor" path="res://Hob.tscn" id="3_lquwl"]
-[ext_resource type="PackedScene" uid="uid://efaec6ymgabo" path="res://Counter.tscn" id="4_7mycd"]
+[ext_resource type="PackedScene" uid="uid://e4i6o5oriecx" path="res://Items/PickupCube.tscn" id="3_h2yge"]
+[ext_resource type="PackedScene" uid="uid://j7caslh27nor" path="res://Stations/Hob.tscn" id="3_lquwl"]
+[ext_resource type="PackedScene" uid="uid://efaec6ymgabo" path="res://Stations/Counter.tscn" id="4_7mycd"]
 [ext_resource type="Sky" uid="uid://c1abtpwhdm2d5" path="res://Textures/sky/NightSkyHDRI009_16K.tres" id="6_7mycd"]
-[ext_resource type="PackedScene" uid="uid://dpot5qie20vf6" path="res://burger.tscn" id="8_5vw27"]
-[ext_resource type="PackedScene" uid="uid://bp3v1jl8pctro" path="res://plate.tscn" id="9_kek77"]
+[ext_resource type="PackedScene" uid="uid://dpot5qie20vf6" path="res://Items/burger.tscn" id="8_5vw27"]
+[ext_resource type="PackedScene" uid="uid://bp3v1jl8pctro" path="res://Containers/plate.tscn" id="9_kek77"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vlqg6"]
 size = Vector3(5, 0.1, 5)
