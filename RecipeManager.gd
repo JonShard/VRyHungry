@@ -1,8 +1,9 @@
 class_name RecipeManager
 extends Node
 
-static var _recipes: Dictionary = {}
-static var _combining_map: Dictionary = {}
+static var _recipes: Dictionary
+static var _combining_map: Dictionary
+static var _cooking_map: Dictionary
 static var _scene_paths: Dictionary 
 static var _loaded: bool = false
 
@@ -26,15 +27,25 @@ static func load_recipes() -> void:
 			_recipes = data
 			_build_scene_paths()
 			_build_combining_map()
+			_build_cooking_map()
 			_loaded = true
 			
 
-static func get_combination(first_id: StringName, second_id: StringName) -> PackedScene:
+static func get_combination_result(first_id: StringName, second_id: StringName) -> PackedScene:
 	load_recipes()
 	var result_id = _combining_map.get(_make_pair_key(first_id, second_id))
 	if result_id == null:
 		return null
 	return get_item_scene(result_id)
+
+
+static func get_cooking_result(ingredient_id: StringName) -> Dictionary:
+	load_recipes()
+	for cooked_id in _cooking_map.keys():
+		var cook_def = _cooking_map[cooked_id]
+		if cook_def["ingredient"] == ingredient_id:
+			return {"cooked_id": cooked_id, "time": cook_def["time"]}
+	return {}
 
 
 static func get_item_scene(item_id: StringName) -> PackedScene:
@@ -78,7 +89,7 @@ static func print_all_recipes() -> void:
 			if typeof(recipe) == TYPE_ARRAY and recipe.size() == 2:
 				var first = str(recipe[0])
 				var second = str(recipe[1])
-				print("%s + %s -> %s" % [first, second, result_id])
+				print("%s <- %s + %s" % [result_id, first, second])
 			else:
 				print("RecipeManager: invalid combining recipe for '%s'" % result_id)
 
@@ -113,6 +124,10 @@ static func _get_recipe_entries(recipe_value: Variant) -> Array:
 	return recipes
 
 
+# Reads strucure into _combining_map:
+# combining:
+#   hamburger:
+#     - [cooked_burger, burger_buns]
 static func _build_combining_map() -> void:
 	_combining_map.clear()
 	var combining = _recipes.get("combining", {})
@@ -132,3 +147,31 @@ static func _make_pair_key(first_id: StringName, second_id: StringName) -> Strin
 	if str(first_id) <= str(second_id):
 		return StringName(str(first_id) + "|" + str(second_id))
 	return StringName(str(second_id) + "|" + str(first_id))
+
+
+# Reads structure into _cooking_map:
+# cooking:
+#   cooked_burger: 
+#     ingredient: raw_burger
+#     time: 3
+static func _build_cooking_map() -> void:
+	_cooking_map.clear()
+	var cooking = _recipes.get("cooking", {})
+	if typeof(cooking) != TYPE_DICTIONARY:
+		return
+	for cooked_id in cooking.keys():
+		var cook_def = cooking[cooked_id]
+		if typeof(cook_def) != TYPE_DICTIONARY:
+			push_error("RecipeManager: cooking recipe for '%s' must be a dictionary" % cooked_id)
+			continue
+		var ingredient = cook_def.get("ingredient", "")
+		if typeof(ingredient) != TYPE_STRING or str(ingredient).is_empty():
+			push_error("RecipeManager: cooking recipe '%s' missing a valid 'ingredient' field" % cooked_id)
+			continue
+		var time_val = cook_def.get("time", null)
+		if typeof(time_val) != TYPE_INT and typeof(time_val) != TYPE_FLOAT:
+			push_error("RecipeManager: cooking recipe '%s' missing a valid 'time' field" % cooked_id)
+			continue
+		# store cooked item -> { ingredient: StringName, time: float }
+		_cooking_map[StringName(cooked_id)] = {"ingredient": StringName(str(ingredient)), "time": float(time_val)}
+	

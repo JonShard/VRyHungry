@@ -17,3 +17,13 @@ combining:
   charcoal:
     - [cube, cube]
 
+cooking:
+  cooked_burger: 
+    ingredient: raw_burger
+    time: 3
+  charcoal: 
+    ingredient: cooked_burger
+    time: 4
+  charcoal: 
+    ingredient: toast
+    time: 2
