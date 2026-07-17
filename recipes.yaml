@@ -27,3 +27,21 @@ cooking:
   charcoal: 
     ingredient: toast
     time: 2
+
+chopping:
+  salad: 
+    ingredient: lettuce
+    work: 50
+
+rolling:
+  pie_base:
+    ingredient: dough
+    work: 80
+
+augmenting:
+  cooked_burger:
+    has_tomato: sliced_tomato
+    has_cheese: cheese
+  salad:
+    has_tomato: sliced_tomato
+    has_olives: olives

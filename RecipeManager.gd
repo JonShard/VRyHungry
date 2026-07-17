@@ -4,6 +4,9 @@ extends Node
 static var _recipes: Dictionary
 static var _combining_map: Dictionary
 static var _cooking_map: Dictionary
+static var _chopping_map: Dictionary
+static var _rolling_map: Dictionary
+static var _augmenting_map: Dictionary
 static var _scene_paths: Dictionary 
 static var _loaded: bool = false
 
@@ -28,6 +31,9 @@ static func load_recipes() -> void:
 			_build_scene_paths()
 			_build_combining_map()
 			_build_cooking_map()
+			_build_chopping_map()
+			_build_rolling_map()
+			_build_augmenting_map()
 			_loaded = true
 			
 
@@ -68,30 +74,55 @@ static func print_all_recipes() -> void:
 		print("RecipeManager: could not load recipes.yaml; no recipes printed.")
 		return
 
-	print("RecipeManager: Loaded recipes")
-
-	var combining = _recipes.get("combining", {})
-	if typeof(combining) != TYPE_DICTIONARY:
-		print("RecipeManager: combining recipes are not available in recipes.yaml")
-		return
-
-	if combining.is_empty():
+	if _combining_map.is_empty():
 		print("RecipeManager: no combining recipes found")
 		return
 
-	for result_id in combining.keys():
-		var recipe_entries = _get_recipe_entries(combining[result_id])
-		if recipe_entries.is_empty():
-			print("RecipeManager: invalid combining recipe for '%s'" % result_id)
+	print("RecipeManager: Loaded recipes")
+	_print_combining_recipes()
+	_print_cooking_recipes()
+	_print_chopping_recipes()
+	_print_rolling_recipes()
+	_print_augmenting_recipes()
+
+static func _print_combining_recipes() -> void:
+	for pair_key in _combining_map.keys():
+		var result_id = _combining_map[pair_key]
+		var key_str = str(pair_key)
+		var separator_index = key_str.find("|")
+		if separator_index == -1:
+			print("RecipeManager: invalid combining map key '%s'" % key_str)
 			continue
 
-		for recipe in recipe_entries:
-			if typeof(recipe) == TYPE_ARRAY and recipe.size() == 2:
-				var first = str(recipe[0])
-				var second = str(recipe[1])
-				print("%s <- %s + %s" % [result_id, first, second])
-			else:
-				print("RecipeManager: invalid combining recipe for '%s'" % result_id)
+		var first = key_str.substr(0, separator_index)
+		var second = key_str.substr(separator_index + 1, key_str.length() - separator_index - 1)
+		print("%s <-combine-- %s + %s" % [result_id, first, second])
+
+
+static func _print_cooking_recipes() -> void:
+	for cooked_id in _cooking_map.keys():
+		var cook_def = _cooking_map[cooked_id]
+		print("%s <-cook-- %s - time: %.1f" % [cooked_id, cook_def["ingredient"], cook_def["time"]])
+
+
+static func _print_chopping_recipes() -> void:
+	for chopped_id in _chopping_map.keys():
+		var chop_def = _chopping_map[chopped_id]
+		print("%s <-chop-- %s - work: %.1f" % [chopped_id, chop_def["ingredient"], chop_def["work"]])
+
+
+static func _print_rolling_recipes() -> void:
+	for rolled_id in _rolling_map.keys():
+		var roll_def = _rolling_map[rolled_id]
+		print("%s <-roll-- %s - work: %.1f" % [rolled_id, roll_def["ingredient"], roll_def["work"]])
+
+
+static func _print_augmenting_recipes() -> void:
+	for target_id in _augmenting_map.keys():
+		var augment_def = _augmenting_map[target_id]
+		for ingredient_id in augment_def.keys():
+			var attr_key = augment_def[ingredient_id]
+			print("%s <-augment-- %s adds attribute '%s'" % [target_id, ingredient_id, attr_key])
 
 
 static func _build_scene_paths() -> void:
@@ -106,22 +137,6 @@ static func _build_scene_paths() -> void:
 		var scene_path = item_def.get("scene", "")
 		if typeof(scene_path) == TYPE_STRING and not scene_path.is_empty():
 			_scene_paths[str(item_id)] = scene_path
-
-
-static func _get_recipe_entries(recipe_value: Variant) -> Array:
-	var recipes: Array = []
-	if typeof(recipe_value) != TYPE_ARRAY:
-		return recipes
-	if recipe_value.is_empty():
-		return recipes
-	if typeof(recipe_value[0]) == TYPE_ARRAY:
-		for recipe in recipe_value:
-			if typeof(recipe) == TYPE_ARRAY and recipe.size() == 2:
-				recipes.append(recipe)
-	else:
-		if recipe_value.size() == 2:
-			recipes.append(recipe_value)
-	return recipes
 
 
 # Reads strucure into _combining_map:
@@ -141,6 +156,22 @@ static func _build_combining_map() -> void:
 			var second = StringName(recipe[1])
 			var key = _make_pair_key(first, second)
 			_combining_map[key] = result_id
+
+
+static func _get_recipe_entries(recipe_value: Variant) -> Array:
+	var recipes: Array = []
+	if typeof(recipe_value) != TYPE_ARRAY:
+		return recipes
+	if recipe_value.is_empty():
+		return recipes
+	if typeof(recipe_value[0]) == TYPE_ARRAY:
+		for recipe in recipe_value:
+			if typeof(recipe) == TYPE_ARRAY and recipe.size() == 2:
+				recipes.append(recipe)
+	else:
+		if recipe_value.size() == 2:
+			recipes.append(recipe_value)
+	return recipes
 
 
 static func _make_pair_key(first_id: StringName, second_id: StringName) -> StringName:
@@ -174,4 +205,86 @@ static func _build_cooking_map() -> void:
 			continue
 		# store cooked item -> { ingredient: StringName, time: float }
 		_cooking_map[StringName(cooked_id)] = {"ingredient": StringName(str(ingredient)), "time": float(time_val)}
+	
+
+# Reads structure into _chopping_map:
+# chopping:
+#   chopped_onion: 
+#     ingredient: onion
+#     work: 2
+static func _build_chopping_map() -> void:
+	_chopping_map.clear()
+	var chopping = _recipes.get("chopping", {})
+	if typeof(chopping) != TYPE_DICTIONARY:
+		return
+	for chopped_id in chopping.keys():
+		var chop_def = chopping[chopped_id]
+		if typeof(chop_def) != TYPE_DICTIONARY:
+			push_error("RecipeManager: chopping recipe for '%s' must be a dictionary" % chopped_id)
+			continue
+		var ingredient = chop_def.get("ingredient", "")
+		if typeof(ingredient) != TYPE_STRING or str(ingredient).is_empty():
+			push_error("RecipeManager: chopping recipe '%s' missing a valid 'ingredient' field" % chopped_id)
+			continue
+		var work_val = chop_def.get("work", null)
+		if typeof(work_val) != TYPE_INT and typeof(work_val) != TYPE_FLOAT:
+			push_error("RecipeManager: chopping recipe '%s' missing a valid 'work' field" % chopped_id)
+			continue
+		# store chopped item -> { ingredient: StringName, work: float }
+		_chopping_map[StringName(chopped_id)] = {"ingredient": StringName(str(ingredient)), "work": float(work_val)}
+
+
+# Reads structure into _rolling_map:
+# rolling:
+#   pie_base:
+# 	  ingredient: dough
+# 	  work: 80
+static func _build_rolling_map() -> void:
+	_rolling_map.clear()
+	var rolling = _recipes.get("rolling", {})
+	if typeof(rolling) != TYPE_DICTIONARY:
+		return
+	for rolled_id in rolling.keys():
+		var roll_def = rolling[rolled_id]
+		if typeof(roll_def) != TYPE_DICTIONARY:
+			push_error("RecipeManager: rolling recipe for '%s' must be a dictionary" % rolled_id)
+			continue
+		var ingredient = roll_def.get("ingredient", "")
+		if typeof(ingredient) != TYPE_STRING or str(ingredient).is_empty():
+			push_error("RecipeManager: rolling recipe '%s' missing a valid 'ingredient' field" % rolled_id)
+			continue
+		var work_val = roll_def.get("work", null)
+		if typeof(work_val) != TYPE_INT and typeof(work_val) != TYPE_FLOAT:
+			push_error("RecipeManager: rolling recipe '%s' missing a valid 'work' field" % rolled_id)
+			continue
+		# store rolled item -> { ingredient: StringName, work: float }
+		_rolling_map[StringName(rolled_id)] = {"ingredient": StringName(str(ingredient)), "work": float(work_val)}
+
+
+# Reads structure into _augmenting_map:
+# augmenting: # Process of adding an item onto another without changing it's type, but toggling attributes.
+# 	cooked_burger:
+# 		has_tomato: sliced_tomato
+# 		has_cheese: cheese
+static func _build_augmenting_map() -> void:
+	_augmenting_map.clear()
+	var augmenting = _recipes.get("augmenting", {})
+	if typeof(augmenting) != TYPE_DICTIONARY:
+		return
+	for target_id in augmenting.keys():
+		var augment_def = augmenting[target_id]
+		if typeof(augment_def) != TYPE_DICTIONARY:
+			push_error("RecipeManager: augmenting recipe for '%s' must be a dictionary" % target_id)
+			continue
+		var map: Dictionary = {}
+		for attr_key in augment_def.keys():
+			var ingredient = augment_def[attr_key]
+			if typeof(ingredient) != TYPE_STRING or str(ingredient).is_empty():
+				push_error("RecipeManager: augmenting recipe '%s' has invalid ingredient for '%s'" % [target_id, attr_key])
+				continue
+			# store ingredient -> attribute_key (e.g. sliced_tomato -> has_tomato)
+			map[StringName(str(ingredient))] = StringName(str(attr_key))
+		if not map.is_empty():
+			_augmenting_map[StringName(target_id)] = map
+	
 	
