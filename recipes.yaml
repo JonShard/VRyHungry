@@ -1,19 +1,14 @@
 items:
   hamburger:
     scene: res://Items/hamburger.tscn
-    type: meal
   burger_buns:
     scene: res://Items/BurgerBuns.tscn
-    type: ingredient
   cooked_burger:
     scene: res://Items/cooked_burger.tscn
-    type: ingredient
   cube:
     scene: res://Items/PickupCube.tscn
-    type: ingredient
   charcoal:
     scene: res://Items/Charcoal.tscn
-    type: ingredient
 
 combining:
   hamburger:
@@ -21,3 +16,4 @@ combining:
     - [charcoal, charcoal]
   charcoal:
     - [cube, cube]
+

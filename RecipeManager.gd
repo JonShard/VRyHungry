@@ -3,7 +3,7 @@ extends Node
 
 static var _recipes: Dictionary = {}
 static var _combining_map: Dictionary = {}
-static var _scene_paths: Dictionary = {}
+static var _scene_paths: Dictionary 
 static var _loaded: bool = false
 
 static func load_recipes() -> void:
@@ -20,25 +20,14 @@ static func load_recipes() -> void:
 		var result = ClassDB.class_call_static("YAML", "load_file", recipe_path)
 		if result != null and not result.has_error():
 			var data = result.get_data()
-			if typeof(data) == TYPE_DICTIONARY:
-				_recipes = data
-				_build_scene_paths()
-				_build_combining_map()
-				_loaded = true
-				return
-			push_warning("RecipeManager: YAML addon parsed recipes.yaml but returned an unsupported structure; falling back to built-in parser")
-		else:
-			push_warning("RecipeManager: YAML addon failed to read %s; falling back to built-in parser: %s" % [recipe_path, result.get_error() if result != null else "unknown error"])
-
-	var fallback_data = _load_recipes_with_fallback_parser(recipe_path)
-	if typeof(fallback_data) != TYPE_DICTIONARY:
-		push_error("RecipeManager: failed to parse recipes.yaml with both YAML addon and built-in fallback")
-		return
-
-	_recipes = fallback_data
-	_build_scene_paths()
-	_build_combining_map()
-	_loaded = true
+			if typeof(data) != TYPE_DICTIONARY:
+				push_warning("RecipeManager: YAML addon parsed recipes.yaml but returned an unsupported structure")
+			
+			_recipes = data
+			_build_scene_paths()
+			_build_combining_map()
+			_loaded = true
+			
 
 static func get_combination(first_id: StringName, second_id: StringName) -> PackedScene:
 	load_recipes()
@@ -46,6 +35,7 @@ static func get_combination(first_id: StringName, second_id: StringName) -> Pack
 	if result_id == null:
 		return null
 	return get_item_scene(result_id)
+
 
 static func get_item_scene(item_id: StringName) -> PackedScene:
 	load_recipes()
@@ -59,6 +49,7 @@ static func get_item_scene(item_id: StringName) -> PackedScene:
 		push_error("RecipeManager: failed to load scene '%s' for item '%s'" % [scene_path, item_id])
 		return null
 	return scene as PackedScene
+
 
 static func print_all_recipes() -> void:
 	load_recipes()
@@ -91,72 +82,6 @@ static func print_all_recipes() -> void:
 			else:
 				print("RecipeManager: invalid combining recipe for '%s'" % result_id)
 
-static func _load_recipes_with_fallback_parser(recipe_path: String) -> Dictionary:
-	var file := FileAccess.open(recipe_path, FileAccess.READ)
-	if file == null:
-		push_error("RecipeManager: could not open %s: %s" % [recipe_path, FileAccess.get_open_error()])
-		return {}
-
-	var lines := file.get_as_text().split("\n")
-	var result := {
-		"items": {},
-		"combining": {}
-	}
-	var current_section := ""
-	var current_result_id := ""
-	var current_item_id := ""
-	var current_item_def: Dictionary = {}
-
-	for line in lines:
-		var trimmed := line.strip_edges()
-		if trimmed.is_empty() or trimmed.begins_with("#"):
-			continue
-
-		var indent := line.length() - line.lstrip(" \t").length()
-		if indent == 0:
-			current_section = ""
-			current_result_id = ""
-			current_item_id = ""
-			if trimmed == "items:":
-				current_section = "items"
-			elif trimmed == "combining:":
-				current_section = "combining"
-			continue
-
-		if current_section == "items":
-			if indent == 2 and trimmed.ends_with(":"):
-				current_item_id = trimmed.trim_suffix(":")
-				current_item_def = {}
-				result["items"][current_item_id] = current_item_def
-				continue
-
-			if indent >= 4 and not current_item_id.is_empty():
-				var parts := trimmed.split(":", true, 1)
-				if parts.size() == 2:
-					var key := parts[0].strip_edges()
-					var value := parts[1].strip_edges()
-					current_item_def[key] = value
-			continue
-
-		if current_section == "combining":
-			if indent == 2 and trimmed.ends_with(":"):
-				current_result_id = trimmed.trim_suffix(":")
-				result["combining"][current_result_id] = []
-				continue
-
-			if trimmed.begins_with("- ") and not current_result_id.is_empty():
-				var item_text := trimmed.substr(2).strip_edges()
-				if item_text.begins_with("[") and item_text.ends_with("]"):
-					var inner := item_text.substr(1, item_text.length() - 2).strip_edges()
-					var parts := inner.split(",", false)
-					var recipe := []
-					for part in parts:
-						recipe.append(part.strip_edges())
-					result["combining"][current_result_id].append(recipe)
-				else:
-					result["combining"][current_result_id].append([item_text])
-
-	return result
 
 static func _build_scene_paths() -> void:
 	_scene_paths.clear()
@@ -170,6 +95,7 @@ static func _build_scene_paths() -> void:
 		var scene_path = item_def.get("scene", "")
 		if typeof(scene_path) == TYPE_STRING and not scene_path.is_empty():
 			_scene_paths[str(item_id)] = scene_path
+
 
 static func _get_recipe_entries(recipe_value: Variant) -> Array:
 	var recipes: Array = []
@@ -186,6 +112,7 @@ static func _get_recipe_entries(recipe_value: Variant) -> Array:
 			recipes.append(recipe_value)
 	return recipes
 
+
 static func _build_combining_map() -> void:
 	_combining_map.clear()
 	var combining = _recipes.get("combining", {})
@@ -199,6 +126,7 @@ static func _build_combining_map() -> void:
 			var second = StringName(recipe[1])
 			var key = _make_pair_key(first, second)
 			_combining_map[key] = result_id
+
 
 static func _make_pair_key(first_id: StringName, second_id: StringName) -> StringName:
 	if str(first_id) <= str(second_id):
