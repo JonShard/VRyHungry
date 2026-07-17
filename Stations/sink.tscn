@@ -1,0 +1,57 @@
+[gd_scene format=3 uid="uid://dvrk268s7gkxh"]
+
+[ext_resource type="Script" uid="uid://byh5j25mwt3oc" path="res://Stations/sink.gd" id="1_7hh4b"]
+[ext_resource type="Script" uid="uid://cquqe4f1m1sw6" path="res://addons/godot-xr-tools/objects/snap_zone.gd" id="2_3ocod"]
+[ext_resource type="PackedScene" uid="uid://bp3v1jl8pctro" path="res://Containers/plate.tscn" id="2_ai6d4"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_24d3s"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_dlkho"]
+radius = 0.3
+
+[node name="Sink" type="StaticBody3D" unique_id=2055277359 groups=["station"]]
+script = ExtResource("1_7hh4b")
+plate_scene = ExtResource("2_ai6d4")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=964735164]
+shape = SubResource("BoxShape3D_24d3s")
+
+[node name="Label3D" type="Label3D" parent="CollisionShape3D" unique_id=878280948]
+transform = Transform3D(0.9999992, 0, 0, 0, 0.99999946, 0, 0, 0, 0.9999992, 0.002797456, 0.6309581, -0.2812457)
+text = "Sink
+"
+
+[node name="XRToolsSnapZone" type="Area3D" parent="." unique_id=1762550988 groups=["station"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5163779, 0)
+collision_layer = 65536
+collision_mask = 65536
+script = ExtResource("2_3ocod")
+snap_mode = 1
+metadata/_custom_type_script = "uid://cquqe4f1m1sw6"
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="XRToolsSnapZone" unique_id=860566355]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -0.000975132, 0)
+shape = SubResource("SphereShape3D_dlkho")
+
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="." unique_id=311064646]
+
+[node name="CSGBox3D" type="CSGBox3D" parent="CSGCombiner3D" unique_id=1147823280]
+
+[node name="CSGSphere3D" type="CSGSphere3D" parent="CSGCombiner3D" unique_id=2129615695]
+transform = Transform3D(1.1506689, 0, 0, 0, 2.7299998, 0, 0, 0, 1, 0, 1.3568852, 0.06031096)
+operation = 2
+radial_segments = 20
+
+[node name="CSGTorus3D" type="CSGTorus3D" parent="CSGCombiner3D" unique_id=2055166617]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 0.84928787, 0, 0.5107032, -0.20686007)
+inner_radius = 0.2
+outer_radius = 0.3
+sides = 16
+
+[node name="CSGBox3D" type="CSGBox3D" parent="CSGCombiner3D/CSGTorus3D" unique_id=1722820789]
+transform = Transform3D(0.5128697, 0, 0, 0, 0.3125893, 0, 0, 0, 1, -0.29027426, 2.3841858e-07, 0)
+operation = 2
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="CSGCombiner3D/CSGTorus3D" unique_id=1812160684]
+transform = Transform3D(0.7700283, 1.4431469e-09, 0.15563977, 3.974847e-09, 0.3125893, -6.8032304e-09, -0.38511342, 6.1118572e-09, 0.3111993, -0.2084502, 8.34465e-07, 0.36219144)
+operation = 2

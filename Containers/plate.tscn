@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bfrlpbsqg5lqr" path="res://addons/godot-xr-tools/objects/pickable.gd" id="1_nq5sa"]
 [ext_resource type="PackedScene" uid="uid://du31pqeytu8as" path="res://Containers/container.tscn" id="1_s5yhh"]
+[ext_resource type="Script" uid="uid://iqjqsk4v6qfh" path="res://Containers/plate_controller.gd" id="1_vjsmi"]
 [ext_resource type="PackedScene" uid="uid://c25yxb0vt53vc" path="res://addons/godot-xr-tools/objects/grab_points/grab_point_hand_left.tscn" id="2_3bkoa"]
 [ext_resource type="Animation" uid="uid://db62hs5s4n2b3" path="res://addons/godot-xr-tools/hands/animations/left/Grip 4.res" id="3_6v47p"]
 [ext_resource type="Script" uid="uid://dvobm6vcfnqe8" path="res://addons/godot-xr-tools/hands/poses/hand_pose_settings.gd" id="4_dhtvl"]
@@ -22,11 +23,17 @@ script = ExtResource("4_dhtvl")
 closed_pose = ExtResource("6_el51w")
 metadata/_custom_type_script = "uid://dvobm6vcfnqe8"
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vlqg6"]
+albedo_color = Color(0.36656043, 0.16690676, 0.12531222, 1)
+
 [node name="Plate" type="RigidBody3D" unique_id=190487773]
 collision_layer = 4
 collision_mask = 196615
 freeze_mode = 1
 script = ExtResource("1_nq5sa")
+
+[node name="PlateController" type="Node" parent="." unique_id=1503264193]
+script = ExtResource("1_vjsmi")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1365637864]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.007171631, 0)
@@ -83,3 +90,47 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.08457637, 0, 0.08950478)
 
 [node name="Slot4" type="Node3D" parent="Container/SidePositions" unique_id=379534402]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06938871, 0, 0.072598234)
+
+[node name="Dirty" type="Node3D" parent="." unique_id=319270152]
+visible = false
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="Dirty" unique_id=1075901752]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.074060306, -1.4901161e-08, -0.021821946)
+radius = 0.02
+height = 0.005
+sides = 16
+material = SubResource("StandardMaterial3D_vlqg6")
+
+[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="Dirty" unique_id=1566886557]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.035480514, 0, 0.09590546)
+radius = 0.04
+height = 0.005
+sides = 16
+material = SubResource("StandardMaterial3D_vlqg6")
+
+[node name="CSGCylinder3D3" type="CSGCylinder3D" parent="Dirty" unique_id=1761966340]
+transform = Transform3D(0.9644101, 0.26441094, 0, -0.26441094, 0.9644101, 0, 0, 0, 1, -0.11377221, 0.005669184, 0.010442272)
+radius = 0.05
+height = 0.005
+sides = 16
+material = SubResource("StandardMaterial3D_vlqg6")
+
+[node name="CSGCylinder3D4" type="CSGCylinder3D" parent="Dirty" unique_id=1869071428]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.023516195, 0, -0.088724144)
+radius = 0.024
+height = 0.005
+sides = 16
+material = SubResource("StandardMaterial3D_vlqg6")
+
+[node name="CSGTorus3D" type="CSGTorus3D" parent="Dirty" unique_id=753275027]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0009794924, -0.005010009, -0.0004204195)
+inner_radius = 0.10664626
+outer_radius = 0.14543402
+sides = 16
+material = SubResource("StandardMaterial3D_vlqg6")
+
+[node name="CSGPolygon3D" type="CSGPolygon3D" parent="Dirty" unique_id=280929999]
+transform = Transform3D(0.21189868, 0, 0, 0, -9.2623855e-09, 0.21189868, 0, -0.21189868, -9.2623855e-09, -0.04347625, 0, 0.017095774)
+polygon = PackedVector2Array(-0.053057775, 0.2586278, 0.09469998, 0.40791017, 0.31746316, 0.26044407, 0.4514293, -0.05809097, 0.105977096, -0.11683442, -4.3913722e-05, 0.02302903)
+depth = 0.02
+material = SubResource("StandardMaterial3D_vlqg6")

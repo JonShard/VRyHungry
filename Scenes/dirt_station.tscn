@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://cnjwtnhwh0i8q"]
+
+[ext_resource type="Script" uid="uid://q7tpwmrbmu1m" path="res://Scenes/dirt_station.gd" id="1_hc1d4"]
+[ext_resource type="Script" uid="uid://cquqe4f1m1sw6" path="res://addons/godot-xr-tools/objects/snap_zone.gd" id="2_v0ytd"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_24d3s"]
+size = Vector3(0.5, 1, 0.5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qn1ku"]
+albedo_color = Color(0.45262197, 0.26770625, 0.2601587, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ay2w6"]
+material = SubResource("StandardMaterial3D_qn1ku")
+size = Vector3(0.5, 1, 0.5)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_dlkho"]
+radius = 0.3
+
+[node name="DirtStation" type="StaticBody3D" unique_id=160842153 groups=["station"]]
+script = ExtResource("1_hc1d4")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1400366312]
+shape = SubResource("BoxShape3D_24d3s")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CollisionShape3D" unique_id=55726639]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.008318901, 0, -0.022509098)
+mesh = SubResource("BoxMesh_ay2w6")
+
+[node name="Label3D" type="Label3D" parent="CollisionShape3D" unique_id=1251766743]
+transform = Transform3D(0.9999992, 0, 0, 0, 0.99999946, 0, 0, 0, 0.9999992, 0.002797456, 0.6309581, -0.2812457)
+text = "Dirt"
+
+[node name="XRToolsSnapZone" type="Area3D" parent="." unique_id=333161027 groups=["station"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5270121, 0)
+collision_layer = 65536
+collision_mask = 65536
+script = ExtResource("2_v0ytd")
+snap_mode = 1
+metadata/_custom_type_script = "uid://cquqe4f1m1sw6"
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="XRToolsSnapZone" unique_id=1398712192]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -0.000975132, 0)
+shape = SubResource("SphereShape3D_dlkho")

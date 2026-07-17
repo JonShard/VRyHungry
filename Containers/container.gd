@@ -1,5 +1,7 @@
+class_name ItemContainer
 extends Node3D
 
+@export var enabled: bool = true
 @export var target_group : String # Items with this tag can be added to the container
 @export var meal_positions: Array[Node3D] = []
 @export var side_positions: Array[Node3D] = []
@@ -12,7 +14,6 @@ extends Node3D
 
 var contained_items: Array[FoodItem] # Expose nice list of others to read
 
-
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	area_3d.body_entered.connect(_on_body_entered)
@@ -23,9 +24,13 @@ func _ready() -> void:
 
 
 func _on_body_entered(body: Node3D) -> void:
+	print("Container enabled: ", enabled)
+	if not enabled:
+		print("Container disabled in  _on_body_entered body")
+		return
 	if not body.is_in_group(target_group):
 		return
-		
+	print("Container _on_body_entered body: ", body)
 	var picked_by = xr_pickable.get_picked_up_by()
 	if picked_by and picked_by.is_in_group("station"):
 		
