@@ -18,18 +18,16 @@ combining:
     - [cube, cube]
 
 cooking:
-  cooked_burger: 
+  cooked_burger:
     ingredient: raw_burger
     time: 3
   charcoal:
-    ingredient: cooked_burger
-    time: 2
-  charcoal: 
-    ingredient: toast
-    time: 2
-  charcoal:
-    ingredient: cube
-    time: 1
+    - ingredient: cooked_burger
+      time: 2
+    - ingredient: toast
+      time: 2
+    - ingredient: cube
+      time: 1
 
 chopping:
   salad: 

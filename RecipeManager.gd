@@ -48,18 +48,31 @@ static func get_combination_result(first_id: StringName, second_id: StringName) 
 static func get_cooking_result(ingredient_id: StringName) -> PackedScene:
 	load_recipes()
 	for cooked_id in _cooking_map.keys():
-		var cook_def = _cooking_map[cooked_id]
-		if cook_def["ingredient"] == ingredient_id:
-			return get_item_scene(cooked_id)
+		var cook_defs = _cooking_map[cooked_id]
+		# cook_defs may be an Array of recipe dicts (new) or a single dict (backwards compat)
+		if typeof(cook_defs) == TYPE_ARRAY:
+			for cook_def in cook_defs:
+				if cook_def["ingredient"] == ingredient_id:
+					return get_item_scene(cooked_id)
+		else:
+			var cook_def = cook_defs
+			if cook_def["ingredient"] == ingredient_id:
+				return get_item_scene(cooked_id)
 	return null
 
 
 static func get_cooking_time(ingredient_id: StringName) -> float:
 	load_recipes()
 	for cooked_id in _cooking_map.keys():
-		var cook_def = _cooking_map[cooked_id]
-		if cook_def["ingredient"] == ingredient_id:
-			return cook_def["time"]
+		var cook_defs = _cooking_map[cooked_id]
+		if typeof(cook_defs) == TYPE_ARRAY:
+			for cook_def in cook_defs:
+				if cook_def["ingredient"] == ingredient_id:
+					return cook_def["time"]
+		else:
+			var cook_def = cook_defs
+			if cook_def["ingredient"] == ingredient_id:
+				return cook_def["time"]
 	return 0.0
 
 
@@ -114,8 +127,13 @@ static func _print_combining_recipes() -> void:
 
 static func _print_cooking_recipes() -> void:
 	for cooked_id in _cooking_map.keys():
-		var cook_def = _cooking_map[cooked_id]
-		print("  %s <-cook-- %s - time: %.1f" % [cooked_id, cook_def["ingredient"], cook_def["time"]])
+		var cook_defs = _cooking_map[cooked_id]
+		if typeof(cook_defs) == TYPE_ARRAY:
+			for cook_def in cook_defs:
+				print("  %s <-cook-- %s - time: %.1f" % [cooked_id, cook_def["ingredient"], cook_def["time"]])
+		else:
+			var cook_def = cook_defs
+			print("  %s <-cook-- %s - time: %.1f" % [cooked_id, cook_def["ingredient"], cook_def["time"]])
 
 
 static func _print_chopping_recipes() -> void:
@@ -198,26 +216,46 @@ static func _make_pair_key(first_id: StringName, second_id: StringName) -> Strin
 #   cooked_burger: 
 #     ingredient: raw_burger
 #     time: 3
+# or allowing multiple recipes for the same cooked item:
+#   charcoal:
+#     - ingredient: cube
+#       time: 1
+#     - ingredient: some_other
+#       time: 2
 static func _build_cooking_map() -> void:
 	_cooking_map.clear()
 	var cooking = _recipes.get("cooking", {})
 	if typeof(cooking) != TYPE_DICTIONARY:
 		return
 	for cooked_id in cooking.keys():
-		var cook_def = cooking[cooked_id]
-		if typeof(cook_def) != TYPE_DICTIONARY:
-			push_error("RecipeManager: cooking recipe for '%s' must be a dictionary" % cooked_id)
+		var cook_val = cooking[cooked_id]
+		var entries: Array = []
+		if typeof(cook_val) == TYPE_ARRAY:
+			for entry in cook_val:
+				if typeof(entry) != TYPE_DICTIONARY:
+					push_error("RecipeManager: cooking recipe for '%s' contains a non-dictionary entry" % cooked_id)
+					continue
+				entries.append(entry)
+		elif typeof(cook_val) == TYPE_DICTIONARY:
+			entries.append(cook_val)
+		else:
+			push_error("RecipeManager: cooking recipe for '%s' must be a dictionary or array of dictionaries" % cooked_id)
 			continue
-		var ingredient = cook_def.get("ingredient", "")
-		if typeof(ingredient) != TYPE_STRING or str(ingredient).is_empty():
-			push_error("RecipeManager: cooking recipe '%s' missing a valid 'ingredient' field" % cooked_id)
-			continue
-		var time_val = cook_def.get("time", null)
-		if typeof(time_val) != TYPE_INT and typeof(time_val) != TYPE_FLOAT:
-			push_error("RecipeManager: cooking recipe '%s' missing a valid 'time' field" % cooked_id)
-			continue
-		# store cooked item -> { ingredient: StringName, time: float }
-		_cooking_map[StringName(cooked_id)] = {"ingredient": StringName(str(ingredient)), "time": float(time_val)}
+
+		var parsed_entries: Array = []
+		for cook_def in entries:
+			var ingredient = cook_def.get("ingredient", "")
+			if typeof(ingredient) != TYPE_STRING or str(ingredient).is_empty():
+				push_error("RecipeManager: cooking recipe '%s' missing a valid 'ingredient' field" % cooked_id)
+				continue
+			var time_val = cook_def.get("time", null)
+			if typeof(time_val) != TYPE_INT and typeof(time_val) != TYPE_FLOAT:
+				push_error("RecipeManager: cooking recipe '%s' missing a valid 'time' field" % cooked_id)
+				continue
+			parsed_entries.append({"ingredient": StringName(str(ingredient)), "time": float(time_val)})
+
+		if not parsed_entries.is_empty():
+			_cooking_map[StringName(cooked_id)] = parsed_entries
 	
 
 # Reads structure into _chopping_map:
