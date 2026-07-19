@@ -22,7 +22,7 @@
 			"title": "Doing",
 			"tasks": [
 				"d9cebd68-792e-4d01-a916-7df5f128b4a8",
-				"eee1990e-f957-4499-84b6-e68003fcb78e"
+				"1c3b9543-cb67-431d-bf71-c8753e816776"
 			]
 		},
 		{
@@ -31,6 +31,7 @@
 			"tasks": [
 				"4ab36c89-a377-4f25-86a1-ac276aadf4a2",
 				"cde44fb1-3fdf-4ea0-8267-d28d894e4e7d",
+				"eee1990e-f957-4499-84b6-e68003fcb78e",
 				"a4dd35ae-dc8e-42a3-9044-bf1cb1af281a"
 			]
 		}
@@ -171,6 +172,30 @@
 			"description": "See if we can use the Container.gd to do this.\nWe could possible change it to support extracting items if that is enabled.",
 			"category": "bf4ec62e-526e-4027-876f-0b22bd17f79a",
 			"steps": []
+		},
+		{
+			"uuid": "1c3b9543-cb67-431d-bf71-c8753e816776",
+			"title": "Table Station (customer)",
+			"description": "Asks for a Meal and consumes it when given, making plate dirty",
+			"category": "bf4ec62e-526e-4027-876f-0b22bd17f79a",
+			"steps": [
+				{
+					"details": "Recipe manager exposes list of meal",
+					"done": false
+				},
+				{
+					"details": "Table picks a meal to request and sinals it visually",
+					"done": false
+				},
+				{
+					"details": "Table consumes meal making plate diry",
+					"done": false
+				},
+				{
+					"details": "Table angry if not meal in set time",
+					"done": false
+				}
+			]
 		}
 	],
 	"layout": {
