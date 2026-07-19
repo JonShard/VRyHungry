@@ -45,13 +45,22 @@ static func get_combination_result(first_id: StringName, second_id: StringName) 
 	return get_item_scene(result_id)
 
 
-static func get_cooking_result(ingredient_id: StringName) -> Dictionary:
+static func get_cooking_result(ingredient_id: StringName) -> PackedScene:
 	load_recipes()
 	for cooked_id in _cooking_map.keys():
 		var cook_def = _cooking_map[cooked_id]
 		if cook_def["ingredient"] == ingredient_id:
-			return {"cooked_id": cooked_id, "time": cook_def["time"]}
-	return {}
+			return get_item_scene(cooked_id)
+	return null
+
+
+static func get_cooking_time(ingredient_id: StringName) -> float:
+	load_recipes()
+	for cooked_id in _cooking_map.keys():
+		var cook_def = _cooking_map[cooked_id]
+		if cook_def["ingredient"] == ingredient_id:
+			return cook_def["time"]
+	return 0.0
 
 
 static func get_item_scene(item_id: StringName) -> PackedScene:
@@ -78,11 +87,15 @@ static func print_all_recipes() -> void:
 		print("RecipeManager: no combining recipes found")
 		return
 
-	print("RecipeManager: Loaded recipes")
+	print("#### RecipeManager: Loaded recipes ####")
 	_print_combining_recipes()
+	print("")
 	_print_cooking_recipes()
+	print("")
 	_print_chopping_recipes()
+	print("")
 	_print_rolling_recipes()
+	print("")
 	_print_augmenting_recipes()
 
 static func _print_combining_recipes() -> void:
@@ -96,25 +109,25 @@ static func _print_combining_recipes() -> void:
 
 		var first = key_str.substr(0, separator_index)
 		var second = key_str.substr(separator_index + 1, key_str.length() - separator_index - 1)
-		print("%s <-combine-- %s + %s" % [result_id, first, second])
+		print("  %s <-combine-- %s + %s" % [result_id, first, second])
 
 
 static func _print_cooking_recipes() -> void:
 	for cooked_id in _cooking_map.keys():
 		var cook_def = _cooking_map[cooked_id]
-		print("%s <-cook-- %s - time: %.1f" % [cooked_id, cook_def["ingredient"], cook_def["time"]])
+		print("  %s <-cook-- %s - time: %.1f" % [cooked_id, cook_def["ingredient"], cook_def["time"]])
 
 
 static func _print_chopping_recipes() -> void:
 	for chopped_id in _chopping_map.keys():
 		var chop_def = _chopping_map[chopped_id]
-		print("%s <-chop-- %s - work: %.1f" % [chopped_id, chop_def["ingredient"], chop_def["work"]])
+		print("  %s <-chop-- %s - work: %.1f" % [chopped_id, chop_def["ingredient"], chop_def["work"]])
 
 
 static func _print_rolling_recipes() -> void:
 	for rolled_id in _rolling_map.keys():
 		var roll_def = _rolling_map[rolled_id]
-		print("%s <-roll-- %s - work: %.1f" % [rolled_id, roll_def["ingredient"], roll_def["work"]])
+		print("  %s <-roll-- %s - work: %.1f" % [rolled_id, roll_def["ingredient"], roll_def["work"]])
 
 
 static func _print_augmenting_recipes() -> void:
@@ -122,7 +135,7 @@ static func _print_augmenting_recipes() -> void:
 		var augment_def = _augmenting_map[target_id]
 		for ingredient_id in augment_def.keys():
 			var attr_key = augment_def[ingredient_id]
-			print("%s <-augment-- %s adds attribute '%s'" % [target_id, ingredient_id, attr_key])
+			print("  %s <-augment-- %s adds attribute '%s'" % [target_id, ingredient_id, attr_key])
 
 
 static func _build_scene_paths() -> void:

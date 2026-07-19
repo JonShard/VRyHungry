@@ -1,59 +1,68 @@
 extends StaticBody3D
 
+const RECIPE_MANAGER = preload("res://RecipeManager.gd")
 
 @export var cook_speed = 1
 @onready var snap_zone: XRToolsSnapZone = $XRToolsSnapZone
 
-var item = null
-var progress = 0
+var time_cooked = 0
+var cooking_result = null
+var cooking_result_time = 0 
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	if snap_zone.initial_object:
-		item = snap_zone.initial_object
-		print("Hob has item: ", item)
-	else:
-		print("Hob is empty")
+	snap_zone.has_picked_up.connect(_on_object_picked_up)
+	snap_zone.has_dropped.connect(_on_object_dropped)
 
-func convert_item(cookable: CookableItem) -> void:
-	print("Hob converting ", cookable)
+func _on_object_picked_up(_item) -> void:
+	print("Hob: object picked up: ", _item)
+
+	# Find the CookableItem in held object
+	var _food_item = _item.get_node_or_null("FoodItem") as FoodItem
+	if not _food_item:
+		print("Hob: held object is not a FoodItem")
+		return
+	var result = RECIPE_MANAGER.get_cooking_result(_food_item.id)
+	if not result:
+		print("Hob: held a FoodItem that is not cookable, id: ", _food_item.id)
+		return
+
+	cooking_result = result
+	cooking_result_time = RECIPE_MANAGER.get_cooking_time(_food_item.id) 
+
+
+func _on_object_dropped() -> void:
+	print("Hob: object drop ")
+	time_cooked = 0
+	cooking_result = null
+	cooking_result_time = 0 
+
+
+func convert_held_to_item(_item: PackedScene) -> void:
+	print("Hob converting ", _item)
 	
 	var old_pickable = snap_zone.picked_up_object
 	if not old_pickable:
-		push_warning("Hob finished cooking item, but snap zone is missing its reference")
+		push_warning("Hob finished cooking _item, but snap zone is missing its reference")
 		return
 	
-	print("picked_up_object ", snap_zone.picked_up_object)
-
+	# Create new item as child of root in the same position
 	var original_transform = old_pickable.global_transform
-	var new_scene_instance = cookable.turns_into.instantiate()
-	
-	# Add the new item to the hob's parent (so it lives in the main world space)
-	get_parent().add_child(new_scene_instance)
+	var new_scene_instance = _item.instantiate()
+	get_tree().get_root().add_child(new_scene_instance)
 	new_scene_instance.global_transform = original_transform
 
+	# Drop and free the old item and pick up the new one
+	print("Hob freeing old_pickable  ", old_pickable)
 	snap_zone.drop_object() 
-	print("old_pickable  ", old_pickable)
 	old_pickable.queue_free()
 	snap_zone.pick_up_object(new_scene_instance)
 	
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
+# If cooking something, progress cooking, when done, convert item
 func _process(delta: float) -> void:	
-	# Find the CookableItem in held object
-	var cookable = null
-	if snap_zone.picked_up_object:
-		var matches = snap_zone.picked_up_object.get_children().filter(func(c): return c is CookableItem)
-		if matches.size() > 0:
-			cookable = matches[0]
-	
-	# Cook it if exists, then convert item after cooking
-	if cookable:
-		progress += cook_speed * delta
-		print("Cooking ", progress)
-		if progress >= cookable.cooking_time:
-			progress = 0
-			convert_item(cookable)
-	else:
-		progress = 0
+	if cooking_result:
+		time_cooked += cook_speed * delta		
+		if time_cooked >= cooking_result_time:
+			time_cooked = 0
+			convert_held_to_item(cooking_result)
 		

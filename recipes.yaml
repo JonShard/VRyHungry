@@ -21,12 +21,15 @@ cooking:
   cooked_burger: 
     ingredient: raw_burger
     time: 3
-  charcoal: 
+  charcoal:
     ingredient: cooked_burger
-    time: 4
+    time: 2
   charcoal: 
     ingredient: toast
     time: 2
+  charcoal:
+    ingredient: cube
+    time: 1
 
 chopping:
   salad: 

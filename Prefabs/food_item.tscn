@@ -4,5 +4,4 @@
 
 [node name="FoodItem" type="Node" unique_id=63948206]
 script = ExtResource("1_0na5k")
-id = "hamburger"
-item_type = "Meal"
+id = "some_food_id"

@@ -50,7 +50,6 @@ func _on_item_dropped(_item: Node3D) -> void:
 
 # If the other body is a FoodItem, check for a recipe and combine if one exists.
 func _on_body_entered(body: Node3D) -> void:
-	print("CombinableItem _on_body_entered")
 	if _combining or body == _pickable:
 		print("CombinableItem _on_body_entered: other is our own pickable")
 		return
