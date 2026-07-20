@@ -4,7 +4,6 @@
 [ext_resource type="PackedScene" uid="uid://j5s5wus7tuhb" path="res://XROrigin.tscn" id="2_o1b3t"]
 [ext_resource type="Material" uid="uid://cmia50cfqxxo4" path="res://Textures/dev_material_3d.tres" id="3_irf4n"]
 [ext_resource type="PackedScene" uid="uid://j7caslh27nor" path="res://Stations/Hob.tscn" id="4_ctden"]
-[ext_resource type="Script" uid="uid://cquqe4f1m1sw6" path="res://addons/godot-xr-tools/objects/snap_zone.gd" id="5_57ppd"]
 [ext_resource type="PackedScene" uid="uid://e4i6o5oriecx" path="res://Items/PickupCube.tscn" id="6_eoxxy"]
 [ext_resource type="Sky" uid="uid://c1abtpwhdm2d5" path="res://Textures/sky/NightSkyHDRI009_16K.tres" id="7_n8fyw"]
 [ext_resource type="PackedScene" uid="uid://c0lknik4noobs" path="res://Items/BurgerBuns.tscn" id="8_rraok"]
@@ -15,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://dvrk268s7gkxh" path="res://Stations/sink.tscn" id="13_o1b3t"]
 [ext_resource type="PackedScene" uid="uid://cnjwtnhwh0i8q" path="res://Stations/dirt_station.tscn" id="14_irf4n"]
 [ext_resource type="PackedScene" uid="uid://cfc4ho67u4r5e" path="res://Items/cooked_burger.tscn" id="15_ctden"]
+[ext_resource type="PackedScene" uid="uid://efaec6ymgabo" path="res://Stations/Counter.tscn" id="15_di04w"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vlqg6"]
 size = Vector3(5, 0.1, 5)
@@ -22,13 +22,6 @@ size = Vector3(5, 0.1, 5)
 [sub_resource type="BoxMesh" id="BoxMesh_24d3s"]
 material = ExtResource("3_irf4n")
 size = Vector3(5, 0.1, 5)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_24d3s"]
-
-[sub_resource type="BoxMesh" id="BoxMesh_i5j2u"]
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_dlkho"]
-radius = 0.3
 
 [sub_resource type="Environment" id="Environment_bvwq1"]
 background_mode = 2
@@ -60,32 +53,6 @@ mesh = SubResource("BoxMesh_24d3s")
 [node name="Hob" parent="." unique_id=1687971542 instance=ExtResource("4_ctden")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.29336345, 0.8981018, -1.484)
 
-[node name="Counter" type="StaticBody3D" parent="." unique_id=1487893288 groups=["station"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.73186195, 0.8981018, -1.484)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Counter" unique_id=692568688]
-shape = SubResource("BoxShape3D_24d3s")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Counter/CollisionShape3D" unique_id=127773521]
-mesh = SubResource("BoxMesh_i5j2u")
-
-[node name="Label3D" type="Label3D" parent="Counter/CollisionShape3D" unique_id=149978729]
-transform = Transform3D(0.9999992, 0, 0, 0, 0.99999946, 0, 0, 0, 0.9999992, 0.002797456, 0.6309581, -0.2812457)
-text = "Counter"
-
-[node name="XRToolsSnapZone" type="Area3D" parent="Counter" unique_id=1647380272 groups=["station"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5270121, 0)
-collision_layer = 65536
-collision_mask = 65536
-script = ExtResource("5_57ppd")
-snap_mode = 1
-initial_object = NodePath("../../Plate")
-metadata/_custom_type_script = "uid://cquqe4f1m1sw6"
-
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="Counter/XRToolsSnapZone" unique_id=969340130]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -0.000975132, 0)
-shape = SubResource("SphereShape3D_dlkho")
-
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1177077250]
 environment = SubResource("Environment_bvwq1")
 
@@ -96,7 +63,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8162017, 1.6081157, -1.471
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.832131, 0.40028095, -1.4813508)
 
 [node name="Plate" parent="." unique_id=190487773 instance=ExtResource("10_ay2w6")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.79203784, 1.6058162, -1.4441451)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.70551, 1.545408, -1.4873823)
 
 [node name="burger" parent="." unique_id=1417604760 instance=ExtResource("11_qn1ku")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6888188, 1.4195822, -1.7110313)
@@ -155,58 +122,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.3303163, 1.4398065, -0.578
 [node name="CookedBurger4" parent="." unique_id=1837607086 instance=ExtResource("15_ctden")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.30671906, 1.525444, -1.0928738)
 
-[node name="Counter2" type="StaticBody3D" parent="." unique_id=806230637 groups=["station"]]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.7617489, 0.8981018, -0.45975232)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Counter2" unique_id=538423775]
-shape = SubResource("BoxShape3D_24d3s")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Counter2/CollisionShape3D" unique_id=361943896]
-mesh = SubResource("BoxMesh_i5j2u")
-
-[node name="Label3D" type="Label3D" parent="Counter2/CollisionShape3D" unique_id=1988050169]
-transform = Transform3D(0.9999992, 0, 0, 0, 0.99999946, 0, 0, 0, 0.9999992, 0.002797456, 0.6309581, -0.2812457)
-text = "Counter"
-
-[node name="XRToolsSnapZone" type="Area3D" parent="Counter2" unique_id=1386604336 groups=["station"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5270121, 0)
-collision_layer = 65536
-collision_mask = 65536
-script = ExtResource("5_57ppd")
-snap_mode = 1
-metadata/_custom_type_script = "uid://cquqe4f1m1sw6"
-
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="Counter2/XRToolsSnapZone" unique_id=1704471901]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -0.000975132, 0)
-shape = SubResource("SphereShape3D_dlkho")
-
 [node name="BurgerBuns2" parent="." unique_id=1210358958 instance=ExtResource("8_rraok")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.3984022, 1.4110342, -0.2721244)
-
-[node name="Counter3" type="StaticBody3D" parent="." unique_id=1980665158 groups=["station"]]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.7617489, 0.8981018, 0.5719713)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Counter3" unique_id=67427622]
-shape = SubResource("BoxShape3D_24d3s")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Counter3/CollisionShape3D" unique_id=267368942]
-mesh = SubResource("BoxMesh_i5j2u")
-
-[node name="Label3D" type="Label3D" parent="Counter3/CollisionShape3D" unique_id=19543496]
-transform = Transform3D(0.9999992, 0, 0, 0, 0.99999946, 0, 0, 0, 0.9999992, 0.002797456, 0.6309581, -0.2812457)
-text = "Counter"
-
-[node name="XRToolsSnapZone" type="Area3D" parent="Counter3" unique_id=1296955986 groups=["station"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5270121, 0)
-collision_layer = 65536
-collision_mask = 65536
-script = ExtResource("5_57ppd")
-snap_mode = 1
-metadata/_custom_type_script = "uid://cquqe4f1m1sw6"
-
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="Counter3/XRToolsSnapZone" unique_id=1150602999]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -0.000975132, 0)
-shape = SubResource("SphereShape3D_dlkho")
 
 [node name="PickableObject7" parent="." unique_id=641653545 instance=ExtResource("6_eoxxy")]
 transform = Transform3D(1, 0, -2.2351742e-08, -2.9802322e-08, 1.0000001, 0, -2.6077032e-08, 1.4901161e-08, 1, -1.3556751, 1.4792972, 0.28881657)
@@ -219,3 +136,15 @@ transform = Transform3D(1, 0, -2.2351742e-08, -2.9802322e-08, 1.0000001, 0, -2.6
 
 [node name="PickableObject10" parent="." unique_id=313160217 instance=ExtResource("6_eoxxy")]
 transform = Transform3D(1, 0, -2.2351742e-08, -2.9802322e-08, 1.0000001, -5.293956e-23, -2.6077032e-08, 1.4901161e-08, 1, -1.4505737, 1.4639391, 0.16882455)
+
+[node name="Counter" parent="." unique_id=1487893288 instance=ExtResource("15_di04w")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7124918, 0.90304357, -1.4886917)
+
+[node name="Counter2" parent="." unique_id=368890752 instance=ExtResource("15_di04w")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.7648025, 0.90304357, -0.4458799)
+
+[node name="Counter3" parent="." unique_id=1498817646 instance=ExtResource("15_di04w")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.7648025, 0.90304357, 0.55367994)
+
+[node name="Counter4" parent="." unique_id=906748771 instance=ExtResource("15_di04w")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.7648025, 0.90304357, 1.5539298)
