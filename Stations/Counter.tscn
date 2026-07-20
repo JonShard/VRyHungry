@@ -19,7 +19,7 @@ albedo_color = Color(1.1759251, 0.741115, 0.5692133, 1)
 shape = SubResource("BoxShape3D_24d3s")
 
 [node name="XRToolsSnapZone" type="Area3D" parent="." unique_id=1647380272 groups=["station"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5270121, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5608841, 0)
 collision_layer = 65536
 collision_mask = 65536
 script = ExtResource("1_dlkho")

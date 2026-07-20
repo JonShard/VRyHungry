@@ -31,37 +31,43 @@ shape = SubResource("SphereShape3D_vlqg6")
 [node name="CSGBox3D" type="CSGBox3D" parent="CSGCombiner3D" unique_id=1111505172]
 
 [node name="CSGCylinder3D" type="CSGCylinder3D" parent="CSGCombiner3D/CSGBox3D" unique_id=1338463939]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5128712, 0)
+transform = Transform3D(0.8943019, 0, 0, 0, 0.8943019, 0, 0, 0, 0.8943019, 0, 0.5103538, -7.827557e-05)
 operation = 2
 radius = 0.25976563
 height = 0.08898926
 sides = 32
 
+[node name="CSGTorus3D3" type="CSGTorus3D" parent="CSGCombiner3D" unique_id=666891341]
+transform = Transform3D(0.8943019, 0, 0, 0, 0.8943019, 0, 0, 0, 0.8943019, 0, 0.5003869, -7.827557e-05)
+inner_radius = 0.09153879
+outer_radius = 0.120084204
+sides = 32
+
 [node name="CSGTorus3D" type="CSGTorus3D" parent="CSGCombiner3D" unique_id=1901978664]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.50172627, 0)
+transform = Transform3D(0.8943019, 0, 0, 0, 0.8943019, 0, 0, 0, 0.8943019, 0, 0.5003869, -7.827557e-05)
 inner_radius = 0.20426142
 outer_radius = 0.2321898
 sides = 32
 
 [node name="CSGTorus3D2" type="CSGTorus3D" parent="CSGCombiner3D" unique_id=24541894]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.50172627, 0)
+transform = Transform3D(0.8943019, 0, 0, 0, 0.8943019, 0, 0, 0, 0.8943019, 0, 0.5003869, -7.827557e-05)
 inner_radius = 0.15036294
 outer_radius = 0.17592031
 sides = 32
 
 [node name="CSGCylinder3D" type="CSGCylinder3D" parent="CSGCombiner3D" unique_id=1107239311]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.44518578, 0)
-radius = 0.1352539
+transform = Transform3D(0.8943019, 0, 0, 0, 0.8943019, 0, 0, 0, 0.8943019, 0, 0.4498226, -7.827557e-05)
+radius = 0.071777344
 height = 0.09637451
 sides = 32
 
 [node name="CSGCylinder3D2" type="CSGCylinder3D" parent="CSGCombiner3D" unique_id=435540815]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0.48640895, -0.0022216737)
+transform = Transform3D(0.8943019, 0, 0, 0, -3.9091177e-08, 0.8943019, 0, -0.8943019, -3.9091177e-08, 0, 0.48668858, -0.0020651226)
 radius = 0.008
 height = 0.44487303
 
 [node name="CSGCylinder3D3" type="CSGCylinder3D" parent="CSGCombiner3D" unique_id=878171801]
-transform = Transform3D(-4.371139e-08, -1, -4.371139e-08, 0, -4.371139e-08, 1, -1, 4.371139e-08, 1.9106855e-15, 0, 0.48640895, -0.0022216737)
+transform = Transform3D(-3.9091177e-08, -0.8943019, -3.9091177e-08, 0, -3.9091177e-08, 0.8943019, -0.8943019, 3.9091177e-08, 1.7087296e-15, 0, 0.48668858, -0.0020651226)
 radius = 0.008
 height = 0.44487303
 
