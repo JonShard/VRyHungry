@@ -1,7 +1,9 @@
 extends StaticBody3D
 
+const GAME_MANAGER = preload("res://GameManager.gd")
+
 @export var initial_thinking_time: float = 8
-@export var initial_primary_time: float = 3
+@export var initial_primary_time: float = 8
 @export var initial_friend_time: float = 3
 @export var initial_eating_time: float = 3
 
@@ -25,7 +27,7 @@ enum TableState {
 }
 var _state = TableState.EMPTY # use _setState(), never set directly
 var _state_time: float = 0.0
-
+var _unsatisfied_orders: Array[String]
 
 func _ready() -> void:
 	if not label_3d:
@@ -42,6 +44,7 @@ func _ready() -> void:
 
 func _on_object_picked_up(_item) -> void:
 	print("Table: object picked up: ", _item)
+	_update_order_text()
 
 
 func _on_object_dropped() -> void:
@@ -50,7 +53,12 @@ func _on_object_dropped() -> void:
 
 func place_order() -> void:
 	print("Table: place_order()")
-	label_3d.text = "order!"
+	_unsatisfied_orders.append(GAME_MANAGER.get_random_meal())
+	_update_order_text()
+
+
+func _update_order_text() -> void:
+	label_3d.text = "Order: " +  ", ".join(_unsatisfied_orders)
 
 
 func _setState(newState: TableState) -> void:
@@ -65,8 +73,8 @@ func _setState(newState: TableState) -> void:
 	
 	if newState == TableState.WAITING_PRIMARY:
 		_state_time = initial_primary_time
-		label_3d.text = lbl_waiting_primary
-	
+		_update_order_text()	
+
 	if newState == TableState.WAITING_FRIEND:
 		_state_time = initial_friend_time
 	
