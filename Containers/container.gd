@@ -14,6 +14,7 @@ extends Node3D
 
 var contained_items: Array[FoodItem] # Expose nice list of others to read
 
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	area_3d.body_entered.connect(_on_body_entered)
@@ -77,9 +78,23 @@ func _add_item(item: Node3D, positions: Array[Node3D], container_root: Node3D) -
 	if food_node:
 		contained_items.append(food_node as FoodItem)
 
+
+func erase_item(item: FoodItem) -> void:
+	for container_root in [_meal_container, _side_container]:
+		for child in container_root.get_children():
+			var food_item = child.get_node_or_null("FoodItem") as FoodItem
+			if food_item.id == item.id:
+				contained_items.erase(item)
+				child.queue_free()
+
+
 func clear() -> void:
 	# delete all nodes in containers and contained_items
-	pass
+	for child in _meal_container.get_children():
+		child.queue_free()
+	for child in _side_container.get_children():
+		child.queue_free()
+	contained_items.clear()
 
 
 #plate (Pickalbe)

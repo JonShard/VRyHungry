@@ -78,4 +78,6 @@ sides = 16
 material = SubResource("StandardMaterial3D_6l01i")
 
 [node name="FoodItem" parent="." index="5" unique_id=63948206 instance=ExtResource("7_yy3y8")]
+id = "hamburger"
 type = 0
+sell_value = 4

@@ -6,3 +6,4 @@ enum Type { MEAL, SIDE, INGREDIENT, NONE }
 
 @export var id: String
 @export var type: Type = Type.NONE
+@export var sell_value = 1

@@ -18,7 +18,7 @@ script = ExtResource("1_2vcpj")
 shape = SubResource("BoxShape3D_24d3s")
 
 [node name="XRToolsSnapZone" type="Area3D" parent="." unique_id=1947858647 groups=["station"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5270121, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.31874347, 0.5270121, 0)
 collision_layer = 65536
 collision_mask = 65536
 script = ExtResource("1_8j1nt")
@@ -26,6 +26,42 @@ snap_mode = 1
 metadata/_custom_type_script = "uid://cquqe4f1m1sw6"
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="XRToolsSnapZone" unique_id=1176887393]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -0.000975132, 0)
+shape = SubResource("SphereShape3D_dlkho")
+
+[node name="XRToolsSnapZone2" type="Area3D" parent="." unique_id=694448387 groups=["station"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.34755045, 0.5270121, 0)
+collision_layer = 65536
+collision_mask = 65536
+script = ExtResource("1_8j1nt")
+snap_mode = 1
+metadata/_custom_type_script = "uid://cquqe4f1m1sw6"
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="XRToolsSnapZone2" unique_id=650960099]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -0.000975132, 0)
+shape = SubResource("SphereShape3D_dlkho")
+
+[node name="XRToolsSnapZone3" type="Area3D" parent="." unique_id=1734026785 groups=["station"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.012355864, 0.5270121, 0.33038777)
+collision_layer = 65536
+collision_mask = 65536
+script = ExtResource("1_8j1nt")
+snap_mode = 1
+metadata/_custom_type_script = "uid://cquqe4f1m1sw6"
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="XRToolsSnapZone3" unique_id=1271210642]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -0.000975132, 0)
+shape = SubResource("SphereShape3D_dlkho")
+
+[node name="XRToolsSnapZone4" type="Area3D" parent="." unique_id=1358457948 groups=["station"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.022546828, 0.5270121, -0.36528283)
+collision_layer = 65536
+collision_mask = 65536
+script = ExtResource("1_8j1nt")
+snap_mode = 1
+metadata/_custom_type_script = "uid://cquqe4f1m1sw6"
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="XRToolsSnapZone4" unique_id=1880499470]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -0.000975132, 0)
 shape = SubResource("SphereShape3D_dlkho")
 
@@ -108,12 +144,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1444692, -0.18527734, -0.15
 size = Vector3(0.05, 0.6713196, 0.05)
 
 [node name="Label3D" type="Label3D" parent="." unique_id=662960977]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1781815, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3247777, 0)
 billboard = 2
 text = "table state"
+vertical_alignment = 0
+line_spacing = -15.0
 
 [node name="Label3DTime" type="Label3D" parent="." unique_id=1534849507]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0412213, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3306234, 0)
 pixel_size = 0.003
 billboard = 2
 text = "20.1s"
