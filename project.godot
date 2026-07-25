@@ -22,6 +22,11 @@ XRToolsRumbleManager="*uid://by853dk86g1qw"
 NetworkManager="*res://Net/network_manager.gd"
 GlobalKeyEvents="*uid://c60unagog5oi1"
 
+[debug]
+
+file_logging/enable_file_logging=true
+file_logging/log_path="res://logs/godot.log"
+
 [display]
 
 window/size/viewport_width=1800
