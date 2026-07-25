@@ -41,7 +41,7 @@ func _set_net_held_by(value: int) -> void:
 	var old := net_held_by
 	net_held_by = value
 	if old != value and NetworkManager.is_online():
-		NetworkManager.log_line("%s net_held_by: %d -> %d (local state: %s, authority=%d)" % [
+		print("%s net_held_by: %d -> %d (local state: %s, authority=%d)" % [
 			_pickable.name, old, value, _holder_desc(), get_multiplayer_authority()
 		])
 	apply_held_state()
@@ -64,7 +64,7 @@ func apply_held_state() -> void:
 			var changed := _pickable.freeze_mode != _original_freeze_mode \
 				or _pickable.collision_mask != _pickable.original_collision_mask
 			if changed and NetworkManager.is_online():
-				NetworkManager.log_line(
+				print(
 					"%s: reclaiming ownership, restoring freeze_mode %d->%d collision_mask %d->%d" % [
 						_pickable.name, _pickable.freeze_mode, _original_freeze_mode,
 						_pickable.collision_mask, _pickable.original_collision_mask
@@ -81,7 +81,7 @@ func apply_held_state() -> void:
 	# actually losing authority for real, should end a grab we initiated.
 	if _pickable.is_picked_up() and _pickable.get_picked_up_by() is XRToolsFunctionPickup:
 		if NetworkManager.is_online():
-			NetworkManager.log_line(
+			print(
 				"%s: ignoring non-authority sync (net_held_by=%d) — still actively held by our own hand (grab-race guard)" % [
 					_pickable.name, net_held_by
 				]
@@ -90,14 +90,14 @@ func apply_held_state() -> void:
 	# Someone else owns it: stop simulating locally, just follow the sync.
 	if _pickable.is_picked_up():
 		if NetworkManager.is_online():
-			NetworkManager.log_line(
+			print(
 				"%s: was held by %s on this peer, but authority now says peer %d owns it — force-dropping" % [
 					_pickable.name, _holder_desc(), net_held_by
 				]
 			)
 		_pickable.drop()
 	if NetworkManager.is_online():
-		NetworkManager.log_line("%s: freezing (non-authority, owner=peer %d)" % [_pickable.name, net_held_by])
+		print("%s: freezing (non-authority, owner=peer %d)" % [_pickable.name, net_held_by])
 	_pickable.freeze = true
 	_pickable.freeze_mode = RigidBody3D.FREEZE_MODE_KINEMATIC
 	_pickable.collision_mask = 0
@@ -114,10 +114,10 @@ func _on_picked_up(_p) -> void:
 		# addon's own "grab out of a snap zone" shortcut mid-cascade) — not a
 		# player-initiated hand grab, so no authority request from here.
 		if NetworkManager.is_online():
-			NetworkManager.log_line("%s picked up by %s (not a hand) — no authority request" % [_pickable.name, _holder_desc()])
+			print("%s picked up by %s (not a hand) — no authority request" % [_pickable.name, _holder_desc()])
 		return
 	if NetworkManager.is_online():
-		NetworkManager.log_line("%s grabbed by hand (authority was peer %d), requesting authority" % [_pickable.name, net_held_by])
+		print("%s grabbed by hand (authority was peer %d), requesting authority" % [_pickable.name, net_held_by])
 	NetworkManager.request_item_authority_from(_pickable.get_path())
 
 
@@ -126,10 +126,10 @@ func _on_dropped(_p) -> void:
 	# apply_held_state() losing authority (see above) must not re-report.
 	if not is_multiplayer_authority():
 		if NetworkManager.is_online():
-			NetworkManager.log_line("%s dropped locally, but we aren't its authority (peer %d is) — not reporting" % [_pickable.name, net_held_by])
+			print("%s dropped locally, but we aren't its authority (peer %d is) — not reporting" % [_pickable.name, net_held_by])
 		return
 	if NetworkManager.is_online():
-		NetworkManager.log_line("%s dropped, reporting release to server (lin=%s ang=%s)" % [
+		print("%s dropped, reporting release to server (lin=%s ang=%s)" % [
 			_pickable.name, _pickable.linear_velocity, _pickable.angular_velocity
 		])
 	NetworkManager.release_item_authority_from(
