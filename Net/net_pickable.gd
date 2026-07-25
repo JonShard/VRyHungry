@@ -38,7 +38,12 @@ func _ready() -> void:
 
 
 func _set_net_held_by(value: int) -> void:
+	var old := net_held_by
 	net_held_by = value
+	if old != value and NetworkManager.is_online():
+		NetworkManager.log_line("%s net_held_by: %d -> %d (local state: %s, authority=%d)" % [
+			_pickable.name, old, value, _holder_desc(), get_multiplayer_authority()
+		])
 	apply_held_state()
 
 
@@ -56,6 +61,15 @@ func apply_held_state() -> void:
 		# client released it) — while actually held, XRToolsPickable's own
 		# pick_up()/let_go() already manage these fields, so leave those be.
 		if not _pickable.is_picked_up():
+			var changed := _pickable.freeze_mode != _original_freeze_mode \
+				or _pickable.collision_mask != _pickable.original_collision_mask
+			if changed and NetworkManager.is_online():
+				NetworkManager.log_line(
+					"%s: reclaiming ownership, restoring freeze_mode %d->%d collision_mask %d->%d" % [
+						_pickable.name, _pickable.freeze_mode, _original_freeze_mode,
+						_pickable.collision_mask, _pickable.original_collision_mask
+					]
+				)
 			_pickable.freeze_mode = _original_freeze_mode
 			_pickable.collision_mask = _pickable.original_collision_mask
 		return
@@ -66,10 +80,24 @@ func apply_held_state() -> void:
 	# hand mid-grab — only an explicit force_release_item rejection, or
 	# actually losing authority for real, should end a grab we initiated.
 	if _pickable.is_picked_up() and _pickable.get_picked_up_by() is XRToolsFunctionPickup:
+		if NetworkManager.is_online():
+			NetworkManager.log_line(
+				"%s: ignoring non-authority sync (net_held_by=%d) — still actively held by our own hand (grab-race guard)" % [
+					_pickable.name, net_held_by
+				]
+			)
 		return
 	# Someone else owns it: stop simulating locally, just follow the sync.
 	if _pickable.is_picked_up():
+		if NetworkManager.is_online():
+			NetworkManager.log_line(
+				"%s: was held by %s on this peer, but authority now says peer %d owns it — force-dropping" % [
+					_pickable.name, _holder_desc(), net_held_by
+				]
+			)
 		_pickable.drop()
+	if NetworkManager.is_online():
+		NetworkManager.log_line("%s: freezing (non-authority, owner=peer %d)" % [_pickable.name, net_held_by])
 	_pickable.freeze = true
 	_pickable.freeze_mode = RigidBody3D.FREEZE_MODE_KINEMATIC
 	_pickable.collision_mask = 0
@@ -82,9 +110,14 @@ func apply_held_state() -> void:
 func _on_picked_up(_p) -> void:
 	var by := _pickable.get_picked_up_by()
 	if not (by is XRToolsFunctionPickup):
+		# e.g. a station snap zone grabbed it (server-side auto-snap, or the
+		# addon's own "grab out of a snap zone" shortcut mid-cascade) — not a
+		# player-initiated hand grab, so no authority request from here.
+		if NetworkManager.is_online():
+			NetworkManager.log_line("%s picked up by %s (not a hand) — no authority request" % [_pickable.name, _holder_desc()])
 		return
 	if NetworkManager.is_online():
-		NetworkManager.log_line("Grabbed %s by hand, requesting authority" % _pickable.name)
+		NetworkManager.log_line("%s grabbed by hand (authority was peer %d), requesting authority" % [_pickable.name, net_held_by])
 	NetworkManager.request_item_authority_from(_pickable.get_path())
 
 
@@ -92,9 +125,31 @@ func _on_dropped(_p) -> void:
 	# Only forward if we're actually still the authority — a drop caused by
 	# apply_held_state() losing authority (see above) must not re-report.
 	if not is_multiplayer_authority():
+		if NetworkManager.is_online():
+			NetworkManager.log_line("%s dropped locally, but we aren't its authority (peer %d is) — not reporting" % [_pickable.name, net_held_by])
 		return
 	if NetworkManager.is_online():
-		NetworkManager.log_line("Dropped %s, reporting release to server" % _pickable.name)
+		NetworkManager.log_line("%s dropped, reporting release to server (lin=%s ang=%s)" % [
+			_pickable.name, _pickable.linear_velocity, _pickable.angular_velocity
+		])
 	NetworkManager.release_item_authority_from(
 		_pickable.get_path(), _pickable.linear_velocity, _pickable.angular_velocity
 	)
+
+
+## Human-readable description of what's currently holding this item on THIS
+## peer, for diagnosing desyncs between a hand's own "what am I holding"
+## bookkeeping and the item's actual grab state (see the snap-zone-grab race
+## in NetworkManager._try_snap_into_station for a real example).
+func _holder_desc() -> String:
+	if not _pickable or not _pickable.is_picked_up():
+		return "loose"
+	var by := _pickable.get_picked_up_by()
+	if not by:
+		return "held(no grabber?)"
+	if by is XRToolsFunctionPickup:
+		return "hand(%s)" % by.get_path()
+	if by is XRToolsSnapZone:
+		var station := by.get_parent()
+		return "zone(%s)" % (station.name if station else str(by.get_path()))
+	return "other(%s: %s)" % [by.get_class(), by.get_path()]

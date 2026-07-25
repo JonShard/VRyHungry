@@ -233,7 +233,7 @@ func _do_release_item_authority(item_path: NodePath, lin: Vector3, ang: Vector3,
 		item.freeze = false
 		item.linear_velocity = lin
 		item.angular_velocity = ang
-	_try_snap_into_station(item)
+	_try_snap_into_station.call_deferred(item)
 
 
 # All station snap zones in the world (every XRToolsSnapZone child of a node in
@@ -251,12 +251,32 @@ func _station_snap_zones() -> Array:
 func _release_from_snap_zones(item: Node) -> void:
 	for zone in _station_snap_zones():
 		if zone.picked_up_object == item:
+			log_line("releasing %s from %s's snap zone (authority just granted elsewhere)" % [item.name, zone.get_parent().name])
 			zone.drop_object()
 
 
 # Snap the item into the nearest empty station snap zone within grab range.
+#
+# Called deferred from _do_release_item_authority: XRToolsFunctionPickup's own
+# "grab an item out of a snap zone" path calls zone.drop_object() BEFORE it
+# calls pick_up() on the hand's behalf. drop_object()'s let_go() synchronously
+# fires the pickable's `dropped` signal, which (via NetPickable) lands here —
+# if this ran synchronously it would immediately re-snap the item into the
+# very same zone it's still physically inside, stealing it away before the
+# hand's own pick_up() call (later in the same call stack) ever runs. That
+# leaves XRToolsFunctionPickup.picked_up_object pointing at an item whose
+# _grab_driver actually belongs to the zone — a stale reference that crashes
+# (null _grab_driver) the next time a controller button is pressed. Deferring
+# lets the hand's pick_up() go first; the is_picked_up() check below is a
+# second guard in case the item gets grabbed for real before this runs.
 func _try_snap_into_station(item: Node) -> void:
 	if not (item is Node3D):
+		return
+	if item.has_method("is_picked_up") and item.is_picked_up():
+		var by: Node = null
+		if item.has_method("get_picked_up_by"):
+			by = item.get_picked_up_by()
+		log_line("skipped snapping %s: already held by %s (grab-race guard)" % [item.name, by.get_path() if by else "?"])
 		return
 	for zone in _station_snap_zones():
 		if is_instance_valid(zone.picked_up_object):
@@ -265,6 +285,7 @@ func _try_snap_into_station(item: Node) -> void:
 			log_line("snapped %s into %s" % [item.name, zone.get_parent().name])
 			zone.pick_up_object(item)
 			return
+	log_line("no station in range to snap %s into (or none empty)" % item.name)
 
 
 # Server broadcasts an authority assignment so every peer agrees on who owns the
