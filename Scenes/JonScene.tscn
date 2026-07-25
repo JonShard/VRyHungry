@@ -33,6 +33,9 @@ ssao_enabled = true
 ssil_enabled = true
 sdfgi_enabled = true
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_24d3s"]
+size = Vector3(5.1, 10, 0.1)
+
 [node name="Main" type="Node3D" unique_id=1312265607]
 script = ExtResource("1_57ppd")
 
@@ -163,3 +166,21 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.7201865, 1.5329367, 0.1477
 
 [node name="Plate3" parent="." unique_id=2004250522 instance=ExtResource("10_ay2w6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5818124, 1.499024, -0.4634577)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=315740174]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=33059670]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.688614, 2.5070028)
+shape = SubResource("BoxShape3D_24d3s")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="StaticBody3D" unique_id=2018792171]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.688614, -2.5446289)
+shape = SubResource("BoxShape3D_24d3s")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="StaticBody3D" unique_id=757662929]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -2.525816, 4.688614, -0.018813243)
+shape = SubResource("BoxShape3D_24d3s")
+
+[node name="CollisionShape3D4" type="CollisionShape3D" parent="StaticBody3D" unique_id=1468386997]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 2.525816, 4.688614, -0.018813023)
+shape = SubResource("BoxShape3D_24d3s")
