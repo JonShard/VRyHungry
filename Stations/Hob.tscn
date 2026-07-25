@@ -8,6 +8,14 @@
 [sub_resource type="SphereShape3D" id="SphereShape3D_vlqg6"]
 radius = 0.3
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_np_hob"]
+properties/0/path = NodePath(".:time_cooked")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:cooking_result_time")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+
 [node name="Hob" type="StaticBody3D" unique_id=1687971542 groups=["station"]]
 script = ExtResource("1_7jc4g")
 
@@ -103,3 +111,7 @@ size = Vector3(0.9842529, 0.095687866, 0.14019775)
 transform = Transform3D(0.94465846, 0, 0, 0, 0.94465846, 0, 0, 0, 0.94465846, -0.003479004, -0.08253479, 0.5616675)
 operation = 2
 size = Vector3(0.9842529, 0.8349304, 0.072387695)
+
+[node name="Sync" type="MultiplayerSynchronizer" parent="."]
+root_path = NodePath("..")
+replication_config = SubResource("SceneReplicationConfig_np_hob")

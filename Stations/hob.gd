@@ -38,23 +38,24 @@ func _on_object_dropped() -> void:
 
 
 func convert_held_to_item(_item: PackedScene) -> void:
+	if not NetworkManager.owns_world():
+		return
 	print("Hob converting ", _item)
-	
+
 	var old_pickable = snap_zone.picked_up_object
 	if not old_pickable:
 		push_warning("Hob finished cooking _item, but snap zone is missing its reference")
 		return
-	
-	# Create new item as child of root in the same position
+
+	# Spawn the new item through the server so it replicates to every peer
+	# (including late joiners), in the old item's position.
 	var original_transform = old_pickable.global_transform
-	var new_scene_instance = _item.instantiate()
-	get_tree().get_root().add_child(new_scene_instance)
-	new_scene_instance.global_transform = original_transform
+	var new_scene_instance = NetworkManager.spawn_item(_item.resource_path, original_transform)
 
 	# Drop and free the old item and pick up the new one
 	print("Hob freeing old_pickable  ", old_pickable)
-	snap_zone.drop_object() 
-	old_pickable.queue_free()
+	snap_zone.drop_object()
+	NetworkManager.despawn_item(old_pickable)
 	snap_zone.pick_up_object(new_scene_instance)
 	
 

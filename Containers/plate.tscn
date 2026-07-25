@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://dvobm6vcfnqe8" path="res://addons/godot-xr-tools/hands/poses/hand_pose_settings.gd" id="4_dhtvl"]
 [ext_resource type="PackedScene" uid="uid://ctw7nbntd5pcj" path="res://addons/godot-xr-tools/objects/grab_points/grab_point_hand_right.tscn" id="5_vlcpl"]
 [ext_resource type="Animation" uid="uid://d1xnpyc08njjx" path="res://addons/godot-xr-tools/hands/animations/right/Grip 4.res" id="6_el51w"]
+[ext_resource type="Script" path="res://Net/net_pickable.gd" id="20_netpk"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_kek77"]
 height = 0.0635376
@@ -25,6 +26,23 @@ metadata/_custom_type_script = "uid://dvobm6vcfnqe8"
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vlqg6"]
 albedo_color = Color(0.36656043, 0.16690676, 0.12531222, 1)
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_np_plate"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = false
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:quaternion")
+properties/1/spawn = false
+properties/1/replication_mode = 1
+properties/2/path = NodePath("NetPickable:net_held_by")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+properties/3/path = NodePath("PlateController:contained_ids")
+properties/3/spawn = true
+properties/3/replication_mode = 1
+properties/4/path = NodePath("PlateController:is_dirty")
+properties/4/spawn = true
+properties/4/replication_mode = 1
 
 [node name="Plate" type="RigidBody3D" unique_id=190487773]
 collision_layer = 4
@@ -134,3 +152,8 @@ transform = Transform3D(0.21189868, 0, 0, 0, -9.2623855e-09, 0.21189868, 0, -0.2
 polygon = PackedVector2Array(-0.053057775, 0.2586278, 0.09469998, 0.40791017, 0.31746316, 0.26044407, 0.4514293, -0.05809097, 0.105977096, -0.11683442, -4.3913722e-05, 0.02302903)
 depth = 0.02
 material = SubResource("StandardMaterial3D_vlqg6")
+
+[node name="NetPickable" type="MultiplayerSynchronizer" parent="."]
+root_path = NodePath("..")
+replication_config = SubResource("SceneReplicationConfig_np_plate")
+script = ExtResource("20_netpk")

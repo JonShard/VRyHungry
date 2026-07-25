@@ -33,6 +33,15 @@ theme_override_font_sizes/font_size = 26
 text = "VRyHungry"
 horizontal_alignment = 1
 
+[node name="Status" type="Label" parent="Margin"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(0.8, 0.8, 0.5, 1)
+theme_override_font_sizes/font_size = 16
+text = ""
+horizontal_alignment = 1
+
 [node name="RootView" type="VBoxContainer" parent="Margin"]
 unique_name_in_owner = true
 layout_mode = 2
@@ -80,14 +89,6 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 34
 text = "127.0.0.1"
-horizontal_alignment = 1
-
-[node name="Status" type="Label" parent="Margin/JoinView"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_colors/font_color = Color(0.8, 0.8, 0.5, 1)
-theme_override_font_sizes/font_size = 16
-text = "Enter host IP, then Join"
 horizontal_alignment = 1
 
 [node name="Keypad" type="GridContainer" parent="Margin/JoinView"]

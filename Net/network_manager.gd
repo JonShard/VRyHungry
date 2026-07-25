@@ -24,8 +24,14 @@ signal connection_failed()
 var _world: Node = null
 var _players_spawner: MultiplayerSpawner = null
 var _items_spawner: MultiplayerSpawner = null
+var _content_root: Node = null
 
 var _log_file: FileAccess
+
+## Reason the session ended, shown by the menu on the next _ready() (see
+## take_status). Avoids depending on a live signal connection to a panel that
+## doesn't exist yet at the moment the session actually ends.
+var last_status := ""
 
 
 func _ready() -> void:
@@ -80,24 +86,41 @@ func _go_offline() -> void:
 	if multiplayer.multiplayer_peer:
 		multiplayer.multiplayer_peer.close()
 	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
+	unregister_world()
 
 
 # --- Item spawning ---------------------------------------------------------
 
 ## Spawn a networked item. Server-only when online (replicates to all peers via
-## the ItemsSpawner); works directly when offline. Returns the new node on the
-## machine that owns spawning, else null.
-func spawn_item(scene_path: String, xform: Transform3D) -> Node:
+## the ItemsSpawner, including late joiners); works directly when offline.
+## node_name gives the spawned node a deterministic, identical name on every
+## peer (needed for NodePath-based RPCs to resolve it); props are applied to
+## the instance before it enters the tree, so exported vars land correctly.
+## Returns the new node on the machine that owns spawning, else null.
+func spawn_item(scene_path: String, xform: Transform3D, node_name: String = "", props: Dictionary = {}) -> Node:
 	if is_online() and not is_server():
 		return null
-	var data := {"scene": scene_path, "xform": xform}
+	var data := {"scene": scene_path, "xform": xform, "name": node_name, "props": props}
 	if is_online() and _items_spawner:
 		return _items_spawner.spawn(data)
-	# Offline: instantiate directly under the world.
+	# Offline: instantiate directly under the registered content root, or (for
+	# scenes that never call register_world, e.g. the offline menu/dev scenes)
+	# the current scene, so this keeps working without every offline scene
+	# needing to opt in.
 	var inst := _spawn_item_from_data(data)
-	if _world and inst:
-		_world.add_child(inst)
+	if inst:
+		var parent: Node = _content_root if _content_root else get_tree().current_scene
+		if parent:
+			parent.add_child(inst)
 	return inst
+
+
+## Despawn a server-spawned item. MultiplayerSpawner broadcasts a despawn to
+## every peer when a tracked node exits the tree on the authority, so this is
+## the single seam for destroying spawned items (works offline too).
+func despawn_item(node: Node) -> void:
+	if owns_world() and is_instance_valid(node):
+		node.queue_free()
 
 
 # MultiplayerSpawner custom spawn function: runs on every peer to build the node
@@ -110,7 +133,30 @@ func _spawn_item_from_data(data: Variant) -> Node:
 	var inst := scene.instantiate()
 	if inst is Node3D:
 		inst.transform = data["xform"]
+	if data.get("name", "") != "":
+		inst.name = data["name"]
+	for key in data.get("props", {}):
+		inst.set(key, data["props"][key])
+	if not owns_world():
+		_gate_station(inst)
 	return inst
+
+
+# Stations run their own logic and auto-grab (XRToolsSnapZone with
+# snap_mode=RANGE) identically on every peer by default, which would let each
+# peer independently grab/simulate the same shared object. Disable both on
+# every peer except the one that owns world logic; the server-authoritative
+# item-authority RPCs are what let clients still grab a server-held item by
+# hand. Runs before the node enters the tree, so its own _ready() sees the
+# final (disabled) state.
+func _gate_station(node: Node) -> void:
+	if not (node is StaticBody3D):
+		return
+	for child in node.get_children():
+		if child is XRToolsSnapZone:
+			child.enabled = false
+			child.set_process(false)
+	node.set_process(false)
 
 
 # --- Item grab-authority transfer -----------------------------------------
@@ -123,10 +169,17 @@ func request_item_authority(item_path: NodePath) -> void:
 	if not is_server():
 		return
 	var sender := multiplayer.get_remote_sender_id()
+	var item := get_node_or_null(item_path)
+	if item:
+		var np := item.get_node_or_null("NetPickable")
+		if np and np.net_held_by != 0 and np.net_held_by != sender:
+			# Already legitimately held by a different live peer: reject the
+			# requester's optimistic client-side grab instead of stealing it.
+			force_release_item.rpc_id(sender, item_path)
+			return
 	# Assign authority + held state first (disables the item on the server so its
 	# snap zone won't re-grab it), then release it from any station.
 	_set_item_authority.rpc(item_path, sender)
-	var item := get_node_or_null(item_path)
 	if item:
 		_release_from_snap_zones(item)
 
@@ -147,13 +200,14 @@ func release_item_authority(item_path: NodePath, lin: Vector3, ang: Vector3) -> 
 	_try_snap_into_station(item)
 
 
-# All station snap zones in the world (nodes in the "station" group).
+# All station snap zones in the world (every XRToolsSnapZone child of a node in
+# the "station" group — some stations, e.g. Table, have more than one).
 func _station_snap_zones() -> Array:
 	var zones := []
 	for station in get_tree().get_nodes_in_group("station"):
-		var zone = station.get_node_or_null("XRToolsSnapZone")
-		if zone:
-			zones.append(zone)
+		for child in station.get_children():
+			if child is XRToolsSnapZone:
+				zones.append(child)
 	return zones
 
 
@@ -190,6 +244,15 @@ func _set_item_authority(item_path: NodePath, peer: int) -> void:
 		np.apply_held_state()
 
 
+## Server tells a specific client that its optimistic grab was rejected (the
+## item was already legitimately held by someone else). The client drops it.
+@rpc("authority", "reliable")
+func force_release_item(item_path: NodePath) -> void:
+	var item := get_node_or_null(item_path)
+	if item and item.has_method("drop"):
+		item.drop()
+
+
 func is_server() -> bool:
 	return is_online() and multiplayer.is_server()
 
@@ -223,14 +286,35 @@ func submit_work(station_path: NodePath, amount: float) -> void:
 		station.add_work(multiplayer.get_remote_sender_id(), amount)
 
 
-## Called by main.gd once the world scene is ready, passing its spawners.
+## Called by the world scene once it's ready, passing its spawners. Must run
+## before world_ready()/host()/join() on every peer so the custom spawn
+## function is installed before any spawn packet can arrive.
 func register_world(world: Node, players_spawner: MultiplayerSpawner, items_spawner: MultiplayerSpawner) -> void:
 	_world = world
 	_players_spawner = players_spawner
 	_items_spawner = items_spawner
+	_content_root = items_spawner.get_node(items_spawner.spawn_path) if items_spawner else world
 	if _items_spawner:
 		_items_spawner.spawn_function = _spawn_item_from_data
 	log_line("World registered (players_spawner=%s items_spawner=%s)" % [str(players_spawner != null), str(items_spawner != null)])
+
+
+## Called when the world scene goes away (disconnect, leaving the session) so
+## the autoload doesn't hold stale/freed references across a scene reload.
+func unregister_world() -> void:
+	_world = null
+	_content_root = null
+	_players_spawner = null
+	_items_spawner = null
+
+
+## Returns the reason the last session ended (if any) and clears it. The menu
+## pulls this on its own _ready() rather than depending on a live signal
+## connection to a panel that doesn't exist yet when the session ends.
+func take_status() -> String:
+	var s := last_status
+	last_status = ""
+	return s
 
 
 ## Called by main.gd after it has registered the world and connected its
@@ -286,11 +370,13 @@ func _on_connected_to_server() -> void:
 func _on_connection_failed() -> void:
 	log_line("connection_failed")
 	_go_offline()
+	last_status = "Could not connect"
 	connection_failed.emit()
 
 func _on_server_disconnected() -> void:
 	log_line("server_disconnected")
 	_go_offline()
+	last_status = "Host disconnected"
 	session_ended.emit()
 
 

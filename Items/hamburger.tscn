@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://ctw7nbntd5pcj" path="res://addons/godot-xr-tools/objects/grab_points/grab_point_hand_right.tscn" id="5_dunns"]
 [ext_resource type="Animation" uid="uid://d1xnpyc08njjx" path="res://addons/godot-xr-tools/hands/animations/right/Grip 4.res" id="6_fh0f6"]
 [ext_resource type="PackedScene" uid="uid://bfj80jh13t6e5" path="res://Prefabs/food_item.tscn" id="7_yy3y8"]
+[ext_resource type="Script" path="res://Net/net_pickable.gd" id="20_netpk"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_fco8w"]
 height = 0.10392761
@@ -27,6 +28,17 @@ albedo_color = Color(0.6784191, 0.54546416, 0.016760282, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6l01i"]
 albedo_color = Color(0.29, 0.101500005, 0, 1)
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_np_hamburger"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = false
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:quaternion")
+properties/1/spawn = false
+properties/1/replication_mode = 1
+properties/2/path = NodePath("NetPickable:net_held_by")
+properties/2/spawn = true
+properties/2/replication_mode = 1
 
 [node name="Hamburger" unique_id=1675596942 groups=["platalbe_item"] instance=ExtResource("1_3gf3l")]
 gravity_scale = 0.04
@@ -81,3 +93,8 @@ material = SubResource("StandardMaterial3D_6l01i")
 id = "hamburger"
 type = 0
 sell_value = 4
+
+[node name="NetPickable" type="MultiplayerSynchronizer" parent="."]
+root_path = NodePath("..")
+replication_config = SubResource("SceneReplicationConfig_np_hamburger")
+script = ExtResource("20_netpk")

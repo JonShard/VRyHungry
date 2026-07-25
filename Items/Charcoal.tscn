@@ -8,6 +8,7 @@
 [ext_resource type="Animation" uid="uid://d1xnpyc08njjx" path="res://addons/godot-xr-tools/hands/animations/right/Grip 4.res" id="6_cp3eg"]
 [ext_resource type="PackedScene" uid="uid://bfj80jh13t6e5" path="res://Prefabs/food_item.tscn" id="7_mde49"]
 [ext_resource type="PackedScene" uid="uid://3lr2dhy62rhk" path="res://Prefabs/combinable_item.tscn" id="8_wmrff"]
+[ext_resource type="Script" path="res://Net/net_pickable.gd" id="20_netpk"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_gkni8"]
 custom_solver_bias = 0.1
@@ -33,6 +34,17 @@ script = ExtResource("4_mgacb")
 closed_pose = ExtResource("6_cp3eg")
 metadata/_custom_type_script = "uid://dvobm6vcfnqe8"
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_np_charcoal"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = false
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:quaternion")
+properties/1/spawn = false
+properties/1/replication_mode = 1
+properties/2/path = NodePath("NetPickable:net_held_by")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+
 [node name="PickableObject" unique_id=1675596942 instance=ExtResource("1_r73y2")]
 
 [node name="CollisionShape3D" parent="." index="0"]
@@ -54,3 +66,8 @@ id = "charcoal"
 type = 2
 
 [node name="CombinableItem" parent="." index="5" unique_id=996936271 instance=ExtResource("8_wmrff")]
+
+[node name="NetPickable" type="MultiplayerSynchronizer" parent="."]
+root_path = NodePath("..")
+replication_config = SubResource("SceneReplicationConfig_np_charcoal")
+script = ExtResource("20_netpk")

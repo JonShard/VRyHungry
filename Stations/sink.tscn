@@ -9,6 +9,11 @@
 [sub_resource type="SphereShape3D" id="SphereShape3D_dlkho"]
 radius = 0.3
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_np_sink"]
+properties/0/path = NodePath(".:progress")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+
 [node name="Sink" type="StaticBody3D" unique_id=2055277359 groups=["station"]]
 script = ExtResource("1_7hh4b")
 plate_scene = ExtResource("2_ai6d4")
@@ -75,3 +80,7 @@ size = Vector3(1.4033203, 1.2053223, 0.352417)
 transform = Transform3D(1.3113414e-07, 0.12955962, 0.99157166, 8.8817837e-16, 0.9915716, -0.1295596, -0.9999999, 1.6989695e-08, 1.3002891e-07, 0.6035124, 0.019589934, -0.20879287)
 operation = 2
 size = Vector3(1.4033203, 1.2053223, 0.352417)
+
+[node name="Sync" type="MultiplayerSynchronizer" parent="."]
+root_path = NodePath("..")
+replication_config = SubResource("SceneReplicationConfig_np_sink")

@@ -8,7 +8,7 @@ var xr_interface :XRInterface
 func _ready():
 	RECIPE_MANAGER.print_all_recipes()
 
-	GAME_MANAGER.meals_in_play.append("hamburger")
+	GAME_MANAGER.meals_in_play = ["hamburger"]
 	
 	xr_interface = XRServer.find_interface("OpenXR")
 	if xr_interface and xr_interface.is_initialized():

@@ -24,7 +24,11 @@ func _ready() -> void:
 		push_error("XRPickable node not found in container.gd")
 
 
+# Absorbing items is a server decision (the container's holder is server-
+# snapped into a station, matching table.gd/hob.gd's convention).
 func _on_body_entered(body: Node3D) -> void:
+	if not NetworkManager.owns_world():
+		return
 	print("Container enabled: ", enabled)
 	if not enabled:
 		print("Container disabled in  _on_body_entered body")
@@ -34,67 +38,118 @@ func _on_body_entered(body: Node3D) -> void:
 	print("Container _on_body_entered body: ", body)
 	var picked_by = xr_pickable.get_picked_up_by()
 	if picked_by and picked_by.is_in_group("station"):
-		
+
 		# If compatible and enough space, add item
 		var food_item = body.get_node("FoodItem")
 		print("Container in station found %s of type %s: %s" % [target_group, FoodItem.Type.keys()[food_item.type], body.name])
-		if food_item.type == FoodItem.Type.MEAL and _meal_container.get_child_count() < meal_positions.size(): 
+		var meal_count := contained_items.filter(func(f): return f.type == FoodItem.Type.MEAL).size()
+		var side_count := contained_items.filter(func(f): return f.type == FoodItem.Type.SIDE).size()
+		if food_item.type == FoodItem.Type.MEAL and meal_count < meal_positions.size():
 			print("Container adding meal")
-			_add_item(body, meal_positions, _meal_container)
-		if food_item.type == FoodItem.Type.SIDE and _side_container.get_child_count() < side_positions.size():
+			_add_item(body)
+		if food_item.type == FoodItem.Type.SIDE and side_count < side_positions.size():
 			print("Container adding side")
-			_add_item(body, side_positions, _side_container)
+			_add_item(body)
 
 
-func _add_item(item: Node3D, positions: Array[Node3D], container_root: Node3D) -> void:
+# Contents are synced as data (ids on the plate's PlateController), not
+# reparented nodes: reparenting a MultiplayerSpawner-tracked item out of
+# WorldContent would despawn it on every client the instant it happened.
+func _add_item(item: Node3D) -> void:
 	var pickable = item as XRToolsPickable
-	var rigidbody = item as RigidBody3D
-	
-	# Drop item
-	if pickable:
-		if pickable.is_picked_up():
-			pickable.drop()
-		pickable.enabled = false
-	
-	# Freeze the rigid body and disable its collisions so it doesn't fight the container
-	if rigidbody:
-		rigidbody.freeze = true
-		rigidbody.freeze_mode = RigidBody3D.FREEZE_MODE_KINEMATIC
-		rigidbody.process_mode = PROCESS_MODE_DISABLED
-		# Optional: Disable collision layer/mask so it doesn't bump into other food
-		rigidbody.collision_layer = 0
-		rigidbody.collision_mask = 0
-		
-	item.reparent(container_root, false) # false = discard global transform
-	
-	# Get target position index
-	var target_slot_index = container_root.get_child_count() - 1
-	if target_slot_index < positions.size():
-		item.position = positions[target_slot_index].position
-		item.rotation = positions[target_slot_index].rotation
-	
-	# Add to list
-	var food_node = item.get_node_or_null("FoodItem")
-	if food_node:
-		contained_items.append(food_node as FoodItem)
+	if pickable and pickable.is_picked_up():
+		pickable.drop()
+
+	var food_node := item.get_node_or_null("FoodItem") as FoodItem
+	if not food_node:
+		return
+
+	# Copy the data out before despawning the real item.
+	var data := FoodItem.new()
+	data.id = food_node.id
+	data.type = food_node.type
+	data.sell_value = food_node.sell_value
+	contained_items.append(data)
+
+	var plate_controller := xr_pickable.get_node_or_null("PlateController") as PlateController
+	if plate_controller:
+		plate_controller.contained_ids.append(food_node.id)
+
+	NetworkManager.despawn_item(item)
 
 
 func erase_item(item: FoodItem) -> void:
-	for container_root in [_meal_container, _side_container]:
-		for child in container_root.get_children():
-			var food_item = child.get_node_or_null("FoodItem") as FoodItem
-			if food_item.id == item.id:
-				contained_items.erase(item)
-				child.queue_free()
+	contained_items.erase(item)
+	var plate_controller := xr_pickable.get_node_or_null("PlateController") as PlateController
+	if plate_controller:
+		plate_controller.contained_ids.erase(item.id)
 
 
 func clear() -> void:
-	# delete all nodes in containers and contained_items
+	contained_items.clear()
+	var plate_controller := xr_pickable.get_node_or_null("PlateController") as PlateController
+	if plate_controller:
+		plate_controller.contained_ids = []
+
+
+## Rebuilds the purely-cosmetic visual representation of the plate's contents
+## from a synced id list. Runs on every peer (called from PlateController
+## whenever contained_ids changes, whether set locally or by the network).
+func refresh_visuals(ids: Array[String]) -> void:
 	for child in _meal_container.get_children():
 		child.queue_free()
 	for child in _side_container.get_children():
 		child.queue_free()
-	contained_items.clear()
+
+	var meal_idx := 0
+	var side_idx := 0
+	for id in ids:
+		var scene := RecipeManager.get_item_scene(id)
+		if not scene:
+			continue
+		var visual := scene.instantiate()
+		var food_node := visual.get_node_or_null("FoodItem") as FoodItem
+
+		var container_root: Node3D
+		var positions: Array[Node3D]
+		var idx: int
+		if food_node and food_node.type == FoodItem.Type.MEAL and meal_idx < meal_positions.size():
+			container_root = _meal_container
+			positions = meal_positions
+			idx = meal_idx
+			meal_idx += 1
+		elif food_node and food_node.type == FoodItem.Type.SIDE and side_idx < side_positions.size():
+			container_root = _side_container
+			positions = side_positions
+			idx = side_idx
+			side_idx += 1
+		else:
+			visual.queue_free()
+			continue
+
+		_make_cosmetic(visual)
+		container_root.add_child(visual)
+		visual.position = positions[idx].position
+		visual.rotation = positions[idx].rotation
+
+
+# Strip interactivity/networking from a display-only copy: it's not spawned
+# through NetworkManager, so it must never try to sync (its NetPickable child,
+# if any, would have no corresponding replicated identity on other peers) or
+# be grabbable/collidable.
+func _make_cosmetic(visual: Node3D) -> void:
+	var net_pickable := visual.get_node_or_null("NetPickable")
+	if net_pickable:
+		net_pickable.queue_free()
+	if visual is RigidBody3D:
+		visual.freeze = true
+		visual.freeze_mode = RigidBody3D.FREEZE_MODE_KINEMATIC
+		visual.collision_layer = 0
+		visual.collision_mask = 0
+	if visual is XRToolsPickable:
+		visual.enabled = false
+	visual.set_process(false)
+	visual.set_physics_process(false)
 
 
 #plate (Pickalbe)

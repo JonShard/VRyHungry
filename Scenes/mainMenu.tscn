@@ -19,7 +19,7 @@
 [ext_resource type="PackedScene" path="res://UI/main_menu_panel.tscn" id="17_panel"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vlqg6"]
-size = Vector3(5, 0.1, 5)
+size = Vector3(115, 0.1, 15)
 
 [sub_resource type="BoxMesh" id="BoxMesh_24d3s"]
 material = ExtResource("3_m56cs")

@@ -13,10 +13,8 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	if not NetworkManager.owns_world():
+		return
 	if not snap_zone.picked_up_object:
-		var new_item = item_scene.instantiate()
-		
-		# Add the new item to the hob's parent (so it lives in the main world space)
-		get_parent().add_child(new_item)
-		new_item.global_transform = snap_zone.transform
+		var new_item = NetworkManager.spawn_item(item_scene.resource_path, snap_zone.global_transform)
 		snap_zone.pick_up_object(new_item)

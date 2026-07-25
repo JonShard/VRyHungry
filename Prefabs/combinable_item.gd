@@ -49,7 +49,10 @@ func _on_item_dropped(_item: Node3D) -> void:
 	set_deferred("monitoring", false)
 
 # If the other body is a FoodItem, check for a recipe and combine if one exists.
+# Combining is a server decision (the base item is server-snapped into a zone).
 func _on_body_entered(body: Node3D) -> void:
+	if not NetworkManager.owns_world():
+		return
 	if _combining or body == _pickable:
 		print("CombinableItem _on_body_entered: other is our own pickable")
 		return
@@ -78,19 +81,16 @@ func _combine(other_body: Node3D, result: PackedScene) -> void:
 		_combining = false
 		return
 
-	# Spawn the result at the base item's location, in world space.
+	# Spawn the result through the server (so it replicates to every peer,
+	# including late joiners) at the base item's location, in world space.
 	var base_transform := _pickable.global_transform
-	var result_instance: Node3D = result.instantiate()
-	_pickable.get_tree().current_scene.add_child(result_instance)
-	result_instance.global_transform = base_transform
+	var result_instance: Node3D = NetworkManager.spawn_item(result.resource_path, base_transform)
 
 	# Free the pickable / root of this item and consume the incoming item.
 	snap_zone.drop_object()
-	_pickable.queue_free()
-	if other_body.has_method("drop_and_free"): # XRToolsPickable has this method
-		other_body.drop_and_free()
-	else:
-		other_body.queue_free()
+	NetworkManager.despawn_item(_pickable)
+	other_body.drop()
+	NetworkManager.despawn_item(other_body)
 
 	# Snap the result into the now-empty zone.
 	snap_zone.pick_up_object(result_instance)

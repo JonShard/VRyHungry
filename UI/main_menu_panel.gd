@@ -7,6 +7,7 @@ extends Control
 
 const JON_SCENE := "res://Scenes/JonScene.tscn"
 const MULTIPLAYER_SCENE := "res://Scenes/multiPlayer.tscn"
+const SETTINGS_PATH := "user://vryhungry_settings.cfg"
 
 var _ip := "127.0.0.1"
 
@@ -33,8 +34,15 @@ func _ready() -> void:
 	_join_menu_btn.pressed.connect(_show_join_view)
 	_join_btn.pressed.connect(_on_join_pressed)
 	_back_btn.pressed.connect(_show_root_view)
+	_load_ip()
 	_show_root_view()
 	_refresh_ip()
+	# Show why we're back here, if the last session ended unexpectedly
+	# (dropped connection, failed join). Pulled rather than pushed, since
+	# NetworkManager may have set this before this panel even existed.
+	var status := NetworkManager.take_status()
+	if not status.is_empty():
+		set_status(status)
 
 
 ## --server / --join <ip> on the command line skip straight to the multiplayer
@@ -64,6 +72,7 @@ func _show_root_view() -> void:
 func _show_join_view() -> void:
 	_root_view.visible = false
 	_join_view.visible = true
+	set_status("Enter host IP, then Join")
 
 
 func _on_key(key: String) -> void:
@@ -94,8 +103,24 @@ func _on_join_pressed() -> void:
 	if _ip.is_empty():
 		set_status("Enter an IP first")
 		return
+	_save_ip()
 	NetworkManager.request_join(_ip)
 	get_tree().change_scene_to_file.call_deferred(MULTIPLAYER_SCENE)
+
+
+## Remembers the last IP the player tried to join, so the keypad starts
+## pre-filled next time instead of always defaulting to 127.0.0.1.
+func _load_ip() -> void:
+	var cfg := ConfigFile.new()
+	if cfg.load(SETTINGS_PATH) == OK:
+		_ip = cfg.get_value("network", "last_ip", _ip)
+
+
+func _save_ip() -> void:
+	var cfg := ConfigFile.new()
+	cfg.load(SETTINGS_PATH)
+	cfg.set_value("network", "last_ip", _ip)
+	cfg.save(SETTINGS_PATH)
 
 
 ## Called by network_manager (e.g. on connection_failed after a bounce back to

@@ -11,6 +11,17 @@ radius = 0.3
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_24d3s"]
 albedo_color = Color(0.31, 0.21576, 0.1333, 1)
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_np_table"]
+properties/0/path = NodePath(".:_state")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:_state_time")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath(".:_unsatisfied_orders")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+
 [node name="Table" type="StaticBody3D" unique_id=1863572470 groups=["station"]]
 script = ExtResource("1_2vcpj")
 
@@ -155,3 +166,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3306234, 0)
 pixel_size = 0.003
 billboard = 2
 text = "20.1s"
+
+[node name="Sync" type="MultiplayerSynchronizer" parent="."]
+root_path = NodePath("..")
+replication_config = SubResource("SceneReplicationConfig_np_table")
