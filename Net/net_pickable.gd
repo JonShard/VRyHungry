@@ -14,12 +14,19 @@ var net_held_by: int = 0: set = _set_net_held_by
 
 var _pickable: XRToolsPickable
 
+# This item's own baked freeze_mode (e.g. plate.tscn bakes KINEMATIC, not the
+# RigidBody3D default of STATIC) — captured once so it can be restored when
+# this peer regains ownership, instead of getting stuck on whatever
+# apply_held_state() last forced it to while non-authority.
+var _original_freeze_mode: int
+
 
 func _ready() -> void:
 	_pickable = get_parent() as XRToolsPickable
 	if not _pickable:
 		push_error("NetPickable must be a child of an XRToolsPickable")
 		return
+	_original_freeze_mode = _pickable.freeze_mode
 	_pickable.picked_up.connect(_on_picked_up)
 	_pickable.dropped.connect(_on_dropped)
 	# Deferred: the pickable root captures its own original_collision_mask/
@@ -43,7 +50,22 @@ func apply_held_state() -> void:
 		return
 	if not NetworkManager.is_online() or is_multiplayer_authority():
 		# We own this item's simulation (offline, loose+server, or currently
-		# holding it): leave physics alone, XRToolsPickable manages the rest.
+		# holding it). If it's not actively in our own hand right now, make
+		# sure it isn't still left frozen/collision-less from a previous
+		# non-authority period (e.g. right after regaining authority when a
+		# client released it) — while actually held, XRToolsPickable's own
+		# pick_up()/let_go() already manage these fields, so leave those be.
+		if not _pickable.is_picked_up():
+			_pickable.freeze_mode = _original_freeze_mode
+			_pickable.collision_mask = _pickable.original_collision_mask
+		return
+	# A net_held_by/position sync update can race ahead of the
+	# authority-handoff RPC that's about to confirm a grab we just made
+	# optimistically (they travel on different channels with no ordering
+	# guarantee). Don't let a stale sync value yank an item out of our own
+	# hand mid-grab — only an explicit force_release_item rejection, or
+	# actually losing authority for real, should end a grab we initiated.
+	if _pickable.is_picked_up() and _pickable.get_picked_up_by() is XRToolsFunctionPickup:
 		return
 	# Someone else owns it: stop simulating locally, just follow the sync.
 	if _pickable.is_picked_up():
