@@ -43,13 +43,13 @@ mesh = SubResource("BoxMesh_24d3s")
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1177077250]
 environment = SubResource("Environment_bvwq1")
 
-[node name="WorldContent" type="Node3D" parent="."]
+[node name="WorldContent" type="Node3D" parent="." unique_id=291550153]
 
-[node name="Players" type="Node3D" parent="."]
+[node name="Players" type="Node3D" parent="." unique_id=1595463693]
 
-[node name="ItemsSpawner" type="MultiplayerSpawner" parent="."]
+[node name="ItemsSpawner" type="MultiplayerSpawner" parent="." unique_id=627119248]
 spawn_path = NodePath("../WorldContent")
 
-[node name="PlayersSpawner" type="MultiplayerSpawner" parent="."]
+[node name="PlayersSpawner" type="MultiplayerSpawner" parent="." unique_id=106645565]
 _spawnable_scenes = PackedStringArray("res://Player/net_player.tscn")
 spawn_path = NodePath("../Players")

@@ -101,6 +101,8 @@ func spawn_item(scene_path: String, xform: Transform3D, node_name: String = "", 
 	if is_online() and not is_server():
 		return null
 	var data := {"scene": scene_path, "xform": xform, "name": node_name, "props": props}
+	var via := "spawner" if (is_online() and _items_spawner) else "offline"
+	log_line("spawn_item: %s (name=%s, via=%s)" % [scene_path.get_file(), node_name, via])
 	if is_online() and _items_spawner:
 		return _items_spawner.spawn(data)
 	# Offline: instantiate directly under the registered content root, or (for
@@ -120,6 +122,7 @@ func spawn_item(scene_path: String, xform: Transform3D, node_name: String = "", 
 ## the single seam for destroying spawned items (works offline too).
 func despawn_item(node: Node) -> void:
 	if owns_world() and is_instance_valid(node):
+		log_line("despawn_item: %s" % node.name)
 		node.queue_free()
 
 
@@ -157,6 +160,7 @@ func _gate_station(node: Node) -> void:
 			child.enabled = false
 			child.set_process(false)
 	node.set_process(false)
+	log_line("gated station (non-owner peer): %s" % node.name)
 
 
 # --- Item grab-authority transfer -----------------------------------------
@@ -175,8 +179,10 @@ func request_item_authority(item_path: NodePath) -> void:
 		if np and np.net_held_by != 0 and np.net_held_by != sender:
 			# Already legitimately held by a different live peer: reject the
 			# requester's optimistic client-side grab instead of stealing it.
+			log_line("request_item_authority: DENIED %s to peer %d (already held by %d)" % [item.name, sender, np.net_held_by])
 			force_release_item.rpc_id(sender, item_path)
 			return
+	log_line("request_item_authority: granting %s to peer %d" % [str(item.name) if item else str(item_path), sender])
 	# Assign authority + held state first (disables the item on the server so its
 	# snap zone won't re-grab it), then release it from any station.
 	_set_item_authority.rpc(item_path, sender)
@@ -191,6 +197,7 @@ func request_item_authority(item_path: NodePath) -> void:
 func release_item_authority(item_path: NodePath, lin: Vector3, ang: Vector3) -> void:
 	if not is_server():
 		return
+	log_line("release_item_authority: %s released by peer %d" % [str(item_path), multiplayer.get_remote_sender_id()])
 	_set_item_authority.rpc(item_path, 1)
 	var item := get_node_or_null(item_path)
 	if item is RigidBody3D:
@@ -226,6 +233,7 @@ func _try_snap_into_station(item: Node) -> void:
 		if is_instance_valid(zone.picked_up_object):
 			continue
 		if zone.global_position.distance_to(item.global_position) <= zone.grab_distance:
+			log_line("snapped %s into %s" % [item.name, zone.get_parent().name])
 			zone.pick_up_object(item)
 			return
 
@@ -237,6 +245,7 @@ func _set_item_authority(item_path: NodePath, peer: int) -> void:
 	var item := get_node_or_null(item_path)
 	if not item:
 		return
+	log_line("_set_item_authority: %s -> peer %d" % [item.name, peer])
 	item.set_multiplayer_authority(peer)  # recursive: item + synchronizer + NetPickable
 	var np := item.get_node_or_null("NetPickable")
 	if np:
@@ -248,6 +257,7 @@ func _set_item_authority(item_path: NodePath, peer: int) -> void:
 ## item was already legitimately held by someone else). The client drops it.
 @rpc("authority", "reliable")
 func force_release_item(item_path: NodePath) -> void:
+	log_line("force_release_item: dropping %s (server rejected our grab)" % str(item_path))
 	var item := get_node_or_null(item_path)
 	if item and item.has_method("drop"):
 		item.drop()
@@ -283,6 +293,7 @@ func submit_work(station_path: NodePath, amount: float) -> void:
 		return
 	var station := get_node_or_null(station_path)
 	if station and station.has_method("add_work"):
+		log_line("submit_work: peer %d contributed %.2f to %s" % [multiplayer.get_remote_sender_id(), amount, station.name])
 		station.add_work(multiplayer.get_remote_sender_id(), amount)
 
 
