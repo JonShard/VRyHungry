@@ -31,11 +31,27 @@ func _ready() -> void:
 	NetworkManager.session_ended.connect(_on_session_ended)
 	NetworkManager.connection_failed.connect(_on_connection_failed)
 
-	# Offline (single player / dev run): owns_world() is already true, so
-	# populate immediately. Online host case is handled by session_started.
+	# world_ready() is what actually calls host()/join() (or the cmdline
+	# equivalent). Populating before this point is wrong for EVERY case, not
+	# just offline: is_online() is still false until host()/join() runs, so
+	# owns_world() would read true for a joining client too, and it would
+	# build its own local copy instead of receiving the server's via the
+	# spawner. host() emits session_started synchronously, which populates
+	# via _on_session_started below; the explicit call after world_ready()
+	# only matters for the case where neither host() nor join() ran (no
+	# pending session, no cmdline args) — running this scene directly offline.
+	NetworkManager.world_ready()
 	_populate_world_if_owner()
 
-	NetworkManager.world_ready()
+	get_tree().create_timer(3.0).timeout.connect(_log_world_state)
+
+
+# Temporary-ish sanity check: confirms WorldContent actually ended up
+# populated on this peer (whether by spawning it or by receiving it via
+# replication), so a silent replication failure shows up in the net log
+# instead of just an empty-looking world.
+func _log_world_state() -> void:
+	NetworkManager.log_line("World state: WorldContent=%d children, Players=%d children" % [$WorldContent.get_child_count(), $Players.get_child_count()])
 
 
 func _exit_tree() -> void:
@@ -53,10 +69,14 @@ func _populate_world_if_owner() -> void:
 		return
 	_populated = true
 	GameManager.meals_in_play = ["hamburger"]
-	for d in WorldLayout.get_stations():
+	var stations := WorldLayout.get_stations()
+	var items := WorldLayout.get_items()
+	NetworkManager.log_line("Populating world: %d stations, %d items" % [stations.size(), items.size()])
+	for d in stations:
 		NetworkManager.spawn_item(d["scene"], d["xform"], d["name"], d["props"])
-	for d in WorldLayout.get_items():
+	for d in items:
 		NetworkManager.spawn_item(d["scene"], d["xform"], d["name"], d["props"])
+	NetworkManager.log_line("World populated")
 
 
 ## Only the server (or the single offline machine) materialises player
@@ -68,6 +88,7 @@ func _on_player_joined(peer_id: int) -> void:
 	var p := PLAYER_SCENE.instantiate()
 	p.name = str(peer_id)
 	$Players.add_child(p, true)
+	NetworkManager.log_line("Spawned avatar for peer %d" % peer_id)
 
 
 func _on_player_left(peer_id: int) -> void:
@@ -76,11 +97,14 @@ func _on_player_left(peer_id: int) -> void:
 	var p := $Players.get_node_or_null(str(peer_id))
 	if p:
 		p.queue_free()
+		NetworkManager.log_line("Despawned avatar for peer %d" % peer_id)
 
 
 func _on_session_ended() -> void:
+	NetworkManager.log_line("Session ended, returning to main menu")
 	get_tree().change_scene_to_file("res://Scenes/mainMenu.tscn")
 
 
 func _on_connection_failed() -> void:
+	NetworkManager.log_line("Connection failed, returning to main menu")
 	get_tree().change_scene_to_file("res://Scenes/mainMenu.tscn")
