@@ -165,14 +165,30 @@ func _gate_station(node: Node) -> void:
 
 # --- Item grab-authority transfer -----------------------------------------
 
-## A client (or host) requests authority over an item it just grabbed. Runs on
-## the server. If the item was snapped into a station, the station releases it
-## so the grabber cleanly takes ownership.
+## Called by NetPickable when this peer grabs an item by hand. Godot rejects
+## rpc_id() targeting your own peer id ("RPC on yourself is not allowed"), so
+## when we ARE the server this runs the logic directly instead of round-
+## tripping an RPC to ourselves — otherwise every host-side grab/drop was
+## silently failing to run its server-side half (no denial checks, and
+## crucially no auto-snap-into-station on release).
+func request_item_authority_from(item_path: NodePath) -> void:
+	if is_server():
+		_grant_or_reject_item_authority(item_path, multiplayer.get_unique_id())
+	else:
+		_request_item_authority_rpc.rpc_id(1, item_path)
+
+
 @rpc("any_peer", "reliable")
-func request_item_authority(item_path: NodePath) -> void:
+func _request_item_authority_rpc(item_path: NodePath) -> void:
 	if not is_server():
 		return
-	var sender := multiplayer.get_remote_sender_id()
+	_grant_or_reject_item_authority(item_path, multiplayer.get_remote_sender_id())
+
+
+## Runs on the server (called directly if the requester IS the server, or via
+## the RPC above otherwise). If the item was snapped into a station, the
+## station releases it so the grabber cleanly takes ownership.
+func _grant_or_reject_item_authority(item_path: NodePath, sender: int) -> void:
 	var item := get_node_or_null(item_path)
 	if item:
 		var np := item.get_node_or_null("NetPickable")
@@ -180,7 +196,7 @@ func request_item_authority(item_path: NodePath) -> void:
 			# Already legitimately held by a different live peer: reject the
 			# requester's optimistic client-side grab instead of stealing it.
 			log_line("request_item_authority: DENIED %s to peer %d (already held by %d)" % [item.name, sender, np.net_held_by])
-			force_release_item.rpc_id(sender, item_path)
+			_force_release_item_to(sender, item_path)
 			return
 	log_line("request_item_authority: granting %s to peer %d" % [str(item.name) if item else str(item_path), sender])
 	# Assign authority + held state first (disables the item on the server so its
@@ -190,14 +206,27 @@ func request_item_authority(item_path: NodePath) -> void:
 		_release_from_snap_zones(item)
 
 
-## A player releases an item, forwarding its throw velocity so the server can
-## resume simulating it. Runs on the server. If released next to a station, the
-## server snaps it in (server-authoritative placement).
+## Called by NetPickable when this peer releases an item, forwarding its throw
+## velocity so the server can resume simulating it. Same self-RPC issue as
+## above: runs directly if we're the server.
+func release_item_authority_from(item_path: NodePath, lin: Vector3, ang: Vector3) -> void:
+	if is_server():
+		_do_release_item_authority(item_path, lin, ang, multiplayer.get_unique_id())
+	else:
+		_release_item_authority_rpc.rpc_id(1, item_path, lin, ang)
+
+
 @rpc("any_peer", "reliable")
-func release_item_authority(item_path: NodePath, lin: Vector3, ang: Vector3) -> void:
+func _release_item_authority_rpc(item_path: NodePath, lin: Vector3, ang: Vector3) -> void:
 	if not is_server():
 		return
-	log_line("release_item_authority: %s released by peer %d" % [str(item_path), multiplayer.get_remote_sender_id()])
+	_do_release_item_authority(item_path, lin, ang, multiplayer.get_remote_sender_id())
+
+
+## Runs on the server. If released next to a station, the server snaps it in
+## (server-authoritative placement).
+func _do_release_item_authority(item_path: NodePath, lin: Vector3, ang: Vector3, sender: int) -> void:
+	log_line("release_item_authority: %s released by peer %d" % [str(item_path), sender])
 	_set_item_authority.rpc(item_path, 1)
 	var item := get_node_or_null(item_path)
 	if item is RigidBody3D:
@@ -253,10 +282,22 @@ func _set_item_authority(item_path: NodePath, peer: int) -> void:
 		np.apply_held_state()
 
 
-## Server tells a specific client that its optimistic grab was rejected (the
-## item was already legitimately held by someone else). The client drops it.
+## Rejects peer's optimistic grab (the item was already legitimately held by
+## someone else). Same self-RPC concern: if the rejected peer is the server
+## itself, apply it directly rather than rpc_id-ing ourselves.
+func _force_release_item_to(peer: int, item_path: NodePath) -> void:
+	if peer == 1:
+		_do_force_release(item_path)
+	else:
+		force_release_item.rpc_id(peer, item_path)
+
+
 @rpc("authority", "reliable")
 func force_release_item(item_path: NodePath) -> void:
+	_do_force_release(item_path)
+
+
+func _do_force_release(item_path: NodePath) -> void:
 	log_line("force_release_item: dropping %s (server rejected our grab)" % str(item_path))
 	var item := get_node_or_null(item_path)
 	if item and item.has_method("drop"):

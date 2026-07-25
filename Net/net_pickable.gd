@@ -85,7 +85,7 @@ func _on_picked_up(_p) -> void:
 		return
 	if NetworkManager.is_online():
 		NetworkManager.log_line("Grabbed %s by hand, requesting authority" % _pickable.name)
-	NetworkManager.request_item_authority.rpc_id(1, _pickable.get_path())
+	NetworkManager.request_item_authority_from(_pickable.get_path())
 
 
 func _on_dropped(_p) -> void:
@@ -95,6 +95,6 @@ func _on_dropped(_p) -> void:
 		return
 	if NetworkManager.is_online():
 		NetworkManager.log_line("Dropped %s, reporting release to server" % _pickable.name)
-	NetworkManager.release_item_authority.rpc_id(
-		1, _pickable.get_path(), _pickable.linear_velocity, _pickable.angular_velocity
+	NetworkManager.release_item_authority_from(
+		_pickable.get_path(), _pickable.linear_velocity, _pickable.angular_velocity
 	)
