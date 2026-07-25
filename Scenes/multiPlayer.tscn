@@ -21,6 +21,9 @@ ssao_enabled = true
 ssil_enabled = true
 sdfgi_enabled = true
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_arao0"]
+size = Vector3(15, 20, 0.1)
+
 [node name="Main" type="Node3D" unique_id=1312265607]
 script = ExtResource("1_kdan8")
 
@@ -53,3 +56,21 @@ spawn_path = NodePath("../WorldContent")
 [node name="PlayersSpawner" type="MultiplayerSpawner" parent="." unique_id=106645565]
 _spawnable_scenes = PackedStringArray("res://Player/net_player.tscn")
 spawn_path = NodePath("../Players")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=4404969]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=998476672]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.197384, 7.589958)
+shape = SubResource("BoxShape3D_arao0")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="StaticBody3D" unique_id=340303902]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.197384, -7.509142)
+shape = SubResource("BoxShape3D_arao0")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="StaticBody3D" unique_id=1193703037]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -7.438612, 9.197384, -0.018813243)
+shape = SubResource("BoxShape3D_arao0")
+
+[node name="CollisionShape3D4" type="CollisionShape3D" parent="StaticBody3D" unique_id=1431367494]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 7.502467, 9.197384, -0.018813023)
+shape = SubResource("BoxShape3D_arao0")
