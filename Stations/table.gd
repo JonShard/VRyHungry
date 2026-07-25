@@ -1,3 +1,4 @@
+class_name Table
 extends StaticBody3D
 
 const GAME_MANAGER = preload("res://GameManager.gd")
@@ -100,6 +101,25 @@ func place_order() -> void:
 	_unsatisfied_orders.append(GAME_MANAGER.get_random_meal())
 
 
+func satisfyAllOrders() -> void:
+	print("Table: satisfyAllOrders()")
+	_unsatisfied_orders.clear()
+	clearAllPlates()
+	_setState(TableState.EMPTY)
+
+
+func clearAllPlates() -> void:
+	print("Table: clearAllPlates()")
+	for snap_zone_node in snap_zones:
+		var held_object = snap_zone_node.picked_up_object
+		if not held_object:
+			continue
+
+		var plate = _get_plate_from_item(held_object)
+		if plate:
+			plate.container.clear()
+			plate.is_dirty = true
+
 ## Server-only state transition: sets the new state's timer and assigns
 ## _state (whose setter refreshes the display on every peer).
 func _setState(newState: TableState) -> void:
@@ -176,13 +196,5 @@ func _process(delta: float) -> void:
 			label_3d.text = lbl_gameover
 
 		TableState.EATING:
-			for snap_zone_node in snap_zones:
-				var held_object = snap_zone_node.picked_up_object
-				if not held_object:
-					continue
-
-				var plate = _get_plate_from_item(held_object)
-				if plate:
-					plate.container.clear()
-					plate.is_dirty = true
+			clearAllPlates()
 			_setState(TableState.EMPTY)

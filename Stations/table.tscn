@@ -167,6 +167,5 @@ pixel_size = 0.003
 billboard = 2
 text = "20.1s"
 
-[node name="Sync" type="MultiplayerSynchronizer" parent="."]
-root_path = NodePath("..")
+[node name="Sync" type="MultiplayerSynchronizer" parent="." unique_id=2000411505]
 replication_config = SubResource("SceneReplicationConfig_np_table")
