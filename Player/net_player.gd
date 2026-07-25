@@ -29,10 +29,18 @@ func _ready() -> void:
 			_local_left_hand = origin.get_node_or_null("XRControllerLeftHand")
 			_local_right_hand = origin.get_node_or_null("XRControllerRightHand")
 			# Every peer's rig is baked at the same spot in the scene; spread
-			# joiners out along X by peer id so they don't start stacked on
-			# top of each other (host/peer 1 keeps the original spot).
+			# joiners out along X so they don't start stacked on top of each
+			# other. Peer ids from ENet are large effectively-random 32-bit
+			# numbers (not small sequential ones), so the offset must be
+			# bounded — using the raw id directly once shifted a joining
+			# player ~460 million units from the origin, which reads as an
+			# empty world (everything was still there, just unreachably far
+			# away) and wrecks float precision badly enough to jitter the
+			# view and destabilize physics.
 			var peer_id := str(name).to_int()
-			origin.position += Vector3((peer_id - 1) * 1.5, 0, 0)
+			if peer_id != 1:
+				var slot := absi(peer_id) % 8 + 1
+				origin.position += Vector3(slot * 1.5, 0, 0)
 		# Don't render your own floating head/hands from the inside.
 		_head.visible = false
 		_left_hand.visible = false
