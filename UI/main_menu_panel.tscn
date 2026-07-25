@@ -1,0 +1,203 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://UI/main_menu_panel.gd" id="1_panel"]
+
+[node name="MainMenuPanel" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_panel")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.09, 0.1, 0.13, 1)
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 16
+
+[node name="Title" type="Label" parent="Margin"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 26
+text = "VRyHungry"
+horizontal_alignment = 1
+
+[node name="RootView" type="VBoxContainer" parent="Margin"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Spacer" type="Control" parent="Margin/RootView"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+
+[node name="JohnButton" type="Button" parent="Margin/RootView"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(0, 64)
+theme_override_font_sizes/font_size = 26
+text = "Play John's Scene"
+
+[node name="HostButton" type="Button" parent="Margin/RootView"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(0, 64)
+theme_override_font_sizes/font_size = 26
+text = "Host Multiplayer"
+
+[node name="JoinMenuButton" type="Button" parent="Margin/RootView"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(0, 64)
+theme_override_font_sizes/font_size = 26
+text = "Join Multiplayer"
+
+[node name="JoinView" type="VBoxContainer" parent="Margin"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="Margin/JoinView"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Join Multiplayer"
+horizontal_alignment = 1
+
+[node name="IPLabel" type="Label" parent="Margin/JoinView"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 34
+text = "127.0.0.1"
+horizontal_alignment = 1
+
+[node name="Status" type="Label" parent="Margin/JoinView"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.8, 0.5, 1)
+theme_override_font_sizes/font_size = 16
+text = "Enter host IP, then Join"
+horizontal_alignment = 1
+
+[node name="Keypad" type="GridContainer" parent="Margin/JoinView"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 3
+
+[node name="B1" type="Button" parent="Margin/JoinView/Keypad"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 26
+text = "1"
+
+[node name="B2" type="Button" parent="Margin/JoinView/Keypad"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 26
+text = "2"
+
+[node name="B3" type="Button" parent="Margin/JoinView/Keypad"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 26
+text = "3"
+
+[node name="B4" type="Button" parent="Margin/JoinView/Keypad"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 26
+text = "4"
+
+[node name="B5" type="Button" parent="Margin/JoinView/Keypad"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 26
+text = "5"
+
+[node name="B6" type="Button" parent="Margin/JoinView/Keypad"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 26
+text = "6"
+
+[node name="B7" type="Button" parent="Margin/JoinView/Keypad"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 26
+text = "7"
+
+[node name="B8" type="Button" parent="Margin/JoinView/Keypad"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 26
+text = "8"
+
+[node name="B9" type="Button" parent="Margin/JoinView/Keypad"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 26
+text = "9"
+
+[node name="BDot" type="Button" parent="Margin/JoinView/Keypad"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 26
+text = "."
+
+[node name="B0" type="Button" parent="Margin/JoinView/Keypad"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 26
+text = "0"
+
+[node name="BDel" type="Button" parent="Margin/JoinView/Keypad"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 22
+text = "DEL"
+
+[node name="Buttons" type="HBoxContainer" parent="Margin/JoinView"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="JoinButton" type="Button" parent="Margin/JoinView/Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 56)
+theme_override_font_sizes/font_size = 24
+text = "JOIN"
+
+[node name="BackButton" type="Button" parent="Margin/JoinView/Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 56)
+theme_override_font_sizes/font_size = 24
+text = "BACK"

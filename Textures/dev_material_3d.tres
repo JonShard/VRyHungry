@@ -4,12 +4,13 @@
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0gbf8"]
 transparency = 1
-albedo_color = Color(0.62908286, 0.62908286, 0.62908286, 1)
+albedo_color = Color(0.11502249, 0.11502249, 0.11502249, 1)
 albedo_texture = ExtResource("1_3jxsn")
 uv1_triplanar = true
 
 [resource]
 next_pass = SubResource("StandardMaterial3D_0gbf8")
+albedo_color = Color(0, 0, 0, 1)
 metallic = 1.0
 metallic_specular = 0.0
 roughness = 0.0

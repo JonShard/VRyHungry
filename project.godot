@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="GodotVR2"
-run/main_scene="uid://clw8ai6kngqxb"
+run/main_scene="uid://c1nv4w33fedj6"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
 
@@ -19,9 +19,12 @@ config/icon="res://icon.svg"
 
 XRToolsUserSettings="*uid://bqgb8i74tm0t"
 XRToolsRumbleManager="*uid://by853dk86g1qw"
+NetworkManager="*res://Net/network_manager.gd"
 
 [display]
 
+window/size/viewport_width=1920
+window/size/viewport_height=1080
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 

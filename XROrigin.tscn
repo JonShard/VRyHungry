@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://diyu06cw06syv" path="res://addons/godot-xr-tools/player/player_body.tscn" id="4_6xr3x"]
 [ext_resource type="PackedScene" uid="uid://b6bk2pj8vbj28" path="res://addons/godot-xr-tools/functions/movement_turn.tscn" id="4_rd8py"]
 [ext_resource type="Script" uid="uid://ck4yn3hxuobj7" path="res://addons/godot-xr-tools/player/player_body.gd" id="5_rd8py"]
+[ext_resource type="PackedScene" uid="uid://cqhw276realc" path="res://addons/godot-xr-tools/functions/function_pointer.tscn" id="6_ptr"]
 
 [node name="XROrigin3D" type="XROrigin3D" unique_id=2055526621]
 
@@ -25,6 +26,10 @@ strafe = true
 [node name="FunctionPickup" parent="XRControllerLeftHand" unique_id=2133415351 instance=ExtResource("3_rd8py")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.009340696, -0.0074635968, 0.024033919)
 
+[node name="FunctionPointer" parent="XRControllerLeftHand" instance=ExtResource("6_ptr")]
+show_laser = 2
+show_target = true
+
 [node name="XRControllerRightHand" type="XRController3D" parent="." unique_id=202756852]
 tracker = &"right_hand"
 
@@ -38,6 +43,10 @@ smooth_turn_speed = 3.5
 
 [node name="FunctionPickup" parent="XRControllerRightHand" unique_id=1876210450 instance=ExtResource("3_rd8py")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0074635968, 0.024033919)
+
+[node name="FunctionPointer" parent="XRControllerRightHand" instance=ExtResource("6_ptr")]
+show_laser = 2
+show_target = true
 
 [node name="PlayerBody" type="CharacterBody3D" parent="." unique_id=1444632058 groups=["player_body"] instance=ExtResource("4_6xr3x")]
 process_priority = -100
