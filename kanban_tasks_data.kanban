@@ -9,30 +9,41 @@
 	"stages": [
 		{
 			"uuid": "94333de9-ebf5-4f38-b95b-9477f4bb9dde",
-			"title": "Todo",
+			"title": "Backlog",
 			"tasks": [
 				"854c7e1e-7521-4bcd-83ff-bb3fecec3142",
 				"4e2ca8d1-84e1-4913-ad8f-834007d52160",
 				"dd822d14-88e5-4790-808e-7d2cf7f79133",
-				"784d5cd3-333a-40a9-b35f-3d0c73f00761"
+				"784d5cd3-333a-40a9-b35f-3d0c73f00761",
+				"21bc19f1-ee3c-4bbb-ab9a-07ec6123a823",
+				"d93a31cd-d475-4c5a-87fc-983174b2594f"
 			]
 		},
 		{
 			"uuid": "211e4050-31cd-4425-a2ba-8ca56b4764cd",
-			"title": "Doing",
+			"title": "Todo",
 			"tasks": [
-				"d9cebd68-792e-4d01-a916-7df5f128b4a8",
-				"1c3b9543-cb67-431d-bf71-c8753e816776"
+				"55ac73b8-4378-4b58-bf3c-33f64590c804"
 			]
 		},
 		{
 			"uuid": "fab8a81b-7ca9-4026-96bb-ed66ea58ef2e",
+			"title": "Doing",
+			"tasks": [
+				"f8073eb2-8786-47b7-b63f-fa70c3f7115a",
+				"6942c45a-53a4-484f-9885-4f249cb4572b"
+			]
+		},
+		{
+			"uuid": "0d743057-955a-473a-8123-a3f805505d5d",
 			"title": "Done",
 			"tasks": [
-				"4ab36c89-a377-4f25-86a1-ac276aadf4a2",
-				"cde44fb1-3fdf-4ea0-8267-d28d894e4e7d",
+				"a4dd35ae-dc8e-42a3-9044-bf1cb1af281a",
+				"1c3b9543-cb67-431d-bf71-c8753e816776",
+				"d9cebd68-792e-4d01-a916-7df5f128b4a8",
 				"eee1990e-f957-4499-84b6-e68003fcb78e",
-				"a4dd35ae-dc8e-42a3-9044-bf1cb1af281a"
+				"4ab36c89-a377-4f25-86a1-ac276aadf4a2",
+				"cde44fb1-3fdf-4ea0-8267-d28d894e4e7d"
 			]
 		}
 	],
@@ -196,6 +207,41 @@
 					"done": false
 				}
 			]
+		},
+		{
+			"uuid": "21bc19f1-ee3c-4bbb-ab9a-07ec6123a823",
+			"title": "Visual indicator Hob",
+			"description": "",
+			"category": "bf4ec62e-526e-4027-876f-0b22bd17f79a",
+			"steps": []
+		},
+		{
+			"uuid": "d93a31cd-d475-4c5a-87fc-983174b2594f",
+			"title": "Visual indicator Sink",
+			"description": "",
+			"category": "bf4ec62e-526e-4027-876f-0b22bd17f79a",
+			"steps": []
+		},
+		{
+			"uuid": "6942c45a-53a4-484f-9885-4f249cb4572b",
+			"title": "Stations progress bar",
+			"description": "",
+			"category": "bf4ec62e-526e-4027-876f-0b22bd17f79a",
+			"steps": []
+		},
+		{
+			"uuid": "f8073eb2-8786-47b7-b63f-fa70c3f7115a",
+			"title": "Game over screen / effect with restart button",
+			"description": "",
+			"category": "bf4ec62e-526e-4027-876f-0b22bd17f79a",
+			"steps": []
+		},
+		{
+			"uuid": "55ac73b8-4378-4b58-bf3c-33f64590c804",
+			"title": "Restart / game reset button",
+			"description": "",
+			"category": "bf4ec62e-526e-4027-876f-0b22bd17f79a",
+			"steps": []
 		}
 	],
 	"layout": {
@@ -208,6 +254,9 @@
 			],
 			[
 				"fab8a81b-7ca9-4026-96bb-ed66ea58ef2e"
+			],
+			[
+				"0d743057-955a-473a-8123-a3f805505d5d"
 			]
 		]
 	}

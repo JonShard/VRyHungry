@@ -22,3 +22,4 @@ static func get_random_side() -> String:
 	var rand_index = randi() % sides_in_play.size()
 	print("GameManager: get_random_side() returning ", sides_in_play[rand_index])
 	return sides_in_play[rand_index]
+
