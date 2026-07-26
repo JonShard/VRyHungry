@@ -24,6 +24,11 @@ var _original_freeze_mode: int
 # branch of apply_held_state() clears while someone else is holding the item.
 var _original_enabled: bool
 
+# Whether the "our own hand still holds this" guard has already been logged for
+# the current grab. apply_held_state() runs every network tick, so without this
+# the guard message repeats for as long as you hold the item.
+var _grab_race_logged := false
+
 
 func _ready() -> void:
 	_pickable = get_parent() as XRToolsPickable
@@ -55,10 +60,19 @@ func _set_net_held_by(value: int) -> void:
 ## Puts the item in the right physics state for whether this peer currently
 ## owns it. Called locally after net_held_by changes, and directly by
 ## NetworkManager._set_item_authority right after an authority handoff.
+##
+## IMPORTANT: this runs on every network tick, not just on a real change.
+## net_held_by is replicated in ALWAYS mode, so the synchronizer assigns it every
+## tick on non-authority peers — unchanged value included — and that assignment
+## lands in _set_net_held_by(), which calls this. So every branch here has to be
+## idempotent and silent when there is nothing to do: otherwise each item logs a
+## line and rewrites four physics properties every tick on every peer that
+## doesn't own it.
 func apply_held_state() -> void:
 	if not _pickable:
 		return
 	if not NetworkManager.is_online() or is_multiplayer_authority():
+		_grab_race_logged = false
 		# We own this item's simulation (offline, loose+server, or currently
 		# holding it). If it's not actively in our own hand right now, make
 		# sure it isn't still left frozen/collision-less from a previous
@@ -68,15 +82,16 @@ func apply_held_state() -> void:
 		if not _pickable.is_picked_up():
 			var changed := _pickable.freeze_mode != _original_freeze_mode \
 				or _pickable.collision_mask != _pickable.original_collision_mask
-			if changed and NetworkManager.is_online():
-				print(
-					"%s: reclaiming ownership, restoring freeze_mode %d->%d collision_mask %d->%d" % [
-						_pickable.name, _pickable.freeze_mode, _original_freeze_mode,
-						_pickable.collision_mask, _pickable.original_collision_mask
-					]
-				)
-			_pickable.freeze_mode = _original_freeze_mode
-			_pickable.collision_mask = _pickable.original_collision_mask
+			if changed:
+				if NetworkManager.is_online():
+					print(
+						"%s: reclaiming ownership, restoring freeze_mode %d->%d collision_mask %d->%d" % [
+							_pickable.name, _pickable.freeze_mode, _original_freeze_mode,
+							_pickable.collision_mask, _pickable.original_collision_mask
+						]
+					)
+				_pickable.freeze_mode = _original_freeze_mode
+				_pickable.collision_mask = _pickable.original_collision_mask
 		# Unlike freeze/collision (which XRToolsPickable manages itself while
 		# held), `enabled` is only ever written by the non-authority branch
 		# below, so it must be restored here or it stays false forever: once a
@@ -101,13 +116,16 @@ func apply_held_state() -> void:
 	# hand mid-grab — only an explicit force_release_item rejection, or
 	# actually losing authority for real, should end a grab we initiated.
 	if _pickable.is_picked_up() and _pickable.get_picked_up_by() is XRToolsFunctionPickup:
-		if NetworkManager.is_online():
+		# Log once per grab, not once per tick.
+		if NetworkManager.is_online() and not _grab_race_logged:
+			_grab_race_logged = true
 			print(
 				"%s: ignoring non-authority sync (net_held_by=%d) — still actively held by our own hand (grab-race guard)" % [
 					_pickable.name, net_held_by
 				]
 			)
 		return
+	_grab_race_logged = false
 	# Someone else owns it: stop simulating locally, just follow the sync.
 	if _pickable.is_picked_up():
 		if NetworkManager.is_online():
@@ -117,12 +135,24 @@ func apply_held_state() -> void:
 				]
 			)
 		_pickable.drop()
+	# Bail out when we're already in the follow-the-sync state. Without this the
+	# writes below (and the line logged with them) repeated every tick for every
+	# item on every non-authority peer — 90% of the log, plus four redundant
+	# physics-property writes per item per tick. The comparison also means we
+	# still re-apply if something else perturbs the state (e.g. let_go()
+	# restoring the collision mask after a force-drop).
+	var want_enabled := (net_held_by == 0)
+	if _pickable.freeze \
+			and _pickable.freeze_mode == RigidBody3D.FREEZE_MODE_KINEMATIC \
+			and _pickable.collision_mask == 0 \
+			and _pickable.enabled == want_enabled:
+		return
 	if NetworkManager.is_online():
 		print("%s: freezing (non-authority, owner=peer %d)" % [_pickable.name, net_held_by])
 	_pickable.freeze = true
 	_pickable.freeze_mode = RigidBody3D.FREEZE_MODE_KINEMATIC
 	_pickable.collision_mask = 0
-	_pickable.enabled = (net_held_by == 0)
+	_pickable.enabled = want_enabled
 
 
 ## Local hand grab (not a station snap zone, which is server-only): request

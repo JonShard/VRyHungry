@@ -108,5 +108,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.40037438, 1.0094403, 0.341
 [node name="Counter" parent="." unique_id=1487893288 instance=ExtResource("12_j5uvh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0.5, 0)
 
-[node name="Counter2" parent="." instance=ExtResource("12_j5uvh")]
+[node name="Counter2" parent="." unique_id=860178119 instance=ExtResource("12_j5uvh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.5, 0)

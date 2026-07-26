@@ -254,7 +254,11 @@ func _cook_and_plate_round(actor: String, burger: String, buns: String, plate: S
 	# Take the finished plate away again, the way a player would carry it off to
 	# be served. Without this the counter stays occupied and the next round has
 	# nowhere to put its plate.
+	await _both("%s_food_on_plate_before_lift" % actor, "verify_plate_visuals", [plate])
 	await _step(actor, "%s_plate_off_counter2" % actor, "park", [plate, park_at])
+	# The food must still be on the plate after it has been carried off the
+	# counter and set down again.
+	await _both("%s_food_stayed_on_plate" % actor, "verify_plate_visuals", [plate])
 
 
 # Spawn a second set of ingredients through NetworkManager for the server's
@@ -292,6 +296,7 @@ func _find_client_id() -> int:
 # Run one step as `actor` (locally if that's us, over RPC if it's the client)
 # and record the verdict.
 func _step(actor: String, label: String, step: String, args: Array) -> void:
+	_current_step = label
 	_banner("STEP %d: %s  (on the %s)" % [_next_step_no(), label, actor.to_upper()])
 	var res: Dictionary
 	if actor == "server":
@@ -307,6 +312,7 @@ func _step(actor: String, label: String, step: String, args: Array) -> void:
 # Run the same check on both peers - the server's state and the client's must
 # agree, which is the whole point of the exercise.
 func _both(label: String, step: String, args: Array) -> void:
+	_current_step = label
 	_banner("STEP %d: %s  (checked on BOTH peers)" % [_next_step_no(), label])
 	_record(label, "server", await _run_local_step(step, args))
 	_record(label, "client", await _remote(step, args))
@@ -372,6 +378,7 @@ func _report() -> void:
 
 @rpc("authority", "reliable")
 func _cmd(step: String, args: Array) -> void:
+	_current_step = step
 	_log("<- server: %s%s" % [step, args])
 	_running = true
 	var res := await _run_local_step(step, args)
@@ -424,6 +431,8 @@ func _run_local_step(step: String, args: Array) -> Dictionary:
 			return _check_food_exists(args[0])
 		"verify_plate_contains":
 			return _check_plate_contains(args[0], args[1])
+		"verify_plate_visuals":
+			return _check_plate_visuals(args[0])
 	return {"ok": false, "detail": "unknown step %s" % step}
 
 
@@ -800,7 +809,56 @@ func _describe(item: Node3D) -> Dictionary:
 		# literally what the player sees sitting on the plate.
 		d["meals_shown"] = _visual_count(item, "Container/MealContainer")
 		d["sides_shown"] = _visual_count(item, "Container/SidesContainer")
+		# Food sitting on a plate is a cosmetic child of the plate, so it must
+		# travel with it. Keys starting with "_" are per-peer diagnostics that
+		# _compare() skips (floats won't match exactly across peers); the
+		# attached flag is asserted absolutely instead, because this can — and
+		# did — go wrong on both peers at once, which a diff would miss.
+		var off := _max_visual_offset(item)
+		d["_visual_offset"] = off
+		d["visuals_attached"] = off <= MAX_VISUAL_OFFSET
 	return d
+
+
+## How far a cosmetic item on a plate may sit from the plate's origin. The plate
+## is ~0.4m across and the furthest slot is ~0.12m out, so anything past this has
+## come off the plate.
+const MAX_VISUAL_OFFSET := 0.3
+
+
+# Largest distance from the plate's origin to any of the cosmetic items it is
+# displaying. -1 when the plate is showing nothing.
+func _max_visual_offset(item: Node3D) -> float:
+	var worst := -1.0
+	for path in ["Container/MealContainer", "Container/SidesContainer"]:
+		var root := item.get_node_or_null(path)
+		if not root:
+			continue
+		for c in root.get_children():
+			if c is Node3D and not c.is_queued_for_deletion():
+				worst = maxf(worst, item.global_position.distance_to((c as Node3D).global_position))
+	return snappedf(worst, 0.001)
+
+
+# What the cosmetic children look like, for diagnosing why they moved.
+func _visual_diag(item: Node3D) -> String:
+	var parts: Array[String] = []
+	for path in ["Container/MealContainer", "Container/SidesContainer"]:
+		var root := item.get_node_or_null(path)
+		if not root:
+			continue
+		for c in root.get_children():
+			var s := "%s global=%s local=%s parent=%s (%.3fm from plate at %s)" % [
+				c.name, (c as Node3D).global_position, (c as Node3D).position,
+				c.get_parent().name,
+				item.global_position.distance_to((c as Node3D).global_position),
+				item.global_position]
+			if c is RigidBody3D:
+				s += " [RigidBody3D freeze=%s freeze_mode=%d layer=%d top_level=%s queued=%s]" % [
+					c.freeze, c.freeze_mode, c.collision_layer, c.top_level,
+					c.is_queued_for_deletion()]
+			parts.append(s)
+	return "; ".join(parts) if parts else "(nothing on the plate)"
 
 
 func _visual_count(item: Node3D, path: String) -> int:
@@ -864,10 +922,20 @@ func _compare(server: Dictionary, client: Dictionary) -> Array[String]:
 		if dist > SYNC_POS_TOLERANCE:
 			problems.append("%s is %.3fm apart (server %s vs client %s)" % [name, dist, s["pos"], c["pos"]])
 		for key in s:
-			if key == "pos":
+			# "_" keys are per-peer diagnostics, not things that must match.
+			if key == "pos" or key.begins_with("_"):
 				continue
 			if s[key] != c[key]:
 				problems.append("%s.%s: server=%s client=%s" % [name, key, s[key], c[key]])
+	# Absolute invariants, checked per peer. A cross-peer diff can't catch a
+	# fault that happens identically on both sides.
+	for peer_name in ["server", "client"]:
+		var snap: Dictionary = server if peer_name == "server" else client
+		for name in snap:
+			var d: Dictionary = snap[name]
+			if d.has("visuals_attached") and not d["visuals_attached"]:
+				problems.append("on the %s, %s's food has come off the plate (%.3fm from it, limit %.2f)"
+					% [peer_name, name, d.get("_visual_offset", -1.0), MAX_VISUAL_OFFSET])
 	return problems
 
 
@@ -891,6 +959,76 @@ func _audit_sync(label: String) -> void:
 	else:
 		res["detail"] = "after %.0fs the peers still disagree: %s" % [SYNC_SETTLE_SEC, "; ".join(problems)]
 	_record("sync_after_" + label, "both", res)
+
+
+# --- Live watch on plate visuals ------------------------------------------
+#
+# The per-step checks tell us the food ended up off the plate, but not when or
+# why. This watches every frame and reports the first frame a cosmetic item
+# departs from its slot, along with what was happening to the plate at the time.
+
+## Local offset from its slot at which a cosmetic item counts as having moved.
+const VISUAL_DRIFT_EPSILON := 0.05
+
+var _current_step := "(before any step)"
+var _drift_reported := {}
+
+
+func _process(_delta: float) -> void:
+	if not _world:
+		return
+	for root in [_world, _world.get_node_or_null("WorldContent")]:
+		if not root:
+			continue
+		for item in root.get_children():
+			if not (item is Node3D) or not item.get_node_or_null("PlateController"):
+				continue
+			_watch_plate(item as Node3D)
+
+
+func _watch_plate(plate: Node3D) -> void:
+	for path in ["Container/MealContainer", "Container/SidesContainer"]:
+		var holder := plate.get_node_or_null(path)
+		if not holder:
+			continue
+		for c in holder.get_children():
+			if not (c is Node3D) or c.is_queued_for_deletion():
+				continue
+			var drift: float = (c as Node3D).position.length()
+			var key := c.get_instance_id()
+			if drift <= VISUAL_DRIFT_EPSILON:
+				_drift_reported.erase(key)
+				continue
+			if _drift_reported.has(key):
+				continue
+			_drift_reported[key] = true
+			_log("VISUAL DRIFT: %s on %s moved to local %s (%.3f from its slot) during '%s'" % [
+				c.name, plate.name, (c as Node3D).position, drift, _current_step])
+			_log("  plate: pos=%s freeze=%s held_by=%s authority=%d" % [
+				plate.global_position, plate.freeze if plate is RigidBody3D else "-",
+				plate.get_picked_up_by() if plate.has_method("get_picked_up_by") else "-",
+				plate.get_multiplayer_authority()])
+			if c is RigidBody3D:
+				_log("  visual: freeze=%s mode=%d layer=%d top_level=%s sleeping=%s lin_vel=%s" % [
+					c.freeze, c.freeze_mode, c.collision_layer, c.top_level,
+					c.sleeping, c.linear_velocity])
+
+
+# Food shown on a plate is a cosmetic child of that plate, so it has to stay put
+# when the plate is picked up and carried around. If it drifts away, the player
+# sees the burger fly off the plate.
+func _check_plate_visuals(plate_name: String) -> Dictionary:
+	var plate := _find(plate_name)
+	if not plate:
+		return {"ok": false, "detail": "'%s' does not exist on this peer" % plate_name}
+	var off := _max_visual_offset(plate)
+	if off < 0.0:
+		return {"ok": false, "detail": "%s is not showing any food to check" % plate_name}
+	if off > MAX_VISUAL_OFFSET:
+		return {"ok": false, "detail": "%s's food has come off the plate: %.3fm away (limit %.2f). %s"
+			% [plate_name, off, MAX_VISUAL_OFFSET, _visual_diag(plate)]}
+	return {"ok": true, "detail": "%s's food is still on it (%.3fm from centre). %s"
+		% [plate_name, off, _visual_diag(plate)]}
 
 
 # --- Diagnostics -----------------------------------------------------------

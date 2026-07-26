@@ -141,6 +141,9 @@ func refresh_visuals(ids: Array[String]) -> void:
 
 		_make_cosmetic(visual)
 		container_root.add_child(visual)
+		# Must happen after add_child: entering the world is what puts the body
+		# into the physics space, so it can only be taken out again afterwards.
+		_remove_from_physics(visual)
 		visual.position = positions[idx].position
 		visual.rotation = positions[idx].rotation
 
@@ -152,16 +155,38 @@ func refresh_visuals(ids: Array[String]) -> void:
 func _make_cosmetic(visual: Node3D) -> void:
 	var net_pickable := visual.get_node_or_null("NetPickable")
 	if net_pickable:
-		net_pickable.queue_free()
+		# Detach and free it outright rather than queue_free(): this runs before
+		# `visual` is added to the tree, and a merely-queued node still enters the
+		# tree with its parent and runs _ready() (which starts syncing and logging)
+		# before the queued deletion lands at the end of the frame.
+		visual.remove_child(net_pickable)
+		net_pickable.free()
 	if visual is RigidBody3D:
 		visual.freeze = true
-		visual.freeze_mode = RigidBody3D.FREEZE_MODE_KINEMATIC
+		# STATIC, not KINEMATIC: a kinematic body is still driven by the physics
+		# engine (see _remove_from_physics), and "static decoration" is what this
+		# actually is.
+		visual.freeze_mode = RigidBody3D.FREEZE_MODE_STATIC
 		visual.collision_layer = 0
 		visual.collision_mask = 0
 	if visual is XRToolsPickable:
 		visual.enabled = false
 	visual.set_process(false)
 	visual.set_physics_process(false)
+
+
+# Take a display-only copy out of the physics simulation completely.
+#
+# Freezing is not enough. Under Jolt (this project's physics engine) a frozen
+# KINEMATIC RigidBody3D is still simulated: it is driven toward its target
+# transform by velocity rather than being teleported. Parented to a plate that
+# gets picked up and carried, it therefore lags behind, keeps its velocity, and
+# overshoots — so the food visibly slid off the plate and ended up metres away,
+# differently on each peer since each simulates its own copy. A body with no
+# space is never touched by the engine, so it simply follows its parent.
+func _remove_from_physics(visual: Node3D) -> void:
+	if visual is RigidBody3D:
+		PhysicsServer3D.body_set_space((visual as RigidBody3D).get_rid(), RID())
 
 
 #plate (Pickalbe)
