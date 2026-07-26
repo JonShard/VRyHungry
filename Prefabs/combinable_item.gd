@@ -72,13 +72,10 @@ func _on_body_entered(body: Node3D) -> void:
 # Instantiate the result of combination and free the two ingredient items
 func _combine(other_body: Node3D, result: PackedScene) -> void:
 	print("CombinableItem _combine: combining %s + %s into %s" % [_food_item.id, _find_food_item(other_body).id, result.resource_path])
-	_combining = true
 
 	# Get Snapzone
 	var snap_zone := _pickable.get_picked_up_by()
 	if not snap_zone or not snap_zone.has_method("pick_up_object"):
-		push_warning("CombineZone: base item is not held by a snap zone; cannot combine.")
-		_combining = false
 		return
 
 	# Spawn the result through the server (so it replicates to every peer,
