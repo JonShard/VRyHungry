@@ -44,8 +44,9 @@ const SETUP_TIMEOUT_SEC := 30.0
 const SNAP_TOLERANCE := 0.12
 ## Cooking and washing both take ~3s of station time; allow generously for it.
 const STATION_WORK_TIMEOUT := 20.0
-## Lines kept in the on-screen overlay.
-const OVERLAY_LINES := 16
+## Lines kept in the on-screen overlay. Enough to show a whole step, without the
+## panel eating the view of the kitchen underneath it.
+const OVERLAY_LINES := 11
 
 ## Where the debug camera sits and what it aims at: a fixed vantage point that
 ## frames the whole kitchen (Counter2 at x=-2 through DirtStation at x=2).
@@ -78,10 +79,16 @@ var _hand_detached := false
 var _overlay: Label
 var _overlay_lines: Array[String] = []
 
+# Per-step screenshots, later stitched into a side-by-side GIF of both peers.
+var _frames_enabled := false
+var _frames_dir := ""
+var _frame_index := 0
+
 
 func _ready() -> void:
 	var args := OS.get_cmdline_user_args()
 	_auto_mode = "--mptest" in args
+	_frames_enabled = "--mptest-frames" in args
 	_step_pause = _arg_value(args, "--mptest-pause", 0.0)
 	_end_hold = _arg_value(args, "--mptest-hold", 0.0)
 	_world = get_parent()
@@ -96,6 +103,7 @@ func _ready() -> void:
 			_finish(false)
 		return
 	_build_debug_camera()
+	_setup_frames()
 	if not _auto_mode:
 		_log("MANUAL MODE - keys act on this window's peer:")
 		_log("  " + HELP)
@@ -173,6 +181,8 @@ func _run_server() -> void:
 		return
 	await _wait_frames(60)
 	_banner("starting sequence")
+	# A frame of the untouched kitchen, so the GIF opens on the starting state.
+	await _capture_step_frame("start")
 
 	# 1-2. Both peers can pick the plate up and put it down.
 	await _step("client", "client_grab_plate", "grab", ["Plate"])
@@ -290,6 +300,7 @@ func _step(actor: String, label: String, step: String, args: Array) -> void:
 		res = await _remote(step, args)
 	_record(label, actor, res)
 	await _audit_sync(label)
+	await _capture_step_frame(label)
 	await _pause()
 
 
@@ -300,6 +311,7 @@ func _both(label: String, step: String, args: Array) -> void:
 	_record(label, "server", await _run_local_step(step, args))
 	_record(label, "client", await _remote(step, args))
 	await _audit_sync(label)
+	await _capture_step_frame(label)
 	await _pause()
 
 
@@ -343,6 +355,8 @@ func _report() -> void:
 	for r in _results:
 		if not r["ok"]:
 			_log("FAILURE %s [%s]: %s" % [r["step"], r["side"], r["detail"]])
+	await _capture_step_frame("final")
+	_write_frame_index()
 	if not _auto_mode:
 		return
 	_quit_client.rpc_id(_client_id)
@@ -374,6 +388,7 @@ func _result(step: String, ok: bool, detail: String) -> void:
 
 @rpc("authority", "reliable")
 func _quit_client() -> void:
+	_write_frame_index()
 	if _end_hold > 0.0:
 		await get_tree().create_timer(_end_hold).timeout
 	_finish(true)
@@ -663,6 +678,94 @@ func _check_plate_contains(plate_name: String, food_id: String) -> Dictionary:
 	return {"ok": true, "detail": "%s contains %s" % [plate_name, str(pc.contained_ids)]}
 
 
+# --- Per-step screenshots --------------------------------------------------
+#
+# One frame per peer per step, saved as PNGs and stitched into a single
+# side-by-side GIF afterwards (see test/make_gif.ps1). Seeing both peers'
+# viewports next to each other for the same step is the fastest way to spot a
+# visual desync — the numbers in the log tell you something diverged, the GIF
+# shows you what it looked like.
+
+## Frames are captured at half the viewport's resolution: 60-odd full-size
+## frames per peer is a lot of pixels to write and then re-encode.
+const FRAME_SCALE := 0.5
+
+
+func _setup_frames() -> void:
+	if not _frames_enabled:
+		return
+	if DisplayServer.get_name() == "headless":
+		_frames_enabled = false
+		_log("frame capture disabled: a headless run has no rendered output to grab")
+		return
+	var role := "server" if "--server" in OS.get_cmdline_user_args() else "client"
+	_frames_dir = "res://logs/mptest_frames_%s" % role
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(_frames_dir))
+	# Clear out a previous run's frames, or the GIF would splice the two together.
+	var dir := DirAccess.open(_frames_dir)
+	if dir:
+		for f in dir.get_files():
+			if f.ends_with(".png"):
+				dir.remove(f)
+	_log("capturing a frame per step into %s" % ProjectSettings.globalize_path(_frames_dir))
+
+
+# The server numbers the frames and tells the client to grab the matching one, so
+# frame N is the same step on both sides and they can be stitched in pairs.
+func _capture_step_frame(label: String) -> void:
+	if not _frames_enabled:
+		return
+	_frame_index += 1
+	if NetworkManager.is_server() and _client_id != 0:
+		_capture_frame_rpc.rpc_id(_client_id, _frame_index, label)
+	await _save_frame(_frame_index, label)
+
+
+@rpc("authority", "reliable")
+func _capture_frame_rpc(index: int, label: String) -> void:
+	if not _frames_enabled:
+		return
+	_frame_index = index
+	await _save_frame(index, label)
+
+
+func _save_frame(index: int, label: String) -> void:
+	# Wait for the frame to actually be drawn, or we capture whatever was in the
+	# buffer before this step's changes landed.
+	await RenderingServer.frame_post_draw
+	var tex := get_viewport().get_texture()
+	if not tex:
+		return
+	var img := tex.get_image()
+	if not img:
+		return
+	if FRAME_SCALE != 1.0:
+		img.resize(int(img.get_width() * FRAME_SCALE), int(img.get_height() * FRAME_SCALE),
+			Image.INTERPOLATE_BILINEAR)
+	# Index-only filenames so ffmpeg's image sequence reader can pick them up as
+	# frame_%04d.png; the step name is already legible in the on-screen overlay.
+	var err := img.save_png("%s/frame_%04d.png" % [_frames_dir, index])
+	if err != OK:
+		_log("  could not save frame %d (%s)" % [index, error_string(err)])
+	else:
+		_frame_labels.append("%04d  %s" % [index, label])
+
+
+# Written alongside the frames so a given frame number can be traced back to the
+# step that produced it.
+var _frame_labels: Array[String] = []
+
+
+func _write_frame_index() -> void:
+	if not _frames_enabled or _frame_labels.is_empty():
+		return
+	var f := FileAccess.open("%s/frames.txt" % _frames_dir, FileAccess.WRITE)
+	if f:
+		for line in _frame_labels:
+			f.store_line(line)
+		f.close()
+
+
 # --- Cross-peer sync audit -------------------------------------------------
 #
 # Runs after every step. Targeted per-step assertions only look at the one thing
@@ -878,6 +981,9 @@ func _manual(what: String, step: String, args: Array) -> void:
 	var res := await _run_local_step(step, args)
 	_running = false
 	_log("%s %s :: %s" % ["PASS" if res.get("ok") else "FAIL", what, res.get("detail", "")])
+	# Capture manual steps too, so a hand-driven repro can be turned into a GIF.
+	await _capture_step_frame(step)
+	_write_frame_index()
 
 
 # --- Helpers ---------------------------------------------------------------
@@ -1031,7 +1137,9 @@ func _build_overlay() -> void:
 	panel.set_anchors_preset(Control.PRESET_TOP_WIDE)
 	panel.modulate = Color(1, 1, 1, 0.85)
 	_overlay = Label.new()
-	_overlay.add_theme_font_size_override("font_size", 13)
+	# Sized for a 1800x1200 canvas, and to stay legible once a captured frame has
+	# been scaled down into the GIF.
+	_overlay.add_theme_font_size_override("font_size", 22)
 	_overlay.autowrap_mode = TextServer.AUTOWRAP_OFF
 	_overlay.clip_text = true
 	panel.add_child(_overlay)

@@ -13,7 +13,13 @@ param(
     # Seconds to pause between steps, and to hold the final state on screen.
     [double]$Pause = 1.5,
     [double]$Hold = 20,
-    [int]$TimeoutSec = 300
+    [int]$TimeoutSec = 300,
+    # Passed through to make_gif.ps1. HalfWidth 900 keeps the on-screen
+    # step log readable in the GIF; lower it to shrink the file.
+    [int]$HalfWidth = 900,
+    [double]$SecondsPerStep = 1.2,
+    # Skip building the GIF (frames are still captured).
+    [switch]$NoGif
 )
 
 $ErrorActionPreference = "Stop"
@@ -30,7 +36,7 @@ function Start-Instance($extraArgs) {
     # --xr-mode off keeps it on the desktop (SteamVR's OpenXR runtime otherwise
     # takes over, and two instances can't share a headset anyway).
     $a = "--xr-mode off --resolution 900x600 --path `"$proj`" $scene -- " +
-         "$($extraArgs -join ' ') --mptest --mptest-pause $Pause --mptest-hold $Hold"
+         "$($extraArgs -join ' ') --mptest --mptest-frames --mptest-pause $Pause --mptest-hold $Hold"
     $p = Start-Process -FilePath $Godot -ArgumentList $a -PassThru
     # Touching .Handle caches it, which is what makes .ExitCode readable later.
     $null = $p.Handle
@@ -60,6 +66,13 @@ foreach ($pair in @(@("SERVER", $serverLog), @("CLIENT", $clientLog))) {
     Write-Host ""
     Write-Host "======================== $($pair[0]) ========================"
     if (Test-Path $pair[1]) { Get-Content $pair[1] -Encoding UTF8 } else { Write-Host "(no log written)" }
+}
+
+if (-not $NoGif) {
+    Write-Host ""
+    Write-Host "======================== GIF ========================"
+    & powershell -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot "make_gif.ps1") `
+        -HalfWidth $HalfWidth -SecondsPerStep $SecondsPerStep
 }
 
 $server.WaitForExit(2000) | Out-Null
