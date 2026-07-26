@@ -1,0 +1,112 @@
+[gd_scene format=3 uid="uid://bodj8op527o2c"]
+
+[ext_resource type="Script" uid="uid://d1cefhe3yyyds" path="res://Scenes/multiplayer_world.gd" id="1_6uucx"]
+[ext_resource type="PackedScene" uid="uid://j5s5wus7tuhb" path="res://XROrigin.tscn" id="2_j7vd1"]
+[ext_resource type="Material" uid="uid://cmia50cfqxxo4" path="res://Textures/dev_material_3d.tres" id="3_ssbaf"]
+[ext_resource type="Sky" uid="uid://c1abtpwhdm2d5" path="res://Textures/sky/NightSkyHDRI009_16K.tres" id="4_081u3"]
+[ext_resource type="PackedScene" uid="uid://j7caslh27nor" path="res://Stations/Hob.tscn" id="5_t1fa7"]
+[ext_resource type="PackedScene" uid="uid://dvrk268s7gkxh" path="res://Stations/sink.tscn" id="6_6jhmh"]
+[ext_resource type="PackedScene" uid="uid://bp3v1jl8pctro" path="res://Containers/plate.tscn" id="7_bowes"]
+[ext_resource type="PackedScene" uid="uid://cnjwtnhwh0i8q" path="res://Stations/dirt_station.tscn" id="8_pvl84"]
+[ext_resource type="Script" uid="uid://biu4qr3nr1eny" path="res://test/mp_test_driver.gd" id="9_mptst"]
+[ext_resource type="PackedScene" uid="uid://dpot5qie20vf6" path="res://Items/burger.tscn" id="10_51k0c"]
+[ext_resource type="PackedScene" uid="uid://c0lknik4noobs" path="res://Items/BurgerBuns.tscn" id="11_psgbv"]
+[ext_resource type="PackedScene" uid="uid://efaec6ymgabo" path="res://Stations/Counter.tscn" id="12_j5uvh"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vlqg6"]
+size = Vector3(15, 0.1, 15)
+
+[sub_resource type="BoxMesh" id="BoxMesh_24d3s"]
+material = ExtResource("3_ssbaf")
+size = Vector3(15, 0.1, 15)
+
+[sub_resource type="Environment" id="Environment_bvwq1"]
+background_mode = 2
+sky = ExtResource("4_081u3")
+reflected_light_source = 2
+ssr_enabled = true
+ssao_enabled = true
+ssil_enabled = true
+sdfgi_enabled = true
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_arao0"]
+size = Vector3(15, 20, 0.1)
+
+[node name="Main" type="Node3D" unique_id=1312265607]
+script = ExtResource("1_6uucx")
+populate_from_layout = false
+
+[node name="XROrigin3D" parent="." unique_id=2055526621 groups=["local_xr_origin"] instance=ExtResource("2_j7vd1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.36171648, 0, 0.81835127)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1376644384]
+transform = Transform3D(-0.8660254, -0.43301278, 0.24999999, 0.3022632, -0.05510214, 0.9516306, -0.39829266, 0.8997021, 0.17860365, 0, 0, 0)
+
+[node name="Floor" type="StaticBody3D" parent="." unique_id=122279514]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor" unique_id=958841648]
+shape = SubResource("BoxShape3D_vlqg6")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor/CollisionShape3D" unique_id=1939997056]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00018164515, 0.0006352663, -0.002532661)
+mesh = SubResource("BoxMesh_24d3s")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1177077250]
+environment = SubResource("Environment_bvwq1")
+
+[node name="WorldContent" type="Node3D" parent="." unique_id=291550153]
+
+[node name="Players" type="Node3D" parent="." unique_id=1595463693]
+
+[node name="ItemsSpawner" type="MultiplayerSpawner" parent="." unique_id=627119248]
+spawn_path = NodePath("../WorldContent")
+
+[node name="PlayersSpawner" type="MultiplayerSpawner" parent="." unique_id=106645565]
+_spawnable_scenes = PackedStringArray("res://Player/net_player.tscn")
+spawn_path = NodePath("../Players")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=4404969]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=998476672]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.197384, 7.589958)
+shape = SubResource("BoxShape3D_arao0")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="StaticBody3D" unique_id=340303902]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.197384, -7.509142)
+shape = SubResource("BoxShape3D_arao0")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="StaticBody3D" unique_id=1193703037]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -7.438612, 9.197384, -0.018813243)
+shape = SubResource("BoxShape3D_arao0")
+
+[node name="CollisionShape3D4" type="CollisionShape3D" parent="StaticBody3D" unique_id=1431367494]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 7.502467, 9.197384, -0.018813023)
+shape = SubResource("BoxShape3D_arao0")
+
+[node name="Hob" parent="." unique_id=1687971542 instance=ExtResource("5_t1fa7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+
+[node name="Sink" parent="." unique_id=2055277359 instance=ExtResource("6_6jhmh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0.5, 0)
+
+[node name="Plate" parent="." unique_id=190487773 instance=ExtResource("7_bowes")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4050963, 1.1702834, 0.049627244)
+
+[node name="DirtStation" parent="." unique_id=160842153 instance=ExtResource("8_pvl84")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.5, 0)
+
+[node name="TestDriver" type="Node" parent="." unique_id=1002011928]
+script = ExtResource("9_mptst")
+
+[node name="raw_burger" parent="." unique_id=1675596942 instance=ExtResource("10_51k0c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.28692234, 1.0149999, 0.3505687)
+
+[node name="BurgerBuns" parent="." unique_id=1088240294 instance=ExtResource("11_psgbv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.40037438, 1.0094403, 0.34120744)
+
+[node name="Counter" parent="." unique_id=1487893288 instance=ExtResource("12_j5uvh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0.5, 0)
+
+[node name="Counter2" parent="." instance=ExtResource("12_j5uvh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.5, 0)

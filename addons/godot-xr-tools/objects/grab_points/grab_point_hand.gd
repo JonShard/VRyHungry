@@ -186,6 +186,12 @@ func _is_correct_hand(grabber : Node3D) -> bool:
 	# Get the positional tracker
 	var tracker := XRServer.get_tracker(controller.tracker) as XRPositionalTracker
 
+	# Without an XR runtime (desktop/headless testing) there is no tracker, so
+	# we can't tell which hand this is. Treat it as "not the correct hand" —
+	# the same result the null deref below used to produce after erroring.
+	if not tracker:
+		return false
+
 	# If left hand then verify left controller
 	if hand == Hand.LEFT and tracker.hand != XRPositionalTracker.TRACKER_HAND_LEFT:
 		return false

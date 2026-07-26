@@ -14,6 +14,12 @@ extends Node3D
 
 const PLAYER_SCENE := preload("res://Player/net_player.tscn")
 
+## Whether to spawn the full WorldLayout on the machine that owns the world.
+## The real game scene wants this; focused debug scenes (test/) bake their own
+## handful of stations and items instead and turn it off, so the thing under
+## test isn't sharing the world with a second copy of the whole kitchen.
+@export var populate_from_layout: bool = true
+
 var xr_interface: XRInterface
 var _populated := false
 
@@ -59,13 +65,14 @@ func _exit_tree() -> void:
 
 
 func _on_session_started(_is_server: bool) -> void:
+	NetworkManager.gate_existing_stations()
 	_populate_world_if_owner()
 
 
 ## Spawns the world's stations/items exactly once, on the machine that owns
 ## world logic (server or offline). Safe to call multiple times/entry points.
 func _populate_world_if_owner() -> void:
-	if not NetworkManager.owns_world() or _populated:
+	if not NetworkManager.owns_world() or _populated or not populate_from_layout:
 		return
 	_populated = true
 	GameManager.meals_in_play = ["hamburger"]

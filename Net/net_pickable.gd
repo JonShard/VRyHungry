@@ -20,6 +20,10 @@ var _pickable: XRToolsPickable
 # apply_held_state() last forced it to while non-authority.
 var _original_freeze_mode: int
 
+# Same idea for the pickable's authored `enabled` flag, which the non-authority
+# branch of apply_held_state() clears while someone else is holding the item.
+var _original_enabled: bool
+
 
 func _ready() -> void:
 	_pickable = get_parent() as XRToolsPickable
@@ -27,6 +31,7 @@ func _ready() -> void:
 		push_error("NetPickable must be a child of an XRToolsPickable")
 		return
 	_original_freeze_mode = _pickable.freeze_mode
+	_original_enabled = _pickable.enabled
 	_pickable.picked_up.connect(_on_picked_up)
 	_pickable.dropped.connect(_on_dropped)
 	# Deferred: the pickable root captures its own original_collision_mask/
@@ -72,6 +77,22 @@ func apply_held_state() -> void:
 				)
 			_pickable.freeze_mode = _original_freeze_mode
 			_pickable.collision_mask = _pickable.original_collision_mask
+		# Unlike freeze/collision (which XRToolsPickable manages itself while
+		# held), `enabled` is only ever written by the non-authority branch
+		# below, so it must be restored here or it stays false forever: once a
+		# client grabbed this item, every other peer set enabled=false, and
+		# regaining authority left it that way. On the server that silently
+		# broke everything downstream — hands couldn't pick the item up again,
+		# and a station snap zone would "snap" it (emitting has_picked_up, so
+		# e.g. a plate still got marked dirty) while pick_up() bailed out on
+		# the disabled item, leaving the zone holding an item with no grab
+		# driver that then fell out of the station.
+		if _pickable.enabled != _original_enabled:
+			if NetworkManager.is_online():
+				print("%s: reclaiming ownership, restoring enabled %s->%s" % [
+					_pickable.name, _pickable.enabled, _original_enabled
+				])
+			_pickable.enabled = _original_enabled
 		return
 	# A net_held_by/position sync update can race ahead of the
 	# authority-handoff RPC that's about to confirm a grab we just made
@@ -132,8 +153,11 @@ func _on_dropped(_p) -> void:
 		print("%s dropped, reporting release to server (lin=%s ang=%s)" % [
 			_pickable.name, _pickable.linear_velocity, _pickable.angular_velocity
 		])
+	# Send our own final transform too: we were the authority until now, and the
+	# server's copy may not have received our last position sync yet.
 	NetworkManager.release_item_authority_from(
-		_pickable.get_path(), _pickable.linear_velocity, _pickable.angular_velocity
+		_pickable.get_path(), _pickable.linear_velocity, _pickable.angular_velocity,
+		_pickable.global_transform
 	)
 
 

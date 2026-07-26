@@ -121,8 +121,31 @@ func spawn_item(scene_path: String, xform: Transform3D, node_name: String = "", 
 ## every peer when a tracked node exits the tree on the authority, so this is
 ## the single seam for destroying spawned items (works offline too).
 func despawn_item(node: Node) -> void:
-	if owns_world() and is_instance_valid(node):
-		log_line("despawn_item: %s" % node.name)
+	if not owns_world() or not is_instance_valid(node):
+		return
+	log_line("despawn_item: %s" % node.name)
+	# Items that came from the ItemsSpawner are despawned on every peer
+	# automatically when they leave the tree here. Items baked into a scene file
+	# are unknown to the spawner, so their removal has to be broadcast
+	# explicitly — otherwise every client keeps a ghost copy of an item the
+	# server has consumed, which then blocks the station it was sitting in and
+	# gets grabbed instead of the real item that replaced it.
+	if is_online() and not _is_spawner_tracked(node):
+		_despawn_static_item.rpc(node.get_path())
+	node.queue_free()
+
+
+# Items the ItemsSpawner replicates live under its spawn path; anything else was
+# baked into the scene file and the spawner knows nothing about it.
+func _is_spawner_tracked(node: Node) -> bool:
+	return _content_root != null and _content_root.is_ancestor_of(node)
+
+
+@rpc("authority", "call_remote", "reliable")
+func _despawn_static_item(path: NodePath) -> void:
+	var node := get_node_or_null(path)
+	if node:
+		log_line("despawn_static_item: freeing %s (the server consumed it)" % node.name)
 		node.queue_free()
 
 
@@ -161,6 +184,19 @@ func _gate_station(node: Node) -> void:
 			child.set_process(false)
 	node.set_process(false)
 	log_line("gated station (non-owner peer): %s" % node.name)
+
+
+## Gate every station already sitting in the scene tree, for peers that don't
+## own world logic. Stations that arrive through spawn_item() are gated as they
+## are built (see _spawn_item_from_data), but ones baked into a scene file never
+## pass through there — leaving a client running its own snap zones, which then
+## grab items straight out of the local hand and fight the server's
+## authoritative placement. Idempotent, so it's safe on every session start.
+func gate_existing_stations() -> void:
+	if owns_world():
+		return
+	for station in get_tree().get_nodes_in_group("station"):
+		_gate_station(station)
 
 
 # --- Item grab-authority transfer -----------------------------------------
@@ -209,27 +245,35 @@ func _grant_or_reject_item_authority(item_path: NodePath, sender: int) -> void:
 ## Called by NetPickable when this peer releases an item, forwarding its throw
 ## velocity so the server can resume simulating it. Same self-RPC issue as
 ## above: runs directly if we're the server.
-func release_item_authority_from(item_path: NodePath, lin: Vector3, ang: Vector3) -> void:
+func release_item_authority_from(item_path: NodePath, lin: Vector3, ang: Vector3, xform: Transform3D) -> void:
 	if is_server():
-		_do_release_item_authority(item_path, lin, ang, multiplayer.get_unique_id())
+		_do_release_item_authority(item_path, lin, ang, xform, multiplayer.get_unique_id())
 	else:
-		_release_item_authority_rpc.rpc_id(1, item_path, lin, ang)
+		_release_item_authority_rpc.rpc_id(1, item_path, lin, ang, xform)
 
 
 @rpc("any_peer", "reliable")
-func _release_item_authority_rpc(item_path: NodePath, lin: Vector3, ang: Vector3) -> void:
+func _release_item_authority_rpc(item_path: NodePath, lin: Vector3, ang: Vector3, xform: Transform3D) -> void:
 	if not is_server():
 		return
-	_do_release_item_authority(item_path, lin, ang, multiplayer.get_remote_sender_id())
+	_do_release_item_authority(item_path, lin, ang, xform, multiplayer.get_remote_sender_id())
 
 
 ## Runs on the server. If released next to a station, the server snaps it in
 ## (server-authoritative placement).
-func _do_release_item_authority(item_path: NodePath, lin: Vector3, ang: Vector3, sender: int) -> void:
+func _do_release_item_authority(item_path: NodePath, lin: Vector3, ang: Vector3, xform: Transform3D, sender: int) -> void:
 	log_line("release_item_authority: %s released by peer %d" % [str(item_path), sender])
 	_set_item_authority.rpc(item_path, 1)
 	var item := get_node_or_null(item_path)
 	if item is RigidBody3D:
+		# Adopt the releasing peer's own final transform rather than trusting our
+		# copy's. That peer was the item's authority right up to this moment, and
+		# its position updates travel on the synchronizer's separate, unordered
+		# channel — this reliable RPC routinely overtakes them, leaving our copy
+		# still sitting where the item was BEFORE the peer carried it away. The
+		# snap decision below then reads that stale position and teleports the
+		# item straight back into the station it was just picked up from.
+		item.global_transform = xform
 		item.freeze = false
 		item.linear_velocity = lin
 		item.angular_velocity = ang

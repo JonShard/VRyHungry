@@ -73,7 +73,16 @@ func _add_item(item: Node3D) -> void:
 
 	var plate_controller := xr_pickable.get_node_or_null("PlateController") as PlateController
 	if plate_controller:
-		plate_controller.contained_ids.append(food_node.id)
+		# Reassign rather than append in place. contained_ids has a setter that
+		# rebuilds the plate's visuals, and mutating the array never triggers it —
+		# so the peer that actually added the food was the one peer that never
+		# redrew the plate. Remote peers looked right (the synchronizer assigns
+		# the value there, which does fire the setter), and the stale peer only
+		# caught up if someone else took the plate and sent the value back.
+		# duplicate() keeps the Array[String] typing that the property requires.
+		var updated := plate_controller.contained_ids.duplicate()
+		updated.append(food_node.id)
+		plate_controller.contained_ids = updated
 
 	NetworkManager.despawn_item(item)
 
@@ -82,7 +91,10 @@ func erase_item(item: FoodItem) -> void:
 	contained_items.erase(item)
 	var plate_controller := xr_pickable.get_node_or_null("PlateController") as PlateController
 	if plate_controller:
-		plate_controller.contained_ids.erase(item.id)
+		# Same reason as _add_item: assign so the visuals actually refresh.
+		var remaining := plate_controller.contained_ids.duplicate()
+		remaining.erase(item.id)
+		plate_controller.contained_ids = remaining
 
 
 func clear() -> void:
