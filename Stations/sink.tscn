@@ -4,10 +4,10 @@
 [ext_resource type="Script" uid="uid://cquqe4f1m1sw6" path="res://addons/godot-xr-tools/objects/snap_zone.gd" id="2_3ocod"]
 [ext_resource type="PackedScene" uid="uid://bxbocxdaayvwx" path="res://UI/progress_bar.tscn" id="4_1pinr"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_24d3s"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_l02yb"]
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_dlkho"]
-radius = 0.3
+[sub_resource type="BoxShape3D" id="BoxShape3D_ai6d4"]
+size = Vector3(0.6, 0.12802735, 0.6)
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_np_sink"]
 properties/0/path = NodePath(".:progress")
@@ -18,19 +18,19 @@ properties/0/replication_mode = 1
 script = ExtResource("1_7hh4b")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=964735164]
-shape = SubResource("BoxShape3D_24d3s")
+shape = SubResource("BoxShape3D_l02yb")
 
 [node name="XRToolsSnapZone" type="Area3D" parent="." unique_id=1762550988 groups=["station"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5163779, 0)
 collision_layer = 65536
-collision_mask = 65536
+collision_mask = 65540
 script = ExtResource("2_3ocod")
 snap_mode = 1
 metadata/_custom_type_script = "uid://cquqe4f1m1sw6"
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="XRToolsSnapZone" unique_id=860566355]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -0.000975132, 0)
-shape = SubResource("SphereShape3D_dlkho")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.000975132, 0)
+shape = SubResource("BoxShape3D_ai6d4")
 
 [node name="CSGCombiner3D" type="CSGCombiner3D" parent="." unique_id=311064646]
 
