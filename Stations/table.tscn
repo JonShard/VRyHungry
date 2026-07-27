@@ -7,7 +7,7 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_24d3s"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_dlkho"]
-radius = 0.3
+radius = 0.6
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_24d3s"]
 albedo_color = Color(0.31, 0.21576, 0.1333, 1)
@@ -32,7 +32,7 @@ shape = SubResource("BoxShape3D_24d3s")
 [node name="XRToolsSnapZone" type="Area3D" parent="." unique_id=1947858647 groups=["station"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.31874347, 0.5270121, 0)
 collision_layer = 65536
-collision_mask = 65536
+collision_mask = 65540
 script = ExtResource("1_8j1nt")
 snap_mode = 1
 metadata/_custom_type_script = "uid://cquqe4f1m1sw6"
@@ -44,7 +44,7 @@ shape = SubResource("SphereShape3D_dlkho")
 [node name="XRToolsSnapZone2" type="Area3D" parent="." unique_id=694448387 groups=["station"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.34755045, 0.5270121, 0)
 collision_layer = 65536
-collision_mask = 65536
+collision_mask = 65540
 script = ExtResource("1_8j1nt")
 snap_mode = 1
 metadata/_custom_type_script = "uid://cquqe4f1m1sw6"
@@ -56,7 +56,7 @@ shape = SubResource("SphereShape3D_dlkho")
 [node name="XRToolsSnapZone3" type="Area3D" parent="." unique_id=1734026785 groups=["station"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.012355864, 0.5270121, 0.33038777)
 collision_layer = 65536
-collision_mask = 65536
+collision_mask = 65540
 script = ExtResource("1_8j1nt")
 snap_mode = 1
 metadata/_custom_type_script = "uid://cquqe4f1m1sw6"
@@ -68,7 +68,7 @@ shape = SubResource("SphereShape3D_dlkho")
 [node name="XRToolsSnapZone4" type="Area3D" parent="." unique_id=1358457948 groups=["station"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.022546828, 0.5270121, -0.36528283)
 collision_layer = 65536
-collision_mask = 65536
+collision_mask = 65540
 script = ExtResource("1_8j1nt")
 snap_mode = 1
 metadata/_custom_type_script = "uid://cquqe4f1m1sw6"

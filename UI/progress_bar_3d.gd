@@ -14,7 +14,6 @@ func _ready() -> void:
 		$Sprite3D.billboard = BaseMaterial3D.BillboardMode.BILLBOARD_FIXED_Y
 
 func set_progress(value: float) -> void:
-	print("ProgressBar set_progress: ", value)
 	progress_bar.value = clamp(value, 0.0, 1.0) * 100
 
 

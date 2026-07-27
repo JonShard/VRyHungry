@@ -6,8 +6,8 @@
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_kdxnr"]
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_vlqg6"]
-radius = 0.3
+[sub_resource type="BoxShape3D" id="BoxShape3D_7uuqv"]
+size = Vector3(0.6, 0.12802735, 0.6)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gkb3v"]
 
@@ -28,14 +28,14 @@ shape = SubResource("BoxShape3D_kdxnr")
 [node name="XRToolsSnapZone" type="Area3D" parent="." unique_id=538157739]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5270121, 0)
 collision_layer = 65536
-collision_mask = 65536
+collision_mask = 65540
 script = ExtResource("2_er1dp")
 snap_mode = 1
 metadata/_custom_type_script = "uid://cquqe4f1m1sw6"
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="XRToolsSnapZone" unique_id=370920392]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -0.000975132, 0)
-shape = SubResource("SphereShape3D_vlqg6")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.000975132, 0)
+shape = SubResource("BoxShape3D_7uuqv")
 
 [node name="CSGCombiner3D" type="CSGCombiner3D" parent="." unique_id=70901698]
 

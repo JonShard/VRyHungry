@@ -172,9 +172,7 @@ func _refresh_display() -> void:
 			progress_bar.set_bar_visible(false)
 	
 	label_3d_time.text = "%.1f" % _state_time
-	print("_state_duration = ", _state_duration)
 	progress_bar.set_progress(clampf(float(_state_time) / _state_duration, 0.0, 1.0))
-
 
 
 func _set_state(value: TableState) -> void:
