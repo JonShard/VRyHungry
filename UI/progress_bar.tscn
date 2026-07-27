@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://bxbocxdaayvwx"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_copv3"]
+viewport_path = NodePath("Sprite3D/SubViewport")
+
+[node name="ProgressBar3D" type="Node3D" unique_id=654673176]
+
+[node name="Sprite3D" type="Sprite3D" parent="." unique_id=1484008334]
+pixel_size = 0.002
+texture = SubResource("ViewportTexture_copv3")
+
+[node name="SubViewport" type="SubViewport" parent="Sprite3D" unique_id=35936518]
+transparent_bg = true
+size = Vector2i(320, 80)
+
+[node name="ProgressBar" type="ProgressBar" parent="Sprite3D/SubViewport" unique_id=727723524]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -13.5
+offset_right = 150.0
+offset_bottom = 36.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4

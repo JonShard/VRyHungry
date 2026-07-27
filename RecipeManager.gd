@@ -45,7 +45,7 @@ static func get_combination_result(first_id: StringName, second_id: StringName) 
 	return get_item_scene(result_id)
 
 
-static func get_cooking_result(ingredient_id: StringName) -> PackedScene:
+static func get_cooking_result(ingredient_id: StringName) -> String:
 	load_recipes()
 	for cooked_id in _cooking_map.keys():
 		var cook_defs = _cooking_map[cooked_id]
@@ -53,12 +53,12 @@ static func get_cooking_result(ingredient_id: StringName) -> PackedScene:
 		if typeof(cook_defs) == TYPE_ARRAY:
 			for cook_def in cook_defs:
 				if cook_def["ingredient"] == ingredient_id:
-					return get_item_scene(cooked_id)
+					return cooked_id
 		else:
 			var cook_def = cook_defs
 			if cook_def["ingredient"] == ingredient_id:
-				return get_item_scene(cooked_id)
-	return null
+				return cooked_id
+	return ""
 
 
 static func get_cooking_time(ingredient_id: StringName) -> float:

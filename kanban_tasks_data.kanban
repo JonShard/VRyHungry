@@ -16,7 +16,8 @@
 				"dd822d14-88e5-4790-808e-7d2cf7f79133",
 				"784d5cd3-333a-40a9-b35f-3d0c73f00761",
 				"21bc19f1-ee3c-4bbb-ab9a-07ec6123a823",
-				"d93a31cd-d475-4c5a-87fc-983174b2594f"
+				"d93a31cd-d475-4c5a-87fc-983174b2594f",
+				"9d7ecbc4-db2a-4d09-9f40-ceed3cf98c00"
 			]
 		},
 		{
@@ -239,6 +240,13 @@
 		{
 			"uuid": "55ac73b8-4378-4b58-bf3c-33f64590c804",
 			"title": "Restart / game reset button",
+			"description": "",
+			"category": "bf4ec62e-526e-4027-876f-0b22bd17f79a",
+			"steps": []
+		},
+		{
+			"uuid": "9d7ecbc4-db2a-4d09-9f40-ceed3cf98c00",
+			"title": "Add test that a hob can chain cook",
 			"description": "",
 			"category": "bf4ec62e-526e-4027-876f-0b22bd17f79a",
 			"steps": []
