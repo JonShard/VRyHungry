@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://byh5j25mwt3oc" path="res://Stations/sink.gd" id="1_7hh4b"]
 [ext_resource type="Script" uid="uid://cquqe4f1m1sw6" path="res://addons/godot-xr-tools/objects/snap_zone.gd" id="2_3ocod"]
-[ext_resource type="PackedScene" uid="uid://bp3v1jl8pctro" path="res://Containers/plate.tscn" id="2_ai6d4"]
+[ext_resource type="PackedScene" uid="uid://bxbocxdaayvwx" path="res://UI/progress_bar.tscn" id="4_1pinr"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_24d3s"]
 
@@ -16,7 +16,6 @@ properties/0/replication_mode = 1
 
 [node name="Sink" type="StaticBody3D" unique_id=2055277359 groups=["station"]]
 script = ExtResource("1_7hh4b")
-plate_scene = ExtResource("2_ai6d4")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=964735164]
 shape = SubResource("BoxShape3D_24d3s")
@@ -41,6 +40,7 @@ shape = SubResource("SphereShape3D_dlkho")
 transform = Transform3D(1.1506689, 0, 0, 0, 2.334253, 0, 0, 0, 1, 0, 1.2831618, 0.06031096)
 operation = 2
 radial_segments = 20
+smooth_faces = false
 
 [node name="CSGTorus3D" type="CSGTorus3D" parent="CSGCombiner3D" unique_id=2055166617]
 transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 0.84928787, 0, 0.5107032, -0.20686007)
@@ -81,6 +81,8 @@ transform = Transform3D(1.3113414e-07, 0.12955962, 0.99157166, 8.8817837e-16, 0.
 operation = 2
 size = Vector3(1.4033203, 1.2053223, 0.352417)
 
-[node name="Sync" type="MultiplayerSynchronizer" parent="."]
-root_path = NodePath("..")
+[node name="Sync" type="MultiplayerSynchronizer" parent="." unique_id=1601242574]
 replication_config = SubResource("SceneReplicationConfig_np_sink")
+
+[node name="ProgressBar3D" parent="." unique_id=654673176 instance=ExtResource("4_1pinr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8164611, -0.035980098)

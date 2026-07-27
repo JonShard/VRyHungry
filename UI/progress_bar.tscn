@@ -1,9 +1,12 @@
 [gd_scene format=3 uid="uid://bxbocxdaayvwx"]
 
+[ext_resource type="Script" uid="uid://bv7oracwmgre8" path="res://UI/progress_bar_3d.gd" id="1_ng8tm"]
+
 [sub_resource type="ViewportTexture" id="ViewportTexture_copv3"]
 viewport_path = NodePath("Sprite3D/SubViewport")
 
 [node name="ProgressBar3D" type="Node3D" unique_id=654673176]
+script = ExtResource("1_ng8tm")
 
 [node name="Sprite3D" type="Sprite3D" parent="." unique_id=1484008334]
 pixel_size = 0.002
