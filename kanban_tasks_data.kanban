@@ -16,7 +16,8 @@
 				"dd822d14-88e5-4790-808e-7d2cf7f79133",
 				"784d5cd3-333a-40a9-b35f-3d0c73f00761",
 				"21bc19f1-ee3c-4bbb-ab9a-07ec6123a823",
-				"d93a31cd-d475-4c5a-87fc-983174b2594f"
+				"d93a31cd-d475-4c5a-87fc-983174b2594f",
+				"9d7ecbc4-db2a-4d09-9f40-ceed3cf98c00"
 			]
 		},
 		{
@@ -30,14 +31,14 @@
 			"uuid": "fab8a81b-7ca9-4026-96bb-ed66ea58ef2e",
 			"title": "Doing",
 			"tasks": [
-				"f8073eb2-8786-47b7-b63f-fa70c3f7115a",
-				"6942c45a-53a4-484f-9885-4f249cb4572b"
+				"f8073eb2-8786-47b7-b63f-fa70c3f7115a"
 			]
 		},
 		{
 			"uuid": "0d743057-955a-473a-8123-a3f805505d5d",
 			"title": "Done",
 			"tasks": [
+				"6942c45a-53a4-484f-9885-4f249cb4572b",
 				"a4dd35ae-dc8e-42a3-9044-bf1cb1af281a",
 				"1c3b9543-cb67-431d-bf71-c8753e816776",
 				"d9cebd68-792e-4d01-a916-7df5f128b4a8",
@@ -239,6 +240,13 @@
 		{
 			"uuid": "55ac73b8-4378-4b58-bf3c-33f64590c804",
 			"title": "Restart / game reset button",
+			"description": "",
+			"category": "bf4ec62e-526e-4027-876f-0b22bd17f79a",
+			"steps": []
+		},
+		{
+			"uuid": "9d7ecbc4-db2a-4d09-9f40-ceed3cf98c00",
+			"title": "Add test that a hob can chain cook",
 			"description": "",
 			"category": "bf4ec62e-526e-4027-876f-0b22bd17f79a",
 			"steps": []

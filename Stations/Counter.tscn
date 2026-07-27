@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://cquqe4f1m1sw6" path="res://addons/godot-xr-tools/objects/snap_zone.gd" id="1_dlkho"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_24d3s"]
+size = Vector3(1, 1, 1.0517578)
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_dlkho"]
 radius = 0.3
@@ -15,7 +16,8 @@ albedo_color = Color(1.1759251, 0.741115, 0.5692133, 1)
 
 [node name="Counter" type="StaticBody3D" unique_id=1487893288 groups=["station"]]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=692568688]
+[node name="CollisionShape3DCuttingBoard" type="CollisionShape3D" parent="." unique_id=706340473]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.025878906)
 shape = SubResource("BoxShape3D_24d3s")
 
 [node name="XRToolsSnapZone" type="Area3D" parent="." unique_id=1647380272 groups=["station"]]
@@ -31,6 +33,7 @@ transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -0.000975132, 0)
 shape = SubResource("SphereShape3D_dlkho")
 
 [node name="CSGCombiner3D" type="CSGCombiner3D" parent="." unique_id=451757283]
+use_collision = true
 
 [node name="CSGBox3D" type="CSGBox3D" parent="CSGCombiner3D" unique_id=305755330]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.045776367, 0)
@@ -64,8 +67,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.060837455, 0.12459713, 0.55
 radius = 0.025492515
 
 [node name="CSGBox3D6" type="CSGBox3D" parent="CSGCombiner3D" unique_id=187377667]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.060742255, 0.4885016, 0.0011152327)
-size = Vector3(0.56365967, 0.092285156, 0.42160034)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.060742255, 0.51602846, 0.0011152327)
+size = Vector3(0.56365967, 0.037231445, 0.42160034)
 material = SubResource("StandardMaterial3D_vlqg6")
 
 [node name="CSGBox3D6" type="CSGBox3D" parent="CSGCombiner3D/CSGBox3D6" unique_id=1146824846]

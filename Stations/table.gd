@@ -3,17 +3,17 @@ extends StaticBody3D
 
 const GAME_MANAGER = preload("res://GameManager.gd")
 
-@export var initial_thinking_time: float = 6
-@export var initial_primary_time: float = 60
-@export var initial_friend_time: float = 10
-@export var initial_eating_time: float = 4
+@export var thinking_duration: float = 6
+@export var primary_duration: float = 23
+@export var friend_duration: float = 10
+@export var eating_duration: float = 4
 
 @onready var label_3d: Label3D = $Label3D
 @onready var label_3d_time: Label3D = $Label3DTime
 @onready var snap_zones: Array[XRToolsSnapZone] = []
+@onready var progress_bar: ProgressBar3D = $ProgressBar3D
 
-const lbl_thinking: String = "Thinking..."
-const lbl_waiting_primary: String = "Waiting for food"
+const lbl_thinking: String = "..."
 const lbl_gameover: String = "Game Over!"
 const lbl_eating: String = "Eating..."
 
@@ -35,13 +35,18 @@ enum TableState {
 ## the same text. Use _setState(), never assign _state directly.
 var _state: TableState = TableState.EMPTY: set = _set_state
 var _state_time: float = 0.0: set = _set_state_time
+var _state_duration: float = 0.0 # set in _set_state_time
 var _unsatisfied_orders: Array[String] = []: set = _set_unsatisfied_orders
+
 
 func _ready() -> void:
 	if not label_3d:
 		push_error("Table is missing reference to Label3D")
 	if not label_3d_time:
 		push_error("Table is missing reference to Label3DTime")
+	if not progress_bar or progress_bar is not ProgressBar3D:
+		push_error("Hob missing reference to progressbar, or wrong type:", progress_bar)
+	progress_bar.y_billboard = true
 
 	# Get snap_zones for plates, store in array snap_zones
 	for child in get_children():
@@ -62,7 +67,6 @@ func _ready() -> void:
 func _on_object_picked_up(_item) -> void:
 	print("Table: object picked up: ", _item)
 	_absorb_item_if_correct(_item)
-
 
 
 func _on_object_dropped() -> void:
@@ -128,14 +132,19 @@ func _setState(newState: TableState) -> void:
 	match newState:
 		TableState.EMPTY:
 			_state_time = 0.0
+			_state_duration = 0.0
 		TableState.THINKING:
-			_state_time = initial_eating_time
+			_state_time = eating_duration
+			_state_duration = eating_duration # Can't be done in _set_state(), will set duration inside timer
 		TableState.WAITING_PRIMARY:
-			_state_time = initial_primary_time
+			_state_time = primary_duration
+			_state_duration = primary_duration
 		TableState.WAITING_FRIEND:
-			_state_time = initial_friend_time
+			_state_time = friend_duration
+			_state_duration = friend_duration
 		TableState.EATING:
-			_state_time = initial_eating_time
+			_state_time = eating_duration
+			_state_duration = eating_duration
 
 	_state = newState
 
@@ -143,19 +152,29 @@ func _setState(newState: TableState) -> void:
 ## Pure presentation, driven off the current (locally authoritative or
 ## synced-from-server) state. Runs on every peer.
 func _refresh_display() -> void:
-	if not label_3d:
-		return
 	match _state:
 		TableState.EMPTY:
+			progress_bar.set_bar_visible(false)
 			label_3d.text = "empty"
 		TableState.THINKING:
+			progress_bar.set_bar_visible(false)
 			label_3d.text = lbl_thinking
-		TableState.WAITING_PRIMARY, TableState.WAITING_FRIEND:
+		TableState.WAITING_PRIMARY:
 			label_3d.text = "%s\n%s" % [TableState.keys()[_state], "\n".join(_unsatisfied_orders)]
+			progress_bar.set_bar_visible(true)
+			progress_bar.override_fill_color(Color.RED if _state_time < 10 else Color.YELLOW)
+		TableState.WAITING_FRIEND:
+			label_3d.text = "%s\n%s" % [TableState.keys()[_state], "\n".join(_unsatisfied_orders)]
+			progress_bar.set_bar_visible(true)
+			progress_bar.override_fill_color(Color.RED if _state_time < 5 else Color.YELLOW)
 		TableState.EATING:
 			label_3d.text = lbl_eating
-	if label_3d_time:
-		label_3d_time.text = "%.1f" % _state_time
+			progress_bar.set_bar_visible(false)
+	
+	label_3d_time.text = "%.1f" % _state_time
+	print("_state_duration = ", _state_duration)
+	progress_bar.set_progress(clampf(float(_state_time) / _state_duration, 0.0, 1.0))
+
 
 
 func _set_state(value: TableState) -> void:
