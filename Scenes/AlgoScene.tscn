@@ -21,11 +21,11 @@
 [ext_resource type="Script" uid="uid://cwijoksyou1ey" path="res://Scenes/GameOvercontroler.gd" id="19_3lufs"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vlqg6"]
-size = Vector3(5, 0.1, 5)
+size = Vector3(16, 0.1, 16)
 
 [sub_resource type="BoxMesh" id="BoxMesh_24d3s"]
 material = ExtResource("3_gatbn")
-size = Vector3(5, 0.1, 5)
+size = Vector3(16, 0.1, 16)
 
 [sub_resource type="Environment" id="Environment_bvwq1"]
 background_mode = 2
@@ -37,7 +37,7 @@ ssil_enabled = true
 sdfgi_enabled = true
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_24d3s"]
-size = Vector3(5.1, 10, 0.1)
+size = Vector3(16, 10, 0.1)
 
 [node name="Main" type="Node3D" unique_id=1312265607]
 script = ExtResource("1_m3h4l")
@@ -59,7 +59,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00018164515, 0.0006352663, 
 mesh = SubResource("BoxMesh_24d3s")
 
 [node name="Hob" parent="." unique_id=1687971542 instance=ExtResource("4_3lufs")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.29336345, 0.8981018, -1.484)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.29336345, 0.5, -1.484)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1177077250]
 environment = SubResource("Environment_bvwq1")
@@ -68,7 +68,7 @@ environment = SubResource("Environment_bvwq1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8162017, 1.6081157, -1.4714175)
 
 [node name="BurgerBunsDispenser" parent="." unique_id=1720683779 instance=ExtResource("7_tejmp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.832131, 0.40028095, -1.4813508)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.832131, 0.014894962, -1.4813508)
 
 [node name="Plate" parent="." unique_id=190487773 instance=ExtResource("8_xcnr4")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5717233, 1.5454081, 1.5373346)
@@ -110,10 +110,10 @@ transform = Transform3D(1, 0, -2.2351742e-08, -2.9802322e-08, 1.0000001, 0, -2.6
 transform = Transform3D(1, 0, -2.2351742e-08, -2.9802322e-08, 1.0000001, -5.293956e-23, -2.6077032e-08, 1.4901161e-08, 1, 0.7462772, 1.4639391, -1.1673055)
 
 [node name="Sink" parent="." unique_id=2055277359 instance=ExtResource("12_ah4xa")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.3140475, 0.9061539, -1.4941733)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.3140475, 0.5, -1.4941733)
 
 [node name="DirtStation" parent="." unique_id=160842153 instance=ExtResource("13_46xi2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.0864775, 0.8981018, -1.244947)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.0864775, 0.5, -1.244947)
 
 [node name="Plate2" parent="." unique_id=356790445 instance=ExtResource("8_xcnr4")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5730225, 1.499024, 0.59790254)
@@ -146,23 +146,19 @@ transform = Transform3D(1, 0, -2.2351742e-08, -2.9802322e-08, 1.0000001, 0, -2.6
 transform = Transform3D(1, 0, -2.2351742e-08, -2.9802322e-08, 1.0000001, -5.293956e-23, -2.6077032e-08, 1.4901161e-08, 1, -1.4505737, 1.4639391, 0.16882455)
 
 [node name="Counter" parent="." unique_id=1487893288 instance=ExtResource("15_tpcje")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7124918, 0.90304357, -1.4886917)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7124918, 0.5, -1.4886917)
 
 [node name="Counter2" parent="." unique_id=368890752 instance=ExtResource("15_tpcje")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.7648025, 0.90304357, -0.4458799)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.7648025, 0.5, -0.4458799)
 
 [node name="Counter3" parent="." unique_id=1498817646 instance=ExtResource("15_tpcje")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.7648025, 0.90304357, 0.55367994)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.7648025, 0.5, 0.55367994)
 
 [node name="Counter4" parent="." unique_id=906748771 instance=ExtResource("15_tpcje")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.7648025, 0.90304357, 1.5539298)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.7648025, 0.5, 1.5539298)
 
 [node name="Table" parent="." unique_id=1863572470 instance=ExtResource("16_g2k6a")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.50244665, 0.9030438, -0.20709503)
-initial_thinking_time = 8.0
-initial_primary_time = 40.0
-initial_friend_time = 3.0
-initial_eating_time = 3.0
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.139665, 0.9030438, 2.2267122)
 
 [node name="Hamburger3" parent="." unique_id=369573848 instance=ExtResource("10_waew8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.7201865, 1.5329367, 0.14773655)
@@ -173,19 +169,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5818124, 1.499024, -0.4634
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=315740174]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=33059670]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.688614, 2.5070028)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.689, 8)
 shape = SubResource("BoxShape3D_24d3s")
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="StaticBody3D" unique_id=2018792171]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.688614, -2.5446289)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.689, -8)
 shape = SubResource("BoxShape3D_24d3s")
 
 [node name="CollisionShape3D3" type="CollisionShape3D" parent="StaticBody3D" unique_id=757662929]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -2.525816, 4.688614, -0.018813243)
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -8, 4.689, 0)
 shape = SubResource("BoxShape3D_24d3s")
 
 [node name="CollisionShape3D4" type="CollisionShape3D" parent="StaticBody3D" unique_id=1468386997]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 2.525816, 4.688614, -0.018813023)
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 8, 4.689, 0)
 shape = SubResource("BoxShape3D_24d3s")
 
 [node name="GameOverPanel" parent="." unique_id=221361954 instance=ExtResource("17_gatbn")]

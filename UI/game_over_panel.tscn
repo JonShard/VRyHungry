@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://xtcei2uvd5li"]
 
-[ext_resource type="Script" uid="uid://crs47shds8bm4" path="res://UI/main_menu_panel.gd" id="1_panel"]
+[ext_resource type="Script" uid="uid://0iuv73i6epvo" path="res://UI/game_over_panel.gd" id="1_kuqui"]
 
 [node name="MainMenuPanel" type="Control" unique_id=816925194]
 layout_mode = 3
@@ -9,7 +9,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_panel")
+script = ExtResource("1_kuqui")
 
 [node name="Background" type="ColorRect" parent="." unique_id=1357080155]
 layout_mode = 1
@@ -69,7 +69,7 @@ theme_override_constants/separation = 14
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 
-[node name="JohnButton" type="Button" parent="Margin/CenterContainer/VBoxContainer/RootView" unique_id=1922783842]
+[node name="Restart" type="Button" parent="Margin/CenterContainer/VBoxContainer/RootView" unique_id=1922783842]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 64)
 layout_mode = 2

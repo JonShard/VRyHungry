@@ -10,9 +10,12 @@
 [ext_resource type="PackedScene" uid="uid://bbg7dwsbxxh1t" path="res://Scenes/cube_side_dispense.tscn" id="12_57ppd"]
 [ext_resource type="PackedScene" uid="uid://ck5tuftqmyiue" path="res://Stations/plate_dispenser.tscn" id="13_irf4n"]
 [ext_resource type="PackedScene" uid="uid://dvrk268s7gkxh" path="res://Stations/sink.tscn" id="13_o1b3t"]
+[ext_resource type="PackedScene" uid="uid://clujaf3u776a3" path="res://addons/godot-xr-tools/objects/viewport_2d_in_3d.tscn" id="14_di04w"]
 [ext_resource type="PackedScene" uid="uid://cnjwtnhwh0i8q" path="res://Stations/dirt_station.tscn" id="14_irf4n"]
 [ext_resource type="PackedScene" uid="uid://efaec6ymgabo" path="res://Stations/Counter.tscn" id="15_di04w"]
+[ext_resource type="PackedScene" uid="uid://xtcei2uvd5li" path="res://UI/game_over_panel.tscn" id="15_eoxxy"]
 [ext_resource type="PackedScene" uid="uid://caf0xanmxbshy" path="res://Stations/table.tscn" id="16_di04w"]
+[ext_resource type="Script" uid="uid://cwijoksyou1ey" path="res://Scenes/GameOvercontroler.gd" id="16_n8fyw"]
 
 [sub_resource type="Environment" id="Environment_bvwq1"]
 background_mode = 2
@@ -78,39 +81,40 @@ shape = SubResource("BoxShape3D_24d3s")
 
 [node name="Table" parent="." unique_id=1863572470 instance=ExtResource("16_di04w")]
 transform = Transform3D(-1, 0, 8.742277e-08, 0, 1, 0, -8.742277e-08, 0, -1, 4.371851, 0.9030438, 2.043332)
+primary_duration = 5.0
 
 [node name="Hob" parent="." unique_id=1687971542 instance=ExtResource("4_ctden")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5104445, 0.50655985, -1.5450908)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.35077858, 0.50655985, -1.2833805)
 
 [node name="Sink" parent="." unique_id=2055277359 instance=ExtResource("13_o1b3t")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5311285, 0.51461196, -1.5552641)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.24685252, 0.51461196, -1.2828919)
 
 [node name="DirtStation" parent="." unique_id=160842153 instance=ExtResource("14_irf4n")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.3035586, 0.50655985, -1.3060378)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7978771, 0.50655985, -1.2598276)
 
 [node name="Counter" parent="." unique_id=1487893288 instance=ExtResource("15_di04w")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.49541074, 0.5115016, -1.5497825)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.94890714, 0.5115015, -1.3041471)
 
 [node name="Counter2" parent="." unique_id=368890752 instance=ExtResource("15_di04w")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.5477214, 0.5115016, -0.50697076)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.5477214, 0.5115016, -0.1103079)
+
+[node name="Counter4" parent="." unique_id=1748373996 instance=ExtResource("15_di04w")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.5477214, 0.5115016, -0.70863545)
 
 [node name="Counter3" parent="." unique_id=1498817646 instance=ExtResource("15_di04w")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.5477214, 0.5115016, 0.49258912)
 
-[node name="Counter4" parent="Counter3" unique_id=1748373996 instance=ExtResource("15_di04w")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.0022283, 0, 1.1920929e-07)
-
 [node name="BurgerBunsDispenser" parent="." unique_id=1720683779 instance=ExtResource("9_sq0s2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5069376, 0.008738995, 1.4692857)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5242664, 0.008738995, 1.1073059)
 
 [node name="RawBurgerDispenser" parent="." unique_id=235630131 instance=ExtResource("11_ctden")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.46601868, 0.008738995, 1.514677)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8896122, 0.008738995, 1.0872328)
 
 [node name="CubeSideDispenser2" parent="." unique_id=200950572 instance=ExtResource("12_57ppd")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.48943835, 0.008738995, 1.5010021)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.47788578, 0.008738995, 1.1293952)
 
 [node name="PlateDispenser" parent="." unique_id=710538846 instance=ExtResource("13_irf4n")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5185561, 0.008738995, 1.5010021)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.26631236, 0.008738995, 1.087036)
 
 [node name="120pScale" type="Node3D" parent="." unique_id=391874704]
 transform = Transform3D(1.2, 0, 0, 0, 1, 0, 0, 0, 1.2, 0, 0, -9.780844)
@@ -236,6 +240,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4638411, 0.008738995, 5.870
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.8827287, 2.335534, 4.665953)
 text = "60%"
 font_size = 46
+
+[node name="GameOverPanel" parent="." unique_id=1234658657 instance=ExtResource("14_di04w")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2.0281777, 2.8122003, 0)
+scene = ExtResource("15_eoxxy")
+viewport_size = Vector2(900, 600)
+transparent = 0
+filter = false
+scene_properties_keys = PackedStringArray("game_over_panel.gd")
+
+[node name="controler" type="Node" parent="GameOverPanel" unique_id=803158176]
+script = ExtResource("16_n8fyw")
 
 [node name="50pScale" type="Node3D" parent="." unique_id=834529278]
 transform = Transform3D(-0.5, 0, 7.54979e-08, 0, 1, 0, -7.54979e-08, 0, -0.5, 4.8798494, 0, 8.821305)

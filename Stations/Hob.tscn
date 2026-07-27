@@ -3,12 +3,13 @@
 [ext_resource type="Script" uid="uid://bsn8vhv5adxdo" path="res://Stations/hob.gd" id="1_7jc4g"]
 [ext_resource type="Script" uid="uid://cquqe4f1m1sw6" path="res://addons/godot-xr-tools/objects/snap_zone.gd" id="2_er1dp"]
 [ext_resource type="PackedScene" uid="uid://bxbocxdaayvwx" path="res://UI/progress_bar.tscn" id="3_7uuqv"]
-[ext_resource type="Script" uid="uid://bv7oracwmgre8" path="res://UI/progress_bar_3d.gd" id="3_zz9kp"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_kdxnr"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_vlqg6"]
 radius = 0.3
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gkb3v"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_np_hob"]
 properties/0/path = NodePath(".:time_cooked")
@@ -39,6 +40,8 @@ shape = SubResource("SphereShape3D_vlqg6")
 [node name="CSGCombiner3D" type="CSGCombiner3D" parent="." unique_id=70901698]
 
 [node name="CSGBox3D" type="CSGBox3D" parent="CSGCombiner3D" unique_id=1111505172]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.00894776)
+size = Vector3(0.6, 1, 0.5821045)
 
 [node name="CSGCylinder3D" type="CSGCylinder3D" parent="CSGCombiner3D/CSGBox3D" unique_id=1338463939]
 transform = Transform3D(0.8943019, 0, 0, 0, 0.8943019, 0, 0, 0, 0.8943019, 0, 0.5103538, -7.827557e-05)
@@ -82,41 +85,38 @@ radius = 0.008
 height = 0.44487303
 
 [node name="CSGCylinder3D4" type="CSGCylinder3D" parent="CSGCombiner3D" unique_id=1619646436]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, -0.26920843, 0.42728558, 0.4856163)
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, -0.20412213, 0.42728558, 0.26171687)
 radius = 0.044433594
 height = 0.10932617
+material = SubResource("StandardMaterial3D_gkb3v")
 
-[node name="CSGCylinder3D5" type="CSGCylinder3D" parent="CSGCombiner3D" unique_id=1748405277]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0.1318646, 0.42728558, 0.4856163)
+[node name="CSGCylinder3D5" type="CSGCylinder3D" parent="CSGCombiner3D" unique_id=548846612]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0.12531614, 0.42728558, 0.26171687)
 radius = 0.044433594
 height = 0.10932617
+material = SubResource("StandardMaterial3D_gkb3v")
 
-[node name="CSGCylinder3D6" type="CSGCylinder3D" parent="CSGCombiner3D" unique_id=624102144]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0.25760216, 0.42728558, 0.4856163)
+[node name="CSGCylinder3D6" type="CSGCylinder3D" parent="CSGCombiner3D" unique_id=1208989647]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0.22979808, 0.42728558, 0.26171687)
 radius = 0.044433594
 height = 0.10932617
+material = SubResource("StandardMaterial3D_gkb3v")
 
 [node name="CSGBox3D2" type="CSGBox3D" parent="CSGCombiner3D" unique_id=465340362]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.039733887, -0.07685089, 0.47770447)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.039733887, -0.07685089, 0.29250562)
 operation = 2
 size = Vector3(1.0999756, 0.8462982, 0.072387695)
 
 [node name="CSGBox3D3" type="CSGBox3D" parent="CSGCombiner3D" unique_id=1813079759]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.003479004, -0.08253479, 0.4977833)
-size = Vector3(0.9842529, 0.8349304, 0.072387695)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.003479004, -0.08253479, 0.2656765)
+size = Vector3(0.55, 0.835, 0.072)
 
 [node name="CSGBox3D4" type="CSGBox3D" parent="CSGCombiner3D" unique_id=1978186019]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.003479004, -0.45215607, 0.46387827)
-size = Vector3(0.9842529, 0.095687866, 0.14019775)
-
-[node name="CSGBox3D5" type="CSGBox3D" parent="CSGCombiner3D" unique_id=1423530445]
-transform = Transform3D(0.94465846, 0, 0, 0, 0.94465846, 0, 0, 0, 0.94465846, -0.003479004, -0.08253479, 0.5616675)
-operation = 2
-size = Vector3(0.9842529, 0.8349304, 0.072387695)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.003479004, -0.45215607, 0.24655426)
+size = Vector3(0.55, 0.096, 0.14)
 
 [node name="Sync" type="MultiplayerSynchronizer" parent="." unique_id=768992259]
 replication_config = SubResource("SceneReplicationConfig_np_hob")
 
 [node name="ProgressBar3D" parent="." unique_id=654673176 instance=ExtResource("3_7uuqv")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.74736404, -0.09216304)
-script = ExtResource("3_zz9kp")

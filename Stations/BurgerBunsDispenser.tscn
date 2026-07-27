@@ -33,11 +33,11 @@ shape = SubResource("CylinderShape3D_24d3s")
 [node name="CSGCombiner3D" type="CSGCombiner3D" parent="." unique_id=1746426494]
 
 [node name="CSGCylinder3D" type="CSGCylinder3D" parent="CSGCombiner3D" unique_id=858311379]
-radius = 0.4
+radius = 0.3
 sides = 32
 
 [node name="CSGCombiner3DBuns" type="CSGCombiner3D" parent="CSGCombiner3D" unique_id=1459017790]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.108142376, 1.0341886, -0.19146484)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.16038476, 1.0341886, -0.09012994)
 autosmooth = true
 smoothing_angle = 138.9
 
@@ -118,7 +118,7 @@ cone = true
 material = SubResource("StandardMaterial3D_vlqg6")
 
 [node name="CSGCombiner3DBuns4" type="CSGCombiner3D" parent="CSGCombiner3D" unique_id=2055085730]
-transform = Transform3D(0.95670986, 0, 0.29104328, 0, 1, 0, -0.29104328, 0, 0.95670986, -0.14758292, 1.0341886, -0.1304872)
+transform = Transform3D(0.95670986, 0, 0.29104328, 0, 1, 0, -0.29104328, 0, 0.95670986, -0.08665481, 1.0341886, -0.10344604)
 autosmooth = true
 smoothing_angle = 138.9
 
@@ -145,7 +145,7 @@ cone = true
 material = SubResource("StandardMaterial3D_vlqg6")
 
 [node name="CSGCombiner3DBuns5" type="CSGCombiner3D" parent="CSGCombiner3D" unique_id=546748728]
-transform = Transform3D(0.20608562, 0, -0.978534, 0, 1, 0, 0.978534, 0, 0.20608562, -0.082762055, 1.0341886, 0.2722176)
+transform = Transform3D(0.20608562, 0, -0.978534, 0, 1, 0, 0.978534, 0, 0.20608562, -0.047733016, 1.0341886, 0.19433105)
 autosmooth = true
 smoothing_angle = 138.9
 

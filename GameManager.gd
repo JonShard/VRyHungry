@@ -11,8 +11,10 @@ enum GameState {
 }
 static var game_state: GameState = GameState.RUNNING
 
-signal game_over_signal
-
+	
+static func _restart():
+	print("restart Game")
+	game_state = GameState.RUNNING
 
 
 static func get_random_meal() -> String:
