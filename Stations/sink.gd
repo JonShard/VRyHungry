@@ -30,6 +30,11 @@ func _on_object_picked_up(_item) -> void:
 	plate = _item.get_node_or_null("PlateController") as PlateController
 	if plate:
 		is_washing = plate.is_dirty
+		if is_washing:
+			$AnimationPlayer.play("working")
+			$bubbles.show()
+			$water.show()
+			$GPUParticles3D.show()
 
 
 func _on_object_dropped() -> void:
@@ -41,6 +46,10 @@ func _reset_sink():
 	time_washed = 0
 	is_washing = false
 	plate = null
+	$AnimationPlayer.play("RESET")
+	$water.hide()
+	$bubbles.hide()
+	$GPUParticles3D.hide()
 	_refresh_progress_bar()
 
 func complete_washing():

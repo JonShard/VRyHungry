@@ -45,10 +45,12 @@ func _on_object_picked_up(_item) -> void:
 	cooking_result_time = RECIPE_MANAGER.get_cooking_time(_food_item.id)
 	print("Hob: set cooking_result ", cooking_result)
 	_refresh_progress_bar()
+	$AnimationPlayer.play("hob")
 
 
 func _on_object_dropped() -> void:
 	print("Hob: object drop ")
+	$AnimationPlayer.play("RESET")
 	time_cooked = 0
 	cooking_result = ""
 	cooking_result_time = 0
@@ -59,6 +61,8 @@ func convert_held_to_item(_item: String) -> void:
 	if not NetworkManager.owns_world():
 		return
 	print("Hob converting ", _item)
+	$AnimationPlayer.play("RESET")
+	
 
 	var old_pickable = snap_zone.picked_up_object
 	if not old_pickable:

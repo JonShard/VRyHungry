@@ -5,24 +5,152 @@
 [ext_resource type="PackedScene" uid="uid://bxbocxdaayvwx" path="res://UI/progress_bar.tscn" id="4_1pinr"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_l02yb"]
-size = Vector3(0.6, 1, 0.6)
+size = Vector3(0.6, 0.9610596, 0.6)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ai6d4"]
-size = Vector3(0.6, 0.12802735, 0.6)
+size = Vector3(0.5, 0.128, 0.5)
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_np_sink"]
 properties/0/path = NodePath(".:progress")
 properties/0/spawn = true
 properties/0/replication_mode = 1
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0gbf8"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bvwq1"]
+albedo_color = Color(0, 1, 1, 1)
+
+[sub_resource type="Animation" id="Animation_ai6d4"]
+length = 0.001
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("bubbles/CSGSphere3D:position:y")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0.50874513, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("bubbles/CSGSphere3D2:position:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0.46531874, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/2/type = "bezier"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("bubbles/CSGSphere3D3:position:y")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0.48187655, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/3/type = "bezier"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("bubbles:rotation:y")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+
+[sub_resource type="Animation" id="Animation_1pinr"]
+resource_name = "working"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "position_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("bubbles")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array()
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("bubbles/CSGSphere3D:position:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0, 2, 0, 2, 2),
+"points": PackedFloat32Array(0.50874513, -0.25, 0, 0.25, 0, 0.4, -0.083333336, 0, 0, 0, 0.43817517, -0.061111122, -0.0063625276, 0, 0, 0.39634025, -0.07222223, -0.005291511, 0.08888888, 0.0065126275, 0.509, -0.18888888, 0, 0, 0),
+"times": PackedFloat32Array(0, 0.5, 1.0333333, 1.4666667, 2)
+}
+tracks/2/type = "bezier"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("bubbles/CSGSphere3D2:position:y")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"handle_modes": PackedInt32Array(0, 2, 2, 2, 2),
+"points": PackedFloat32Array(0.46531874, -0.25, 0, 0.25, 0, 0.36907488, -0.04444445, 0, 0.2888889, 0, 0.46498385, -0.06111112, -0.0033932133, 0.22777776, 0.0126474295, 0.37737477, -0.099999994, -2.450405e-05, 0.12777779, 3.1310734e-05, 0.46531874, -0.33333334, 0, 0, 0),
+"times": PackedFloat32Array(0, 0.26666668, 0.6333334, 1.2333333, 2)
+}
+tracks/3/type = "bezier"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("bubbles/CSGSphere3D3:position:y")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"handle_modes": PackedInt32Array(0, 2, 2, 2, 2),
+"points": PackedFloat32Array(0.48187655, -0.25, 0, 0.25, 0, 0.41496682, -0.06666668, 0.011151623, 0, 0, 0.3745708, -0.083333336, 0.0067326725, 0, 0, 0.45563954, -0.13888891, -0.013511459, 0, 0, 0.482, -0.044444423, 0, 0, 0),
+"times": PackedFloat32Array(0, 0.40000004, 0.90000004, 1.7333335, 2)
+}
+tracks/4/type = "bezier"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("bubbles:rotation:y")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"handle_modes": PackedInt32Array(2, 0, 0),
+"points": PackedFloat32Array(0, 0, 0, 0.33333334, 0, 5, -0.16666667, 0, 0.16666667, 0, 0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 1.2, 2)
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_u2x8c"]
+_data = {
+&"RESET": SubResource("Animation_ai6d4"),
+&"working": SubResource("Animation_1pinr")
+}
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_hrheb"]
+spread = 180.0
+initial_velocity_max = 0.099999994
+gravity = Vector3(0, -0.98, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ai6d4"]
+albedo_color = Color(0, 0.5294118, 1, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_bvwq1"]
+material = SubResource("StandardMaterial3D_ai6d4")
+radius = 0.02
+height = 0.04
+
 [node name="Sink" type="StaticBody3D" unique_id=2055277359 groups=["station"]]
 script = ExtResource("1_7hh4b")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=964735164]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.019470215, 0)
 shape = SubResource("BoxShape3D_l02yb")
 
 [node name="XRToolsSnapZone" type="Area3D" parent="." unique_id=1762550988 groups=["station"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5163779, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.44614658, 0)
 collision_layer = 65536
 collision_mask = 65540
 script = ExtResource("2_3ocod")
@@ -30,7 +158,7 @@ snap_mode = 1
 metadata/_custom_type_script = "uid://cquqe4f1m1sw6"
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="XRToolsSnapZone" unique_id=860566355]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.000975132, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02560103, 0)
 shape = SubResource("BoxShape3D_ai6d4")
 
 [node name="CSGCombiner3D" type="CSGCombiner3D" parent="." unique_id=311064646]
@@ -59,33 +187,48 @@ operation = 2
 transform = Transform3D(0.7700283, 1.4431469e-09, 0.15563977, 3.974847e-09, 0.3125893, -6.8032304e-09, -0.38511342, 6.1118572e-09, 0.3111993, -0.2084502, 8.34465e-07, 0.36219144)
 operation = 2
 
-[node name="CSGBox3D2" type="CSGBox3D" parent="CSGCombiner3D" unique_id=45680409]
-transform = Transform3D(1, 0, 0, 0, 0.9915717, -0.12955965, 0, 0.12955965, 0.9915717, 0, 0.019589934, 0.4141063)
-operation = 2
-size = Vector3(1, 1.2053223, 0.352417)
-
 [node name="CSGBox3D3" type="CSGBox3D" parent="CSGCombiner3D" unique_id=641957703]
 transform = Transform3D(1, 0, 0, 0, 0.9367828, -0.34991136, 0, 0.34991136, 0.9367828, 0, -0.16928616, 0.2663328)
 operation = 2
 size = Vector3(1, 1.2053223, 0.352417)
-
-[node name="CSGBox3D4" type="CSGBox3D" parent="CSGCombiner3D" unique_id=1059266043]
-transform = Transform3D(1, 0, 0, 0, 0.7815701, -0.62381756, 0, 0.62381756, 0.7815701, 0, -0.2719775, 0.14792833)
-operation = 2
-size = Vector3(1, 1.2053223, 0.352417)
-
-[node name="CSGBox3D5" type="CSGBox3D" parent="CSGCombiner3D" unique_id=880649240]
-transform = Transform3D(-4.371139e-08, -0.12955964, -0.9915717, 0, 0.99157166, -0.12955962, 0.99999994, -5.6632317e-09, -4.3342972e-08, -0.42133215, 0.019589934, -0.20879287)
-operation = 2
-size = Vector3(1.4033203, 1.2053223, 0.352417)
-
-[node name="CSGBox3D6" type="CSGBox3D" parent="CSGCombiner3D" unique_id=770532411]
-transform = Transform3D(1.3113414e-07, 0.12955962, 0.99157166, 8.8817837e-16, 0.9915716, -0.1295596, -0.9999999, 1.6989695e-08, 1.3002891e-07, 0.41671216, 0.019589934, -0.20879287)
-operation = 2
-size = Vector3(1.4033203, 1.2053223, 0.352417)
 
 [node name="Sync" type="MultiplayerSynchronizer" parent="." unique_id=1601242574]
 replication_config = SubResource("SceneReplicationConfig_np_sink")
 
 [node name="ProgressBar3D" parent="." unique_id=654673176 instance=ExtResource("4_1pinr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8164611, -0.035980098)
+
+[node name="bubbles" type="CSGCombiner3D" parent="." unique_id=1624244242]
+visible = false
+
+[node name="CSGSphere3D" type="CSGSphere3D" parent="bubbles" unique_id=1363004819]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.09462261, 0.50874513, 0)
+radius = 0.08
+material = SubResource("StandardMaterial3D_0gbf8")
+
+[node name="CSGSphere3D2" type="CSGSphere3D" parent="bubbles" unique_id=1570986332]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.069681, 0.46531874, 0)
+radius = 0.08
+material = SubResource("StandardMaterial3D_0gbf8")
+
+[node name="CSGSphere3D3" type="CSGSphere3D" parent="bubbles" unique_id=1342281109]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03321421, 0.48187655, 0.15330702)
+radius = 0.08
+material = SubResource("StandardMaterial3D_0gbf8")
+
+[node name="water" type="CSGCombiner3D" parent="." unique_id=1050686091]
+visible = false
+
+[node name="CSGBox3D" type="CSGBox3D" parent="water" unique_id=1224655006]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3997054, 0)
+size = Vector3(0.5, 0.1, 0.5)
+material = SubResource("StandardMaterial3D_bvwq1")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1495781056]
+libraries/ = SubResource("AnimationLibrary_u2x8c")
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="." unique_id=1688415718]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0002603531, 0.6479259, -0.03759767)
+visible = false
+process_material = SubResource("ParticleProcessMaterial_hrheb")
+draw_pass_1 = SubResource("SphereMesh_bvwq1")

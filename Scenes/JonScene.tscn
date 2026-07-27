@@ -46,7 +46,7 @@ script = ExtResource("1_57ppd")
 environment = SubResource("Environment_bvwq1")
 
 [node name="XROrigin3D" parent="." unique_id=2055526621 instance=ExtResource("2_o1b3t")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.36171648, 0, 0.81835127)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9667189, 0)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1376644384]
 transform = Transform3D(-0.8660254, -0.43301278, 0.24999999, 0.3022632, -0.05510214, 0.9516306, -0.39829266, 0.8997021, 0.17860365, 0, 0, 0)
@@ -81,6 +81,7 @@ shape = SubResource("BoxShape3D_24d3s")
 
 [node name="Table" parent="." unique_id=1863572470 instance=ExtResource("16_di04w")]
 transform = Transform3D(-1, 0, 8.742277e-08, 0, 1, 0, -8.742277e-08, 0, -1, 3.6294794, 0.54177135, 0.0973109)
+thinking_duration = 35.0
 primary_duration = 5.0
 
 [node name="Hob" parent="." unique_id=1687971542 instance=ExtResource("4_ctden")]
