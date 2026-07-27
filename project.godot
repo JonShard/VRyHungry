@@ -21,6 +21,7 @@ XRToolsUserSettings="*uid://bqgb8i74tm0t"
 XRToolsRumbleManager="*uid://by853dk86g1qw"
 NetworkManager="*res://Net/network_manager.gd"
 GlobalKeyEvents="*uid://c60unagog5oi1"
+Signals="*uid://fuux6cxfjwdc"
 
 [debug]
 

@@ -5,6 +5,15 @@ static var money: int
 static var meals_in_play: Array[String]
 static var sides_in_play: Array[String]
 
+enum GameState {
+	RUNNING,
+	GAME_OVER
+}
+static var game_state: GameState = GameState.RUNNING
+
+signal game_over_signal
+
+
 
 static func get_random_meal() -> String:
 	if meals_in_play.size() == 0:
@@ -23,3 +32,12 @@ static func get_random_side() -> String:
 	print("GameManager: get_random_side() returning ", sides_in_play[rand_index])
 	return sides_in_play[rand_index]
 
+
+
+static  func game_over():
+	print("Game Over")
+	game_state = GameState.GAME_OVER
+	Signals.game_over.emit()
+	
+	
+	

@@ -1,0 +1,201 @@
+[gd_scene format=3 uid="uid://22shbqdvnwgo"]
+
+[ext_resource type="Script" uid="uid://b4ldkd3ngs0vp" path="res://main.gd" id="1_m3h4l"]
+[ext_resource type="PackedScene" uid="uid://j5s5wus7tuhb" path="res://XROrigin.tscn" id="2_8pfaf"]
+[ext_resource type="Material" uid="uid://cmia50cfqxxo4" path="res://Textures/dev_material_3d.tres" id="3_gatbn"]
+[ext_resource type="PackedScene" uid="uid://j7caslh27nor" path="res://Stations/Hob.tscn" id="4_3lufs"]
+[ext_resource type="Sky" uid="uid://c1abtpwhdm2d5" path="res://Textures/sky/NightSkyHDRI009_16K.tres" id="5_kh26v"]
+[ext_resource type="PackedScene" uid="uid://c0lknik4noobs" path="res://Items/BurgerBuns.tscn" id="6_kwbxo"]
+[ext_resource type="PackedScene" uid="uid://c6rift56ql3f8" path="res://Stations/BurgerBunsDispenser.tscn" id="7_tejmp"]
+[ext_resource type="PackedScene" uid="uid://bp3v1jl8pctro" path="res://Containers/plate.tscn" id="8_xcnr4"]
+[ext_resource type="PackedScene" uid="uid://dpot5qie20vf6" path="res://Items/burger.tscn" id="9_rwx83"]
+[ext_resource type="PackedScene" uid="uid://b3m2ag8g5rj4r" path="res://Items/hamburger.tscn" id="10_waew8"]
+[ext_resource type="PackedScene" uid="uid://e4i6o5oriecx" path="res://Items/PickupCube.tscn" id="11_8wetd"]
+[ext_resource type="PackedScene" uid="uid://dvrk268s7gkxh" path="res://Stations/sink.tscn" id="12_ah4xa"]
+[ext_resource type="PackedScene" uid="uid://cnjwtnhwh0i8q" path="res://Stations/dirt_station.tscn" id="13_46xi2"]
+[ext_resource type="PackedScene" uid="uid://cfc4ho67u4r5e" path="res://Items/cooked_burger.tscn" id="14_vftjt"]
+[ext_resource type="PackedScene" uid="uid://efaec6ymgabo" path="res://Stations/Counter.tscn" id="15_tpcje"]
+[ext_resource type="PackedScene" uid="uid://caf0xanmxbshy" path="res://Stations/table.tscn" id="16_g2k6a"]
+[ext_resource type="PackedScene" uid="uid://clujaf3u776a3" path="res://addons/godot-xr-tools/objects/viewport_2d_in_3d.tscn" id="17_gatbn"]
+[ext_resource type="PackedScene" uid="uid://xtcei2uvd5li" path="res://UI/game_over_panel.tscn" id="18_3lufs"]
+[ext_resource type="Script" uid="uid://cwijoksyou1ey" path="res://Scenes/GameOvercontroler.gd" id="19_3lufs"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vlqg6"]
+size = Vector3(5, 0.1, 5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_24d3s"]
+material = ExtResource("3_gatbn")
+size = Vector3(5, 0.1, 5)
+
+[sub_resource type="Environment" id="Environment_bvwq1"]
+background_mode = 2
+sky = ExtResource("5_kh26v")
+reflected_light_source = 2
+ssr_enabled = true
+ssao_enabled = true
+ssil_enabled = true
+sdfgi_enabled = true
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_24d3s"]
+size = Vector3(5.1, 10, 0.1)
+
+[node name="Main" type="Node3D" unique_id=1312265607]
+script = ExtResource("1_m3h4l")
+
+[node name="XROrigin3D" parent="." unique_id=2055526621 instance=ExtResource("2_8pfaf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.36171648, 0, 0.81835127)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1376644384]
+transform = Transform3D(-0.8660254, -0.43301278, 0.24999999, 0.3022632, -0.05510214, 0.9516306, -0.39829266, 0.8997021, 0.17860365, 0, 0, 0)
+
+[node name="Floor" type="StaticBody3D" parent="." unique_id=122279514]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor" unique_id=958841648]
+shape = SubResource("BoxShape3D_vlqg6")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor/CollisionShape3D" unique_id=1939997056]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00018164515, 0.0006352663, -0.002532661)
+mesh = SubResource("BoxMesh_24d3s")
+
+[node name="Hob" parent="." unique_id=1687971542 instance=ExtResource("4_3lufs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.29336345, 0.8981018, -1.484)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1177077250]
+environment = SubResource("Environment_bvwq1")
+
+[node name="BurgerBuns" parent="." unique_id=1088240294 instance=ExtResource("6_kwbxo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8162017, 1.6081157, -1.4714175)
+
+[node name="BurgerBunsDispenser" parent="." unique_id=1720683779 instance=ExtResource("7_tejmp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.832131, 0.40028095, -1.4813508)
+
+[node name="Plate" parent="." unique_id=190487773 instance=ExtResource("8_xcnr4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5717233, 1.5454081, 1.5373346)
+
+[node name="burger" parent="." unique_id=1417604760 instance=ExtResource("9_rwx83")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6888188, 1.4195822, -1.7110313)
+
+[node name="burger2" parent="." unique_id=1584460510 instance=ExtResource("9_rwx83")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6931299, 1.5300478, -1.71225)
+
+[node name="burger3" parent="." unique_id=1884095916 instance=ExtResource("9_rwx83")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.69027674, 1.4969791, -1.7210286)
+
+[node name="burger4" parent="." unique_id=1844818864 instance=ExtResource("9_rwx83")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.69134104, 1.4543622, -1.7210286)
+
+[node name="Hamburger" parent="." unique_id=761091445 instance=ExtResource("10_waew8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9352558, 1.623975, 1.2447833)
+
+[node name="PickableObject" parent="." unique_id=1675596942 instance=ExtResource("11_8wetd")]
+transform = Transform3D(1, 0, -2.2351742e-08, -2.9802322e-08, 1.0000001, 0, -2.6077032e-08, 1.4901161e-08, 1, 0.6225724, 1.4792972, -1.0473135)
+
+[node name="PickableObject2" parent="." unique_id=713087634 instance=ExtResource("11_8wetd")]
+transform = Transform3D(1, 0, -2.2351742e-08, -2.9802322e-08, 1.0000001, -5.293956e-23, -2.6077032e-08, 1.4901161e-08, 1, 0.6359743, 1.4639391, -1.1673055)
+
+[node name="PickableObject3" parent="." unique_id=879935619 instance=ExtResource("11_8wetd")]
+transform = Transform3D(1, 0, -2.2351742e-08, -2.9802322e-08, 1.0000001, 0, -2.6077032e-08, 1.4901161e-08, 1, 0.5142721, 1.4792972, -1.0473135)
+
+[node name="PickableObject4" parent="." unique_id=198541902 instance=ExtResource("11_8wetd")]
+transform = Transform3D(1, 0, -2.2351742e-08, -2.9802322e-08, 1.0000001, -5.293956e-23, -2.6077032e-08, 1.4901161e-08, 1, 0.5276739, 1.4639391, -1.1673055)
+
+[node name="Hamburger2" parent="." unique_id=1349934579 instance=ExtResource("10_waew8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9857153, 1.5329368, 0.9472374)
+
+[node name="PickableObject5" parent="." unique_id=1021333509 instance=ExtResource("11_8wetd")]
+transform = Transform3D(1, 0, -2.2351742e-08, -2.9802322e-08, 1.0000001, 0, -2.6077032e-08, 1.4901161e-08, 1, 0.73287535, 1.4792972, -1.0473135)
+
+[node name="PickableObject6" parent="." unique_id=1268843669 instance=ExtResource("11_8wetd")]
+transform = Transform3D(1, 0, -2.2351742e-08, -2.9802322e-08, 1.0000001, -5.293956e-23, -2.6077032e-08, 1.4901161e-08, 1, 0.7462772, 1.4639391, -1.1673055)
+
+[node name="Sink" parent="." unique_id=2055277359 instance=ExtResource("12_ah4xa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.3140475, 0.9061539, -1.4941733)
+
+[node name="DirtStation" parent="." unique_id=160842153 instance=ExtResource("13_46xi2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.0864775, 0.8981018, -1.244947)
+
+[node name="Plate2" parent="." unique_id=356790445 instance=ExtResource("8_xcnr4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5730225, 1.499024, 0.59790254)
+
+[node name="CookedBurger" parent="." unique_id=1127807542 instance=ExtResource("14_vftjt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.30671906, 1.4131018, -1.0928738)
+
+[node name="CookedBurger2" parent="." unique_id=160088590 instance=ExtResource("14_vftjt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.30671906, 1.4496142, -1.0928738)
+
+[node name="CookedBurger3" parent="." unique_id=992183367 instance=ExtResource("14_vftjt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.3344773, 1.4398065, -0.7096845)
+
+[node name="CookedBurger4" parent="." unique_id=1837607086 instance=ExtResource("14_vftjt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.30671906, 1.525444, -1.0928738)
+
+[node name="BurgerBuns2" parent="." unique_id=1210358958 instance=ExtResource("6_kwbxo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.3596323, 1.4110342, -0.22482127)
+
+[node name="PickableObject7" parent="." unique_id=641653545 instance=ExtResource("11_8wetd")]
+transform = Transform3D(1, 0, -2.2351742e-08, -2.9802322e-08, 1.0000001, 0, -2.6077032e-08, 1.4901161e-08, 1, -1.3556751, 1.4792972, 0.28881657)
+
+[node name="PickableObject8" parent="." unique_id=1733819363 instance=ExtResource("11_8wetd")]
+transform = Transform3D(1, 0, -2.2351742e-08, -2.9802322e-08, 1.0000001, -5.293956e-23, -2.6077032e-08, 1.4901161e-08, 1, -1.3422732, 1.4639391, 0.16882455)
+
+[node name="PickableObject9" parent="." unique_id=12419746 instance=ExtResource("11_8wetd")]
+transform = Transform3D(1, 0, -2.2351742e-08, -2.9802322e-08, 1.0000001, 0, -2.6077032e-08, 1.4901161e-08, 1, -1.4639754, 1.4792972, 0.28881657)
+
+[node name="PickableObject10" parent="." unique_id=313160217 instance=ExtResource("11_8wetd")]
+transform = Transform3D(1, 0, -2.2351742e-08, -2.9802322e-08, 1.0000001, -5.293956e-23, -2.6077032e-08, 1.4901161e-08, 1, -1.4505737, 1.4639391, 0.16882455)
+
+[node name="Counter" parent="." unique_id=1487893288 instance=ExtResource("15_tpcje")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7124918, 0.90304357, -1.4886917)
+
+[node name="Counter2" parent="." unique_id=368890752 instance=ExtResource("15_tpcje")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.7648025, 0.90304357, -0.4458799)
+
+[node name="Counter3" parent="." unique_id=1498817646 instance=ExtResource("15_tpcje")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.7648025, 0.90304357, 0.55367994)
+
+[node name="Counter4" parent="." unique_id=906748771 instance=ExtResource("15_tpcje")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.7648025, 0.90304357, 1.5539298)
+
+[node name="Table" parent="." unique_id=1863572470 instance=ExtResource("16_g2k6a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.50244665, 0.9030438, -0.20709503)
+initial_thinking_time = 8.0
+initial_primary_time = 40.0
+initial_friend_time = 3.0
+initial_eating_time = 3.0
+
+[node name="Hamburger3" parent="." unique_id=369573848 instance=ExtResource("10_waew8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.7201865, 1.5329367, 0.14773655)
+
+[node name="Plate3" parent="." unique_id=2004250522 instance=ExtResource("8_xcnr4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5818124, 1.499024, -0.4634577)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=315740174]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=33059670]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.688614, 2.5070028)
+shape = SubResource("BoxShape3D_24d3s")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="StaticBody3D" unique_id=2018792171]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.688614, -2.5446289)
+shape = SubResource("BoxShape3D_24d3s")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="StaticBody3D" unique_id=757662929]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -2.525816, 4.688614, -0.018813243)
+shape = SubResource("BoxShape3D_24d3s")
+
+[node name="CollisionShape3D4" type="CollisionShape3D" parent="StaticBody3D" unique_id=1468386997]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 2.525816, 4.688614, -0.018813023)
+shape = SubResource("BoxShape3D_24d3s")
+
+[node name="GameOverPanel" parent="." unique_id=221361954 instance=ExtResource("17_gatbn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.46454135, 3.4496074, -1.832967)
+visible = false
+scene = ExtResource("18_3lufs")
+viewport_size = Vector2(900, 600)
+transparent = 0
+filter = false
+scene_properties_keys = PackedStringArray("main_menu_panel.gd")
+
+[node name="controler" type="Node" parent="GameOverPanel" unique_id=1302491889]
+script = ExtResource("19_3lufs")
