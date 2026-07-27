@@ -14,8 +14,6 @@ combining:
   hamburger:
     - [cooked_burger, burger_buns]
     - [charcoal, charcoal]
-  charcoal:
-    - [cube, cube]
 
 cooking:
   cooked_burger:
