@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://caeikc7e3igkd" path="res://Stations/table.gd" id="1_2vcpj"]
 [ext_resource type="Script" uid="uid://cquqe4f1m1sw6" path="res://addons/godot-xr-tools/objects/snap_zone.gd" id="1_8j1nt"]
+[ext_resource type="PackedScene" uid="uid://bxbocxdaayvwx" path="res://UI/progress_bar.tscn" id="3_kjf1i"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_24d3s"]
 
@@ -162,10 +163,14 @@ vertical_alignment = 0
 line_spacing = -15.0
 
 [node name="Label3DTime" type="Label3D" parent="." unique_id=1534849507]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3306234, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4532461, 0)
 pixel_size = 0.003
 billboard = 2
 text = "20.1s"
 
 [node name="Sync" type="MultiplayerSynchronizer" parent="." unique_id=2000411505]
 replication_config = SubResource("SceneReplicationConfig_np_table")
+
+[node name="ProgressBar3D" parent="." unique_id=654673176 instance=ExtResource("3_kjf1i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3676775, 0)
+y_billboard = true

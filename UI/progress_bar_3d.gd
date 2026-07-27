@@ -1,13 +1,17 @@
 extends Node3D
 class_name ProgressBar3D
 
+@export var y_billboard: bool = false
 
 @onready var progress_bar: ProgressBar = $Sprite3D/SubViewport/ProgressBar
+@onready var sprite_3d: Sprite3D = $Sprite3D
 
 
 func _ready() -> void:
 	if not progress_bar:
 		push_error("Progressbar3D missing reference to ProgressBar")
+	if y_billboard:
+		$Sprite3D.billboard = BaseMaterial3D.BillboardMode.BILLBOARD_FIXED_Y
 
 func set_progress(value: float) -> void:
 	print("ProgressBar set_progress: ", value)
