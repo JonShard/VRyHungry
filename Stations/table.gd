@@ -195,6 +195,9 @@ func _process(delta: float) -> void:
 	if _state_time > 0:
 		_state_time -= delta
 		return
+		
+	if GAME_MANAGER.game_state == GAME_MANAGER.GameState.GAME_OVER:
+		return
 
 	# When state timer is finished, do this stuff before moving to next state
 	match _state:
@@ -208,9 +211,12 @@ func _process(delta: float) -> void:
 
 		TableState.WAITING_PRIMARY:
 			label_3d.text = lbl_gameover
+			GAME_MANAGER.game_over()
 
 		TableState.WAITING_FRIEND:
 			label_3d.text = lbl_gameover
+			GAME_MANAGER.game_over()
+			
 
 		TableState.EATING:
 			clearAllPlates()

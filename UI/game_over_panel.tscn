@@ -1,0 +1,77 @@
+[gd_scene format=3 uid="uid://xtcei2uvd5li"]
+
+[ext_resource type="Script" uid="uid://crs47shds8bm4" path="res://UI/main_menu_panel.gd" id="1_panel"]
+
+[node name="MainMenuPanel" type="Control" unique_id=816925194]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_panel")
+
+[node name="Background" type="ColorRect" parent="." unique_id=1357080155]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.09, 0.1, 0.13, 1)
+
+[node name="Margin" type="MarginContainer" parent="." unique_id=1809235566]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 3.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 16
+
+[node name="Panel" type="Panel" parent="Margin" unique_id=626023996]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Margin/Panel" unique_id=712414582]
+layout_mode = 0
+offset_right = 916.0
+offset_bottom = 36.0
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 26
+text = "VRyHungry"
+horizontal_alignment = 1
+
+[node name="CenterContainer" type="CenterContainer" parent="Margin" unique_id=386836547]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Margin/CenterContainer" unique_id=1621136758]
+layout_mode = 2
+
+[node name="Status" type="Label" parent="Margin/CenterContainer/VBoxContainer" unique_id=333264578]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 100
+text = "Get Good!"
+horizontal_alignment = 1
+
+[node name="RootView" type="VBoxContainer" parent="Margin/CenterContainer/VBoxContainer" unique_id=518577929]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Spacer" type="Control" parent="Margin/CenterContainer/VBoxContainer/RootView" unique_id=756236975]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+
+[node name="JohnButton" type="Button" parent="Margin/CenterContainer/VBoxContainer/RootView" unique_id=1922783842]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "Restasrt?"
