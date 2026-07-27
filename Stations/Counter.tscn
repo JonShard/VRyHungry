@@ -4,7 +4,7 @@
 [ext_resource type="AudioStream" uid="uid://claw3d2wnyr6a" path="res://Sounds/220212__gameaudio__ping-bing.wav" id="2_0aadn"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_24d3s"]
-size = Vector3(1, 1, 1.0517578)
+size = Vector3(0.6, 1, 0.6)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_1ntq7"]
 size = Vector3(0.6, 0.12802735, 0.6)
@@ -21,7 +21,6 @@ albedo_color = Color(1.1759251, 0.741115, 0.5692133, 1)
 [node name="Counter" type="StaticBody3D" unique_id=1487893288 groups=["station"]]
 
 [node name="CollisionShape3DCuttingBoard" type="CollisionShape3D" parent="." unique_id=706340473]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.025878906)
 shape = SubResource("BoxShape3D_24d3s")
 
 [node name="XRToolsSnapZone" type="Area3D" parent="." unique_id=1647380272 groups=["station"]]

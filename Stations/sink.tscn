@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://bxbocxdaayvwx" path="res://UI/progress_bar.tscn" id="4_1pinr"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_l02yb"]
+size = Vector3(0.6, 1, 0.6)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ai6d4"]
 size = Vector3(0.6, 0.12802735, 0.6)
