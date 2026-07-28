@@ -13,8 +13,8 @@ albedo_color = Color(0.45262197, 0.26770625, 0.2601587, 1)
 material = SubResource("StandardMaterial3D_qn1ku")
 size = Vector3(0.5, 1, 0.5)
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_dlkho"]
-radius = 0.3
+[sub_resource type="BoxShape3D" id="BoxShape3D_mep2a"]
+size = Vector3(0.81640625, 0.5635376, 0.79351807)
 
 [node name="DirtStation" type="StaticBody3D" unique_id=160842153 groups=["station"]]
 script = ExtResource("1_hc1d4")
@@ -39,5 +39,5 @@ snap_mode = 1
 metadata/_custom_type_script = "uid://cquqe4f1m1sw6"
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="XRToolsSnapZone" unique_id=1398712192]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -0.000975132, 0)
-shape = SubResource("SphereShape3D_dlkho")
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.008666992, -0.11009073, -0.009353638)
+shape = SubResource("BoxShape3D_mep2a")
