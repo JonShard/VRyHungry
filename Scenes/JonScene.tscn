@@ -114,9 +114,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5242664, 0.008738995, 1.10
 [node name="RawBurgerDispenser" parent="." unique_id=235630131 instance=ExtResource("11_ctden")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8896122, 0.008738995, 1.0872328)
 
-[node name="CubeSideDispenser2" parent="." unique_id=200950572 instance=ExtResource("12_57ppd")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.47788578, 0.008738995, 1.1293952)
-
 [node name="PlateDispenser" parent="." unique_id=710538846 instance=ExtResource("13_irf4n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.26631236, 0.008738995, 1.087036)
 
@@ -130,3 +127,6 @@ scene_properties_keys = PackedStringArray("game_over_panel.gd")
 
 [node name="controler" type="Node" parent="GameOverPanel" unique_id=803158176]
 script = ExtResource("16_n8fyw")
+
+[node name="CubeSideDispenser2" parent="." unique_id=200950572 instance=ExtResource("12_57ppd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.35154933, 0, 1.1119425)

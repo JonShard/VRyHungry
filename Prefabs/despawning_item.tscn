@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://b5ukku8i0hilb"]
+
+[ext_resource type="Script" uid="uid://deyna316ka4xs" path="res://Prefabs/despawning_item.gd" id="1_ayqk8"]
+
+[node name="DespawningItem" type="Node" unique_id=303090111]
+script = ExtResource("1_ayqk8")

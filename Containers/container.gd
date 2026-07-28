@@ -193,6 +193,9 @@ func _make_cosmetic(visual: Node3D) -> void:
 func _remove_from_physics(visual: Node3D) -> void:
 	if visual is RigidBody3D:
 		PhysicsServer3D.body_set_space((visual as RigidBody3D).get_rid(), RID())
+		var despawning_item = visual.get_node_or_null("DespawningItem")
+		if despawning_item:
+			NetworkManager.despawn_item(despawning_item)
 
 
 #plate (Pickalbe)
