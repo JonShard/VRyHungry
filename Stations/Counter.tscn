@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://efaec6ymgabo"]
 
 [ext_resource type="Script" uid="uid://cquqe4f1m1sw6" path="res://addons/godot-xr-tools/objects/snap_zone.gd" id="1_dlkho"]
-[ext_resource type="AudioStream" uid="uid://claw3d2wnyr6a" path="res://Sounds/220212__gameaudio__ping-bing.wav" id="2_0aadn"]
+[ext_resource type="AudioStream" uid="uid://bqtk1adk8umbx" path="res://Sounds/220197__gameaudio__click-basic.wav" id="2_0aadn"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_24d3s"]
 size = Vector3(0.6, 1, 0.6)
@@ -35,6 +35,8 @@ metadata/_custom_type_script = "uid://cquqe4f1m1sw6"
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="XRToolsSnapZone" unique_id=969340130]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.002, 0)
 shape = SubResource("BoxShape3D_1ntq7")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="XRToolsSnapZone" unique_id=1786831079]
 
 [node name="CSGCombiner3D" type="CSGCombiner3D" parent="." unique_id=451757283]
 use_collision = true

@@ -23,12 +23,10 @@ func _ready() -> void:
 		
 
 func _process(delta: float) -> void:
-	print("SpeedSquare: ", _rigid.linear_velocity.length_squared())
 	# if we're held or moving, reset timer and return
 	if  _pickable.get_picked_up_by() or _rigid.linear_velocity.length_squared() > pow(minimum_speed_square,2):
 		_time_left = time_to_despawn
 		get_parent().visible = true
-		print("DespawningItem resetting timer: ", get_parent())
 		return
 	
 

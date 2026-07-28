@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://caeikc7e3igkd" path="res://Stations/table.gd" id="1_2vcpj"]
 [ext_resource type="Script" uid="uid://cquqe4f1m1sw6" path="res://addons/godot-xr-tools/objects/snap_zone.gd" id="1_8j1nt"]
+[ext_resource type="AudioStream" uid="uid://daiv8ubwdbidf" path="res://Sounds/220195__gameaudio__click-wooden-1.wav" id="3_0s6ir"]
 [ext_resource type="PackedScene" uid="uid://bxbocxdaayvwx" path="res://UI/progress_bar.tscn" id="3_kjf1i"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_24d3s"]
@@ -35,6 +36,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.31874347, 0.5270121, 0)
 collision_layer = 65536
 collision_mask = 65540
 script = ExtResource("1_8j1nt")
+stash_sound = ExtResource("3_0s6ir")
 snap_mode = 1
 metadata/_custom_type_script = "uid://cquqe4f1m1sw6"
 
@@ -42,11 +44,15 @@ metadata/_custom_type_script = "uid://cquqe4f1m1sw6"
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -0.000975132, 0)
 shape = SubResource("SphereShape3D_dlkho")
 
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="XRToolsSnapZone" unique_id=2135860710]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.022546828, -0.5270121, 0.36528283)
+
 [node name="XRToolsSnapZone2" type="Area3D" parent="." unique_id=694448387 groups=["station"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.34755045, 0.5270121, 0)
 collision_layer = 65536
 collision_mask = 65540
 script = ExtResource("1_8j1nt")
+stash_sound = ExtResource("3_0s6ir")
 snap_mode = 1
 metadata/_custom_type_script = "uid://cquqe4f1m1sw6"
 
@@ -54,11 +60,15 @@ metadata/_custom_type_script = "uid://cquqe4f1m1sw6"
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -0.000975132, 0)
 shape = SubResource("SphereShape3D_dlkho")
 
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="XRToolsSnapZone2" unique_id=709529410]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.022546828, -0.5270121, 0.36528283)
+
 [node name="XRToolsSnapZone3" type="Area3D" parent="." unique_id=1734026785 groups=["station"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.012355864, 0.5270121, 0.33038777)
 collision_layer = 65536
 collision_mask = 65540
 script = ExtResource("1_8j1nt")
+stash_sound = ExtResource("3_0s6ir")
 snap_mode = 1
 metadata/_custom_type_script = "uid://cquqe4f1m1sw6"
 
@@ -66,17 +76,24 @@ metadata/_custom_type_script = "uid://cquqe4f1m1sw6"
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -0.000975132, 0)
 shape = SubResource("SphereShape3D_dlkho")
 
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="XRToolsSnapZone3" unique_id=2000860662]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.022546828, -0.5270121, 0.36528283)
+
 [node name="XRToolsSnapZone4" type="Area3D" parent="." unique_id=1358457948 groups=["station"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.022546828, 0.5270121, -0.36528283)
 collision_layer = 65536
 collision_mask = 65540
 script = ExtResource("1_8j1nt")
+stash_sound = ExtResource("3_0s6ir")
 snap_mode = 1
 metadata/_custom_type_script = "uid://cquqe4f1m1sw6"
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="XRToolsSnapZone4" unique_id=1880499470]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -0.000975132, 0)
 shape = SubResource("SphereShape3D_dlkho")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="XRToolsSnapZone4" unique_id=790672192]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.022546828, -0.5270121, 0.36528283)
 
 [node name="CSGCombiner3D" type="CSGCombiner3D" parent="." unique_id=2085635675]
 
