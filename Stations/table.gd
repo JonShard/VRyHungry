@@ -49,6 +49,9 @@ func _ready() -> void:
 	if not progress_bar or progress_bar is not ProgressBar3D:
 		push_error("Table missing reference to progressbar, or wrong type:", progress_bar)
 	progress_bar.y_billboard = true
+	# Render whatever state already arrived from the server before we were in
+	# the tree (see the guard in _refresh_display).
+	_refresh_display.call_deferred()
 	if not audio_player:
 		push_error("Table is missing reference to AudioStreamPlayer3D")
 		
@@ -171,6 +174,13 @@ func _setState(newState: TableState) -> void:
 ## Pure presentation, driven off the current (locally authoritative or
 ## synced-from-server) state. Runs on every peer.
 func _refresh_display() -> void:
+	# _state, _state_time and _unsatisfied_orders are replicated with spawn=true,
+	# and MultiplayerSpawner applies a spawn payload BEFORE the node enters the
+	# tree — so these setters fire while the @onready children below are still
+	# null. Bail out until _ready() has resolved them; _ready() calls back in
+	# once it has, so nothing that arrived early is lost.
+	if not progress_bar or not label_3d or not label_3d_time:
+		return
 	match _state:
 		TableState.EMPTY:
 			progress_bar.set_bar_visible(false)
