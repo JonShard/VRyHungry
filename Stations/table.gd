@@ -3,17 +3,17 @@ extends StaticBody3D
 
 const GAME_MANAGER = preload("res://GameManager.gd")
 
-@export var thinking_duration: float = 6
-@export var primary_duration: float = 23
-@export var friend_duration: float = 10
-@export var eating_duration: float = 4
+@export var thinking_duration: float = 3.0
+@export var primary_duration: float = 60.0
+@export var friend_duration: float = 10.0
+@export var eating_duration: float = 4.0
 
 @onready var label_3d: Label3D = $Label3D
 @onready var label_3d_time: Label3D = $Label3DTime
 @onready var snap_zones: Array[XRToolsSnapZone] = []
 @onready var progress_bar: ProgressBar3D = $ProgressBar3D
 
-const lbl_thinking: String = "..."
+const lbl_thinking: String = "Thinking"
 const lbl_gameover: String = "Game Over!"
 const lbl_eating: String = "Eating..."
 
@@ -61,11 +61,14 @@ func _ready() -> void:
 	for snap_zone_node in snap_zones:
 		snap_zone_node.has_picked_up.connect(_on_object_picked_up)
 		snap_zone_node.has_dropped.connect(_on_object_dropped)
+	set_process(true)
 	_setState(TableState.EMPTY)
 
 
 func _on_object_picked_up(_item) -> void:
 	print("Table: object picked up: ", _item)
+	if _state == TableState.EATING:
+		return
 	_absorb_item_if_correct(_item)
 
 
@@ -92,17 +95,20 @@ func _absorb_item_if_correct(_item: Node) -> void:
 			print("Table: held FoodItem is in unsatisfied orders, removing it")
 			_unsatisfied_orders.erase(food_item.id)
 			GAME_MANAGER.money += food_item.sell_value
-			_setState(TableState.WAITING_FRIEND)
+			if _unsatisfied_orders.size() > 0 and _state != TableState.EATING:
+				_setState(TableState.WAITING_FRIEND)
 
-	# Table has everything it wants. Start eating
-	if _unsatisfied_orders.is_empty():
-		_setState(TableState.EATING)
+			# Table has everything it wants. Start eating
+			elif _unsatisfied_orders.is_empty() and _state != TableState.EATING:
+				_setState(TableState.EATING)
 
 
 func place_order() -> void:
 	print("Table: place_order()")
-	_unsatisfied_orders.append(GAME_MANAGER.get_random_meal())
-	_unsatisfied_orders.append(GAME_MANAGER.get_random_meal())
+	var new_orders = _unsatisfied_orders.duplicate()
+	new_orders.append(GAME_MANAGER.get_random_meal())
+	new_orders.append(GAME_MANAGER.get_random_meal())
+	_set_unsatisfied_orders(new_orders)
 
 
 func satisfyAllOrders() -> void:
@@ -124,6 +130,12 @@ func clearAllPlates() -> void:
 			plate.container.clear()
 			plate.is_dirty = true
 
+
+func _set_snap_zones_enabled(value: bool) -> void:
+	for zone in snap_zones:
+		zone.enabled = value
+
+
 ## Server-only state transition: sets the new state's timer and assigns
 ## _state (whose setter refreshes the display on every peer).
 func _setState(newState: TableState) -> void:
@@ -131,11 +143,11 @@ func _setState(newState: TableState) -> void:
 
 	match newState:
 		TableState.EMPTY:
-			_state_time = 0.0
-			_state_duration = 0.0
+			_state_time = 5.0
+			_state_duration = 5.0
 		TableState.THINKING:
-			_state_time = eating_duration
-			_state_duration = eating_duration # Can't be done in _set_state(), will set duration inside timer
+			_state_time = thinking_duration
+			_state_duration = thinking_duration # Can't be done in _set_state(), will set duration inside timer
 		TableState.WAITING_PRIMARY:
 			_state_time = primary_duration
 			_state_duration = primary_duration
@@ -145,6 +157,7 @@ func _setState(newState: TableState) -> void:
 		TableState.EATING:
 			_state_time = eating_duration
 			_state_duration = eating_duration
+			_set_snap_zones_enabled(false)
 
 	_state = newState
 
@@ -192,32 +205,36 @@ func _set_unsatisfied_orders(value: Array[String]) -> void:
 
 func _process(delta: float) -> void:
 	# Wait for state to finish
-	if _state_time > 0:
-		_state_time -= delta
+	if _state_time > 0.0:
+		_state_time = max(0.0, _state_time - delta)
 		return
-		
+	
 	if GAME_MANAGER.game_state == GAME_MANAGER.GameState.GAME_OVER:
 		return
 
 	# When state timer is finished, do this stuff before moving to next state
 	match _state:
 		TableState.EMPTY:
+			print("Table State EMPTY finish")
 			_setState(TableState.THINKING)
 
 		TableState.THINKING:
+			print("Table State THINKING finish")
 			place_order()
 			_setState(TableState.WAITING_PRIMARY)
 
-
 		TableState.WAITING_PRIMARY:
+			print("Table State WAITING_PRIMARY finish")
 			label_3d.text = lbl_gameover
 			GAME_MANAGER.game_over()
 
 		TableState.WAITING_FRIEND:
+			print("Table State WAITING_FRIEND finish")
 			label_3d.text = lbl_gameover
 			GAME_MANAGER.game_over()
-			
 
 		TableState.EATING:
+			print("Table State EATING finish")
 			clearAllPlates()
+			_set_snap_zones_enabled(true)
 			_setState(TableState.EMPTY)
