@@ -10,6 +10,9 @@ size = Vector3(0.6, 1, 0.6)
 [sub_resource type="BoxShape3D" id="BoxShape3D_7uuqv"]
 size = Vector3(0.6, 0.12802735, 0.6)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_di04w"]
+albedo_color = Color(0, 0, 0, 1)
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gkb3v"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_np_hob"]
@@ -19,6 +22,107 @@ properties/0/replication_mode = 1
 properties/1/path = NodePath(".:cooking_result_time")
 properties/1/spawn = true
 properties/1/replication_mode = 1
+
+[sub_resource type="Animation" id="Animation_7uuqv"]
+length = 0.001
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CSGCombiner3D/CSGTorus3D:material:albedo_color:r")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CSGCombiner3D/CSGTorus3D:material:albedo_color:g")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/2/type = "bezier"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CSGCombiner3D/CSGTorus3D:material:albedo_color:b")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/3/type = "bezier"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("CSGCombiner3D/CSGTorus3D:material:albedo_color:a")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+
+[sub_resource type="Animation" id="Animation_6oyg1"]
+resource_name = "hob"
+loop_mode = 1
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CSGCombiner3D/CSGTorus3D:material:albedo_color:r")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0, 2, 2),
+"points": PackedFloat32Array(0.5, -0.25, 0, 0.25, 0, 0.8, -0.083333336, 0, 0, 0, 0.5, -0.083333336, 0, 0, 0),
+"times": PackedFloat32Array(0, 0.5, 1)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CSGCombiner3D/CSGTorus3D:material:albedo_color:g")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0, 2, 2),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 0, -0.083333336, 0, 0, 0, 0, -0.083333336, 0, 0, 0),
+"times": PackedFloat32Array(0, 0.5, 1)
+}
+tracks/2/type = "bezier"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CSGCombiner3D/CSGTorus3D:material:albedo_color:b")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"handle_modes": PackedInt32Array(0, 2, 2),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 0, -0.083333336, 0, 0, 0, 0, -0.083333336, 0, 0, 0),
+"times": PackedFloat32Array(0, 0.5, 1)
+}
+tracks/3/type = "bezier"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("CSGCombiner3D/CSGTorus3D:material:albedo_color:a")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"handle_modes": PackedInt32Array(0, 2, 2),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0, 1, -0.083333336, 0, 0, 0, 1, -0.083333336, 0, 0, 0),
+"times": PackedFloat32Array(0, 0.5, 1)
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ac5f3"]
+_data = {
+&"RESET": SubResource("Animation_7uuqv"),
+&"hob": SubResource("Animation_6oyg1")
+}
 
 [node name="Hob" type="StaticBody3D" unique_id=1687971542 groups=["station"]]
 script = ExtResource("1_7jc4g")
@@ -56,18 +160,21 @@ transform = Transform3D(0.8943019, 0, 0, 0, 0.8943019, 0, 0, 0, 0.8943019, 0, 0.
 inner_radius = 0.09153879
 outer_radius = 0.120084204
 sides = 32
+material = SubResource("StandardMaterial3D_di04w")
 
 [node name="CSGTorus3D" type="CSGTorus3D" parent="CSGCombiner3D" unique_id=1901978664]
 transform = Transform3D(0.8943019, 0, 0, 0, 0.8943019, 0, 0, 0, 0.8943019, 0, 0.5003869, -7.827557e-05)
 inner_radius = 0.20426142
 outer_radius = 0.2321898
 sides = 32
+material = SubResource("StandardMaterial3D_di04w")
 
 [node name="CSGTorus3D2" type="CSGTorus3D" parent="CSGCombiner3D" unique_id=24541894]
 transform = Transform3D(0.8943019, 0, 0, 0, 0.8943019, 0, 0, 0, 0.8943019, 0, 0.5003869, -7.827557e-05)
 inner_radius = 0.15036294
 outer_radius = 0.17592031
 sides = 32
+material = SubResource("StandardMaterial3D_di04w")
 
 [node name="CSGCylinder3D" type="CSGCylinder3D" parent="CSGCombiner3D" unique_id=1107239311]
 transform = Transform3D(0.8943019, 0, 0, 0, 0.8943019, 0, 0, 0, 0.8943019, 0, 0.4498226, -7.827557e-05)
@@ -121,3 +228,6 @@ replication_config = SubResource("SceneReplicationConfig_np_hob")
 
 [node name="ProgressBar3D" parent="." unique_id=654673176 instance=ExtResource("3_7uuqv")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.74736404, -0.09216304)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1525460719]
+libraries/ = SubResource("AnimationLibrary_ac5f3")
