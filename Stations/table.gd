@@ -7,11 +7,13 @@ const GAME_MANAGER = preload("res://GameManager.gd")
 @export var primary_duration: float = 60.0
 @export var friend_duration: float = 10.0
 @export var eating_duration: float = 4.0
+@export var money_sound: AudioStream 
 
 @onready var label_3d: Label3D = $Label3D
 @onready var label_3d_time: Label3D = $Label3DTime
 @onready var snap_zones: Array[XRToolsSnapZone] = []
 @onready var progress_bar: ProgressBar3D = $ProgressBar3D
+@onready var audio_player: AudioStreamPlayer3D = $AudioStreamPlayer3D
 
 const lbl_thinking: String = "Thinking"
 const lbl_gameover: String = "Game Over!"
@@ -45,9 +47,11 @@ func _ready() -> void:
 	if not label_3d_time:
 		push_error("Table is missing reference to Label3DTime")
 	if not progress_bar or progress_bar is not ProgressBar3D:
-		push_error("Hob missing reference to progressbar, or wrong type:", progress_bar)
+		push_error("Table missing reference to progressbar, or wrong type:", progress_bar)
 	progress_bar.y_billboard = true
-
+	if not audio_player:
+		push_error("Table is missing reference to AudioStreamPlayer3D")
+		
 	# Get snap_zones for plates, store in array snap_zones
 	for child in get_children():
 		var snap_zone_node = child as XRToolsSnapZone
@@ -94,12 +98,14 @@ func _absorb_item_if_correct(_item: Node) -> void:
 		if food_item.id in _unsatisfied_orders:
 			print("Table: held FoodItem is in unsatisfied orders, removing it")
 			_unsatisfied_orders.erase(food_item.id)
-			GAME_MANAGER.money += food_item.sell_value
 			if _unsatisfied_orders.size() > 0 and _state != TableState.EATING:
 				_setState(TableState.WAITING_FRIEND)
 
 			# Table has everything it wants. Start eating
 			elif _unsatisfied_orders.is_empty() and _state != TableState.EATING:
+				GAME_MANAGER.money += food_item.sell_value
+				audio_player.stream = money_sound
+				audio_player.play()
 				_setState(TableState.EATING)
 
 
