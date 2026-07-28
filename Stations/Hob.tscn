@@ -26,7 +26,7 @@ script = ExtResource("1_7jc4g")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1283846023]
 shape = SubResource("BoxShape3D_kdxnr")
 
-[node name="XRToolsSnapZone" type="Area3D" parent="." unique_id=538157739]
+[node name="XRToolsSnapZone" type="Area3D" parent="." unique_id=538157739 groups=["station"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5270121, 0)
 collision_layer = 65536
 collision_mask = 65540

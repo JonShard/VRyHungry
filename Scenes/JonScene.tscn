@@ -104,6 +104,9 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.5
 [node name="Counter3" parent="." unique_id=1498817646 instance=ExtResource("15_di04w")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.5477214, 0.5115016, 0.49258912)
 
+[node name="Counter5" parent="Counter3" unique_id=200341072 instance=ExtResource("15_di04w")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 1.8051152, 0, 3.5603657)
+
 [node name="BurgerBunsDispenser" parent="." unique_id=1720683779 instance=ExtResource("9_sq0s2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5242664, 0.008738995, 1.1073059)
 

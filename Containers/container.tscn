@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://6lyhyial1fh5" path="res://Containers/container.gd" id="1_r4cle"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_vlqg6"]
-radius = 0.2
+radius = 0.3
 
 [node name="Container" type="Node3D" unique_id=377793422 node_paths=PackedStringArray("meal_positions")]
 script = ExtResource("1_r4cle")

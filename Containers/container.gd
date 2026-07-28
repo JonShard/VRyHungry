@@ -36,10 +36,15 @@ func _on_body_entered(body: Node3D) -> void:
 	if not body.is_in_group(target_group):
 		return
 	print("Container _on_body_entered body: ", body)
-	var picked_by = xr_pickable.get_picked_up_by()
-	if picked_by and picked_by.is_in_group("station"):
 
-		# If compatible and enough space, add item
+
+	# If one of us is in a station
+	var picked_by = xr_pickable.get_picked_up_by()
+	var body_pickable = body as XRToolsPickable
+	var body_picked_by = body_pickable.get_picked_up_by() if body_pickable else null
+	if (picked_by and picked_by.is_in_group("station")) or (body_picked_by and body_picked_by.is_in_group("station")):
+
+		# If enough space, add item
 		var food_item = body.get_node("FoodItem")
 		print("Container in station found %s of type %s: %s" % [target_group, FoodItem.Type.keys()[food_item.type], body.name])
 		var meal_count := contained_items.filter(func(f): return f.type == FoodItem.Type.MEAL).size()
@@ -50,6 +55,7 @@ func _on_body_entered(body: Node3D) -> void:
 		if food_item.type == FoodItem.Type.SIDE and side_count < side_positions.size():
 			print("Container adding side")
 			_add_item(body)
+
 
 
 # Contents are synced as data (ids on the plate's PlateController), not
