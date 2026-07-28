@@ -48,4 +48,5 @@ show_laser = 2
 show_target = true
 
 [node name="PlayerBody" parent="." unique_id=1444632058 instance=ExtResource("4_6xr3x")]
+collision_mask = 1017
 player_calibrate_height = false

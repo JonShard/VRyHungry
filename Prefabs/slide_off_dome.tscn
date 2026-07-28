@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://mpapt5mkbuao"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_4m60m"]
+friction = 0.0
+bounce = 1.0
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_nn8tr"]
+radius = 0.2752769
+
+[node name="SlideOffDome" type="StaticBody3D" unique_id=1427609426]
+collision_layer = 7
+physics_material_override = SubResource("PhysicsMaterial_4m60m")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="." unique_id=513124640]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.99165964, 0)
+shape = SubResource("SphereShape3D_nn8tr")
