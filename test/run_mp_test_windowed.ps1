@@ -24,7 +24,8 @@ param(
 
 $ErrorActionPreference = "Stop"
 $proj = Split-Path -Parent $PSScriptRoot
-$scene = "res://test/multiPlayerTest.tscn"
+$serverScene = "res://test/multiPlayerTest.tscn"
+$clientScene = "res://Scenes/multiPlayer.tscn"
 $serverLog = Join-Path $proj "logs/mptest_server.log"
 $clientLog = Join-Path $proj "logs/mptest_client.log"
 
@@ -32,10 +33,10 @@ foreach ($f in @($serverLog, $clientLog)) { if (Test-Path $f) { Remove-Item $f -
 
 . (Join-Path $PSScriptRoot "mp_window_layout.ps1")
 
-function Start-Instance($extraArgs) {
+function Start-Instance($extraArgs, $sceneFor) {
     # --xr-mode off keeps it on the desktop (SteamVR's OpenXR runtime otherwise
     # takes over, and two instances can't share a headset anyway).
-    $a = "--xr-mode off --resolution 900x600 --path `"$proj`" $scene -- " +
+    $a = "--xr-mode off --resolution 900x600 --path `"$proj`" $sceneFor -- " +
          "$($extraArgs -join ' ') --mptest --mptest-frames --mptest-pause $Pause --mptest-hold $Hold"
     $p = Start-Process -FilePath $Godot -ArgumentList $a -PassThru
     # Touching .Handle caches it, which is what makes .ExitCode readable later.
@@ -44,11 +45,11 @@ function Start-Instance($extraArgs) {
 }
 
 Write-Host "Starting SERVER window (left)..."
-$server = Start-Instance @("--server")
+$server = Start-Instance @("--server") $serverScene
 $w = Move-GameWindow $server 20 60
 Start-Sleep -Seconds 5
 Write-Host "Starting CLIENT window (right)..."
-$client = Start-Instance @("--join", "127.0.0.1")
+$client = Start-Instance @("--join", "127.0.0.1") $clientScene
 $null = Move-GameWindow $client (20 + $w + 12) 60
 
 Write-Host "Watch the two windows (each has a fixed camera on the test area)."

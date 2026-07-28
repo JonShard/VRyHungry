@@ -18,51 +18,67 @@ func get_node_data(node):
 	var data = {}
 	data["scene"] = node.scene_file_path
 	data["name"] = node.name
-	data["xform"] = node.transform
+	# global, not local: the copies are respawned under WorldContent, so an
+	# authored node that was nested inside another (JonScene parents Counter5
+	# under Counter3) would otherwise land in the wrong place.
+	data["xform"] = node.global_transform
 	data["props"] = {}
 	var scrip = node.get_script()
 	if scrip:
 		for i in scrip.get_script_property_list():
-			if i.usage & PROPERTY_USAGE_STORAGE:
-				data["props"][i["name"]] = node.get(i["name"])
+			# Only authored configuration — i.e. @export vars, which are the ones
+			# the editor exposes. Plain script variables are live runtime state:
+			# copying those and replaying them into a fresh instance re-runs their
+			# setters before the node is in the tree, so any setter touching an
+			# @onready reference blows up (Table's _state calls into its progress
+			# bar, which is still null at that point).
+			if not (i.usage & PROPERTY_USAGE_EDITOR):
+				continue
+			if str(i["name"]).begins_with("_"):
+				continue
+			data["props"][i["name"]] = node.get(i["name"])
 	return data
+
+
+## The authored station nodes sitting in the current scene: anything instanced
+## from res://Stations/. Exposed as nodes (not just data) because every peer has
+## to remove these originals — the server replaces them with replicated copies,
+## and a client that kept its own would end up showing two of everything.
+func get_station_nodes() -> Array[Node]:
+	return _authored_nodes("res://Stations/", "StaticBody3D")
+
+
+## Likewise for authored items. Containers/ counts as items too — plates and
+## trays are things the player carries, and a client that never received one
+## would have an incomplete world.
+func get_item_nodes() -> Array[Node]:
+	var found := _authored_nodes("res://Items/", "XRToolsPickable")
+	found.append_array(_authored_nodes("res://Containers/", "XRToolsPickable"))
+	return found
+
+
+func _authored_nodes(dir: String, type: String) -> Array[Node]:
+	var scenes := []
+	for file in ResourceLoader.list_directory(dir):
+		scenes.append(dir + file)
+	var found: Array[Node] = []
+	for node in get_tree().root.find_children("*", type, true, false):
+		if node.scene_file_path in scenes and not found.has(node):
+			found.append(node)
+	return found
 
 
 func get_stations() -> Array[Dictionary]:
-	var Stations = ResourceLoader.list_directory("res://Stations/")
-
-	var Stations2 = []
-	for i in Stations:
-		Stations2.append("res://Stations/" + i)
-	Stations = Stations2
-	
-	var Stations_nodes = []
-	for i in get_tree().root.find_children("*", "StaticBody3D", true, false):
-			if i.scene_file_path in Stations:
-				Stations_nodes.append(i)
-
 	var data: Array[Dictionary] = []
-	for i in Stations_nodes:
-		data.append(get_node_data(i))
+	for node in get_station_nodes():
+		data.append(get_node_data(node))
 	return data
-	
-	
-func get_items() -> Array[Dictionary]:
-	var Items = ResourceLoader.list_directory("res://Items/")
 
-	var Items2 = []
-	for i in Items:
-		Items2.append("res://Items/" + i)
-	Items = Items2
-	
-	var Items_nodes = []
-	for i in get_tree().root.find_children("*", "XRToolsPickable", true, false):
-			if i.scene_file_path in Items:
-				Items_nodes.append(i)
-	
+
+func get_items() -> Array[Dictionary]:
 	var data: Array[Dictionary] = []
-	for i in Items_nodes:
-		data.append(get_node_data(i))
+	for node in get_item_nodes():
+		data.append(get_node_data(node))
 	return data
 
 

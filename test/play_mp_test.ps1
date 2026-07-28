@@ -29,27 +29,28 @@ param(
 
 $ErrorActionPreference = "Stop"
 $proj = Split-Path -Parent $PSScriptRoot
-$scene = "res://test/multiPlayerTest.tscn"
+$serverScene = "res://test/multiPlayerTest.tscn"
+$clientScene = "res://Scenes/multiPlayer.tscn"
 
 . (Join-Path $PSScriptRoot "mp_window_layout.ps1")
 
-function Start-Instance($extraArgs) {
-    $a = "--xr-mode off --resolution 900x600 --path `"$proj`" $scene"
-    if ($extraArgs) { $a += " -- $($extraArgs -join ' ')" }
+function Start-Instance($extraArgs, $sceneFor) {
+    $a = "--xr-mode off --resolution 900x600 --path `"$proj`" $sceneFor -- --mptest-manual"
+    if ($extraArgs) { $a += " $($extraArgs -join ' ')" }
     return Start-Process -FilePath $Godot -ArgumentList $a -PassThru
 }
 
 if ($Solo) {
     Write-Host "Opening a single offline window (no networking)."
-    $null = Move-GameWindow (Start-Instance $null) 300 100
+    $null = Move-GameWindow (Start-Instance $null $serverScene) 300 100
     return
 }
 
 Write-Host "Opening SERVER window (left)..."
-$w = Move-GameWindow (Start-Instance @("--server")) 20 60
+$w = Move-GameWindow (Start-Instance @("--server") $serverScene) 20 60
 Start-Sleep -Seconds 5
 Write-Host "Opening CLIENT window (right)..."
-$null = Move-GameWindow (Start-Instance @("--join", "127.0.0.1")) (20 + $w + 12) 60
+$null = Move-GameWindow (Start-Instance @("--join", "127.0.0.1") $clientScene) (20 + $w + 12) 60
 
 Write-Host ""
 Write-Host "Both windows are up. Click one to focus it, then press:"

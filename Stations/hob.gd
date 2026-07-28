@@ -6,24 +6,63 @@ const RECIPE_MANAGER = preload("res://RecipeManager.gd")
 @onready var snap_zone: XRToolsSnapZone = $XRToolsSnapZone
 @onready var progress_bar: ProgressBar3D = $ProgressBar3D
 
-var time_cooked = 0
-var cooking_result: String
-var cooking_result_time = 0 
+## Cooking state. All three are replicated (see Hob.tscn's Sync node) and each
+## refreshes the display when it changes, which is what makes the hob look alive
+## on a client: only the world owner runs the station's _process and its snap
+## zone, so a client never reaches the code below by itself and would otherwise
+## show a hob that never lights up.
+var time_cooked: float = 0.0: set = _set_time_cooked
+var cooking_result: String = "": set = _set_cooking_result
+var cooking_result_time: float = 0.0: set = _set_cooking_result_time
+
+
+func _set_time_cooked(value: float) -> void:
+	if is_equal_approx(time_cooked, value):
+		return
+	time_cooked = value
+	_refresh_display()
+
+
+func _set_cooking_result(value: String) -> void:
+	if cooking_result == value:
+		return
+	cooking_result = value
+	_refresh_display()
+	# The flames follow whether we're cooking, on every peer.
+	_play_animation("hob" if not cooking_result.is_empty() else "RESET")
+
+
+func _set_cooking_result_time(value: float) -> void:
+	if is_equal_approx(cooking_result_time, value):
+		return
+	cooking_result_time = value
+	_refresh_display()
+
 
 func _ready() -> void:
 	if not progress_bar or progress_bar is not ProgressBar3D:
 		push_error("Hob missing reference to progressbar, or wrong type:", progress_bar)
 	snap_zone.has_picked_up.connect(_on_object_picked_up)
 	snap_zone.has_dropped.connect(_on_object_dropped)
-	_refresh_progress_bar()
+	_refresh_display()
 
 
-func _refresh_progress_bar() -> void:
+func _play_animation(name: String) -> void:
+	# Replicated setters can fire before the node is in the tree (spawn payload),
+	# when the @onready children don't exist yet.
+	var player := get_node_or_null("AnimationPlayer") as AnimationPlayer
+	if player:
+		player.play(name)
+
+
+func _refresh_display() -> void:
+	# Guarded for the same reason as _play_animation.
+	if not progress_bar:
+		return
 	var progress := 0.0
 	if cooking_result and cooking_result_time > 0:
 		progress = clampf(float(time_cooked) / cooking_result_time, 0.0, 1.0)
 
-	#print("time_cooked: %s / cooking_result_time: %s =  progress: %s" % [time_cooked, cooking_result_time, progress])
 	progress_bar.set_progress(progress)
 	progress_bar.set_bar_visible(not cooking_result.is_empty())
 	progress_bar.override_fill_color(Color.RED if cooking_result == "charcoal" else Color.GREEN)
@@ -44,25 +83,20 @@ func _on_object_picked_up(_item) -> void:
 	cooking_result = result
 	cooking_result_time = RECIPE_MANAGER.get_cooking_time(_food_item.id)
 	print("Hob: set cooking_result ", cooking_result)
-	_refresh_progress_bar()
-	$AnimationPlayer.play("hob")
+	# The setters above already refresh the display and start the flames.
 
 
 func _on_object_dropped() -> void:
 	print("Hob: object drop ")
-	$AnimationPlayer.play("RESET")
 	time_cooked = 0
 	cooking_result = ""
 	cooking_result_time = 0
-	_refresh_progress_bar()
 
 
 func convert_held_to_item(_item: String) -> void:
 	if not NetworkManager.owns_world():
 		return
 	print("Hob converting ", _item)
-	$AnimationPlayer.play("RESET")
-	
 
 	var old_pickable = snap_zone.picked_up_object
 	if not old_pickable:
@@ -86,7 +120,7 @@ func _process(delta: float) -> void:
 	if cooking_result:
 		#print("Hob cooking_result: ", cooking_result)
 		time_cooked += cook_speed * delta		
-		_refresh_progress_bar()
+		_refresh_display()
 		if time_cooked >= cooking_result_time:
 			time_cooked = 0
 			convert_held_to_item(cooking_result)

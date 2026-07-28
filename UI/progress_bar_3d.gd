@@ -25,6 +25,10 @@ func set_bar_visible(value: bool) -> void:
 	progress_bar.visible = value
 
 
+func is_bar_visible() -> bool:
+	return progress_bar != null and progress_bar.visible
+
+
 func override_fill_color(color: Color) -> void:
 	var style_box := StyleBoxFlat.new()
 	style_box.bg_color = color

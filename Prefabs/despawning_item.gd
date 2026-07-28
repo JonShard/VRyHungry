@@ -23,19 +23,41 @@ func _ready() -> void:
 		
 
 func _process(delta: float) -> void:
+	# Despawning is a world decision, so only the owner of world logic runs the
+	# clock. Every peer used to run its own copy: the countdown drifted between
+	# them and the blink below toggled `visible` locally, so the same item was
+	# shown on one peer and hidden on the other. Non-owners just follow the
+	# server, which removes the item for everyone when its time is up.
+	if not NetworkManager.owns_world():
+		return
+
 	# if we're held or moving, reset timer and return
 	if  _pickable.get_picked_up_by() or _rigid.linear_velocity.length_squared() > pow(minimum_speed_square,2):
 		_time_left = time_to_despawn
-		get_parent().visible = true
+		_set_visible(true)
 		return
-	
+
 
 	# Count down to zero and despawn
 	_time_left -= delta
 	if _time_left <= 0:
 		print("DespawningItem despawning!" , get_parent())
 		NetworkManager.despawn_item(get_parent())
+		# Stop counting: despawn_item() only queues the free, so without this we
+		# keep re-reporting the same item every frame until it actually goes.
+		set_process(false)
+		return
 
 	# Make item blink in and out before despawning
 	if _time_left < time_to_despawn / 2:
-		get_parent().visible = int(_time_left * 5.0) %2 == 0
+		_set_visible(int(_time_left * 5.0) % 2 == 0)
+
+
+# `visible` is not a replicated property, so a blink driven only here would make
+# the item flicker on the host and stay solid on clients. Until it is synced,
+# only warn when there is nobody else to disagree with.
+func _set_visible(value: bool) -> void:
+	if NetworkManager.is_online():
+		get_parent().visible = true
+		return
+	get_parent().visible = value

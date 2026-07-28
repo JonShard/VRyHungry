@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://do6mrslyqe5qe"]
 
-[ext_resource type="Script" uid="uid://b4ldkd3ngs0vp" path="res://main.gd" id="1_57ppd"]
+[ext_resource type="Script" uid="uid://d1cefhe3yyyds" path="res://Scenes/multiplayer_world.gd" id="1_57ppd"]
 [ext_resource type="PackedScene" uid="uid://j5s5wus7tuhb" path="res://XROrigin.tscn" id="2_o1b3t"]
 [ext_resource type="Material" uid="uid://cmia50cfqxxo4" path="res://Textures/dev_material_3d.tres" id="3_irf4n"]
 [ext_resource type="PackedScene" uid="uid://j7caslh27nor" path="res://Stations/Hob.tscn" id="4_ctden"]
@@ -45,8 +45,19 @@ script = ExtResource("1_57ppd")
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1177077250]
 environment = SubResource("Environment_bvwq1")
 
-[node name="XROrigin3D" parent="." unique_id=2055526621 instance=ExtResource("2_o1b3t")]
+[node name="XROrigin3D" parent="." unique_id=2055526621 groups=["local_xr_origin"] instance=ExtResource("2_o1b3t")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9667189, 0)
+
+[node name="WorldContent" type="Node3D" parent="."]
+
+[node name="Players" type="Node3D" parent="."]
+
+[node name="ItemsSpawner" type="MultiplayerSpawner" parent="."]
+spawn_path = NodePath("../WorldContent")
+
+[node name="PlayersSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://Player/net_player.tscn")
+spawn_path = NodePath("../Players")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1376644384]
 transform = Transform3D(-0.8660254, -0.43301278, 0.24999999, 0.3022632, -0.05510214, 0.9516306, -0.39829266, 0.8997021, 0.17860365, 0, 0, 0)

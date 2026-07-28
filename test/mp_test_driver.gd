@@ -88,6 +88,12 @@ var _frame_index := 0
 func _ready() -> void:
 	var args := OS.get_cmdline_user_args()
 	_auto_mode = "--mptest" in args
+	# Opt-in only. This node also sits in the real multiplayer scene (so a client
+	# joining a test session has a driver), and must be completely inert during
+	# an ordinary game — no overlay, no debug camera, no keyboard hooks.
+	if not _auto_mode and not ("--mptest-manual" in args):
+		queue_free()
+		return
 	_frames_enabled = "--mptest-frames" in args
 	_step_pause = _arg_value(args, "--mptest-pause", 0.0)
 	_end_hold = _arg_value(args, "--mptest-hold", 0.0)
@@ -98,7 +104,8 @@ func _ready() -> void:
 	_refresh_role()
 	_log("=== mp test driver ready (role=%s, peer=%d, mode=%s) ==="
 		% [_role, multiplayer.get_unique_id(), "automatic" if _auto_mode else "manual"])
-	if not _resolve_nodes():
+	# await: _resolve_nodes now waits for the server's spawns to arrive.
+	if not await _resolve_nodes():
 		if _auto_mode:
 			_finish(false)
 		return
@@ -133,12 +140,38 @@ func _resolve_nodes() -> bool:
 	if not _hand:
 		_log("FATAL: could not resolve XROrigin3D/XRControllerRightHand/FunctionPickup")
 		return false
+	# The kitchen is no longer baked into the live scene: the server harvests the
+	# authored nodes and respawns them replicated, so on a client nothing exists
+	# until those spawns arrive. Wait for them rather than failing immediately.
 	for required in ["Hob", "Sink", "DirtStation", "Counter", "Counter2", "Plate"]:
-		if not _find(required):
-			_log("FATAL: test scene is missing '%s'" % required)
+		if not await _wait_until(func(): return _find(required) != null,
+				"'%s' to arrive from the server" % required, SETUP_TIMEOUT_SEC):
+			_log("FATAL: '%s' never appeared in the world" % required)
 			return false
 	_log("resolved hand=%s; kitchen has Hob, Sink, DirtStation, Counter, Counter2" % _hand.get_path())
+	_disable_despawn_timers()
 	return true
+
+
+# The test deliberately leaves items sitting still for minutes at a time, which
+# DespawningItem would treat as litter and remove (it took the raw burger out
+# before the client had even connected). Hold them indefinitely instead, so the
+# run tests the kitchen rather than the despawn timer.
+func _disable_despawn_timers() -> void:
+	var stopped := 0
+	for node in _world.find_children("*", "DespawningItem", true, false):
+		if _despawn_timers_seen.has(node.get_instance_id()):
+			continue
+		_despawn_timers_seen[node.get_instance_id()] = true
+		node.set_process(false)
+		stopped += 1
+	if stopped > 0:
+		_log("disabled %d DespawningItem timer(s) so test items don't vanish mid-run" % stopped)
+
+
+# Items appear as the run goes on (cooking and combining spawn new ones), so
+# this is re-checked before every step rather than only at startup.
+var _despawn_timers_seen := {}
 
 
 # Items live either baked in the scene root or, once spawned at runtime, under
@@ -184,6 +217,11 @@ func _run_server() -> void:
 	# A frame of the untouched kitchen, so the GIF opens on the starting state.
 	await _capture_step_frame("start")
 
+	# 0. The client opened a different, empty scene, so everything it has must
+	# have arrived over the network. Check that before touching anything — this
+	# is the same path a player joining mid-session takes.
+	await _step("server", "world_replicated_to_client", "verify_world_replicated", [])
+
 	# 1-2. Both peers can pick the plate up and put it down.
 	await _step("client", "client_grab_plate", "grab", ["Plate"])
 	await _step("client", "client_drop_plate", "drop", ["Plate"])
@@ -204,8 +242,10 @@ func _run_server() -> void:
 	# 5. Client takes the dirty plate to the sink, which should wash it clean.
 	await _step("client", "client_plate_to_sink", "place_in_zone", ["Plate", "Sink"])
 	await _both("plate_snapped_in_sink", "verify_snapped", ["Plate", "Sink"])
+	await _both("sink_bar_shown_while_washing", "verify_station_bar", ["Sink", "true"])
 	await _step("server", "wait_for_wash", "await_clean", ["Plate"])
 	await _both("plate_washed_clean", "verify_dirty", ["Plate", "false"])
+	await _both("sink_bar_hidden_when_done", "verify_station_bar", ["Sink", "false"])
 
 	# 6. The cook-and-plate round, once per peer. The first round uses the items
 	# baked into the scene; the second uses freshly spawned ones, so both paths
@@ -230,6 +270,7 @@ func _cook_and_plate_round(actor: String, burger: String, buns: String, plate: S
 	# Burger onto the hob; it should cook and the raw one should disappear.
 	await _step(actor, "%s_burger_to_hob" % actor, "place_in_zone", [burger, "Hob"])
 	await _both("%s_burger_snapped_in_hob" % actor, "verify_snapped", [burger, "Hob"])
+	await _both("%s_hob_bar_shown_while_cooking" % actor, "verify_station_bar", ["Hob", "true"])
 	await _step("server", "%s_wait_for_cook" % actor, "await_food", ["cooked_burger"])
 
 	# Get it off the hob before anything else: the hob keeps cooking whatever is
@@ -238,6 +279,7 @@ func _cook_and_plate_round(actor: String, burger: String, buns: String, plate: S
 	await _step(actor, "%s_cooked_to_counter" % actor, "place_food_in_zone", ["cooked_burger", "Counter"])
 	await _both("%s_raw_burger_removed" % actor, "verify_gone", [burger])
 	await _both("%s_cooked_burger_exists" % actor, "verify_food_exists", ["cooked_burger"])
+	await _both("%s_hob_bar_hidden_when_empty" % actor, "verify_station_bar", ["Hob", "false"])
 
 	# Now bring the buns to it to combine.
 	await _step(actor, "%s_buns_to_cooked" % actor, "carry_food_to_food", [buns, "cooked_burger"])
@@ -256,6 +298,7 @@ func _cook_and_plate_round(actor: String, burger: String, buns: String, plate: S
 	# nowhere to put its plate.
 	await _both("%s_food_on_plate_before_lift" % actor, "verify_plate_visuals", [plate])
 	await _step(actor, "%s_plate_off_counter2" % actor, "park", [plate, park_at])
+	await _both("%s_counter2_freed" % actor, "verify_zone_empty", ["Counter2"])
 	# The food must still be on the plate after it has been carried off the
 	# counter and set down again.
 	await _both("%s_food_stayed_on_plate" % actor, "verify_plate_visuals", [plate])
@@ -297,6 +340,7 @@ func _find_client_id() -> int:
 # and record the verdict.
 func _step(actor: String, label: String, step: String, args: Array) -> void:
 	_current_step = label
+	_disable_despawn_timers()
 	_banner("STEP %d: %s  (on the %s)" % [_next_step_no(), label, actor.to_upper()])
 	var res: Dictionary
 	if actor == "server":
@@ -313,6 +357,7 @@ func _step(actor: String, label: String, step: String, args: Array) -> void:
 # agree, which is the whole point of the exercise.
 func _both(label: String, step: String, args: Array) -> void:
 	_current_step = label
+	_disable_despawn_timers()
 	_banner("STEP %d: %s  (checked on BOTH peers)" % [_next_step_no(), label])
 	_record(label, "server", await _run_local_step(step, args))
 	_record(label, "client", await _remote(step, args))
@@ -363,6 +408,7 @@ func _report() -> void:
 			_log("FAILURE %s [%s]: %s" % [r["step"], r["side"], r["detail"]])
 	await _capture_step_frame("final")
 	_write_frame_index()
+	_write_report(failed)
 	if not _auto_mode:
 		return
 	_quit_client.rpc_id(_client_id)
@@ -374,11 +420,40 @@ func _report() -> void:
 	_finish(failed == 0)
 
 
+# A standalone report of the run, written next to the logs so it can be read
+# without scrolling the console — and so the in-editor runner can print it back.
+func _write_report(failed: int) -> void:
+	var path := "res://logs/mptest_report.txt"
+	var f := FileAccess.open(path, FileAccess.WRITE)
+	if not f:
+		return
+	var passed := _results.size() - failed
+	f.store_line("VRyHungry multiplayer test report")
+	f.store_line("run at %s" % Time.get_datetime_string_from_system())
+	f.store_line("")
+	f.store_line("RESULT: %s   (%d passed, %d failed, %d total)"
+		% ["ALL CHECKS PASSED" if failed == 0 else "FAILED", passed, failed, _results.size()])
+	f.store_line("")
+	if failed > 0:
+		f.store_line("--- failures ---")
+		for r in _results:
+			if not r["ok"]:
+				f.store_line("FAIL  [%s]  %s" % [r["side"], r["step"]])
+				f.store_line("        %s" % r["detail"])
+		f.store_line("")
+	f.store_line("--- every check, in order ---")
+	for r in _results:
+		f.store_line("%-4s  %-6s  %s" % ["PASS" if r["ok"] else "FAIL", r["side"], r["step"]])
+	f.close()
+	_log("report written to %s" % ProjectSettings.globalize_path(path))
+
+
 # --- Client command handling ----------------------------------------------
 
 @rpc("authority", "reliable")
 func _cmd(step: String, args: Array) -> void:
 	_current_step = step
+	_disable_despawn_timers()
 	_log("<- server: %s%s" % [step, args])
 	_running = true
 	var res := await _run_local_step(step, args)
@@ -433,6 +508,12 @@ func _run_local_step(step: String, args: Array) -> Dictionary:
 			return _check_plate_contains(args[0], args[1])
 		"verify_plate_visuals":
 			return _check_plate_visuals(args[0])
+		"verify_station_bar":
+			return _check_station_bar(args[0], args[1] == "true")
+		"verify_zone_empty":
+			return _check_zone_empty(args[0])
+		"verify_world_replicated":
+			return await _check_world_replicated()
 	return {"ok": false, "detail": "unknown step %s" % step}
 
 
@@ -872,6 +953,10 @@ func _visual_count(item: Node3D, path: String) -> int:
 	return count
 
 
+## Stations whose on-screen state has to match on every peer.
+const WATCHED_STATIONS := ["Hob", "Sink", "DirtStation", "Counter", "Counter2"]
+
+
 func _snapshot() -> Dictionary:
 	var out := {}
 	for root in [_world, _world.get_node_or_null("WorldContent")]:
@@ -880,7 +965,31 @@ func _snapshot() -> Dictionary:
 		for child in root.get_children():
 			if child is XRToolsPickable and not child.is_queued_for_deletion():
 				out[str(child.name)] = _describe(child)
+	for name in WATCHED_STATIONS:
+		var station := _find(name)
+		if station:
+			out["station:" + name] = _describe_station(station)
 	return out
+
+
+# What a station shows the player. Only the world owner runs a station's logic
+# and snap zone, so its display has to be driven from replicated state — a
+# client that never updates it shows a hob that never lights up, or a sink bar
+# that stays on screen after the plate came out clean.
+#
+# Bar *visibility* is compared across peers; the progress value is diagnostic
+# only ("_" prefix), because it changes every tick and the two peers are
+# legitimately a frame apart.
+func _describe_station(station: Node3D) -> Dictionary:
+	var d := {}
+	var bar := station.get_node_or_null("ProgressBar3D") as ProgressBar3D
+	d["bar_visible"] = bar.is_bar_visible() if bar else false
+	d["_bar_progress"] = snappedf(bar.get_progress(), 1.0) if bar else -1.0
+	if "cooking_result" in station:
+		d["cooking"] = str(station.cooking_result)
+	if "is_washing" in station:
+		d["washing"] = bool(station.is_washing)
+	return d
 
 
 @rpc("authority", "reliable")
@@ -918,9 +1027,11 @@ func _compare(server: Dictionary, client: Dictionary) -> Array[String]:
 			continue
 		var s: Dictionary = server[name]
 		var c: Dictionary = client[name]
-		var dist: float = (s["pos"] as Vector3).distance_to(c["pos"])
-		if dist > SYNC_POS_TOLERANCE:
-			problems.append("%s is %.3fm apart (server %s vs client %s)" % [name, dist, s["pos"], c["pos"]])
+		# Stations are compared on their displayed state, not a position.
+		if s.has("pos") and c.has("pos"):
+			var dist: float = (s["pos"] as Vector3).distance_to(c["pos"])
+			if dist > SYNC_POS_TOLERANCE:
+				problems.append("%s is %.3fm apart (server %s vs client %s)" % [name, dist, s["pos"], c["pos"]])
 		for key in s:
 			# "_" keys are per-peer diagnostics, not things that must match.
 			if key == "pos" or key.begins_with("_"):
@@ -1029,6 +1140,59 @@ func _check_plate_visuals(plate_name: String) -> Dictionary:
 			% [plate_name, off, MAX_VISUAL_OFFSET, _visual_diag(plate)]}
 	return {"ok": true, "detail": "%s's food is still on it (%.3fm from centre). %s"
 		% [plate_name, off, _visual_diag(plate)]}
+
+
+# A station's progress bar must show the same thing to everyone: visible while
+# the station is working, gone once it has finished. Only the world owner runs
+# station logic, so a client can only get this right if the display is driven
+# from replicated state.
+func _check_station_bar(station_name: String, want_visible: bool) -> Dictionary:
+	var station := _find(station_name)
+	if not station:
+		return {"ok": false, "detail": "'%s' does not exist on this peer" % station_name}
+	var bar := station.get_node_or_null("ProgressBar3D") as ProgressBar3D
+	if not bar:
+		return {"ok": false, "detail": "%s has no ProgressBar3D" % station_name}
+	var shown := bar.is_bar_visible()
+	var detail := "%s bar visible=%s progress=%.0f%%" % [station_name, shown, bar.get_progress()]
+	if "cooking_result" in station:
+		detail += " cooking='%s'" % station.cooking_result
+	if "is_washing" in station:
+		detail += " washing=%s" % station.is_washing
+	if shown != want_visible:
+		return {"ok": false, "detail": "expected %s's bar to be %s, but %s"
+			% [station_name, "visible" if want_visible else "hidden", detail]}
+	return {"ok": true, "detail": detail}
+
+
+# The client loaded a bare multiplayer scene with no kitchen in it, so every
+# object it can see arrived from the server. This confirms it got the whole
+# layout — the same thing that has to work for a player joining mid-session.
+# Server-side check: it asks the client for its inventory and compares.
+func _check_world_replicated() -> Dictionary:
+	var mine := _snapshot()
+	var theirs := await _fetch_client_snapshot()
+	if theirs.is_empty():
+		return {"ok": false, "detail": "the client reported nothing at all"}
+	var problems := _compare(mine, theirs)
+	var detail := "server has %d objects, client has %d" % [mine.size(), theirs.size()]
+	if not problems.is_empty():
+		return {"ok": false, "detail": "%s; %s" % [detail, "; ".join(problems)]}
+	return {"ok": true, "detail": "%s, all matching (client received the world over the network)" % detail}
+
+
+# A station that has had its item taken away must not still be holding it.
+func _check_zone_empty(station_name: String) -> Dictionary:
+	var zone := _zone_of(station_name)
+	if not zone:
+		return {"ok": false, "detail": "station '%s' has no snap zone on this peer" % station_name}
+	if not NetworkManager.owns_world():
+		# Client zones are gated off entirely; they never hold anything.
+		return {"ok": true, "detail": "%s: client zones are gated, nothing to check" % station_name}
+	if is_instance_valid(zone.picked_up_object):
+		return {"ok": false, "detail": "%s's zone still holds %s after it was taken away"
+			% [station_name, zone.picked_up_object]}
+	return {"ok": true, "detail": "%s's zone is empty" % station_name}
 
 
 # --- Diagnostics -----------------------------------------------------------

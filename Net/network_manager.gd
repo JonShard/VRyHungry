@@ -297,6 +297,17 @@ func _release_from_snap_zones(item: Node) -> void:
 		if zone.picked_up_object == item:
 			log_line("releasing %s from %s's snap zone (authority just granted elsewhere)" % [item.name, zone.get_parent().name])
 			zone.drop_object()
+		# Make the zone forget the item as well. These zones are snap_mode=RANGE,
+		# so every frame they re-grab anything still listed in their grab area
+		# that can be picked up — and Jolt does not emit body_exited when let_go()
+		# switches the item's collision layer back out of the zone's mask, so the
+		# entry goes stale and never clears. The station then snatches the item
+		# straight back off the player who just took it, teleporting it home.
+		# Bringing it near again re-adds it properly (a held item is on the layer
+		# the zone watches), and releasing next to a station is handled
+		# explicitly by _try_snap_into_station.
+		if zone._object_in_grab_area.has(item):
+			zone._object_in_grab_area.erase(item)
 
 
 # Snap the item into the nearest empty station snap zone within grab range.

@@ -6,9 +6,40 @@ const plate_wash_time: float = 3.0
 @onready var snap_zone: XRToolsSnapZone = $XRToolsSnapZone
 @onready var progress_bar: ProgressBar3D = $ProgressBar3D
 
-var time_washed: float = 0.0
-var is_washing: bool = false
+## Washing state. Both are replicated (see sink.tscn's Sync node) and refresh the
+## display when they change. Only the world owner runs this station's _process
+## and snap zone, so without this a client never updates its bar — it stayed
+## frozen on screen long after the plate came out clean.
+var time_washed: float = 0.0: set = _set_time_washed
+var is_washing: bool = false: set = _set_is_washing
 var plate: PlateController = null
+
+
+func _set_time_washed(value: float) -> void:
+	if is_equal_approx(time_washed, value):
+		return
+	time_washed = value
+	_refresh_progress_bar()
+
+
+func _set_is_washing(value: bool) -> void:
+	if is_washing == value:
+		return
+	is_washing = value
+	_refresh_progress_bar()
+	_set_effects_playing(is_washing)
+
+
+# Water, bubbles and the animation follow the washing state on every peer, not
+# just the one running the logic.
+func _set_effects_playing(playing: bool) -> void:
+	var player := get_node_or_null("AnimationPlayer") as AnimationPlayer
+	if player:
+		player.play("working" if playing else "RESET")
+	for effect in ["water", "bubbles", "GPUParticles3D"]:
+		var node := get_node_or_null(effect) as Node3D
+		if node:
+			node.visible = playing
 
 func _ready() -> void:
 	if not progress_bar or progress_bar is not ProgressBar3D:
@@ -21,6 +52,8 @@ func _ready() -> void:
  
 
 func _refresh_progress_bar() -> void:
+	if not progress_bar:
+		return
 	progress_bar.set_progress(clampf(float(time_washed) / plate_wash_time, 0.0, 1.0))
 	progress_bar.set_bar_visible(is_washing)
 
@@ -29,12 +62,8 @@ func _on_object_picked_up(_item) -> void:
 	print("Sink: object picked up: ", _item)
 	plate = _item.get_node_or_null("PlateController") as PlateController
 	if plate:
+		# The setter starts the effects and shows the bar, here and on clients.
 		is_washing = plate.is_dirty
-		if is_washing:
-			$AnimationPlayer.play("working")
-			$bubbles.show()
-			$water.show()
-			$GPUParticles3D.show()
 
 
 func _on_object_dropped() -> void:
@@ -46,13 +75,10 @@ func _reset_sink():
 	time_washed = 0
 	is_washing = false
 	plate = null
-	$AnimationPlayer.play("RESET")
-	$water.hide()
-	$bubbles.hide()
-	$GPUParticles3D.hide()
-	_refresh_progress_bar()
 
 func complete_washing():
+		if not plate:
+			return
 		plate.is_dirty = false
 		_reset_sink()
 		print("Sink washing complete!")

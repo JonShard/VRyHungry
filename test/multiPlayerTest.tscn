@@ -34,7 +34,7 @@ size = Vector3(15, 20, 0.1)
 
 [node name="Main" type="Node3D" unique_id=1312265607]
 script = ExtResource("1_6uucx")
-populate_from_layout = false
+populate_from_layout = true
 
 [node name="XROrigin3D" parent="." unique_id=2055526621 groups=["local_xr_origin"] instance=ExtResource("2_j7vd1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.36171648, 0, 0.81835127)
@@ -100,10 +100,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.5, 0)
 script = ExtResource("9_mptst")
 
 [node name="raw_burger" parent="." unique_id=1675596942 instance=ExtResource("10_51k0c")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.28692234, 1.0149999, 0.3505687)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.28692234, 1.0149999, 1.1)
 
 [node name="BurgerBuns" parent="." unique_id=1088240294 instance=ExtResource("11_psgbv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.40037438, 1.0094403, 0.34120744)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.40037438, 1.0094403, 1.1)
 
 [node name="Counter" parent="." unique_id=1487893288 instance=ExtResource("12_j5uvh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0.5, 0)

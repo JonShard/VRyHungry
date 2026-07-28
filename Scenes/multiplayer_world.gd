@@ -72,18 +72,50 @@ func _on_session_started(_is_server: bool) -> void:
 ## Spawns the world's stations/items exactly once, on the machine that owns
 ## world logic (server or offline). Safe to call multiple times/entry points.
 func _populate_world_if_owner() -> void:
-	if not NetworkManager.owns_world() or _populated or not populate_from_layout:
+	if _populated or not populate_from_layout:
 		return
+	# WorldLayout reads the live scene tree to find what to replicate, so it
+	# needs to be an instance sitting in that tree — its methods can't be called
+	# on the class itself.
+	var layout := WorldLayout.new()
+	add_child(layout)
+	var authored := layout.get_station_nodes()
+	authored.append_array(layout.get_item_nodes())
+
+	# The stations and items authored into the scene file are a *template*, not
+	# the live world. Only the server turns them into real objects, spawned
+	# through NetworkManager so they replicate. Every peer therefore drops its
+	# own authored copies: the client would otherwise show its local originals
+	# on top of the server's replicated ones, and the two sets would drift apart
+	# because only the server's are synced.
+	if not NetworkManager.owns_world():
+		NetworkManager.log_line("Clearing %d authored nodes; the server's copies replace them" % authored.size())
+		_remove_authored(authored)
+		layout.queue_free()
+		return
+
 	_populated = true
 	GameManager.meals_in_play = ["hamburger"]
-	var stations := WorldLayout.get_stations()
-	var items := WorldLayout.get_items()
+	var stations := layout.get_stations()
+	var items := layout.get_items()
+	layout.queue_free()
+	_remove_authored(authored)
 	NetworkManager.log_line("Populating world: %d stations, %d items" % [stations.size(), items.size()])
 	for d in stations:
 		NetworkManager.spawn_item(d["scene"], d["xform"], d["name"], d["props"])
 	for d in items:
 		NetworkManager.spawn_item(d["scene"], d["xform"], d["name"], d["props"])
 	NetworkManager.log_line("World populated")
+
+
+# Free the authored template nodes. Done immediately rather than with
+# queue_free() so the names are released before the replicated copies are
+# spawned under the same ones.
+func _remove_authored(nodes: Array[Node]) -> void:
+	for node in nodes:
+		if is_instance_valid(node):
+			node.get_parent().remove_child(node)
+			node.free()
 
 
 ## Only the server (or the single offline machine) materialises player
