@@ -96,7 +96,7 @@ func _on_john_pressed() -> void:
 
 func _on_host_pressed() -> void:
 	NetworkManager.request_host()
-	get_tree().change_scene_to_file.call_deferred(MULTIPLAYER_SCENE)
+	get_tree().change_scene_to_file.call_deferred("res://Scenes/JonScene.tscn")
 
 
 func _on_join_pressed() -> void:
