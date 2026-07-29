@@ -6,6 +6,14 @@
 [ext_resource type="PackedScene" uid="uid://bxbocxdaayvwx" path="res://UI/progress_bar.tscn" id="3_7uuqv"]
 [ext_resource type="Material" uid="uid://d1djvskv4n4m3" path="res://Textures/hob_off.tres" id="4_8qpxk"]
 [ext_resource type="Material" uid="uid://db7c7w4apwti7" path="res://Textures/hob_on.tres" id="6_m7l4u"]
+[ext_resource type="Script" uid="uid://bu0g23cfrqy0m" path="res://Stations/station_movement.gd" id="7_akjp4"]
+[ext_resource type="Script" uid="uid://bfrlpbsqg5lqr" path="res://addons/godot-xr-tools/objects/pickable.gd" id="7_d4kl5"]
+[ext_resource type="PackedScene" uid="uid://c25yxb0vt53vc" path="res://addons/godot-xr-tools/objects/grab_points/grab_point_hand_left.tscn" id="8_w3ous"]
+[ext_resource type="Animation" uid="uid://db62hs5s4n2b3" path="res://addons/godot-xr-tools/hands/animations/left/Grip 4.res" id="9_rdqhn"]
+[ext_resource type="Script" uid="uid://dvobm6vcfnqe8" path="res://addons/godot-xr-tools/hands/poses/hand_pose_settings.gd" id="10_hyphg"]
+[ext_resource type="PackedScene" uid="uid://ctw7nbntd5pcj" path="res://addons/godot-xr-tools/objects/grab_points/grab_point_hand_right.tscn" id="11_sexl6"]
+[ext_resource type="Animation" uid="uid://d1xnpyc08njjx" path="res://addons/godot-xr-tools/hands/animations/right/Grip 4.res" id="12_0t4ed"]
+[ext_resource type="Script" uid="uid://bwd0pe2udb5xo" path="res://Net/net_pickable.gd" id="15_trny8"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_kdxnr"]
 size = Vector3(0.6, 1, 0.6)
@@ -25,6 +33,12 @@ properties/1/replication_mode = 1
 properties/2/path = NodePath(".:cooking_result")
 properties/2/spawn = true
 properties/2/replication_mode = 1
+properties/3/path = NodePath(".:position")
+properties/3/spawn = true
+properties/3/replication_mode = 1
+properties/4/path = NodePath(".:rotation")
+properties/4/spawn = true
+properties/4/replication_mode = 1
 
 [sub_resource type="Animation" id="Animation_7uuqv"]
 length = 0.001
@@ -159,6 +173,37 @@ _data = {
 &"hob": SubResource("Animation_6oyg1")
 }
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_m1xbq"]
+size = Vector3(0.1, 0.1, 0.1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_24d3s"]
+albedo_color = Color(0.1764706, 1, 1, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_vlqg6"]
+material = SubResource("StandardMaterial3D_24d3s")
+size = Vector3(0.1, 0.1, 0.1)
+
+[sub_resource type="Resource" id="Resource_lc22d"]
+script = ExtResource("10_hyphg")
+closed_pose = ExtResource("9_rdqhn")
+metadata/_custom_type_script = "uid://dvobm6vcfnqe8"
+
+[sub_resource type="Resource" id="Resource_qyiot"]
+script = ExtResource("10_hyphg")
+closed_pose = ExtResource("12_0t4ed")
+metadata/_custom_type_script = "uid://dvobm6vcfnqe8"
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_np_cube"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = false
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:quaternion")
+properties/1/spawn = false
+properties/1/replication_mode = 1
+properties/2/path = NodePath("NetPickable:net_held_by")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+
 [node name="Hob" type="StaticBody3D" unique_id=1687971542 groups=["station"]]
 script = ExtResource("1_7jc4g")
 
@@ -276,3 +321,36 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5053487, 0)
 light_color = Color(1, 0.13725491, 0, 1)
 light_energy = 0.0
 omni_range = 0.5
+
+[node name="Movement" type="Node3D" parent="." unique_id=1818087979]
+script = ExtResource("7_akjp4")
+
+[node name="MoveHandle" type="RigidBody3D" parent="Movement" unique_id=1675596942 groups=["platalbe_item"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.92786825, 0)
+collision_layer = 4
+collision_mask = 196615
+axis_lock_linear_y = true
+axis_lock_angular_x = true
+axis_lock_angular_z = true
+mass = 0.004
+gravity_scale = 0.0
+linear_damp = 100.0
+script = ExtResource("7_d4kl5")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Movement/MoveHandle" unique_id=1023455695]
+shape = SubResource("BoxShape3D_m1xbq")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Movement/MoveHandle" unique_id=1223689787]
+mesh = SubResource("BoxMesh_vlqg6")
+
+[node name="GrabPointHandLeft" parent="Movement/MoveHandle" unique_id=1571481674 instance=ExtResource("8_w3ous")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.067650706, 0.04601878, -0.08606844)
+hand_pose = SubResource("Resource_lc22d")
+
+[node name="GrabPointHandRight" parent="Movement/MoveHandle" unique_id=514404634 instance=ExtResource("11_sexl6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06531982, 0.042291984, -0.08604182)
+hand_pose = SubResource("Resource_qyiot")
+
+[node name="NetPickable" type="MultiplayerSynchronizer" parent="Movement/MoveHandle" unique_id=1858332513]
+replication_config = SubResource("SceneReplicationConfig_np_cube")
+script = ExtResource("15_trny8")
