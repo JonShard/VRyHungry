@@ -1,14 +1,14 @@
 [gd_scene format=3 uid="uid://bp3v1jl8pctro"]
 
 [ext_resource type="Script" uid="uid://bfrlpbsqg5lqr" path="res://addons/godot-xr-tools/objects/pickable.gd" id="1_nq5sa"]
-[ext_resource type="PackedScene" uid="uid://du31pqeytu8as" path="res://Containers/container.tscn" id="1_s5yhh"]
-[ext_resource type="Script" uid="uid://iqjqsk4v6qfh" path="res://Containers/plate_controller.gd" id="1_vjsmi"]
+[ext_resource type="PackedScene" uid="uid://du31pqeytu8as" path="res://containers/container.tscn" id="1_s5yhh"]
+[ext_resource type="Script" uid="uid://iqjqsk4v6qfh" path="res://containers/plate_controller.gd" id="1_vjsmi"]
 [ext_resource type="PackedScene" uid="uid://c25yxb0vt53vc" path="res://addons/godot-xr-tools/objects/grab_points/grab_point_hand_left.tscn" id="2_3bkoa"]
 [ext_resource type="Animation" uid="uid://db62hs5s4n2b3" path="res://addons/godot-xr-tools/hands/animations/left/Grip 4.res" id="3_6v47p"]
 [ext_resource type="Script" uid="uid://dvobm6vcfnqe8" path="res://addons/godot-xr-tools/hands/poses/hand_pose_settings.gd" id="4_dhtvl"]
 [ext_resource type="PackedScene" uid="uid://ctw7nbntd5pcj" path="res://addons/godot-xr-tools/objects/grab_points/grab_point_hand_right.tscn" id="5_vlcpl"]
 [ext_resource type="Animation" uid="uid://d1xnpyc08njjx" path="res://addons/godot-xr-tools/hands/animations/right/Grip 4.res" id="6_el51w"]
-[ext_resource type="Script" uid="uid://bwd0pe2udb5xo" path="res://Net/net_pickable.gd" id="20_netpk"]
+[ext_resource type="Script" uid="uid://bwd0pe2udb5xo" path="res://net/net_pickable.gd" id="20_netpk"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_kek77"]
 height = 0.0635376
@@ -49,6 +49,7 @@ collision_layer = 4
 collision_mask = 196615
 freeze_mode = 1
 script = ExtResource("1_nq5sa")
+second_hand_grab = 1
 
 [node name="PlateController" type="Node" parent="." unique_id=1503264193]
 script = ExtResource("1_vjsmi")
