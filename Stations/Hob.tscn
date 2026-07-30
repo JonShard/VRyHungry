@@ -206,36 +206,34 @@ _data = {
 
 [node name="Hob" type="Node3D" unique_id=172418174 groups=["station"]]
 
-[node name="Movement" type="Node3D" parent="." unique_id=1818087979]
+[node name="MoveHandle" type="RigidBody3D" parent="." unique_id=1675596942 groups=["platalbe_item"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.08, 0)
-script = ExtResource("7_akjp4")
-
-[node name="MoveHandle" type="RigidBody3D" parent="Movement" unique_id=1675596942 groups=["platalbe_item"]]
 collision_layer = 4
 collision_mask = 196615
 axis_lock_linear_y = true
 axis_lock_angular_x = true
 axis_lock_angular_z = true
 mass = 0.004
-gravity_scale = 0.0
+gravity_scale = 0.5
 linear_damp = 100.0
 script = ExtResource("7_d4kl5")
+release_mode = 1
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Movement/MoveHandle" unique_id=1023455695]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MoveHandle" unique_id=1023455695]
 shape = SubResource("BoxShape3D_m1xbq")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Movement/MoveHandle" unique_id=1223689787]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="MoveHandle" unique_id=1223689787]
 mesh = SubResource("BoxMesh_vlqg6")
 
-[node name="GrabPointHandLeft" parent="Movement/MoveHandle" unique_id=1571481674 instance=ExtResource("8_w3ous")]
+[node name="GrabPointHandLeft" parent="MoveHandle" unique_id=1571481674 instance=ExtResource("8_w3ous")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.067650706, 0.04601878, -0.08606844)
 hand_pose = SubResource("Resource_lc22d")
 
-[node name="GrabPointHandRight" parent="Movement/MoveHandle" unique_id=514404634 instance=ExtResource("11_sexl6")]
+[node name="GrabPointHandRight" parent="MoveHandle" unique_id=514404634 instance=ExtResource("11_sexl6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06531982, 0.042291984, -0.08604182)
 hand_pose = SubResource("Resource_qyiot")
 
-[node name="NetPickable" type="MultiplayerSynchronizer" parent="Movement/MoveHandle" unique_id=1858332513]
+[node name="NetPickable" type="MultiplayerSynchronizer" parent="MoveHandle" unique_id=1858332513]
 replication_config = SubResource("SceneReplicationConfig_np_cube")
 script = ExtResource("15_trny8")
 
@@ -358,3 +356,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5053487, 0)
 light_color = Color(1, 0.13725491, 0, 1)
 light_energy = 0.0
 omni_range = 0.5
+
+[node name="Movement" type="Node" parent="Hob" unique_id=1004484356 node_paths=PackedStringArray("move_handle", "station")]
+script = ExtResource("7_akjp4")
+move_handle = NodePath("../../MoveHandle")
+station = NodePath("..")
