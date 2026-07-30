@@ -9,7 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://b5ukku8i0hilb" path="res://prefabs/despawning_item.tscn" id="10_6p8pj"]
 [ext_resource type="PackedScene" uid="uid://3lr2dhy62rhk" path="res://prefabs/combinable_item.tscn" id="10_ut7mg"]
 [ext_resource type="PackedScene" uid="uid://bfj80jh13t6e5" path="res://prefabs/food_item.tscn" id="10_zz42p"]
-[ext_resource type="Script" uid="uid://bwd0pe2udb5xo" path="res://net/net_pickable.gd" id="20_netpk"]
+[ext_resource type="Script" uid="uid://bwd0pe2udb5xo" path="res://Net/net_pickable.gd" id="20_netpk"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_fco8w"]
 height = 0.04777527

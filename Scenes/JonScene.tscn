@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://j5s5wus7tuhb" path="res://XROrigin.tscn" id="2_o1b3t"]
 [ext_resource type="Material" uid="uid://cmia50cfqxxo4" path="res://textures/dev_material_3d.tres" id="3_irf4n"]
 [ext_resource type="PackedScene" uid="uid://j7caslh27nor" path="res://stations/Hob.tscn" id="4_ctden"]
-[ext_resource type="Script" uid="uid://ctsqvhicswj8m" path="res://scenes/add_spawnables.gd" id="5_n8fyw"]
+[ext_resource type="PackedScene" uid="uid://damrxtlt7uswf" path="res://content/station_layouts/small_line.tscn" id="6_pmikj"]
 [ext_resource type="Sky" uid="uid://c1abtpwhdm2d5" path="res://textures/sky/NightSkyHDRI009_16K.tres" id="7_n8fyw"]
 [ext_resource type="PackedScene" uid="uid://c6rift56ql3f8" path="res://stations/BurgerBunsDispenser.tscn" id="9_sq0s2"]
 [ext_resource type="PackedScene" uid="uid://cwnwo4i28upap" path="res://stations/raw_burger_dispenser.tscn" id="11_ctden"]
@@ -17,6 +17,7 @@
 [ext_resource type="PackedScene" uid="uid://xtcei2uvd5li" path="res://ui/game_over_panel.tscn" id="15_eoxxy"]
 [ext_resource type="PackedScene" uid="uid://caf0xanmxbshy" path="res://stations/table.tscn" id="16_di04w"]
 [ext_resource type="Script" uid="uid://cwijoksyou1ey" path="res://scenes/GameOvercontroler.gd" id="16_n8fyw"]
+[ext_resource type="Script" uid="uid://fyd2rjramhbb" path="res://scenes/kitchen_instantiator.gd" id="17_6qhav"]
 
 [sub_resource type="Environment" id="Environment_bvwq1"]
 background_mode = 2
@@ -47,16 +48,18 @@ script = ExtResource("1_57ppd")
 environment = SubResource("Environment_bvwq1")
 
 [node name="XROrigin3D" parent="." unique_id=2055526621 groups=["local_xr_origin"] instance=ExtResource("2_o1b3t")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0094595, 0.9667189, -0.15640831)
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 1.2094594, 0.9667189, 0.4435917)
 
 [node name="WorldContent" type="Node3D" parent="." unique_id=262398468]
 
 [node name="Players" type="Node3D" parent="." unique_id=1772076868]
 
+[node name="Stations" type="Node3D" parent="." unique_id=730717613]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 1.8000001, 0, 1.8000001)
+
 [node name="ItemsSpawner" type="MultiplayerSpawner" parent="." unique_id=2051771581]
 _spawnable_scenes = PackedStringArray("uid://cwwnbx5uat3fw")
 spawn_path = NodePath("../WorldContent")
-script = ExtResource("5_n8fyw")
 
 [node name="PlayersSpawner" type="MultiplayerSpawner" parent="." unique_id=619815427]
 _spawnable_scenes = PackedStringArray("res://Player/net_player.tscn")
@@ -122,7 +125,7 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.5
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.5477214, 0.5115016, 0.49258912)
 
 [node name="Counter5" parent="Counter3" unique_id=200341072 instance=ExtResource("15_di04w")]
-transform = Transform3D(-1, 0, 4.371139e-08, 0, 1, 0, -4.371139e-08, 0, -1, -0.12681937, 2.3841858e-07, 3.538899)
+transform = Transform3D(-1, 0, 4.371139e-08, 0, 1, 0, -4.371139e-08, 0, -1, 1.6731808, 2.3841858e-07, 4.738899)
 
 [node name="BurgerBunsDispenser" parent="." unique_id=1720683779 instance=ExtResource("9_sq0s2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5242664, 0.008738995, 1.1073059)
@@ -146,3 +149,8 @@ script = ExtResource("16_n8fyw")
 
 [node name="CubeSideDispenser2" parent="." unique_id=200950572 instance=ExtResource("12_57ppd")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.35154933, 0, 1.1119425)
+
+[node name="KitchenInstantiator" type="Node3D" parent="." unique_id=48671856]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 1.2, 0, 2.4)
+script = ExtResource("17_6qhav")
+kitchen_scene = ExtResource("6_pmikj")
