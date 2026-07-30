@@ -3,7 +3,7 @@ extends StaticBody3D
 
 const GAME_MANAGER = preload("res://GameManager.gd")
 
-@export var thinking_duration: float = 5.0
+@export var thinking_duration: float = 3.0
 @export var ordering_duration: float = 40.0
 @export var primary_duration: float = 40.0
 @export var friend_duration: float = 10.0
@@ -40,10 +40,10 @@ enum TableState {
 ## NetworkManager._gate_station). The setters below just refresh the display,
 ## so both the server (via _setState) and clients (via incoming sync) show
 ## the same text. Use _setState(), never assign _state directly.
-var _state: TableState = TableState.EMPTY: set = _set_state
-var _state_time: float = 0.0: set = _set_state_time
+var _state: TableState = TableState.EMPTY
+var _state_time: float = 0.0
 var _state_duration: float = 0.0 # set in _set_state_time
-var _unsatisfied_orders: Array[String] = []: set = _set_unsatisfied_orders
+var _unsatisfied_orders: Array[String] = []
 
 
 func _ready() -> void:
@@ -54,6 +54,7 @@ func _ready() -> void:
 	if not progress_bar or progress_bar is not ProgressBar3D:
 		push_error("Table missing reference to progressbar, or wrong type:", progress_bar)
 	progress_bar.y_billboard = true
+	progress_bar.exponential = true
 	# Render whatever state already arrived from the server before we were in
 	# the tree (see the guard in _refresh_display).
 	_refresh_display.call_deferred()
@@ -93,9 +94,10 @@ func _on_player_detected(player):
 	print("Table _on_player_detected(), ", player)
 	if _state != TableState.ORDERING:
 		return
-		
+
 	place_order()
-	_set_state(TableState.WAITING_PRIMARY)
+	_setState(TableState.WAITING_PRIMARY)
+
 
 func _get_plate_from_item(_item: Node) -> PlateController:
 	return _item.get_children().filter(func(c): return c is PlateController).front() as PlateController
@@ -132,7 +134,7 @@ func place_order() -> void:
 	var new_orders = _unsatisfied_orders.duplicate()
 	new_orders.append(GAME_MANAGER.get_random_meal())
 	new_orders.append(GAME_MANAGER.get_random_meal())
-	_set_unsatisfied_orders(new_orders)
+	_unsatisfied_orders = new_orders
 
 
 func satisfyAllOrders() -> void:
@@ -163,7 +165,7 @@ func _set_snap_zones_enabled(value: bool) -> void:
 ## Server-only state transition: sets the new state's timer and assigns
 ## _state (whose setter refreshes the display on every peer).
 func _setState(newState: TableState) -> void:
-	print("Table set _state: ", TableState.keys()[newState])
+	print("Table State START: ", TableState.keys()[newState])
 
 	match newState:
 		TableState.EMPTY:
@@ -190,6 +192,27 @@ func _setState(newState: TableState) -> void:
 	_state = newState
 
 
+# When state timer is finished, do this stuff before moving to next state
+func _state_end(oldState: TableState):
+	print("Table State END  : ", TableState.keys()[oldState])
+	match oldState:
+		TableState.EMPTY:
+			customers.visible = true
+			_setState(TableState.THINKING)
+
+		TableState.THINKING:
+			_setState(TableState.ORDERING)
+
+		TableState.EATING:
+			clearAllPlates()
+			_set_snap_zones_enabled(true)
+			_setState(TableState.EMPTY)
+
+		TableState.ORDERING, TableState.WAITING_PRIMARY, TableState.WAITING_FRIEND:
+			label_3d.text = lbl_gameover
+			GAME_MANAGER.game_over()
+
+
 ## Pure presentation, driven off the current (locally authoritative or
 ## synced-from-server) state. Runs on every peer.
 func _refresh_display() -> void:
@@ -199,6 +222,7 @@ func _refresh_display() -> void:
 	# null. Bail out until _ready() has resolved them; _ready() calls back in
 	# once it has, so nothing that arrived early is lost.
 	if not progress_bar or not label_3d or not label_3d_time:
+		push_error("Table missing progress bar or label")
 		return
 	match _state:
 		TableState.EMPTY:
@@ -227,59 +251,13 @@ func _refresh_display() -> void:
 	progress_bar.set_progress(clampf(float(_state_time) / _state_duration, 0.0, 1.0))
 
 
-func _set_state(value: TableState) -> void:
-	_state = value
-	_refresh_display()
-
-
-func _set_state_time(value: float) -> void:
-	_state_time = value
-	_refresh_display()
-
-
-func _set_unsatisfied_orders(value: Array[String]) -> void:
-	_unsatisfied_orders = value
-	_refresh_display()
-
-
 func _process(delta: float) -> void:
+	_refresh_display()
 	# Wait for state to finish
 	if _state_time > 0.0:
 		_state_time = max(0.0, _state_time - delta)
 		return
-	
 	if GAME_MANAGER.game_state == GAME_MANAGER.GameState.GAME_OVER:
 		return
 
-	# When state timer is finished, do this stuff before moving to next state
-	match _state:
-		TableState.EMPTY:
-			print("Table State EMPTY finish")
-			customers.visible = true
-			_setState(TableState.THINKING)
-
-		TableState.THINKING:
-			print("Table State THINKING finish")
-			_setState(TableState.ORDERING)
-
-		TableState.ORDERING:
-			print("Table State ORDERING finish")
-			label_3d.text = lbl_gameover
-			GAME_MANAGER.game_over()
-
-
-		TableState.WAITING_PRIMARY:
-			print("Table State WAITING_PRIMARY finish")
-			label_3d.text = lbl_gameover
-			GAME_MANAGER.game_over()
-
-		TableState.WAITING_FRIEND:
-			print("Table State WAITING_FRIEND finish")
-			label_3d.text = lbl_gameover
-			GAME_MANAGER.game_over()
-
-		TableState.EATING:
-			print("Table State EATING finish")
-			clearAllPlates()
-			_set_snap_zones_enabled(true)
-			_setState(TableState.EMPTY)
+	_state_end(_state)
