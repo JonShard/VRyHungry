@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://7earnjgdmwgx"]
 
-[ext_resource type="Script" uid="uid://bs7cxydoxk1cx" path="res://Prefabs/cookable_item.gd" id="1_6hwx6"]
-[ext_resource type="PackedScene" uid="uid://cucc3gaqu2nab" path="res://Items/Charcoal.tscn" id="2_rpt7j"]
+[ext_resource type="Script" uid="uid://bs7cxydoxk1cx" path="res://prefabs/cookable_item.gd" id="1_6hwx6"]
+[ext_resource type="PackedScene" uid="uid://cucc3gaqu2nab" path="res://items/Charcoal.tscn" id="2_rpt7j"]
 
 [node name="CookableItem" type="Node" unique_id=280820828]
 script = ExtResource("1_6hwx6")

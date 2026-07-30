@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://cwnwo4i28upap"]
 
-[ext_resource type="Script" uid="uid://0y6wnjcsum6" path="res://Stations/item_dispenser.gd" id="1_gkb3v"]
-[ext_resource type="PackedScene" uid="uid://dpot5qie20vf6" path="res://Items/burger.tscn" id="2_mep2a"]
+[ext_resource type="Script" uid="uid://0y6wnjcsum6" path="res://stations/item_dispenser.gd" id="1_gkb3v"]
+[ext_resource type="PackedScene" uid="uid://dpot5qie20vf6" path="res://items/burger.tscn" id="2_mep2a"]
 [ext_resource type="Script" uid="uid://cquqe4f1m1sw6" path="res://addons/godot-xr-tools/objects/snap_zone.gd" id="3_3xuvi"]
-[ext_resource type="Texture2D" uid="uid://cexxfyw03hr81" path="res://Textures/1.png" id="4_1f5le"]
-[ext_resource type="PackedScene" uid="uid://mpapt5mkbuao" path="res://Prefabs/slide_off_dome.tscn" id="5_mep2a"]
+[ext_resource type="Texture2D" uid="uid://cexxfyw03hr81" path="res://textures/1.png" id="4_1f5le"]
+[ext_resource type="PackedScene" uid="uid://mpapt5mkbuao" path="res://prefabs/slide_off_dome.tscn" id="5_mep2a"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_xmbo2"]
 radius = 0.3

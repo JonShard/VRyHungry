@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://cquqe4f1m1sw6" path="res://addons/godot-xr-tools/objects/snap_zone.gd" id="1_8j1nt"]
 [ext_resource type="AudioStream" uid="uid://clkjwcawdqvta" path="res://sounds/money.mp3" id="2_jslhm"]
 [ext_resource type="AudioStream" uid="uid://daiv8ubwdbidf" path="res://sounds/220195__gameaudio__click-wooden-1.wav" id="3_0s6ir"]
-[ext_resource type="PackedScene" uid="uid://bxbocxdaayvwx" path="res://ui/progress_bar.tscn" id="3_kjf1i"]
+[ext_resource type="PackedScene" uid="uid://bxbocxdaayvwx" path="res://UI/progress_bar.tscn" id="3_kjf1i"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_24d3s"]
 size = Vector3(0.6, 1, 0.6)

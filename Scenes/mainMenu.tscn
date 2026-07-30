@@ -7,7 +7,7 @@
 [ext_resource type="Sky" uid="uid://c1abtpwhdm2d5" path="res://textures/sky/NightSkyHDRI009_16K.tres" id="5_l1qm6"]
 [ext_resource type="PackedScene" uid="uid://c0lknik4noobs" path="res://items/BurgerBuns.tscn" id="6_bktvt"]
 [ext_resource type="PackedScene" uid="uid://c6rift56ql3f8" path="res://stations/BurgerBunsDispenser.tscn" id="7_1nkd0"]
-[ext_resource type="PackedScene" uid="uid://bp3v1jl8pctro" path="res://containers/plate.tscn" id="8_l1owj"]
+[ext_resource type="PackedScene" uid="uid://bp3v1jl8pctro" path="res://Containers/plate.tscn" id="8_l1owj"]
 [ext_resource type="PackedScene" uid="uid://dpot5qie20vf6" path="res://items/burger.tscn" id="9_220hi"]
 [ext_resource type="PackedScene" uid="uid://b3m2ag8g5rj4r" path="res://items/hamburger.tscn" id="10_qacki"]
 [ext_resource type="PackedScene" uid="uid://e4i6o5oriecx" path="res://items/PickupCube.tscn" id="11_npf8s"]

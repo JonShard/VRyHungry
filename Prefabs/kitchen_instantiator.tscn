@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://t83yi6hxti2x"]
+
+[ext_resource type="Script" uid="uid://fyd2rjramhbb" path="res://prefabs/kitchen_instantiator.gd" id="1_jitfr"]
+[ext_resource type="PackedScene" uid="uid://damrxtlt7uswf" path="res://content/station_layouts/small_line.tscn" id="2_3awg0"]
+
+[node name="KitchenInstantiator" type="Node3D" unique_id=291701321]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, 0, 0)
+script = ExtResource("1_jitfr")
+kitchen_scene = ExtResource("2_3awg0")

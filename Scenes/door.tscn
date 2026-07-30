@@ -1,0 +1,77 @@
+[gd_scene format=3 uid="uid://q37nqadkibbp"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p8umn"]
+albedo_color = Color(0.38, 0.35162666, 0.3268, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vlqg6"]
+size = Vector3(1.2, 0.78000003, 0.6)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_b53mu"]
+albedo_color = Color(0.46, 0.32261336, 0.2024, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hgrxd"]
+albedo_color = Color(0.46, 0.46, 0.46, 1)
+metallic = 0.73
+metallic_specular = 0.83
+roughness = 0.3
+
+[node name="Door" type="StaticBody3D" unique_id=964400290]
+
+[node name="CSGCombinerWall" type="CSGCombiner3D" parent="." unique_id=1966373401]
+use_collision = true
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="CSGCombinerWall" unique_id=1920740063]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.1, 0)
+size = Vector3(0.6, 1.8000001, 0.6)
+material = SubResource("StandardMaterial3D_p8umn")
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="CSGCombinerWall" unique_id=747780779]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5999999, 3.1, 0)
+size = Vector3(0.6, 1.8000001, 0.6)
+material = SubResource("StandardMaterial3D_p8umn")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1127621100]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 2.6302783, 0)
+shape = SubResource("BoxShape3D_vlqg6")
+
+[node name="CSGCombinerDoor" type="CSGCombiner3D" parent="." unique_id=522743190]
+transform = Transform3D(0.087155804, 0, -0.9961947, 0, 1, 0, 0.9961947, 0, 0.087155804, -0.89999986, 0, 0)
+use_collision = true
+
+[node name="CSGBox3D5" type="CSGBox3D" parent="CSGCombinerDoor" unique_id=34425292]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.29999995, 1.1, 0)
+size = Vector3(0.6, 2.2, 0.05)
+material = SubResource("StandardMaterial3D_b53mu")
+
+[node name="CSGBox3D6" type="CSGBox3D" parent="CSGCombinerDoor" unique_id=397451563]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.48594975, 1.1787889, -0.0049031973)
+size = Vector3(0.22, 0.42, 0.06)
+material = SubResource("StandardMaterial3D_hgrxd")
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="CSGCombinerDoor" unique_id=3701079]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0.29999995, 1.6800001, 0)
+operation = 2
+radius = 0.15
+height = 0.2
+sides = 32
+
+[node name="CSGCombinerDoor2" type="CSGCombiner3D" parent="." unique_id=454018491]
+transform = Transform3D(-0.087155804, 8.709011e-08, 0.9961947, 0, 1, -8.742278e-08, 0.9961947, 7.619402e-09, 0.087155804, 0.3000002, 0, 0)
+use_collision = true
+
+[node name="CSGBox3D5" type="CSGBox3D" parent="CSGCombinerDoor2" unique_id=312337639]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.29999995, 1.1, 0)
+size = Vector3(0.6, 2.2, 0.05)
+material = SubResource("StandardMaterial3D_b53mu")
+
+[node name="CSGBox3D6" type="CSGBox3D" parent="CSGCombinerDoor2" unique_id=359915386]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.49211836, 1.1787889, -0.0049031973)
+size = Vector3(0.22, 0.42, 0.06)
+material = SubResource("StandardMaterial3D_hgrxd")
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="CSGCombinerDoor2" unique_id=1793882462]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0.29999995, 1.6800001, 0)
+operation = 2
+radius = 0.15
+height = 0.2
+sides = 32

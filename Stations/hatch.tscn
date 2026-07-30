@@ -1,0 +1,75 @@
+[gd_scene format=3 uid="uid://dlw5geheupgpt"]
+
+[ext_resource type="Script" uid="uid://cquqe4f1m1sw6" path="res://addons/godot-xr-tools/objects/snap_zone.gd" id="1_oowyn"]
+[ext_resource type="AudioStream" uid="uid://bqtk1adk8umbx" path="res://sounds/220197__gameaudio__click-basic.wav" id="2_4mvh7"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hgrxd"]
+size = Vector3(0.6, 0.12802735, 0.6)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vlqg6"]
+albedo_color = Color(0.45, 0.3012, 0.17099999, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p8umn"]
+albedo_color = Color(0.38, 0.35162666, 0.3268, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_oowyn"]
+albedo_color = Color(0.38, 0.35162666, 0.3268, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vlqg6"]
+size = Vector3(0.6, 0.34027833, 0.6)
+
+[node name="Hatch" type="StaticBody3D" unique_id=1341321603]
+
+[node name="XRToolsSnapZone" type="Area3D" parent="." unique_id=2093161322 groups=["station"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2495586, 0)
+collision_layer = 65536
+collision_mask = 65540
+script = ExtResource("1_oowyn")
+stash_sound = ExtResource("2_4mvh7")
+snap_mode = 1
+metadata/_custom_type_script = "uid://cquqe4f1m1sw6"
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="XRToolsSnapZone" unique_id=1997533747]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.002, 0)
+shape = SubResource("BoxShape3D_hgrxd")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="XRToolsSnapZone" unique_id=1729156185]
+
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="." unique_id=2092063969]
+use_collision = true
+
+[node name="CSGBox3D" type="CSGBox3D" parent="CSGCombiner3D" unique_id=1242328035]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.48000002, 0)
+size = Vector3(0.599, 1, 0.3)
+material = SubResource("StandardMaterial3D_vlqg6")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="CSGCombiner3D" unique_id=1252817409]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.07, 0)
+size = Vector3(0.6, 0.3, 0.6)
+material = SubResource("StandardMaterial3D_p8umn")
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="CSGCombiner3D/CSGBox3D2" unique_id=1648749119]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0.005000025, 0, 0)
+operation = 1
+radius = 0.25
+height = 0.67
+sides = 32
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="CSGCombiner3D" unique_id=740791264]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.14530161, 0.48000002, -0.15)
+size = Vector3(0.120000005, 1, 0.120000005)
+material = SubResource("StandardMaterial3D_vlqg6")
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="CSGCombiner3D" unique_id=249869254]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.14650056, 0.48000002, -0.15)
+size = Vector3(0.120000005, 1, 0.120000005)
+material = SubResource("StandardMaterial3D_vlqg6")
+
+[node name="CSGBox3D5" type="CSGBox3D" parent="CSGCombiner3D" unique_id=1242869868]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.1, 0)
+size = Vector3(0.6, 1.8000001, 0.6)
+material = SubResource("StandardMaterial3D_oowyn")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1832317008]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0501393, 0)
+shape = SubResource("BoxShape3D_vlqg6")

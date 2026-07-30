@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://bsn8vhv5adxdo" path="res://stations/hob.gd" id="1_7jc4g"]
 [ext_resource type="Script" uid="uid://cquqe4f1m1sw6" path="res://addons/godot-xr-tools/objects/snap_zone.gd" id="2_er1dp"]
 [ext_resource type="AudioStream" uid="uid://bqtk1adk8umbx" path="res://sounds/220197__gameaudio__click-basic.wav" id="3_6oyg1"]
-[ext_resource type="PackedScene" uid="uid://bxbocxdaayvwx" path="res://ui/progress_bar.tscn" id="3_7uuqv"]
+[ext_resource type="PackedScene" uid="uid://bxbocxdaayvwx" path="res://UI/progress_bar.tscn" id="3_7uuqv"]
 [ext_resource type="Material" uid="uid://d1djvskv4n4m3" path="res://textures/hob_off.tres" id="4_8qpxk"]
 [ext_resource type="Material" uid="uid://db7c7w4apwti7" path="res://textures/hob_on.tres" id="6_m7l4u"]
 [ext_resource type="Script" uid="uid://bu0g23cfrqy0m" path="res://stations/station_movement.gd" id="7_akjp4"]

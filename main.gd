@@ -9,6 +9,7 @@ func _ready():
 	RECIPE_MANAGER.print_all_recipes()
 
 	GAME_MANAGER.meals_in_play = ["hamburger"]
+	GAME_MANAGER.sides_in_play = ["cube"]
 	
 	xr_interface = XRServer.find_interface("OpenXR")
 	if xr_interface and xr_interface.is_initialized():

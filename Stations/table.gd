@@ -90,6 +90,7 @@ func _on_object_dropped() -> void:
 	print("Table: object dropped ")
 
 
+# TODO: Use a on_stay signal or similar
 func _on_player_detected(player):
 	print("Table _on_player_detected(), ", player)
 	if _state != TableState.ORDERING:
@@ -102,7 +103,7 @@ func _on_player_detected(player):
 func _get_plate_from_item(_item: Node) -> PlateController:
 	return _item.get_children().filter(func(c): return c is PlateController).front() as PlateController
 
-
+# TODO: Handle a case where a side is added to a plate after it's served.
 func _absorb_item_if_correct(_item: Node) -> void:
 	if not _item:
 		return
@@ -121,7 +122,7 @@ func _absorb_item_if_correct(_item: Node) -> void:
 			print("Table: held a plate with FoodItem that is in unsatisfied orders, removing it")
 			_unsatisfied_orders.erase(food_item.id)
 			(plate_controller.get_parent() as XRToolsPickable).get_picked_up_by().enabled = false # Lock meal that is deliverd
-
+			print("Table _unsatisfied_orders: ", _unsatisfied_orders)
 			if _unsatisfied_orders.size() > 0 and _state != TableState.EATING:
 				_setState(TableState.WAITING_FRIEND)
 
@@ -131,7 +132,6 @@ func _absorb_item_if_correct(_item: Node) -> void:
 				audio_player.stream = money_sound
 				audio_player.play()
 				_setState(TableState.EATING)
-
 
 
 func place_order() -> void:

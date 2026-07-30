@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://da6yrsnxvsrif"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p8umn"]
+albedo_color = Color(0.38, 0.35162666, 0.3268, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vlqg6"]
+size = Vector3(0.6, 0.34027833, 0.6)
+
+[node name="Wall" type="StaticBody3D" unique_id=434181749]
+
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="." unique_id=671294008]
+use_collision = true
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="CSGCombiner3D" unique_id=308631620]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+size = Vector3(0.6, 4, 0.6)
+material = SubResource("StandardMaterial3D_p8umn")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1166811333]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0501393, 0)
+shape = SubResource("BoxShape3D_vlqg6")
