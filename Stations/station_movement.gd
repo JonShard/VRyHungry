@@ -17,6 +17,7 @@ func _process(_delta: float) -> void:
 		station.collision_layer = 0
 	else:
 		station.collision_layer = original_collision_layer
+		# move_handle.transform.origin = Vector3.ZERO
 	
 	move_handle_rigid.linear_velocity = Vector3.ZERO
 	move_handle_rigid.angular_velocity = Vector3.ZERO
