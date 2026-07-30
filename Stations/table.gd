@@ -104,6 +104,9 @@ func _get_plate_from_item(_item: Node) -> PlateController:
 
 
 func _absorb_item_if_correct(_item: Node) -> void:
+	if not _item:
+		return
+
 	# Get plate controller in childer of _item (hopefully a plate XRpickable)
 	var plate_controller = _get_plate_from_item(_item)
 	if not plate_controller:
@@ -174,24 +177,32 @@ func _setState(newState: TableState) -> void:
 			_state_time = 5.0
 			_state_duration = 5.0
 			customers.visible = false
+			_state = newState
 		TableState.THINKING:
 			_state_time = thinking_duration
 			_state_duration = thinking_duration # Can't be done in _set_state(), will set duration inside timer
+			_state = newState
 		TableState.ORDERING:
 			_state_time = ordering_duration
 			_state_duration = ordering_duration
+			_state = newState
 		TableState.WAITING_PRIMARY:
 			_state_time = primary_duration
 			_state_duration = primary_duration
+			_state = newState
+			# Absorm meals that were already in the table when the state starts
+			for zone in snap_zones:
+				_absorb_item_if_correct(zone.picked_up_object)
 		TableState.WAITING_FRIEND:
 			_state_time = friend_duration
 			_state_duration = friend_duration
+			_state = newState
 		TableState.EATING:
 			_state_time = eating_duration
 			_state_duration = eating_duration
 			_set_snap_zones_enabled(false)
+			_state = newState
 
-	_state = newState
 
 
 # When state timer is finished, do this stuff before moving to next state

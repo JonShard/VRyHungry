@@ -100,11 +100,14 @@ primary_duration = 35.0
 [node name="Hob" parent="." unique_id=1687971542 instance=ExtResource("4_ctden")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.35077858, 0.50655985, -1.2833805)
 
+[node name="Hob2" parent="." unique_id=1368146287 instance=ExtResource("4_ctden")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.24922144, 0.50655985, -1.2833805)
+
 [node name="Sink" parent="." unique_id=2055277359 instance=ExtResource("13_o1b3t")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.24685252, 0.51461196, -1.2828919)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.84685254, 0.51461196, -1.2828919)
 
 [node name="DirtStation" parent="." unique_id=160842153 instance=ExtResource("14_irf4n")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7978771, 0.50655985, -1.2598276)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.3978771, 0.50655985, -1.2598276)
 
 [node name="Counter" parent="." unique_id=1487893288 instance=ExtResource("15_di04w")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.94890714, 0.5115015, -1.3041471)
