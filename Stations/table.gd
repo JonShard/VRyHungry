@@ -105,18 +105,20 @@ func _get_plate_from_item(_item: Node) -> PlateController:
 
 func _absorb_item_if_correct(_item: Node) -> void:
 	# Get plate controller in childer of _item (hopefully a plate XRpickable)
-	var plate = _get_plate_from_item(_item)
-	if not plate:
+	var plate_controller = _get_plate_from_item(_item)
+	if not plate_controller:
 		print("Table: held object is not a Plate")
 		return
-	print("Table: held a Plate!")
+	#print("Table: held a Plate!")
 
 	# Absorm items from the plate we want
-	for food_item in plate.container.contained_items:
-		print("Table: held a plate with FoodItem: ", food_item.id)
+	for food_item in plate_controller.container.contained_items:
+		#print("Table: held a plate with FoodItem: ", food_item.id)
 		if food_item.id in _unsatisfied_orders:
-			print("Table: held FoodItem is in unsatisfied orders, removing it")
+			print("Table: held a plate with FoodItem that is in unsatisfied orders, removing it")
 			_unsatisfied_orders.erase(food_item.id)
+			(plate_controller.get_parent() as XRToolsPickable).get_picked_up_by().enabled = false # Lock meal that is deliverd
+
 			if _unsatisfied_orders.size() > 0 and _state != TableState.EATING:
 				_setState(TableState.WAITING_FRIEND)
 
