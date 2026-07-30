@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://c30i6h32w8p47"]
 
-[ext_resource type="Script" uid="uid://d1cefhe3yyyds" path="res://Scenes/multiplayer_world.gd" id="1_kdan8"]
+[ext_resource type="Script" uid="uid://d1cefhe3yyyds" path="res://scenes/multiplayer_world.gd" id="1_kdan8"]
 [ext_resource type="PackedScene" uid="uid://j5s5wus7tuhb" path="res://XROrigin.tscn" id="2_g30gi"]
-[ext_resource type="Material" uid="uid://cmia50cfqxxo4" path="res://Textures/dev_material_3d.tres" id="3_75ecy"]
-[ext_resource type="Sky" uid="uid://c1abtpwhdm2d5" path="res://Textures/sky/NightSkyHDRI009_16K.tres" id="5_c3xgf"]
+[ext_resource type="Material" uid="uid://cmia50cfqxxo4" path="res://textures/dev_material_3d.tres" id="3_75ecy"]
+[ext_resource type="Sky" uid="uid://c1abtpwhdm2d5" path="res://textures/sky/NightSkyHDRI009_16K.tres" id="5_c3xgf"]
 [ext_resource type="Script" uid="uid://biu4qr3nr1eny" path="res://test/mp_test_driver.gd" id="99_mptst"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vlqg6"]
@@ -76,5 +76,5 @@ shape = SubResource("BoxShape3D_arao0")
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 7.502467, 9.197384, -0.018813023)
 shape = SubResource("BoxShape3D_arao0")
 
-[node name="TestDriver" type="Node" parent="."]
+[node name="TestDriver" type="Node" parent="." unique_id=580575192]
 script = ExtResource("99_mptst")
