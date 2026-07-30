@@ -1,12 +1,12 @@
 [gd_scene format=3 uid="uid://j7caslh27nor"]
 
-[ext_resource type="Script" uid="uid://bsn8vhv5adxdo" path="res://Stations/hob.gd" id="1_7jc4g"]
+[ext_resource type="Script" uid="uid://bsn8vhv5adxdo" path="res://stations/hob.gd" id="1_7jc4g"]
 [ext_resource type="Script" uid="uid://cquqe4f1m1sw6" path="res://addons/godot-xr-tools/objects/snap_zone.gd" id="2_er1dp"]
-[ext_resource type="AudioStream" uid="uid://bqtk1adk8umbx" path="res://Sounds/220197__gameaudio__click-basic.wav" id="3_6oyg1"]
-[ext_resource type="PackedScene" uid="uid://bxbocxdaayvwx" path="res://UI/progress_bar.tscn" id="3_7uuqv"]
-[ext_resource type="Material" uid="uid://d1djvskv4n4m3" path="res://Textures/hob_off.tres" id="4_8qpxk"]
-[ext_resource type="Material" uid="uid://db7c7w4apwti7" path="res://Textures/hob_on.tres" id="6_m7l4u"]
-[ext_resource type="Script" uid="uid://bu0g23cfrqy0m" path="res://Stations/station_movement.gd" id="7_akjp4"]
+[ext_resource type="AudioStream" uid="uid://bqtk1adk8umbx" path="res://sounds/220197__gameaudio__click-basic.wav" id="3_6oyg1"]
+[ext_resource type="PackedScene" uid="uid://bxbocxdaayvwx" path="res://ui/progress_bar.tscn" id="3_7uuqv"]
+[ext_resource type="Material" uid="uid://d1djvskv4n4m3" path="res://textures/hob_off.tres" id="4_8qpxk"]
+[ext_resource type="Material" uid="uid://db7c7w4apwti7" path="res://textures/hob_on.tres" id="6_m7l4u"]
+[ext_resource type="Script" uid="uid://bu0g23cfrqy0m" path="res://stations/station_movement.gd" id="7_akjp4"]
 [ext_resource type="Script" uid="uid://bfrlpbsqg5lqr" path="res://addons/godot-xr-tools/objects/pickable.gd" id="7_d4kl5"]
 [ext_resource type="PackedScene" uid="uid://c25yxb0vt53vc" path="res://addons/godot-xr-tools/objects/grab_points/grab_point_hand_left.tscn" id="8_w3ous"]
 [ext_resource type="Animation" uid="uid://db62hs5s4n2b3" path="res://addons/godot-xr-tools/hands/animations/left/Grip 4.res" id="9_rdqhn"]
@@ -14,164 +14,6 @@
 [ext_resource type="PackedScene" uid="uid://ctw7nbntd5pcj" path="res://addons/godot-xr-tools/objects/grab_points/grab_point_hand_right.tscn" id="11_sexl6"]
 [ext_resource type="Animation" uid="uid://d1xnpyc08njjx" path="res://addons/godot-xr-tools/hands/animations/right/Grip 4.res" id="12_0t4ed"]
 [ext_resource type="Script" uid="uid://bwd0pe2udb5xo" path="res://Net/net_pickable.gd" id="15_trny8"]
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_kdxnr"]
-size = Vector3(0.6, 1, 0.6)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_7uuqv"]
-size = Vector3(0.6, 0.12802735, 0.6)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gkb3v"]
-
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_np_hob"]
-properties/0/path = NodePath(".:time_cooked")
-properties/0/spawn = true
-properties/0/replication_mode = 1
-properties/1/path = NodePath(".:cooking_result_time")
-properties/1/spawn = true
-properties/1/replication_mode = 1
-properties/2/path = NodePath(".:cooking_result")
-properties/2/spawn = true
-properties/2/replication_mode = 1
-properties/3/path = NodePath(".:position")
-properties/3/spawn = true
-properties/3/replication_mode = 1
-properties/4/path = NodePath(".:rotation")
-properties/4/spawn = true
-properties/4/replication_mode = 1
-
-[sub_resource type="Animation" id="Animation_7uuqv"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("CSGCombiner3D/CSGTorus3D3:material")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("4_8qpxk")]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("CSGCombiner3D/CSGTorus3D2:material")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("4_8qpxk")]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("CSGCombiner3D/CSGTorus3D:material")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("4_8qpxk")]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("CSGCombiner3D/CSGTorus3D3:material:emission_energy_multiplier")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [0.0]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("OmniLight3D:light_energy")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [0.0]
-}
-
-[sub_resource type="Animation" id="Animation_6oyg1"]
-resource_name = "hob"
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("CSGCombiner3D/CSGTorus3D3:material")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("6_m7l4u")]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("CSGCombiner3D/CSGTorus3D2:material")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("6_m7l4u")]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("CSGCombiner3D/CSGTorus3D:material")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("6_m7l4u")]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("CSGCombiner3D/CSGTorus3D3:material:emission_energy_multiplier")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.5, 1),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [1.0, 0.0, 1.0]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("OmniLight3D:light_energy")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.5, 1),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [1.0, 0.0, 1.0]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_ac5f3"]
-_data = {
-&"RESET": SubResource("Animation_7uuqv"),
-&"hob": SubResource("Animation_6oyg1")
-}
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_m1xbq"]
 size = Vector3(0.1, 0.1, 0.1)
@@ -204,123 +46,165 @@ properties/2/path = NodePath("NetPickable:net_held_by")
 properties/2/spawn = true
 properties/2/replication_mode = 1
 
-[node name="Hob" type="StaticBody3D" unique_id=1687971542 groups=["station"]]
-script = ExtResource("1_7jc4g")
+[sub_resource type="BoxShape3D" id="BoxShape3D_kdxnr"]
+size = Vector3(0.6, 1, 0.6)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1283846023]
-shape = SubResource("BoxShape3D_kdxnr")
+[sub_resource type="BoxShape3D" id="BoxShape3D_7uuqv"]
+size = Vector3(0.6, 0.12802735, 0.6)
 
-[node name="XRToolsSnapZone" type="Area3D" parent="." unique_id=538157739 groups=["station"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5270121, 0)
-collision_layer = 65536
-collision_mask = 65540
-script = ExtResource("2_er1dp")
-stash_sound = ExtResource("3_6oyg1")
-snap_mode = 1
-metadata/_custom_type_script = "uid://cquqe4f1m1sw6"
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gkb3v"]
 
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="XRToolsSnapZone" unique_id=370920392]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.000975132, 0)
-shape = SubResource("BoxShape3D_7uuqv")
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_np_hob"]
+properties/0/path = NodePath(".:time_cooked")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:cooking_result_time")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath(".:cooking_result")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+properties/3/path = NodePath(".:position")
+properties/3/spawn = true
+properties/3/replication_mode = 1
+properties/4/path = NodePath(".:rotation")
+properties/4/spawn = true
+properties/4/replication_mode = 1
 
-[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="XRToolsSnapZone" unique_id=1991627595]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.022546828, -0.5270121, 0.36528283)
+[sub_resource type="Animation" id="Animation_7uuqv"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Station/CSGCombiner3D/CSGTorus3D3:material")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("4_8qpxk")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Station/CSGCombiner3D/CSGTorus3D2:material")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("4_8qpxk")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Station/CSGCombiner3D/CSGTorus3D:material")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("4_8qpxk")]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Station/CSGCombiner3D/CSGTorus3D3:material:emission_energy_multiplier")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Station/OmniLight3D:light_energy")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
 
-[node name="CSGCombiner3D" type="CSGCombiner3D" parent="." unique_id=70901698]
+[sub_resource type="Animation" id="Animation_6oyg1"]
+resource_name = "hob"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Station/CSGCombiner3D/CSGTorus3D3:material")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("6_m7l4u")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Station/CSGCombiner3D/CSGTorus3D2:material")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("6_m7l4u")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Station/CSGCombiner3D/CSGTorus3D:material")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("6_m7l4u")]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Station/CSGCombiner3D/CSGTorus3D3:material:emission_energy_multiplier")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [1.0, 0.0, 1.0]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Station/OmniLight3D:light_energy")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [1.0, 0.0, 1.0]
+}
 
-[node name="CSGBox3D" type="CSGBox3D" parent="CSGCombiner3D" unique_id=1111505172]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.00894776)
-size = Vector3(0.6, 1, 0.5821045)
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ac5f3"]
+_data = {
+&"RESET": SubResource("Animation_7uuqv"),
+&"hob": SubResource("Animation_6oyg1")
+}
 
-[node name="CSGCylinder3D" type="CSGCylinder3D" parent="CSGCombiner3D/CSGBox3D" unique_id=1338463939]
-transform = Transform3D(0.8943019, 0, 0, 0, 0.8943019, 0, 0, 0, 0.8943019, 0, 0.5103538, -7.827557e-05)
-operation = 2
-radius = 0.25976563
-height = 0.08898926
-sides = 32
-
-[node name="CSGTorus3D3" type="CSGTorus3D" parent="CSGCombiner3D" unique_id=666891341]
-transform = Transform3D(0.8943019, 0, 0, 0, 0.8943019, 0, 0, 0, 0.8943019, 0, 0.5003869, -7.827557e-05)
-inner_radius = 0.09153879
-outer_radius = 0.120084204
-sides = 32
-material = ExtResource("4_8qpxk")
-
-[node name="CSGTorus3D2" type="CSGTorus3D" parent="CSGCombiner3D" unique_id=24541894]
-transform = Transform3D(0.8943019, 0, 0, 0, 0.8943019, 0, 0, 0, 0.8943019, 0, 0.5003869, -7.827557e-05)
-inner_radius = 0.15036294
-outer_radius = 0.17592031
-sides = 32
-material = ExtResource("4_8qpxk")
-
-[node name="CSGTorus3D" type="CSGTorus3D" parent="CSGCombiner3D" unique_id=1901978664]
-transform = Transform3D(0.8943019, 0, 0, 0, 0.8943019, 0, 0, 0, 0.8943019, 0, 0.5003869, -7.827557e-05)
-inner_radius = 0.20426142
-outer_radius = 0.2321898
-sides = 32
-material = ExtResource("4_8qpxk")
-
-[node name="CSGCylinder3D" type="CSGCylinder3D" parent="CSGCombiner3D" unique_id=1107239311]
-transform = Transform3D(0.8943019, 0, 0, 0, 0.8943019, 0, 0, 0, 0.8943019, 0, 0.4498226, -7.827557e-05)
-radius = 0.071777344
-height = 0.09637451
-sides = 32
-
-[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="CSGCombiner3D" unique_id=435540815]
-transform = Transform3D(0.8943019, 0, 0, 0, -3.9091177e-08, 0.8943019, 0, -0.8943019, -3.9091177e-08, 0, 0.48668858, -0.0020651226)
-radius = 0.008
-height = 0.44487303
-
-[node name="CSGCylinder3D3" type="CSGCylinder3D" parent="CSGCombiner3D" unique_id=878171801]
-transform = Transform3D(-3.9091177e-08, -0.8943019, -3.9091177e-08, 0, -3.9091177e-08, 0.8943019, -0.8943019, 3.9091177e-08, 1.7087296e-15, 0, 0.48668858, -0.0020651226)
-radius = 0.008
-height = 0.44487303
-
-[node name="CSGCylinder3D4" type="CSGCylinder3D" parent="CSGCombiner3D" unique_id=1619646436]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, -0.20412213, 0.42728558, 0.26171687)
-radius = 0.044433594
-height = 0.10932617
-material = SubResource("StandardMaterial3D_gkb3v")
-
-[node name="CSGCylinder3D5" type="CSGCylinder3D" parent="CSGCombiner3D" unique_id=548846612]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0.12531614, 0.42728558, 0.26171687)
-radius = 0.044433594
-height = 0.10932617
-material = SubResource("StandardMaterial3D_gkb3v")
-
-[node name="CSGCylinder3D6" type="CSGCylinder3D" parent="CSGCombiner3D" unique_id=1208989647]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0.22979808, 0.42728558, 0.26171687)
-radius = 0.044433594
-height = 0.10932617
-material = SubResource("StandardMaterial3D_gkb3v")
-
-[node name="CSGBox3D2" type="CSGBox3D" parent="CSGCombiner3D" unique_id=465340362]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.039733887, -0.07685089, 0.29250562)
-operation = 2
-size = Vector3(1.0999756, 0.8462982, 0.072387695)
-
-[node name="CSGBox3D3" type="CSGBox3D" parent="CSGCombiner3D" unique_id=1813079759]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.003479004, -0.08253479, 0.2656765)
-size = Vector3(0.55, 0.835, 0.072)
-
-[node name="CSGBox3D4" type="CSGBox3D" parent="CSGCombiner3D" unique_id=1978186019]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.003479004, -0.45215607, 0.24655426)
-size = Vector3(0.55, 0.096, 0.14)
-
-[node name="Sync" type="MultiplayerSynchronizer" parent="." unique_id=768992259]
-replication_config = SubResource("SceneReplicationConfig_np_hob")
-
-[node name="ProgressBar3D" parent="." unique_id=654673176 instance=ExtResource("3_7uuqv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.74736404, -0.09216304)
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1525460719]
-libraries/ = SubResource("AnimationLibrary_ac5f3")
-
-[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=1618457623]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5053487, 0)
-light_color = Color(1, 0.13725491, 0, 1)
-light_energy = 0.0
-omni_range = 0.5
+[node name="Hob" type="Node3D" unique_id=172418174 groups=["station"]]
 
 [node name="Movement" type="Node3D" parent="." unique_id=1818087979]
 script = ExtResource("7_akjp4")
@@ -354,3 +238,123 @@ hand_pose = SubResource("Resource_qyiot")
 [node name="NetPickable" type="MultiplayerSynchronizer" parent="Movement/MoveHandle" unique_id=1858332513]
 replication_config = SubResource("SceneReplicationConfig_np_cube")
 script = ExtResource("15_trny8")
+
+[node name="Station" type="StaticBody3D" parent="." unique_id=1332123047]
+script = ExtResource("1_7jc4g")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Station" unique_id=1283846023]
+shape = SubResource("BoxShape3D_kdxnr")
+
+[node name="XRToolsSnapZone" type="Area3D" parent="Station" unique_id=538157739 groups=["station"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5270121, 0)
+collision_layer = 65536
+collision_mask = 65540
+script = ExtResource("2_er1dp")
+stash_sound = ExtResource("3_6oyg1")
+snap_mode = 1
+metadata/_custom_type_script = "uid://cquqe4f1m1sw6"
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Station/XRToolsSnapZone" unique_id=370920392]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.000975132, 0)
+shape = SubResource("BoxShape3D_7uuqv")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="Station/XRToolsSnapZone" unique_id=1991627595]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.022546828, -0.5270121, 0.36528283)
+
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="Station" unique_id=70901698]
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Station/CSGCombiner3D" unique_id=1111505172]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.00894776)
+size = Vector3(0.6, 1, 0.5821045)
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="Station/CSGCombiner3D/CSGBox3D" unique_id=1338463939]
+transform = Transform3D(0.8943019, 0, 0, 0, 0.8943019, 0, 0, 0, 0.8943019, 0, 0.5103538, -7.827557e-05)
+operation = 2
+radius = 0.25976563
+height = 0.08898926
+sides = 32
+
+[node name="CSGTorus3D3" type="CSGTorus3D" parent="Station/CSGCombiner3D" unique_id=666891341]
+transform = Transform3D(0.8943019, 0, 0, 0, 0.8943019, 0, 0, 0, 0.8943019, 0, 0.5003869, -7.827557e-05)
+inner_radius = 0.09153879
+outer_radius = 0.120084204
+sides = 32
+material = ExtResource("4_8qpxk")
+
+[node name="CSGTorus3D2" type="CSGTorus3D" parent="Station/CSGCombiner3D" unique_id=24541894]
+transform = Transform3D(0.8943019, 0, 0, 0, 0.8943019, 0, 0, 0, 0.8943019, 0, 0.5003869, -7.827557e-05)
+inner_radius = 0.15036294
+outer_radius = 0.17592031
+sides = 32
+material = ExtResource("4_8qpxk")
+
+[node name="CSGTorus3D" type="CSGTorus3D" parent="Station/CSGCombiner3D" unique_id=1901978664]
+transform = Transform3D(0.8943019, 0, 0, 0, 0.8943019, 0, 0, 0, 0.8943019, 0, 0.5003869, -7.827557e-05)
+inner_radius = 0.20426142
+outer_radius = 0.2321898
+sides = 32
+material = ExtResource("4_8qpxk")
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="Station/CSGCombiner3D" unique_id=1107239311]
+transform = Transform3D(0.8943019, 0, 0, 0, 0.8943019, 0, 0, 0, 0.8943019, 0, 0.4498226, -7.827557e-05)
+radius = 0.071777344
+height = 0.09637451
+sides = 32
+
+[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="Station/CSGCombiner3D" unique_id=435540815]
+transform = Transform3D(0.8943019, 0, 0, 0, -3.9091177e-08, 0.8943019, 0, -0.8943019, -3.9091177e-08, 0, 0.48668858, -0.0020651226)
+radius = 0.008
+height = 0.44487303
+
+[node name="CSGCylinder3D3" type="CSGCylinder3D" parent="Station/CSGCombiner3D" unique_id=878171801]
+transform = Transform3D(-3.9091177e-08, -0.8943019, -3.9091177e-08, 0, -3.9091177e-08, 0.8943019, -0.8943019, 3.9091177e-08, 1.7087296e-15, 0, 0.48668858, -0.0020651226)
+radius = 0.008
+height = 0.44487303
+
+[node name="CSGCylinder3D4" type="CSGCylinder3D" parent="Station/CSGCombiner3D" unique_id=1619646436]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, -0.20412213, 0.42728558, 0.26171687)
+radius = 0.044433594
+height = 0.10932617
+material = SubResource("StandardMaterial3D_gkb3v")
+
+[node name="CSGCylinder3D5" type="CSGCylinder3D" parent="Station/CSGCombiner3D" unique_id=548846612]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0.12531614, 0.42728558, 0.26171687)
+radius = 0.044433594
+height = 0.10932617
+material = SubResource("StandardMaterial3D_gkb3v")
+
+[node name="CSGCylinder3D6" type="CSGCylinder3D" parent="Station/CSGCombiner3D" unique_id=1208989647]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0.22979808, 0.42728558, 0.26171687)
+radius = 0.044433594
+height = 0.10932617
+material = SubResource("StandardMaterial3D_gkb3v")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Station/CSGCombiner3D" unique_id=465340362]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.039733887, -0.07685089, 0.29250562)
+operation = 2
+size = Vector3(1.0999756, 0.8462982, 0.072387695)
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="Station/CSGCombiner3D" unique_id=1813079759]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.003479004, -0.08253479, 0.2656765)
+size = Vector3(0.55, 0.835, 0.072)
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="Station/CSGCombiner3D" unique_id=1978186019]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.003479004, -0.45215607, 0.24655426)
+size = Vector3(0.55, 0.096, 0.14)
+
+[node name="Sync" type="MultiplayerSynchronizer" parent="Station" unique_id=768992259]
+root_path = NodePath("../..")
+replication_config = SubResource("SceneReplicationConfig_np_hob")
+
+[node name="ProgressBar3D" parent="Station" unique_id=654673176 instance=ExtResource("3_7uuqv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.74736404, -0.09216304)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Station" unique_id=1525460719]
+root_node = NodePath("../..")
+libraries/ = SubResource("AnimationLibrary_ac5f3")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Station" unique_id=1618457623]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5053487, 0)
+light_color = Color(1, 0.13725491, 0, 1)
+light_energy = 0.0
+omni_range = 0.5
