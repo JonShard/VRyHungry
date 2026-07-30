@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://caf0xanmxbshy"]
 
-[ext_resource type="Script" uid="uid://caeikc7e3igkd" path="res://Stations/table.gd" id="1_2vcpj"]
+[ext_resource type="Script" uid="uid://caeikc7e3igkd" path="res://stations/table.gd" id="1_2vcpj"]
 [ext_resource type="Script" uid="uid://cquqe4f1m1sw6" path="res://addons/godot-xr-tools/objects/snap_zone.gd" id="1_8j1nt"]
-[ext_resource type="AudioStream" uid="uid://clkjwcawdqvta" path="res://Sounds/money.mp3" id="2_jslhm"]
-[ext_resource type="AudioStream" uid="uid://daiv8ubwdbidf" path="res://Sounds/220195__gameaudio__click-wooden-1.wav" id="3_0s6ir"]
-[ext_resource type="PackedScene" uid="uid://bxbocxdaayvwx" path="res://UI/progress_bar.tscn" id="3_kjf1i"]
+[ext_resource type="AudioStream" uid="uid://clkjwcawdqvta" path="res://sounds/money.mp3" id="2_jslhm"]
+[ext_resource type="AudioStream" uid="uid://daiv8ubwdbidf" path="res://sounds/220195__gameaudio__click-wooden-1.wav" id="3_0s6ir"]
+[ext_resource type="PackedScene" uid="uid://bxbocxdaayvwx" path="res://ui/progress_bar.tscn" id="3_kjf1i"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_24d3s"]
 size = Vector3(0.6, 1, 0.6)
@@ -25,6 +25,9 @@ properties/1/replication_mode = 1
 properties/2/path = NodePath(".:_unsatisfied_orders")
 properties/2/spawn = true
 properties/2/replication_mode = 1
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vlqg6"]
+size = Vector3(2.1, 0.5, 2.1)
 
 [node name="Table" type="StaticBody3D" unique_id=1863572470 groups=["station"]]
 script = ExtResource("1_2vcpj")
@@ -198,3 +201,9 @@ y_billboard = true
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." unique_id=724610642]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2935008, 0)
+
+[node name="PlayerDetectArea3D" type="Area3D" parent="." unique_id=913445150]
+collision_mask = 524288
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayerDetectArea3D" unique_id=1538221021]
+shape = SubResource("BoxShape3D_vlqg6")

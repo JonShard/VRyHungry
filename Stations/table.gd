@@ -3,10 +3,11 @@ extends StaticBody3D
 
 const GAME_MANAGER = preload("res://GameManager.gd")
 
-@export var thinking_duration: float = 3.0
-@export var primary_duration: float = 60.0
+@export var thinking_duration: float = 5.0
+@export var ordering_duration: float = 40.0
+@export var primary_duration: float = 40.0
 @export var friend_duration: float = 10.0
-@export var eating_duration: float = 4.0
+@export var eating_duration: float = 5.0
 @export var money_sound: AudioStream 
 
 @onready var label_3d: Label3D = $Label3D
@@ -14,8 +15,11 @@ const GAME_MANAGER = preload("res://GameManager.gd")
 @onready var snap_zones: Array[XRToolsSnapZone] = []
 @onready var progress_bar: ProgressBar3D = $ProgressBar3D
 @onready var audio_player: AudioStreamPlayer3D = $AudioStreamPlayer3D
+@onready var customers: Node3D = $Customers
+@onready var player_detect_area_3d: Area3D = $PlayerDetectArea3D
 
-const lbl_thinking: String = "Thinking"
+const lbl_thinking: String = "..."
+const lbl_ordering: String = "!"
 const lbl_gameover: String = "Game Over!"
 const lbl_eating: String = "Eating..."
 
@@ -24,6 +28,7 @@ const lbl_eating: String = "Eating..."
 enum TableState {
 	EMPTY, 			 # Just finished eating or havent eaten yet
 	THINKING,
+	ORDERING,		 # Wating for player to take their order
 	WAITING_PRIMARY, # Inital wait to be served
 	WAITING_FRIEND,  # Waiting for friends food to arrive
 	EATING
@@ -68,6 +73,7 @@ func _ready() -> void:
 	for snap_zone_node in snap_zones:
 		snap_zone_node.has_picked_up.connect(_on_object_picked_up)
 		snap_zone_node.has_dropped.connect(_on_object_dropped)
+	player_detect_area_3d.body_entered.connect(_on_player_detected)
 	set_process(true)
 	_setState(TableState.EMPTY)
 
@@ -82,6 +88,14 @@ func _on_object_picked_up(_item) -> void:
 func _on_object_dropped() -> void:
 	print("Table: object dropped ")
 
+
+func _on_player_detected(player):
+	print("Table _on_player_detected(), ", player)
+	if _state != TableState.ORDERING:
+		return
+		
+	place_order()
+	_set_state(TableState.WAITING_PRIMARY)
 
 func _get_plate_from_item(_item: Node) -> PlateController:
 	return _item.get_children().filter(func(c): return c is PlateController).front() as PlateController
@@ -110,6 +124,7 @@ func _absorb_item_if_correct(_item: Node) -> void:
 				audio_player.stream = money_sound
 				audio_player.play()
 				_setState(TableState.EATING)
+
 
 
 func place_order() -> void:
@@ -154,9 +169,13 @@ func _setState(newState: TableState) -> void:
 		TableState.EMPTY:
 			_state_time = 5.0
 			_state_duration = 5.0
+			customers.visible = false
 		TableState.THINKING:
 			_state_time = thinking_duration
 			_state_duration = thinking_duration # Can't be done in _set_state(), will set duration inside timer
+		TableState.ORDERING:
+			_state_time = ordering_duration
+			_state_duration = ordering_duration
 		TableState.WAITING_PRIMARY:
 			_state_time = primary_duration
 			_state_duration = primary_duration
@@ -188,6 +207,10 @@ func _refresh_display() -> void:
 		TableState.THINKING:
 			progress_bar.set_bar_visible(false)
 			label_3d.text = lbl_thinking
+		TableState.ORDERING:
+			progress_bar.set_bar_visible(true)
+			progress_bar.override_fill_color(Color.RED if _state_time < 10 else Color.YELLOW)
+			label_3d.text = lbl_ordering
 		TableState.WAITING_PRIMARY:
 			label_3d.text = "%s\n%s" % [TableState.keys()[_state], "\n".join(_unsatisfied_orders)]
 			progress_bar.set_bar_visible(true)
@@ -232,12 +255,18 @@ func _process(delta: float) -> void:
 	match _state:
 		TableState.EMPTY:
 			print("Table State EMPTY finish")
+			customers.visible = true
 			_setState(TableState.THINKING)
 
 		TableState.THINKING:
 			print("Table State THINKING finish")
-			place_order()
-			_setState(TableState.WAITING_PRIMARY)
+			_setState(TableState.ORDERING)
+
+		TableState.ORDERING:
+			print("Table State ORDERING finish")
+			label_3d.text = lbl_gameover
+			GAME_MANAGER.game_over()
+
 
 		TableState.WAITING_PRIMARY:
 			print("Table State WAITING_PRIMARY finish")
