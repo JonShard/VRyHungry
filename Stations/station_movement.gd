@@ -4,7 +4,7 @@ extends Node3D
 @onready var move_handle: XRToolsPickable = $MoveHandle
 
 @onready var move_handle_rigid: RigidBody3D = $MoveHandle
-@onready var station: StaticBody3D = $"../Station"
+@onready var station: StaticBody3D = $"../Hob"
 
 var original_collision_layer
 
