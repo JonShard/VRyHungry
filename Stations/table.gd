@@ -51,9 +51,10 @@ var _players_count: int = 0
 func place_order() -> void:
 	print("Table place_order()")
 	var new_orders: Array[String] = _unsatisfied_orders.duplicate()
-	new_orders.append(GAME_MANAGER.get_random_meal())
-	new_orders.append(GAME_MANAGER.get_random_meal())
-	new_orders.append(GAME_MANAGER.get_random_side())
+	for _i in range(0, randi_range(1, 2)):
+		new_orders.append(GAME_MANAGER.get_random_meal())
+	for _i in range(0, randi_range(0, 1)):
+		new_orders.append(GAME_MANAGER.get_random_side())
 	_unsatisfied_orders = new_orders
 	_original_orders = _unsatisfied_orders.duplicate()
 
