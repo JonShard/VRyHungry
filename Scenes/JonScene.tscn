@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://do6mrslyqe5qe"]
 
 [ext_resource type="Script" uid="uid://d1cefhe3yyyds" path="res://scenes/multiplayer_world.gd" id="1_57ppd"]
-[ext_resource type="PackedScene" uid="uid://j5s5wus7tuhb" path="res://XROrigin.tscn" id="2_o1b3t"]
+[ext_resource type="PackedScene" uid="uid://j5s5wus7tuhb" path="res://prefabs/XROrigin.tscn" id="2_o1b3t"]
 [ext_resource type="Material" uid="uid://cmia50cfqxxo4" path="res://textures/dev_material_3d.tres" id="3_irf4n"]
 [ext_resource type="Sky" uid="uid://c1abtpwhdm2d5" path="res://textures/sky/NightSkyHDRI009_16K.tres" id="7_n8fyw"]
 [ext_resource type="PackedScene" uid="uid://q37nqadkibbp" path="res://scenes/door.tscn" id="10_l51r2"]
@@ -79,7 +79,7 @@ transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, -1.8
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 1.8000001, 0, 1.8000001)
 
 [node name="ItemsSpawner" type="MultiplayerSpawner" parent="." unique_id=2051771581]
-_spawnable_scenes = PackedStringArray("uid://cwwnbx5uat3fw")
+_spawnable_scenes = PackedStringArray("res://stations/csg_box_3d.tscn")
 spawn_path = NodePath("../WorldContent")
 
 [node name="PlayersSpawner" type="MultiplayerSpawner" parent="." unique_id=619815427]

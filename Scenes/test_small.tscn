@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://dbgu4r127ke5v"]
 
-[ext_resource type="Script" uid="uid://b4ldkd3ngs0vp" path="res://main.gd" id="1_1ymas"]
+[ext_resource type="Script" path="res://main.gd" id="1_1ymas"]
 [ext_resource type="Sky" uid="uid://c1abtpwhdm2d5" path="res://textures/sky/NightSkyHDRI009_16K.tres" id="2_1jq86"]
-[ext_resource type="PackedScene" uid="uid://j5s5wus7tuhb" path="res://XROrigin.tscn" id="3_bryd6"]
+[ext_resource type="PackedScene" uid="uid://j5s5wus7tuhb" path="res://prefabs/XROrigin.tscn" id="3_bryd6"]
 [ext_resource type="Material" uid="uid://cmia50cfqxxo4" path="res://textures/dev_material_3d.tres" id="4_kpgm6"]
 [ext_resource type="PackedScene" uid="uid://j7caslh27nor" path="res://stations/Hob.tscn" id="5_gfdi7"]
 [ext_resource type="PackedScene" uid="uid://dvrk268s7gkxh" path="res://stations/sink.tscn" id="6_fmmg3"]
