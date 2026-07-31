@@ -66,7 +66,7 @@ func _on_object_picked_up(_item) -> void:
 		is_washing = plate.is_dirty
 
 
-func _on_object_dropped() -> void:
+func _on_object_dropped(_item) -> void:
 	print("Sink: object drop ")
 	_reset_sink()
 

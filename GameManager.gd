@@ -11,7 +11,7 @@ enum GameState {
 }
 static var game_state: GameState = GameState.RUNNING
 
-	
+
 static func _restart():
 	print("restart Game")
 	game_state = GameState.RUNNING
@@ -27,13 +27,13 @@ static func get_random_meal() -> String:
 
 
 static func get_random_side() -> String:
+	print("GameManager: get_random_side() ")
 	if sides_in_play.size() == 0:
 		push_error("GameManager: get_random_side() called but sides_in_play is empty")
 		return ""
 	var rand_index = randi() % sides_in_play.size()
 	print("GameManager: get_random_side() list=%s returning %s" % [sides_in_play, sides_in_play[rand_index]])
 	return sides_in_play[rand_index]
-
 
 
 static  func game_over():

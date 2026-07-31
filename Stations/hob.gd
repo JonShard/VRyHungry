@@ -86,7 +86,7 @@ func _on_object_picked_up(_item) -> void:
 	# The setters above already refresh the display and start the flames.
 
 
-func _on_object_dropped() -> void:
+func _on_object_dropped(_item) -> void:
 	print("Hob: object drop ")
 	time_cooked = 0
 	cooking_result = ""

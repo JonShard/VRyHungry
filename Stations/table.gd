@@ -4,9 +4,9 @@ extends StaticBody3D
 const GAME_MANAGER = preload("res://GameManager.gd")
 
 @export var thinking_duration: float = 3.0
-@export var ordering_duration: float = 40.0
-@export var primary_duration: float = 40.0
-@export var friend_duration: float = 10.0
+@export var ordering_duration: float = 50.0
+@export var primary_duration: float = 70.0
+@export var friend_duration: float = 12.0
 @export var eating_duration: float = 5.0
 @export var money_sound: AudioStream 
 
@@ -43,8 +43,58 @@ enum TableState {
 var _state: TableState = TableState.EMPTY
 var _state_time: float = 0.0
 var _state_duration: float = 0.0 # set in _set_state_time
+var _original_orders: Array[String] = []
 var _unsatisfied_orders: Array[String] = []
 var _players_count: int = 0
+
+
+func place_order() -> void:
+	print("Table place_order()")
+	var new_orders: Array[String] = _unsatisfied_orders.duplicate()
+	new_orders.append(GAME_MANAGER.get_random_meal())
+	new_orders.append(GAME_MANAGER.get_random_meal())
+	new_orders.append(GAME_MANAGER.get_random_side())
+	_unsatisfied_orders = new_orders
+	_original_orders = _unsatisfied_orders.duplicate()
+
+
+func absorb_items():
+	print("Table: absorb_items()")
+	for snap_zone_node in snap_zones:
+		var held_object = snap_zone_node.picked_up_object
+		if not held_object:
+			continue
+
+		_absorb_item_if_correct(held_object)
+		
+		
+func satisfyAllOrders() -> void:
+	print("Table: satisfyAllOrders()")
+	_unsatisfied_orders.clear()
+	_original_orders.clear()
+	clearAllFood()
+	_setState(TableState.EMPTY)
+
+
+func clearAllFood() -> void:
+	print("Table: clearAllFood()")
+	for zone in snap_zones:
+		var held_object = zone.picked_up_object
+		if not held_object:
+			continue
+
+		var plate: PlateController = _get_plate_controller_from_item(held_object)
+		var food_item: FoodItem = Helper.find_food_item(held_object)
+		if plate:
+			plate.container.clear()
+			plate.is_dirty = true
+
+		# Side or other food item directly on table
+		elif food_item and food_item.type == FoodItem.Type.SIDE:
+			zone.drop_object()
+			NetworkManager.despawn_item(held_object)
+
+
 
 func _ready() -> void:
 	if not label_3d:
@@ -85,9 +135,20 @@ func _on_object_picked_up(_item) -> void:
 	_absorb_item_if_correct(_item)
 
 
-func _on_object_dropped() -> void:
-	print("Table: object dropped ")
+func _on_object_dropped(_item) -> void:
+	print("Table: object dropped, item: ", _item)
+	# If then player picks up a food_item (side) the table has already registerd, unregister
+	var food_item: FoodItem = Helper.find_food_item(_item)
+	if food_item and food_item.type == FoodItem.Type.SIDE:
+		var original_count = _original_orders.count(food_item.id)
+		var unsatisfied_count = _unsatisfied_orders.count(food_item.id)
+		if original_count > unsatisfied_count:
+			_unsatisfied_orders.append(food_item.id)
 
+
+# original 		: burger cube, cube
+# unsatisfied 	: burger cube
+# table			: 
 
 # There is no on_stay signal, we have to track player with bool
 func _on_player_enter(_body):
@@ -107,33 +168,62 @@ func _place_order_if_player():
 		place_order()
 		_setState(TableState.WAITING_PRIMARY)
 
-func _get_plate_from_item(_item: Node) -> PlateController:
-	return _item.get_children().filter(func(c): return c is PlateController).front() as PlateController
 
-# TODO: Handle a case where a side is added to a plate after it's served.
+# func _get_plate_controller_from_item(_item: Node) -> PlateController:
+# 	return _item.get_children().filter(func(c): return c is PlateController).front() as PlateController
+
+
+func _get_plate_controller_from_item(_item: Node) -> PlateController:
+	if not _item:
+		print("_item is null")
+		return null
+
+	for child in _item.get_children():
+		if child is PlateController:
+			print("found child")
+			return child
+	
+	print("no match")
+	return null
+
+
 func _absorb_item_if_correct(_item: Node) -> void:
+	print("Table _absorb_item_if_correct, item: ", _item)
 	if not _item:
 		return
-
-	# Get plate controller in childer of _item (hopefully a plate XRpickable)
-	var plate_controller = _get_plate_from_item(_item)
-	if not plate_controller:
-		print("Table: held object is not a Plate")
+	if not (_state == TableState.WAITING_PRIMARY or _state == TableState.WAITING_FRIEND):
 		return
-	#print("Table: held a Plate!")
 
-	# Absorm items from the plate we want
-	for food_item in plate_controller.container.contained_items:
-		#print("Table: held a plate with FoodItem: ", food_item.id)
-		if food_item.id in _unsatisfied_orders:
-			print("Table: held a plate with FoodItem that is in unsatisfied orders, removing it")
-			(plate_controller.get_parent() as XRToolsPickable).get_picked_up_by().enabled = false # Lock meal that is deliverd
-			_unsatisfied_orders.erase(food_item.id)
-			_update_state_from_orders()
+	# Plate: Get plate controller in child of _item (hopefully a plate XRpickable)
+	var plate_controller = _get_plate_controller_from_item(_item)
+	print("Table _absorb_item_if_correct plate_controller ref: ", plate_controller)
+	_item.print_tree_pretty()
+	
+	if plate_controller:
+		# Absorm items from the plate we want
+		for food_item: FoodItem in plate_controller.container.contained_items: # TOOD: handle registering the meal again when a side is added to the plate
+			if food_item.id in _unsatisfied_orders and not food_item.is_absorbed:
+				print("Table: _absorb_item_if_correct held a plate with FoodItem that is in unsatisfied orders, removing it")
+				(plate_controller.get_parent() as XRToolsPickable).get_picked_up_by().enabled = false # Lock meal that is deliverd
+				_unsatisfied_orders.erase(food_item.id)
+				food_item.is_absorbed = true
+				_update_state_from_orders()
+		return
+	
+	# Side pickable item, no container
+	var food_item: FoodItem = Helper.find_food_item(_item)
+	if food_item and food_item.type == FoodItem.Type.SIDE:
+		print("Table: _absorb_item_if_correct held a side that is in unsatisfied orders, removing it")
+		# Do not lock snap zone here. Problem if table want many meals, but to many sides have filled up slots, so can't place plates.
+		_unsatisfied_orders.erase(food_item.id)
+		_update_state_from_orders()
+		return
+
+	print("Table: absorb_item_if_correct() held object is not a Plate or Side")
 
 
 func _update_state_from_orders():
-	print("Table _update_state_from_orders: ", _unsatisfied_orders)
+	print("Table _update_state_from_orders: unsatisfied_orders: ", _unsatisfied_orders)
 	if _unsatisfied_orders.size() > 0 and _state != TableState.EATING:
 		_setState(TableState.WAITING_FRIEND)
 
@@ -142,43 +232,21 @@ func _update_state_from_orders():
 		_setState(TableState.EATING)
 
 
-func _collect_money_from_plates():
+func _collect_money_from_food():
 	for snap_zone_node in snap_zones:
 		var held_object = snap_zone_node.picked_up_object
 		if not held_object:
 			continue
 
-		var plate: PlateController = _get_plate_from_item(held_object)
-		for fi: FoodItem in plate.get_food_items():
-			GAME_MANAGER.money += fi.sell_value
-	print("Table _collect_money_from_plates(), money: ", GAME_MANAGER.money)
-
-func place_order() -> void:
-	print("Table place_order()")
-	var new_orders = _unsatisfied_orders.duplicate()
-	new_orders.append(GAME_MANAGER.get_random_meal())
-	new_orders.append(GAME_MANAGER.get_random_meal())
-	_unsatisfied_orders = new_orders
-
-
-func satisfyAllOrders() -> void:
-	print("Table: satisfyAllOrders()")
-	_unsatisfied_orders.clear()
-	clearAllPlates()
-	_setState(TableState.EMPTY)
-
-
-func clearAllPlates() -> void:
-	print("Table: clearAllPlates()")
-	for snap_zone_node in snap_zones:
-		var held_object = snap_zone_node.picked_up_object
-		if not held_object:
-			continue
-
-		var plate = _get_plate_from_item(held_object)
+		var plate: PlateController = _get_plate_controller_from_item(held_object)
+		var food_item: FoodItem = Helper.find_food_item(held_object)
 		if plate:
-			plate.container.clear()
-			plate.is_dirty = true
+			for fi: FoodItem in plate.get_food_items():
+				GAME_MANAGER.money += fi.sell_value
+		elif food_item:
+			GAME_MANAGER.money += food_item.sell_value
+
+	print("Table _collect_money_from_food(), money: ", GAME_MANAGER.money)
 
 
 func _set_snap_zones_enabled(value: bool) -> void:
@@ -219,12 +287,11 @@ func _setState(newState: TableState) -> void:
 		TableState.EATING:
 			_state_time = eating_duration
 			_state_duration = eating_duration
-			_collect_money_from_plates()
+			_collect_money_from_food()
 			_set_snap_zones_enabled(false)
 			audio_player.stream = money_sound
 			audio_player.play()
 			_state = newState
-
 
 
 # When state timer is finished, do this stuff before moving to next state
@@ -239,7 +306,7 @@ func _state_end(oldState: TableState):
 			_setState(TableState.ORDERING)
 
 		TableState.EATING:
-			clearAllPlates()
+			clearAllFood()
 			_set_snap_zones_enabled(true)
 			_setState(TableState.EMPTY)
 

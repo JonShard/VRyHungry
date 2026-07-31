@@ -91,6 +91,10 @@ func _add_item(item: Node3D) -> void:
 		plate_controller.contained_ids = updated
 
 	NetworkManager.despawn_item(item)
+	# In case the container is on a table that needs to register this addition,
+	# ask all table in scene to absorb any new items.
+	print("Container group call absorb_items()")
+	get_tree().call_group("table", "absorb_items") 
 
 
 func erase_item(item: FoodItem) -> void:

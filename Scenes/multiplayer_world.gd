@@ -94,8 +94,8 @@ func _populate_world_if_owner() -> void:
 		layout.queue_free()
 		return
 
+	_init_recipes()
 	_populated = true
-	GameManager.meals_in_play = ["hamburger"]
 	var stations := layout.get_stations()
 	var items := layout.get_items()
 	layout.queue_free()
@@ -106,6 +106,11 @@ func _populate_world_if_owner() -> void:
 	for d in items:
 		NetworkManager.spawn_item(d["scene"], d["xform"], d["name"], d["props"])
 	NetworkManager.log_line("World populated")
+
+
+func _init_recipes():
+	GameManager.meals_in_play = ["hamburger"]
+	GameManager.sides_in_play = ["cube"]
 
 
 # Free the authored template nodes. Done immediately rather than with

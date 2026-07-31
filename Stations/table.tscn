@@ -29,7 +29,7 @@ properties/2/replication_mode = 1
 [sub_resource type="BoxShape3D" id="BoxShape3D_vlqg6"]
 size = Vector3(2.1, 0.5, 2.1)
 
-[node name="Table" type="StaticBody3D" unique_id=1863572470 groups=["station"]]
+[node name="Table" type="StaticBody3D" unique_id=1863572470 groups=["station", "table"]]
 script = ExtResource("1_2vcpj")
 money_sound = ExtResource("2_jslhm")
 

@@ -57,7 +57,7 @@ func _on_body_entered(body: Node3D) -> void:
 		print("CombinableItem _on_body_entered: other is our own pickable")
 		return
 
-	var other := _find_food_item(body)
+	var other := Helper.find_food_item(body)
 	if not other:
 		print("CombinableItem _on_body_entered: other is not a foodItem")
 		return
@@ -71,7 +71,7 @@ func _on_body_entered(body: Node3D) -> void:
 
 # Instantiate the result of combination and free the two ingredient items
 func _combine(other_body: Node3D, result: PackedScene) -> void:
-	print("CombinableItem _combine: combining %s + %s into %s" % [_food_item.id, _find_food_item(other_body).id, result.resource_path])
+	print("CombinableItem _combine: combining %s + %s into %s" % [_food_item.id, Helper.find_food_item(other_body).id, result.resource_path])
 
 	# Get Snapzone
 	var snap_zone := _pickable.get_picked_up_by()
@@ -91,13 +91,3 @@ func _combine(other_body: Node3D, result: PackedScene) -> void:
 
 	# Snap the result into the now-empty zone.
 	snap_zone.pick_up_object(result_instance)
-
-
-# Find a FoodItem among the direct children of [param node].
-func _find_food_item(node: Node) -> FoodItem:
-	if not node:
-		return null
-	for child in node.get_children():
-		if child is FoodItem:
-			return child
-	return null

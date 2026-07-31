@@ -46,6 +46,7 @@ import/blender/enabled=false
 
 platalbe_item="Meals, sides, augments for meals"
 station="Hobs, Counters ..."
+table="all nodes with table script"
 
 [input]
 
