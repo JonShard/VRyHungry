@@ -31,7 +31,7 @@ static func get_random_side() -> String:
 		push_error("GameManager: get_random_side() called but sides_in_play is empty")
 		return ""
 	var rand_index = randi() % sides_in_play.size()
-	print("GameManager: get_random_side() returning ", sides_in_play[rand_index])
+	print("GameManager: get_random_side() list=%s returning %s" % [sides_in_play, sides_in_play[rand_index]])
 	return sides_in_play[rand_index]
 
 

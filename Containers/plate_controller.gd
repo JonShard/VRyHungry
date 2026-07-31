@@ -13,6 +13,8 @@ extends Node
 ## the cosmetic result via the setter below.
 @export var contained_ids: Array[String] = []: set = _set_contained_ids
 
+func get_food_items() -> Array[FoodItem]:
+	return container.contained_items
 
 func _ready() -> void:
 	if not dirty_node:

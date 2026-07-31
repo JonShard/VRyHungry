@@ -44,7 +44,7 @@ var _state: TableState = TableState.EMPTY
 var _state_time: float = 0.0
 var _state_duration: float = 0.0 # set in _set_state_time
 var _unsatisfied_orders: Array[String] = []
-
+var _players_count: int = 0
 
 func _ready() -> void:
 	if not label_3d:
@@ -74,7 +74,6 @@ func _ready() -> void:
 	for snap_zone_node in snap_zones:
 		snap_zone_node.has_picked_up.connect(_on_object_picked_up)
 		snap_zone_node.has_dropped.connect(_on_object_dropped)
-	player_detect_area_3d.body_entered.connect(_on_player_detected)
 	set_process(true)
 	_setState(TableState.EMPTY)
 
@@ -90,15 +89,23 @@ func _on_object_dropped() -> void:
 	print("Table: object dropped ")
 
 
-# TODO: Use a on_stay signal or similar
-func _on_player_detected(player):
-	print("Table _on_player_detected(), ", player)
+# There is no on_stay signal, we have to track player with bool
+func _on_player_enter(_body):
+	_players_count += 1
+	print("Table _on_player_enter() pleryers_count: ", _players_count)
+
+
+func _on_player_exit(_body):
+	_players_count -= 1
+	print("Table _on_player_exit() pleryers_count: ", _players_count)
+
+
+func _place_order_if_player():
 	if _state != TableState.ORDERING:
 		return
-
-	place_order()
-	_setState(TableState.WAITING_PRIMARY)
-
+	if _players_count > 0:
+		place_order()
+		_setState(TableState.WAITING_PRIMARY)
 
 func _get_plate_from_item(_item: Node) -> PlateController:
 	return _item.get_children().filter(func(c): return c is PlateController).front() as PlateController
@@ -120,22 +127,34 @@ func _absorb_item_if_correct(_item: Node) -> void:
 		#print("Table: held a plate with FoodItem: ", food_item.id)
 		if food_item.id in _unsatisfied_orders:
 			print("Table: held a plate with FoodItem that is in unsatisfied orders, removing it")
-			_unsatisfied_orders.erase(food_item.id)
 			(plate_controller.get_parent() as XRToolsPickable).get_picked_up_by().enabled = false # Lock meal that is deliverd
-			print("Table _unsatisfied_orders: ", _unsatisfied_orders)
-			if _unsatisfied_orders.size() > 0 and _state != TableState.EATING:
-				_setState(TableState.WAITING_FRIEND)
+			_unsatisfied_orders.erase(food_item.id)
+			_update_state_from_orders()
 
-			# Table has everything it wants. Start eating
-			elif _unsatisfied_orders.is_empty() and _state != TableState.EATING:
-				GAME_MANAGER.money += food_item.sell_value
-				audio_player.stream = money_sound
-				audio_player.play()
-				_setState(TableState.EATING)
 
+func _update_state_from_orders():
+	print("Table _update_state_from_orders: ", _unsatisfied_orders)
+	if _unsatisfied_orders.size() > 0 and _state != TableState.EATING:
+		_setState(TableState.WAITING_FRIEND)
+
+	# Table has everything it wants. Start eating
+	elif _unsatisfied_orders.is_empty() and _state != TableState.EATING:
+		_setState(TableState.EATING)
+
+
+func _collect_money_from_plates():
+	for snap_zone_node in snap_zones:
+		var held_object = snap_zone_node.picked_up_object
+		if not held_object:
+			continue
+
+		var plate: PlateController = _get_plate_from_item(held_object)
+		for fi: FoodItem in plate.get_food_items():
+			GAME_MANAGER.money += fi.sell_value
+	print("Table _collect_money_from_plates(), money: ", GAME_MANAGER.money)
 
 func place_order() -> void:
-	print("Table: place_order()")
+	print("Table place_order()")
 	var new_orders = _unsatisfied_orders.duplicate()
 	new_orders.append(GAME_MANAGER.get_random_meal())
 	new_orders.append(GAME_MANAGER.get_random_meal())
@@ -174,8 +193,8 @@ func _setState(newState: TableState) -> void:
 
 	match newState:
 		TableState.EMPTY:
-			_state_time = 5.0
-			_state_duration = 5.0
+			_state_time = randf_range(3, 7)
+			_state_duration = _state_time
 			customers.visible = false
 			_state = newState
 		TableState.THINKING:
@@ -200,7 +219,10 @@ func _setState(newState: TableState) -> void:
 		TableState.EATING:
 			_state_time = eating_duration
 			_state_duration = eating_duration
+			_collect_money_from_plates()
 			_set_snap_zones_enabled(false)
+			audio_player.stream = money_sound
+			audio_player.play()
 			_state = newState
 
 
@@ -240,7 +262,7 @@ func _refresh_display() -> void:
 	match _state:
 		TableState.EMPTY:
 			progress_bar.set_bar_visible(false)
-			label_3d.text = "empty"
+			label_3d.text = ""
 		TableState.THINKING:
 			progress_bar.set_bar_visible(false)
 			label_3d.text = lbl_thinking
@@ -266,6 +288,8 @@ func _refresh_display() -> void:
 
 func _process(delta: float) -> void:
 	_refresh_display()
+	_place_order_if_player()
+	
 	# Wait for state to finish
 	if _state_time > 0.0:
 		_state_time = max(0.0, _state_time - delta)
