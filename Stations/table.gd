@@ -1,8 +1,6 @@
 class_name Table
 extends StaticBody3D
 
-const GAME_MANAGER = preload("res://GameManager.gd")
-
 @export var thinking_duration: float = 3.0
 @export var ordering_duration: float = 50.0
 @export var primary_duration: float = 70.0
@@ -52,9 +50,9 @@ func place_order() -> void:
 	print("Table place_order()")
 	var new_orders: Array[String] = _unsatisfied_orders.duplicate()
 	for _i in range(0, randi_range(1, 2)):
-		new_orders.append(GAME_MANAGER.get_random_meal())
+		new_orders.append(GameManager.get_random_meal())
 	for _i in range(0, randi_range(0, 1)):
-		new_orders.append(GAME_MANAGER.get_random_side())
+		new_orders.append(GameManager.get_random_side())
 	_unsatisfied_orders = new_orders
 	_original_orders = _unsatisfied_orders.duplicate()
 
@@ -243,11 +241,11 @@ func _collect_money_from_food():
 		var food_item: FoodItem = Helper.find_food_item(held_object)
 		if plate:
 			for fi: FoodItem in plate.get_food_items():
-				GAME_MANAGER.money += fi.sell_value
+				GameManager.money += fi.sell_value
 		elif food_item:
-			GAME_MANAGER.money += food_item.sell_value
+			GameManager.money += food_item.sell_value
 
-	print("Table _collect_money_from_food(), money: ", GAME_MANAGER.money)
+	print("Table _collect_money_from_food(), money: ", GameManager.money)
 
 
 func _set_snap_zones_enabled(value: bool) -> void:
@@ -313,7 +311,7 @@ func _state_end(oldState: TableState):
 
 		TableState.ORDERING, TableState.WAITING_PRIMARY, TableState.WAITING_FRIEND:
 			label_3d.text = lbl_gameover
-			GAME_MANAGER.game_over()
+			GameManager.game_over()
 
 
 ## Pure presentation, driven off the current (locally authoritative or
@@ -362,7 +360,7 @@ func _process(delta: float) -> void:
 	if _state_time > 0.0:
 		_state_time = max(0.0, _state_time - delta)
 		return
-	if GAME_MANAGER.game_state == GAME_MANAGER.GameState.GAME_OVER:
+	if GameManager.game_state == GameManager.GameState.GAME_OVER:
 		return
 
 	_state_end(_state)

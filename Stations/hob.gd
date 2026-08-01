@@ -1,6 +1,5 @@
 extends StaticBody3D
 
-const RECIPE_MANAGER = preload("res://RecipeManager.gd")
 
 @export var cook_speed = 1
 @onready var snap_zone: XRToolsSnapZone = $XRToolsSnapZone
@@ -75,13 +74,13 @@ func _on_object_picked_up(_item) -> void:
 	if not _food_item:
 		print("Hob: held object is not a FoodItem")
 		return
-	var result = RECIPE_MANAGER.get_cooking_result(_food_item.id)
+	var result = RecipeManager.get_cooking_result(_food_item.id)
 	if not result:
 		print("Hob: held a FoodItem that is not cookable, id: %s  result: %s" % [_food_item.id, result])
 		return
 
 	cooking_result = result
-	cooking_result_time = RECIPE_MANAGER.get_cooking_time(_food_item.id)
+	cooking_result_time = RecipeManager.get_cooking_time(_food_item.id)
 	print("Hob: set cooking_result ", cooking_result)
 	# The setters above already refresh the display and start the flames.
 
@@ -106,7 +105,7 @@ func convert_held_to_item(_item: String) -> void:
 	# Spawn the new item through the server so it replicates to every peer
 	# (including late joiners), in the old item's position.
 	var original_transform = old_pickable.global_transform
-	var new_scene_instance = NetworkManager.spawn_item(RECIPE_MANAGER.get_item_scene(_item).resource_path, original_transform)
+	var new_scene_instance = NetworkManager.spawn_item(RecipeManager.get_item_scene(_item).resource_path, original_transform)
 
 	# Drop and free the old item and pick up the new one
 	print("Hob freeing old_pickable  ", old_pickable)

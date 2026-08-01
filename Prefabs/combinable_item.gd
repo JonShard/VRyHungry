@@ -1,8 +1,6 @@
 class_name CombinableItem
 extends Node
 
-const RECIPE_MANAGER = preload("res://RecipeManager.gd")
-
 @onready var combine_area_3d: Area3D = $Area3d
 @onready var _pickable: XRToolsPickable = get_parent() as XRToolsPickable
 
@@ -62,7 +60,7 @@ func _on_body_entered(body: Node3D) -> void:
 		print("CombinableItem _on_body_entered: other is not a foodItem")
 		return
 
-	var result: PackedScene = RECIPE_MANAGER.get_combination_result(_food_item.id, other.id)
+	var result: PackedScene = RecipeManager.get_combination_result(_food_item.id, other.id)
 	if not result:
 		print("CombinableItem _on_body_entered: There is no recipe for %s + %s" % [_food_item.id, other.id])
 		return
