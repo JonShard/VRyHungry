@@ -76,6 +76,24 @@ static func get_cooking_time(ingredient_id: StringName) -> float:
 	return 0.0
 
 
+static func get_chopping_result(ingredient_id: StringName) -> String:
+	load_recipes()
+	for chopped_id in _chopping_map.keys():
+		var chop_def = _chopping_map[chopped_id]
+		if chop_def["ingredient"] == ingredient_id:
+			return chopped_id
+	return ""
+
+
+static func get_chopping_work(ingredient_id: StringName) -> float:
+	load_recipes()
+	for chopped_id in _chopping_map.keys():
+		var chop_def = _chopping_map[chopped_id]
+		if chop_def["ingredient"] == ingredient_id:
+			return chop_def["work"]
+	return 0.0
+
+
 static func get_item_scene(item_id: StringName) -> PackedScene:
 	load_recipes()
 	var scene_path = _scene_paths.get(str(item_id), "")

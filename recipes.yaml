@@ -1,14 +1,22 @@
 items:
   hamburger:
-    scene: res://Items/hamburger.tscn
+    scene: res://items/hamburger.tscn
   burger_buns:
-    scene: res://Items/BurgerBuns.tscn
+    scene: res://items/BurgerBuns.tscn
+  raw_burger:
+    scene: res://items/burger.tscn
   cooked_burger:
-    scene: res://Items/cooked_burger.tscn
+    scene: res://items/cooked_burger.tscn
   cube:
-    scene: res://Items/PickupCube.tscn
+    scene: res://items/PickupCube.tscn
   charcoal:
-    scene: res://Items/Charcoal.tscn
+    scene: res://items/Charcoal.tscn
+  potato:
+    scene: res://items/potato.tscn
+  chopped_potato:
+    scene: res://items/chopped_potato.tscn
+  chips:
+    scene: res://items/chips.tscn
 
 combining:
   hamburger:

@@ -21,6 +21,10 @@
 [ext_resource type="PackedScene" uid="uid://dvrk268s7gkxh" path="res://stations/sink.tscn" id="16_u5c1m"]
 [ext_resource type="PackedScene" uid="uid://cwnwo4i28upap" path="res://stations/raw_burger_dispenser.tscn" id="17_y7baw"]
 [ext_resource type="PackedScene" uid="uid://c6rift56ql3f8" path="res://stations/BurgerBunsDispenser.tscn" id="18_wvcs1"]
+[ext_resource type="PackedScene" uid="uid://duwrbvwcqcuk3" path="res://items/chips.tscn" id="22_2ndvi"]
+[ext_resource type="PackedScene" uid="uid://dgk88esxip5xi" path="res://items/knife.tscn" id="23_qxyk8"]
+[ext_resource type="PackedScene" uid="uid://drwuhqb3pjtiy" path="res://items/potato.tscn" id="24_u5c1m"]
+[ext_resource type="PackedScene" uid="uid://bpvp20hiagxxb" path="res://items/chopped_potato.tscn" id="25_y7baw"]
 
 [sub_resource type="Environment" id="Environment_bvwq1"]
 background_mode = 2
@@ -79,7 +83,6 @@ transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, -1.8
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 1.8000001, 0, 1.8000001)
 
 [node name="ItemsSpawner" type="MultiplayerSpawner" parent="." unique_id=2051771581]
-_spawnable_scenes = PackedStringArray("res://stations/csg_box_3d.tscn")
 spawn_path = NodePath("../WorldContent")
 
 [node name="PlayersSpawner" type="MultiplayerSpawner" parent="." unique_id=619815427]
@@ -471,3 +474,18 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3800001, -0.6)
 
 [node name="PickableObject" parent="." unique_id=1084951838 instance=ExtResource("13_1f3bw")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 1.2, -0.6)
+
+[node name="Chips" parent="." unique_id=1028364693 instance=ExtResource("22_2ndvi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 1.2, -0.6)
+
+[node name="Knife" parent="." unique_id=1789694138 instance=ExtResource("23_qxyk8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 3)
+
+[node name="Potato" parent="." unique_id=275760487 instance=ExtResource("24_u5c1m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.9600005, 1.1400001, 2.2800002)
+
+[node name="ChoppedPotato" parent="." unique_id=1564262551 instance=ExtResource("25_y7baw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.96, 1.1400001, 1.6800001)
+
+[node name="Chips2" parent="." unique_id=2054749156 instance=ExtResource("22_2ndvi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.9600003, 1.1400001, 1.08)

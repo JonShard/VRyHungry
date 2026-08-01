@@ -1,13 +1,13 @@
 [gd_scene format=3 uid="uid://dbgu4r127ke5v"]
 
-[ext_resource type="Script" path="res://main.gd" id="1_1ymas"]
+[ext_resource type="Script" uid="uid://d1cefhe3yyyds" path="res://scenes/multiplayer_world.gd" id="1_atgwk"]
 [ext_resource type="Sky" uid="uid://c1abtpwhdm2d5" path="res://textures/sky/NightSkyHDRI009_16K.tres" id="2_1jq86"]
 [ext_resource type="PackedScene" uid="uid://j5s5wus7tuhb" path="res://prefabs/XROrigin.tscn" id="3_bryd6"]
 [ext_resource type="Material" uid="uid://cmia50cfqxxo4" path="res://textures/dev_material_3d.tres" id="4_kpgm6"]
 [ext_resource type="PackedScene" uid="uid://j7caslh27nor" path="res://stations/Hob.tscn" id="5_gfdi7"]
-[ext_resource type="PackedScene" uid="uid://dvrk268s7gkxh" path="res://stations/sink.tscn" id="6_fmmg3"]
 [ext_resource type="PackedScene" uid="uid://efaec6ymgabo" path="res://stations/Counter.tscn" id="7_jnxsa"]
-[ext_resource type="PackedScene" uid="uid://e4i6o5oriecx" path="res://items/PickupCube.tscn" id="8_xl5nn"]
+[ext_resource type="PackedScene" uid="uid://drwuhqb3pjtiy" path="res://items/potato.tscn" id="8_1qeqw"]
+[ext_resource type="PackedScene" uid="uid://dlw5geheupgpt" path="res://stations/hatch.tscn" id="8_atgwk"]
 
 [sub_resource type="Environment" id="Environment_bvwq1"]
 background_mode = 2
@@ -32,16 +32,30 @@ size = Vector3(20, 0.1, 20)
 size = Vector3(20, 10, 0.1)
 
 [node name="Main" type="Node3D" unique_id=1312265607]
-script = ExtResource("1_1ymas")
+script = ExtResource("1_atgwk")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1177077250]
 environment = SubResource("Environment_bvwq1")
 
 [node name="XROrigin3D" parent="." unique_id=2055526621 instance=ExtResource("3_bryd6")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9667189, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9667189, 1.2)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1376644384]
 transform = Transform3D(-0.8660254, -0.43301278, 0.24999999, 0.3022632, -0.05510214, 0.9516306, -0.39829266, 0.8997021, 0.17860365, 0, 0, 0)
+
+[node name="WorldContent" type="Node3D" parent="." unique_id=1945394545]
+
+[node name="Players" type="Node3D" parent="." unique_id=177940558]
+
+[node name="Stations" type="Node3D" parent="." unique_id=1243299496]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 1.8000001, 0, 1.8000001)
+
+[node name="ItemsSpawner" type="MultiplayerSpawner" parent="." unique_id=201060343]
+spawn_path = NodePath("../WorldContent")
+
+[node name="PlayersSpawner" type="MultiplayerSpawner" parent="." unique_id=1840881658]
+_spawnable_scenes = PackedStringArray("res://Player/net_player.tscn")
+spawn_path = NodePath("../Players")
 
 [node name="Floor" type="StaticBody3D" parent="." unique_id=122279514]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
@@ -72,13 +86,16 @@ transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 9.93
 shape = SubResource("BoxShape3D_24d3s")
 
 [node name="Hob" parent="." unique_id=1687971542 instance=ExtResource("5_gfdi7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.35077858, 0.50655985, -1.2833805)
-
-[node name="Sink" parent="." unique_id=2055277359 instance=ExtResource("6_fmmg3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.24685252, 0.51461196, -1.2828919)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.507, 0)
 
 [node name="Counter" parent="." unique_id=1487893288 instance=ExtResource("7_jnxsa")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.94890714, 0.5115015, -1.3041471)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0.512, 0)
 
-[node name="PickableObject" parent="." unique_id=1675596942 instance=ExtResource("8_xl5nn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.87560004, 1.5534955, -1.2869046)
+[node name="Potato" parent="." unique_id=962444046 instance=ExtResource("8_1qeqw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.273382, 1.5940565, -0.036002517)
+
+[node name="Hatch" parent="." unique_id=1341321603 instance=ExtResource("8_atgwk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, 0, 0)
+
+[node name="Hatch2" parent="." unique_id=1755144529 instance=ExtResource("8_atgwk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 0, 0)

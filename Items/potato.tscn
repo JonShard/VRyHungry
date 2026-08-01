@@ -64,16 +64,15 @@ script = ExtResource("9_x0uku")
 
 [node name="DespawningItem" parent="." index="5" unique_id=303090111 instance=ExtResource("10_fj22u")]
 
-[node name="CSGCombiner3D" type="CSGCombiner3D" parent="." index="6" unique_id=1632388374]
-use_collision = true
+[node name="CSGCombiner3DPotato" type="CSGCombiner3D" parent="." index="6" unique_id=1632388374]
 
-[node name="CSGSphere3D" type="CSGSphere3D" parent="CSGCombiner3D" index="0" unique_id=125051486]
+[node name="CSGSphere3D" type="CSGSphere3D" parent="CSGCombiner3DPotato" index="0" unique_id=125051486]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.03307341)
 radius = 0.06
 radial_segments = 32
 material = SubResource("StandardMaterial3D_d4wpw")
 
-[node name="CSGSphere3D2" type="CSGSphere3D" parent="CSGCombiner3D" index="1" unique_id=837168454]
+[node name="CSGSphere3D2" type="CSGSphere3D" parent="CSGCombiner3DPotato" index="1" unique_id=837168454]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.03243477)
 radius = 0.053
 radial_segments = 32

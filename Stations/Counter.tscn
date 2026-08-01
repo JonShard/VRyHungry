@@ -1,10 +1,17 @@
 [gd_scene format=3 uid="uid://efaec6ymgabo"]
 
 [ext_resource type="Script" uid="uid://cquqe4f1m1sw6" path="res://addons/godot-xr-tools/objects/snap_zone.gd" id="1_dlkho"]
-[ext_resource type="AudioStream" uid="uid://bqtk1adk8umbx" path="res://Sounds/220197__gameaudio__click-basic.wav" id="2_0aadn"]
+[ext_resource type="Script" uid="uid://cql13y8da4auf" path="res://stations/counter.gd" id="1_oapbh"]
+[ext_resource type="AudioStream" uid="uid://bqtk1adk8umbx" path="res://sounds/220197__gameaudio__click-basic.wav" id="2_0aadn"]
+[ext_resource type="AudioStream" uid="uid://daiv8ubwdbidf" path="res://sounds/220195__gameaudio__click-wooden-1.wav" id="2_lg82m"]
+[ext_resource type="PackedScene" uid="uid://dgk88esxip5xi" path="res://items/knife.tscn" id="3_3gvdi"]
+[ext_resource type="PackedScene" uid="uid://bxbocxdaayvwx" path="res://UI/progress_bar.tscn" id="6_racgh"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_24d3s"]
 size = Vector3(0.6, 1, 0.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vlqg6"]
+size = Vector3(0.3, 0.05, 0.3)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_1ntq7"]
 size = Vector3(0.6, 0.12802735, 0.6)
@@ -18,10 +25,30 @@ albedo_color = Color(0.66595805, 0.53976387, 0.4331022, 1)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vlqg6"]
 albedo_color = Color(1.1759251, 0.741115, 0.5692133, 1)
 
-[node name="Counter" type="StaticBody3D" unique_id=1487893288 groups=["station"]]
+[node name="Counter" type="StaticBody3D" unique_id=1487893288 node_paths=PackedStringArray("audio", "knife", "progress_bar") groups=["station"]]
+script = ExtResource("1_oapbh")
+audio = NodePath("AudioStreamPlayer3D")
+chop_audio = ExtResource("2_lg82m")
+knife = NodePath("Knife")
+progress_bar = NodePath("ProgressBar3D")
 
 [node name="CollisionShape3DCuttingBoard" type="CollisionShape3D" parent="." unique_id=706340473]
 shape = SubResource("BoxShape3D_24d3s")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." unique_id=1941838513]
+
+[node name="GestureArea" type="Area3D" parent="." unique_id=398687137]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.54, 0)
+collision_layer = 0
+collision_mask = 65536
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GestureArea" unique_id=1450988028]
+shape = SubResource("BoxShape3D_vlqg6")
+
+[node name="Knife" parent="." unique_id=1675596942 instance=ExtResource("3_3gvdi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.78000003, 0)
+freeze = true
+release_mode = 1
 
 [node name="XRToolsSnapZone" type="Area3D" parent="." unique_id=1647380272 groups=["station"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5608841, 0)
@@ -37,6 +64,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.002, 0)
 shape = SubResource("BoxShape3D_1ntq7")
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="XRToolsSnapZone" unique_id=1786831079]
+
+[node name="ProgressBar3D" parent="." unique_id=654673176 instance=ExtResource("6_racgh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.78000003, -0.18)
 
 [node name="CSGCombiner3D" type="CSGCombiner3D" parent="." unique_id=451757283]
 use_collision = true
@@ -88,3 +118,7 @@ material = SubResource("StandardMaterial3D_vlqg6")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1899699, 0.01924485, -0.0039587095)
 operation = 2
 size = Vector3(0.037109375, 0.092285156, 0.26757813)
+
+[connection signal="body_entered" from="GestureArea" to="." method="_on_gesture_area_body_entered"]
+[connection signal="has_dropped" from="XRToolsSnapZone" to="." method="_on_snap_zone_dropped"]
+[connection signal="has_picked_up" from="XRToolsSnapZone" to="." method="_on_snap_zone_picked_up"]
