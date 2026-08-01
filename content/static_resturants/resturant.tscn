@@ -311,9 +311,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 0)
 
 [node name="Table" parent="." unique_id=1863572470 instance=ExtResource("2_d63j6")]
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 3, 0.48000002, -3)
+thinking_duration = null
+ordering_duration = null
+primary_duration = null
+friend_duration = null
+eating_duration = null
 
 [node name="Table2" parent="." unique_id=1457688277 instance=ExtResource("2_d63j6")]
 transform = Transform3D(1, 0, -1.7484555e-07, 0, 1, 0, 1.7484555e-07, 0, 1, 0.5999999, 0.48000002, -3)
+thinking_duration = null
+ordering_duration = null
+primary_duration = null
+friend_duration = null
+eating_duration = null
 
 [node name="Hob" parent="." unique_id=172418174 instance=ExtResource("1_p8umn")]
 transform = Transform3D(1.3113416e-07, 0, -1, 0, 1, 0, 1, 0, 1.3113416e-07, 4.2000003, 0.54, 1.7999992)

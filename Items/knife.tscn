@@ -1,0 +1,164 @@
+[gd_scene format=3 uid="uid://dgk88esxip5xi"]
+
+[ext_resource type="PackedScene" uid="uid://c8l60rnugru40" path="res://addons/godot-xr-tools/objects/pickable.tscn" id="1_apu43"]
+[ext_resource type="PackedScene" uid="uid://c25yxb0vt53vc" path="res://addons/godot-xr-tools/objects/grab_points/grab_point_hand_left.tscn" id="2_ti0k8"]
+[ext_resource type="Script" uid="uid://cxeipjc3m0hhu" path="res://prefabs/knife_controller.gd" id="2_va4ky"]
+[ext_resource type="Animation" uid="uid://db62hs5s4n2b3" path="res://addons/godot-xr-tools/hands/animations/left/Grip 4.res" id="3_xyohi"]
+[ext_resource type="Script" uid="uid://dvobm6vcfnqe8" path="res://addons/godot-xr-tools/hands/poses/hand_pose_settings.gd" id="4_4iajw"]
+[ext_resource type="PackedScene" uid="uid://ctw7nbntd5pcj" path="res://addons/godot-xr-tools/objects/grab_points/grab_point_hand_right.tscn" id="5_kni1i"]
+[ext_resource type="Animation" uid="uid://d1xnpyc08njjx" path="res://addons/godot-xr-tools/hands/animations/right/Grip 4.res" id="6_b3is5"]
+[ext_resource type="Script" uid="uid://bwd0pe2udb5xo" path="res://Net/net_pickable.gd" id="8_2ao4o"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_fco8w"]
+height = 0.29805934
+radius = 0.025390625
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vlqg6"]
+size = Vector3(0.01, 0.062841795, 0.18769531)
+
+[sub_resource type="Resource" id="Resource_lc22d"]
+script = ExtResource("4_4iajw")
+closed_pose = ExtResource("3_xyohi")
+metadata/_custom_type_script = "uid://dvobm6vcfnqe8"
+
+[sub_resource type="Resource" id="Resource_qyiot"]
+script = ExtResource("4_4iajw")
+closed_pose = ExtResource("6_b3is5")
+metadata/_custom_type_script = "uid://dvobm6vcfnqe8"
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_np_burger"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = false
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:quaternion")
+properties/1/spawn = false
+properties/1/replication_mode = 1
+properties/2/path = NodePath("NetPickable:net_held_by")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+
+[sub_resource type="Gradient" id="Gradient_s6exe"]
+interpolation_mode = 2
+offsets = PackedFloat32Array(0.0088495575, 0.76106197)
+colors = PackedColorArray(0.6, 0.6, 0.6, 1, 1, 1, 1, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_22jur"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_3lf03"]
+noise = SubResource("FastNoiseLite_22jur")
+color_ramp = SubResource("Gradient_s6exe")
+normalize = false
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_24d3s"]
+albedo_color = Color(0.54, 0.39384004, 0.22680002, 1)
+albedo_texture = SubResource("NoiseTexture2D_3lf03")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vlqg6"]
+albedo_color = Color(0.6, 0.6, 0.6, 1)
+metallic = 1.0
+metallic_specular = 1.0
+
+[node name="Knife" unique_id=1675596942 groups=["chopping_tool"] instance=ExtResource("1_apu43")]
+second_hand_grab = 1
+
+[node name="CollisionShape3D" parent="." index="0"]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 2.8164342e-09, -0.0644325)
+shape = SubResource("CylinderShape3D_fco8w")
+
+[node name="KnifeController" type="Node3D" parent="." index="1" unique_id=2068516828]
+script = ExtResource("2_va4ky")
+
+[node name="Area3D" type="Area3D" parent="KnifeController" index="0" unique_id=1995926098]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.05011083)
+collision_layer = 512
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="KnifeController/Area3D" index="0" unique_id=1593629505]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.018579103, -0.1395939)
+shape = SubResource("BoxShape3D_vlqg6")
+
+[node name="GrabPointHandLeft" parent="." index="2" unique_id=1571481674 instance=ExtResource("2_ti0k8")]
+transform = Transform3D(1, 0, 0, 0, 0.80581045, 0.5921736, 0, -0.5921736, 0.80581045, -0.0055686757, -0.027660534, -0.06972287)
+hand_pose = SubResource("Resource_lc22d")
+
+[node name="GrabPointHandRight" parent="." index="3" unique_id=514404634 instance=ExtResource("5_kni1i")]
+transform = Transform3D(1, 0, 0, 0, 0.7906625, 0.6122523, 0, -0.6122523, 0.7906625, -0.00973678, -0.036154382, -0.07772979)
+hand_pose = SubResource("Resource_qyiot")
+
+[node name="NetPickable" type="MultiplayerSynchronizer" parent="." index="4" unique_id=1382968688]
+replication_config = SubResource("SceneReplicationConfig_np_burger")
+script = ExtResource("8_2ao4o")
+
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="." index="5" unique_id=1632388374]
+transform = Transform3D(0.45, 0, 0, 0, 0.45, 0, 0, 0, 0.45, 0, 0, 0)
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="CSGCombiner3D" index="0" unique_id=73312047]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 1.9443882e-09, 0.044482417)
+radius = 0.05
+height = 0.28896484
+sides = 16
+material = SubResource("StandardMaterial3D_24d3s")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="CSGCombiner3D/CSGCylinder3D" index="0" unique_id=1092536616]
+transform = Transform3D(1, 0, 0, 0, -4.3711392e-08, -1, 0, 1, -4.3711392e-08, -0.06291181, -0.003074348, 0.003173826)
+operation = 2
+size = Vector3(0.06698901, 0.08496094, 0.3070221)
+material = SubResource("StandardMaterial3D_24d3s")
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="CSGCombiner3D/CSGCylinder3D" index="1" unique_id=611507380]
+transform = Transform3D(1, 0, 0, 0, -4.3711392e-08, -1, 0, 1, -4.3711392e-08, 0.057669085, -0.00014465302, 0.003173826)
+operation = 2
+size = Vector3(0.051974364, 0.08496094, 0.30897522)
+material = SubResource("StandardMaterial3D_24d3s")
+
+[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="CSGCombiner3D/CSGCylinder3D" index="2" unique_id=1981876218]
+transform = Transform3D(-4.3711392e-08, 1, 0, 4.3711392e-08, 1.9106857e-15, -1, -1, -4.3711392e-08, -4.3711392e-08, 0.0014698628, 0.062123798, 0.00029686643)
+radius = 0.016
+height = 0.06318359
+
+[node name="CSGCylinder3D3" type="CSGCylinder3D" parent="CSGCombiner3D/CSGCylinder3D" index="3" unique_id=1905314362]
+transform = Transform3D(-4.3711392e-08, 1, 0, 4.3711392e-08, 1.9106857e-15, -1, -1, -4.3711392e-08, -4.3711392e-08, 0.0014698628, -0.049634382, 0.00029686154)
+radius = 0.016
+height = 0.06318359
+
+[node name="CSGCylinder3D4" type="CSGCylinder3D" parent="CSGCombiner3D/CSGCylinder3D" index="4" unique_id=905243368]
+transform = Transform3D(-6.070399e-08, 1, 0, 1.3887457, 4.3711392e-08, 8.7422784e-08, 1.21408e-07, 3.8213714e-15, -1, 0.0017506231, -0.10254226, -0.07109782)
+operation = 2
+radius = 0.032226563
+height = 0.07854004
+sides = 32
+material = SubResource("StandardMaterial3D_24d3s")
+
+[node name="CSGCylinder3D5" type="CSGCylinder3D" parent="CSGCombiner3D/CSGCylinder3D" index="5" unique_id=1873534320]
+transform = Transform3D(-1.0240791e-07, 1, 0, 2.34282, 4.3711392e-08, 8.7422784e-08, 2.0481582e-07, 3.8213714e-15, -1, 0.0017506231, 0.089636564, -0.07143875)
+operation = 2
+radius = 0.032226563
+height = 0.07854004
+sides = 32
+material = SubResource("StandardMaterial3D_24d3s")
+
+[node name="CSGCylinder3D6" type="CSGCylinder3D" parent="CSGCombiner3D/CSGCylinder3D" index="6" unique_id=471254428]
+transform = Transform3D(-1.0240791e-07, 1, 0, 2.34282, 4.3711392e-08, 8.7422784e-08, 2.0481582e-07, 3.8213714e-15, -1, 0.0017506231, -0.079547666, -0.07143876)
+operation = 2
+radius = 0.032226563
+height = 0.07854004
+sides = 32
+material = SubResource("StandardMaterial3D_24d3s")
+
+[node name="CSGBox3DBlade" type="CSGBox3D" parent="CSGCombiner3D" index="1" unique_id=94519802]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.005445559, -0.18191797)
+size = Vector3(0.007, 0.08954346, 0.6364492)
+material = SubResource("StandardMaterial3D_vlqg6")
+
+[node name="CSGTorus3D" type="CSGTorus3D" parent="CSGCombiner3D/CSGBox3DBlade" index="0" unique_id=555698965]
+transform = Transform3D(-4.3711392e-08, 1, 0, -1, -4.3711392e-08, 0, 0, 0, 0.90598416, 0, 0.25891897, -0.12508947)
+operation = 2
+outer_radius = 0.3
+sides = 64
+
+[node name="CSGBox3D5" type="CSGBox3D" parent="CSGCombiner3D/CSGBox3DBlade/CSGTorus3D" index="0" unique_id=720590378]
+transform = Transform3D(-4.3710607e-08, -0.9973613, 0.0724587, 0.99998987, -4.3595673e-08, 3.1672265e-09, 0, 0.034851935, 0.47972566, 0.25730363, -0.003919763, 0.23939973)
+operation = 2
+size = Vector3(0.40247935, 0.2781372, 0.97288764)
+
+[connection signal="body_entered" from="KnifeController/Area3D" to="KnifeController" method="_on_chop_area_entered"]

@@ -18,19 +18,25 @@ combining:
 cooking:
   cooked_burger:
     ingredient: raw_burger
-    time: 3
+    time: 4
   charcoal:
     - ingredient: cooked_burger
-      time: 2
+      time: 5
     - ingredient: toast
       time: 2
     - ingredient: cube
       time: 1
+  chips:
+    ingredient: chopped_potato
+    time: 3
 
 chopping:
   salad: 
     ingredient: lettuce
     work: 50
+  chopped_potato:
+    ingredient: potato
+    work: 30
 
 rolling:
   pie_base:
