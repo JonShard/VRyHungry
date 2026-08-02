@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://efaec6ymgabo"]
 
+[ext_resource type="PackedScene" uid="uid://cvucwxibtol5f" path="res://stations/StationMovement.tscn" id="1_3jbl6"]
 [ext_resource type="Script" uid="uid://cquqe4f1m1sw6" path="res://addons/godot-xr-tools/objects/snap_zone.gd" id="1_dlkho"]
 [ext_resource type="Script" uid="uid://cql13y8da4auf" path="res://stations/counter.gd" id="1_oapbh"]
 [ext_resource type="AudioStream" uid="uid://bqtk1adk8umbx" path="res://sounds/220197__gameaudio__click-basic.wav" id="2_0aadn"]
@@ -25,32 +26,41 @@ albedo_color = Color(0.66595805, 0.53976387, 0.4331022, 1)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vlqg6"]
 albedo_color = Color(1.1759251, 0.741115, 0.5692133, 1)
 
-[node name="Counter" type="StaticBody3D" unique_id=1487893288 node_paths=PackedStringArray("audio", "knife", "progress_bar") groups=["station"]]
+[node name="Counter" type="Node3D" unique_id=672880121]
+
+[node name="StationMovement" parent="." unique_id=946873975 node_paths=PackedStringArray("station") instance=ExtResource("1_3jbl6")]
+station = NodePath("../Counter")
+
+[node name="Counter" type="StaticBody3D" parent="." unique_id=1487893288 node_paths=PackedStringArray("audio", "knife", "progress_bar") groups=["station"]]
 script = ExtResource("1_oapbh")
 audio = NodePath("AudioStreamPlayer3D")
 chop_audio = ExtResource("2_lg82m")
 knife = NodePath("Knife")
 progress_bar = NodePath("ProgressBar3D")
 
-[node name="CollisionShape3DCuttingBoard" type="CollisionShape3D" parent="." unique_id=706340473]
+[node name="CollisionShape3DCuttingBoard" type="CollisionShape3D" parent="Counter" unique_id=706340473]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00157471, 0.51688915, 0.00070264935)
 shape = SubResource("BoxShape3D_24d3s")
 
-[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." unique_id=1941838513]
+[node name="CollisionShape3DCounter" type="CollisionShape3D" parent="Counter" unique_id=895680269]
+shape = SubResource("BoxShape3D_24d3s")
 
-[node name="GestureArea" type="Area3D" parent="." unique_id=398687137]
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="Counter" unique_id=1941838513]
+
+[node name="GestureArea" type="Area3D" parent="Counter" unique_id=398687137]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.54, 0)
 collision_layer = 0
 collision_mask = 65536
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="GestureArea" unique_id=1450988028]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Counter/GestureArea" unique_id=1450988028]
 shape = SubResource("BoxShape3D_vlqg6")
 
-[node name="Knife" parent="." unique_id=1675596942 instance=ExtResource("3_3gvdi")]
+[node name="Knife" parent="Counter" unique_id=1675596942 instance=ExtResource("3_3gvdi")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.78000003, 0)
 freeze = true
 release_mode = 1
 
-[node name="XRToolsSnapZone" type="Area3D" parent="." unique_id=1647380272 groups=["station"]]
+[node name="XRToolsSnapZone" type="Area3D" parent="Counter" unique_id=1647380272 groups=["station"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5608841, 0)
 collision_layer = 65536
 collision_mask = 65540
@@ -59,66 +69,65 @@ stash_sound = ExtResource("2_0aadn")
 snap_mode = 1
 metadata/_custom_type_script = "uid://cquqe4f1m1sw6"
 
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="XRToolsSnapZone" unique_id=969340130]
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Counter/XRToolsSnapZone" unique_id=969340130]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.002, 0)
 shape = SubResource("BoxShape3D_1ntq7")
 
-[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="XRToolsSnapZone" unique_id=1786831079]
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="Counter/XRToolsSnapZone" unique_id=1786831079]
 
-[node name="ProgressBar3D" parent="." unique_id=654673176 instance=ExtResource("6_racgh")]
+[node name="ProgressBar3D" parent="Counter" unique_id=654673176 instance=ExtResource("6_racgh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.78000003, -0.18)
 
-[node name="CSGCombiner3D" type="CSGCombiner3D" parent="." unique_id=451757283]
-use_collision = true
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="Counter" unique_id=451757283]
 
-[node name="CSGBox3D" type="CSGBox3D" parent="CSGCombiner3D" unique_id=305755330]
+[node name="CSGBox3D" type="CSGBox3D" parent="Counter/CSGCombiner3D" unique_id=305755330]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.046, -0.025)
 size = Vector3(0.6, 0.908, 0.55)
 material = SubResource("StandardMaterial3D_24d3s")
 
-[node name="CSGBox3D7" type="CSGBox3D" parent="CSGCombiner3D" unique_id=1086568272]
+[node name="CSGBox3D7" type="CSGBox3D" parent="Counter/CSGCombiner3D" unique_id=1086568272]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.39999902, 0.22965088)
 operation = 2
 size = Vector3(0.6, 0.22992969, 0.14069825)
 material = SubResource("StandardMaterial3D_24d3s")
 
-[node name="CSGBox3D2" type="CSGBox3D" parent="CSGCombiner3D" unique_id=43663195]
+[node name="CSGBox3D2" type="CSGBox3D" parent="Counter/CSGCombiner3D" unique_id=43663195]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 size = Vector3(0.6, 0.202, 0.6)
 
-[node name="CSGBox3D3" type="CSGBox3D" parent="CSGCombiner3D" unique_id=1210567516]
+[node name="CSGBox3D3" type="CSGBox3D" parent="Counter/CSGCombiner3D" unique_id=1210567516]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5617909, 0.060281754)
 operation = 2
 size = Vector3(0.6, 0.12051563, 0.6402156)
 
-[node name="CSGBox3D4" type="CSGBox3D" parent="CSGCombiner3D" unique_id=1533996708]
+[node name="CSGBox3D4" type="CSGBox3D" parent="Counter/CSGCombiner3D" unique_id=1533996708]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15, 0.08, 0.26034504)
 size = Vector3(0.25, 0.6, 0.024)
 material = SubResource("StandardMaterial3D_pt8vn")
 
-[node name="CSGBox3D5" type="CSGBox3D" parent="CSGCombiner3D" unique_id=1983709234]
+[node name="CSGBox3D5" type="CSGBox3D" parent="Counter/CSGCombiner3D" unique_id=1983709234]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.15, 0.08, 0.26034504)
 size = Vector3(0.25, 0.6, 0.024)
 material = SubResource("StandardMaterial3D_pt8vn")
 
-[node name="CSGSphere3D" type="CSGSphere3D" parent="CSGCombiner3D" unique_id=1785057925]
+[node name="CSGSphere3D" type="CSGSphere3D" parent="Counter/CSGCombiner3D" unique_id=1785057925]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.057649717, 0.12459713, 0.29140875)
 radius = 0.025492515
 
-[node name="CSGSphere3D2" type="CSGSphere3D" parent="CSGCombiner3D" unique_id=1224446005]
+[node name="CSGSphere3D2" type="CSGSphere3D" parent="Counter/CSGCombiner3D" unique_id=1224446005]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.060837455, 0.12459713, 0.29140875)
 radius = 0.025492515
 
-[node name="CSGBox3D6" type="CSGBox3D" parent="CSGCombiner3D" unique_id=187377667]
+[node name="CSGBox3D6" type="CSGBox3D" parent="Counter/CSGCombiner3D" unique_id=187377667]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.514, 0)
 size = Vector3(0.48251343, 0.037231445, 0.42160034)
 material = SubResource("StandardMaterial3D_vlqg6")
 
-[node name="CSGBox3D6" type="CSGBox3D" parent="CSGCombiner3D/CSGBox3D6" unique_id=1146824846]
+[node name="CSGBox3D6" type="CSGBox3D" parent="Counter/CSGCombiner3D/CSGBox3D6" unique_id=1146824846]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1899699, 0.01924485, -0.0039587095)
 operation = 2
 size = Vector3(0.037109375, 0.092285156, 0.26757813)
 
-[connection signal="body_entered" from="GestureArea" to="." method="_on_gesture_area_body_entered"]
-[connection signal="has_dropped" from="XRToolsSnapZone" to="." method="_on_snap_zone_dropped"]
-[connection signal="has_picked_up" from="XRToolsSnapZone" to="." method="_on_snap_zone_picked_up"]
+[connection signal="body_entered" from="Counter/GestureArea" to="Counter" method="_on_gesture_area_body_entered"]
+[connection signal="has_dropped" from="Counter/XRToolsSnapZone" to="Counter" method="_on_snap_zone_dropped"]
+[connection signal="has_picked_up" from="Counter/XRToolsSnapZone" to="Counter" method="_on_snap_zone_picked_up"]

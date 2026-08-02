@@ -9,6 +9,8 @@
 [ext_resource type="PackedScene" uid="uid://drwuhqb3pjtiy" path="res://items/potato.tscn" id="8_1qeqw"]
 [ext_resource type="PackedScene" uid="uid://dlw5geheupgpt" path="res://stations/hatch.tscn" id="8_atgwk"]
 [ext_resource type="Script" uid="uid://bsdpd18i1i17s" path="res://prefabs/build_mode_controller.gd" id="9_atgwk"]
+[ext_resource type="PackedScene" uid="uid://dvrk268s7gkxh" path="res://stations/sink.tscn" id="10_dhas4"]
+[ext_resource type="PackedScene" uid="uid://caf0xanmxbshy" path="res://stations/table.tscn" id="11_gaw43"]
 
 [sub_resource type="Environment" id="Environment_bvwq1"]
 background_mode = 2
@@ -103,3 +105,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 0, 0)
 
 [node name="BuildModeController" type="Node" parent="." unique_id=1876729190]
 script = ExtResource("9_atgwk")
+
+[node name="Sink" parent="." unique_id=1559059799 instance=ExtResource("10_dhas4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 0.5, 0.6)
+
+[node name="Table" parent="." unique_id=1863572470 instance=ExtResource("11_gaw43")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 0.5, 1.8)

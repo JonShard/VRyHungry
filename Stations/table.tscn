@@ -1,13 +1,14 @@
 [gd_scene format=3 uid="uid://caf0xanmxbshy"]
 
 [ext_resource type="Script" uid="uid://caeikc7e3igkd" path="res://stations/table.gd" id="1_2vcpj"]
+[ext_resource type="PackedScene" uid="uid://cvucwxibtol5f" path="res://stations/StationMovement.tscn" id="1_5mi7y"]
 [ext_resource type="Script" uid="uid://cquqe4f1m1sw6" path="res://addons/godot-xr-tools/objects/snap_zone.gd" id="1_8j1nt"]
 [ext_resource type="AudioStream" uid="uid://clkjwcawdqvta" path="res://sounds/money.mp3" id="2_jslhm"]
 [ext_resource type="AudioStream" uid="uid://daiv8ubwdbidf" path="res://sounds/220195__gameaudio__click-wooden-1.wav" id="3_0s6ir"]
 [ext_resource type="PackedScene" uid="uid://bxbocxdaayvwx" path="res://UI/progress_bar.tscn" id="3_kjf1i"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_24d3s"]
-size = Vector3(0.6, 1, 0.6)
+size = Vector3(0.99146974, 0.060000002, 1.0059766)
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_dlkho"]
 radius = 0.6
@@ -29,14 +30,23 @@ properties/2/replication_mode = 1
 [sub_resource type="BoxShape3D" id="BoxShape3D_vlqg6"]
 size = Vector3(2.1, 0.5, 2.1)
 
-[node name="Table" type="StaticBody3D" unique_id=1863572470 groups=["station", "table"]]
+[node name="Table" type="Node3D" unique_id=987495548]
+
+[node name="StationMovement" parent="." unique_id=946873975 node_paths=PackedStringArray("station") instance=ExtResource("1_5mi7y")]
+station = NodePath("../Table")
+
+[node name="Table" type="StaticBody3D" parent="." unique_id=1863572470 groups=["station", "table"]]
 script = ExtResource("1_2vcpj")
 money_sound = ExtResource("2_jslhm")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=228053941]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Table" unique_id=228053941]
 shape = SubResource("BoxShape3D_24d3s")
 
-[node name="XRToolsSnapZone" type="Area3D" parent="." unique_id=1947858647 groups=["station"]]
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Table" unique_id=276384063]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0017700791, 0.47, -0.0042381883)
+shape = SubResource("BoxShape3D_24d3s")
+
+[node name="XRToolsSnapZone" type="Area3D" parent="Table" unique_id=1947858647 groups=["station"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.31874347, 0.5270121, 0)
 collision_layer = 65536
 collision_mask = 65540
@@ -45,14 +55,14 @@ stash_sound = ExtResource("3_0s6ir")
 snap_mode = 1
 metadata/_custom_type_script = "uid://cquqe4f1m1sw6"
 
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="XRToolsSnapZone" unique_id=1176887393]
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Table/XRToolsSnapZone" unique_id=1176887393]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -0.000975132, 0)
 shape = SubResource("SphereShape3D_dlkho")
 
-[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="XRToolsSnapZone" unique_id=2135860710]
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="Table/XRToolsSnapZone" unique_id=2135860710]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.013531357, -0.015141487, 0.012176305)
 
-[node name="XRToolsSnapZone2" type="Area3D" parent="." unique_id=694448387 groups=["station"]]
+[node name="XRToolsSnapZone2" type="Area3D" parent="Table" unique_id=694448387 groups=["station"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.34755045, 0.5270121, 0)
 collision_layer = 65536
 collision_mask = 65540
@@ -61,14 +71,14 @@ stash_sound = ExtResource("3_0s6ir")
 snap_mode = 1
 metadata/_custom_type_script = "uid://cquqe4f1m1sw6"
 
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="XRToolsSnapZone2" unique_id=650960099]
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Table/XRToolsSnapZone2" unique_id=650960099]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -0.000975132, 0)
 shape = SubResource("SphereShape3D_dlkho")
 
-[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="XRToolsSnapZone2" unique_id=709529410]
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="Table/XRToolsSnapZone2" unique_id=709529410]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.013531357, -0.015141487, 0.012176305)
 
-[node name="XRToolsSnapZone3" type="Area3D" parent="." unique_id=1734026785 groups=["station"]]
+[node name="XRToolsSnapZone3" type="Area3D" parent="Table" unique_id=1734026785 groups=["station"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.012355864, 0.5270121, 0.33038777)
 collision_layer = 65536
 collision_mask = 65540
@@ -77,14 +87,14 @@ stash_sound = ExtResource("3_0s6ir")
 snap_mode = 1
 metadata/_custom_type_script = "uid://cquqe4f1m1sw6"
 
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="XRToolsSnapZone3" unique_id=1271210642]
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Table/XRToolsSnapZone3" unique_id=1271210642]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -0.000975132, 0)
 shape = SubResource("SphereShape3D_dlkho")
 
-[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="XRToolsSnapZone3" unique_id=2000860662]
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="Table/XRToolsSnapZone3" unique_id=2000860662]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.013531357, -0.015141487, 0.012176305)
 
-[node name="XRToolsSnapZone4" type="Area3D" parent="." unique_id=1358457948 groups=["station"]]
+[node name="XRToolsSnapZone4" type="Area3D" parent="Table" unique_id=1358457948 groups=["station"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.022546828, 0.5270121, -0.36528283)
 collision_layer = 65536
 collision_mask = 65540
@@ -93,120 +103,119 @@ stash_sound = ExtResource("3_0s6ir")
 snap_mode = 1
 metadata/_custom_type_script = "uid://cquqe4f1m1sw6"
 
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="XRToolsSnapZone4" unique_id=1880499470]
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Table/XRToolsSnapZone4" unique_id=1880499470]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -0.000975132, 0)
 shape = SubResource("SphereShape3D_dlkho")
 
-[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="XRToolsSnapZone4" unique_id=790672192]
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="Table/XRToolsSnapZone4" unique_id=790672192]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.013531357, -0.015141487, 0.012176305)
 
-[node name="CSGCombiner3D" type="CSGCombiner3D" parent="." unique_id=2085635675]
-use_collision = true
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="Table" unique_id=2085635675]
 
-[node name="CSGBox3D" type="CSGBox3D" parent="CSGCombiner3D" unique_id=411048765]
+[node name="CSGBox3D" type="CSGBox3D" parent="Table/CSGCombiner3D" unique_id=411048765]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.46137518, 0)
 size = Vector3(1, 0.077, 1)
 material = SubResource("StandardMaterial3D_24d3s")
 
-[node name="CSGBox3D2" type="CSGBox3D" parent="CSGCombiner3D" unique_id=2093582402]
+[node name="CSGBox3D2" type="CSGBox3D" parent="Table/CSGCombiner3D" unique_id=2093582402]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.27815637, 0)
 size = Vector3(0.1, 0.31586915, 0.1)
 material = SubResource("StandardMaterial3D_24d3s")
 
-[node name="CSGBox3D3" type="CSGBox3D" parent="CSGCombiner3D" unique_id=839228683]
+[node name="CSGBox3D3" type="CSGBox3D" parent="Table/CSGCombiner3D" unique_id=839228683]
 transform = Transform3D(0.86602545, 0.50000006, 0, -0.50000006, 0.86602545, 0, 0, 0, 1, -0.21657634, -0.106895894, 0)
 size = Vector3(0.1, 0.8768555, 0.1)
 material = SubResource("StandardMaterial3D_24d3s")
 
-[node name="CSGBox3D4" type="CSGBox3D" parent="CSGCombiner3D" unique_id=1028598922]
+[node name="CSGBox3D4" type="CSGBox3D" parent="Table/CSGCombiner3D" unique_id=1028598922]
 transform = Transform3D(-0.45971727, -0.2654179, 0.8474747, -0.50000006, 0.86602545, 0, -0.73393464, -0.4237374, -0.53083575, 0.10796261, -0.106895894, 0.16580808)
 size = Vector3(0.1, 0.8768555, 0.1)
 material = SubResource("StandardMaterial3D_24d3s")
 
-[node name="CSGBox3D5" type="CSGBox3D" parent="CSGCombiner3D" unique_id=892392906]
+[node name="CSGBox3D5" type="CSGBox3D" parent="Table/CSGCombiner3D" unique_id=892392906]
 transform = Transform3D(-0.38498235, -0.12489955, -0.9144338, -0.5286442, 0.8420017, 0.107556336, 0.756521, 0.5248176, -0.39018327, 0.059352398, -0.106895894, -0.2290039)
 size = Vector3(0.1, 0.8768555, 0.1)
 material = SubResource("StandardMaterial3D_24d3s")
 
-[node name="Customers" type="Node3D" parent="." unique_id=2147179512]
+[node name="Customers" type="Node3D" parent="Table" unique_id=2147179512]
 
-[node name="Customer" type="Node3D" parent="Customers" unique_id=1265943831]
+[node name="Customer" type="Node3D" parent="Table/Customers" unique_id=1265943831]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.016780734, -0.08218986, 0)
 
-[node name="CSGCombiner3D" type="CSGCombiner3D" parent="Customers/Customer" unique_id=1211819222]
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="Table/Customers/Customer" unique_id=1211819222]
 transform = Transform3D(1.095, 0, 0, 0, 1.095, 0, 0, 0, 1.095, 0.08442788, -0.19989291, 0)
 
-[node name="CSGSphere3D" type="CSGSphere3D" parent="Customers/Customer/CSGCombiner3D" unique_id=2104132980]
+[node name="CSGSphere3D" type="CSGSphere3D" parent="Table/Customers/Customer/CSGCombiner3D" unique_id=2104132980]
 transform = Transform3D(0.9999998, 0, 0, 0, 0.9999998, 0, 0, 0, 0.9999998, -0.7149929, 1.2762557, 0)
 radius = 0.17520222
 
-[node name="CSGSphere3D2" type="CSGSphere3D" parent="Customers/Customer/CSGCombiner3D" unique_id=808477724]
+[node name="CSGSphere3D2" type="CSGSphere3D" parent="Table/Customers/Customer/CSGCombiner3D" unique_id=808477724]
 transform = Transform3D(0.9999998, 0, 0, 0, 1.7476468, 0, 0, 0, 0.9999998, -0.7366721, 0.8531885, 0)
 radius = 0.17520222
 
-[node name="Seats" type="Node3D" parent="." unique_id=1101423789]
+[node name="Seats" type="Node3D" parent="Table" unique_id=1101423789]
 
-[node name="Seat" type="Node3D" parent="Seats" unique_id=1951252898]
+[node name="Seat" type="Node3D" parent="Table/Seats" unique_id=1951252898]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9079602, -0.37259835, 0)
 
-[node name="CSGCombiner3D" type="CSGCombiner3D" parent="Seats/Seat" unique_id=384912485]
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="Table/Seats/Seat" unique_id=384912485]
 
-[node name="CSGCylinder3D" type="CSGCylinder3D" parent="Seats/Seat/CSGCombiner3D" unique_id=170426769]
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="Table/Seats/Seat/CSGCombiner3D" unique_id=170426769]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.18637085, 0.51674986, 0)
 radius = 0.25634766
 height = 0.051940918
 sides = 16
 
-[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="Seats/Seat/CSGCombiner3D" unique_id=1294605073]
+[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="Table/Seats/Seat/CSGCombiner3D" unique_id=1294605073]
 transform = Transform3D(0.24355066, 0.98373884, 0, -1.3339849, 0.1796049, 0, 0, 0, 0.8365013, -0.05247748, 0.8547088, 0)
 radius = 0.25634766
 height = 0.051940918
 sides = 16
 
-[node name="CSGBox3D" type="CSGBox3D" parent="Seats/Seat/CSGCombiner3D" unique_id=1761839440]
+[node name="CSGBox3D" type="CSGBox3D" parent="Table/Seats/Seat/CSGCombiner3D" unique_id=1761839440]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.030369163, 0.18746406, 0.1341562)
 size = Vector3(0.05, 0.6713196, 0.05)
 
-[node name="CSGBox3D2" type="CSGBox3D" parent="Seats/Seat/CSGCombiner3D" unique_id=1395371703]
+[node name="CSGBox3D2" type="CSGBox3D" parent="Table/Seats/Seat/CSGCombiner3D" unique_id=1395371703]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.030369163, 0.18746406, -0.15065354)
 size = Vector3(0.05, 0.6713196, 0.05)
 
-[node name="CSGBox3D3" type="CSGBox3D" parent="Seats/Seat/CSGCombiner3D" unique_id=96608061]
+[node name="CSGBox3D3" type="CSGBox3D" parent="Table/Seats/Seat/CSGCombiner3D" unique_id=96608061]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.33084005, 0.18746406, 0.1341562)
 size = Vector3(0.05, 0.6713196, 0.05)
 
-[node name="CSGBox3D4" type="CSGBox3D" parent="Seats/Seat/CSGCombiner3D" unique_id=1684738537]
+[node name="CSGBox3D4" type="CSGBox3D" parent="Table/Seats/Seat/CSGCombiner3D" unique_id=1684738537]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.33084005, 0.18746406, -0.15065354)
 size = Vector3(0.05, 0.6713196, 0.05)
 
-[node name="Label3D" type="Label3D" parent="." unique_id=662960977]
+[node name="Label3D" type="Label3D" parent="Table" unique_id=662960977]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3247777, 0)
 billboard = 2
 text = "table state"
 vertical_alignment = 0
 line_spacing = -15.0
 
-[node name="Label3DTime" type="Label3D" parent="." unique_id=1534849507]
+[node name="Label3DTime" type="Label3D" parent="Table" unique_id=1534849507]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.513246, 0)
 pixel_size = 0.003
 billboard = 2
 text = "20.1s"
 
-[node name="Sync" type="MultiplayerSynchronizer" parent="." unique_id=2000411505]
+[node name="Sync" type="MultiplayerSynchronizer" parent="Table" unique_id=2000411505]
 replication_config = SubResource("SceneReplicationConfig_np_table")
 
-[node name="ProgressBar3D" parent="." unique_id=654673176 instance=ExtResource("3_kjf1i")]
+[node name="ProgressBar3D" parent="Table" unique_id=654673176 instance=ExtResource("3_kjf1i")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3676775, 0)
 y_billboard = true
 
-[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." unique_id=724610642]
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="Table" unique_id=724610642]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2935008, 0)
 
-[node name="PlayerDetectArea3D" type="Area3D" parent="." unique_id=913445150]
+[node name="PlayerDetectArea3D" type="Area3D" parent="Table" unique_id=913445150]
 collision_mask = 524288
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayerDetectArea3D" unique_id=1538221021]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Table/PlayerDetectArea3D" unique_id=1538221021]
 shape = SubResource("BoxShape3D_vlqg6")
 
-[connection signal="body_entered" from="PlayerDetectArea3D" to="." method="_on_player_enter"]
-[connection signal="body_exited" from="PlayerDetectArea3D" to="." method="_on_player_exit"]
+[connection signal="body_entered" from="Table/PlayerDetectArea3D" to="Table" method="_on_player_enter"]
+[connection signal="body_exited" from="Table/PlayerDetectArea3D" to="Table" method="_on_player_exit"]
