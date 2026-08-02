@@ -16,9 +16,3 @@ func _ready() -> void:
 		# Later we will do procedural generation here.
 		# For now we just load a scene.
 		NetworkManager.call_deferred("spawn_item", kitchen_scene.resource_path, transform)
-
-func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("satisfy_table_orders"):
-		var trans: Transform3D = transform
-		trans.origin += Vector3(-1.2, 0, 0)
-		NetworkManager.call_deferred("spawn_item", hob_scene.resource_path, trans)

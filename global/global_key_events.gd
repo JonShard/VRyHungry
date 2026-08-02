@@ -5,6 +5,10 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_tree().quit()
 	if event.is_action_pressed("satisfy_table_orders"):
 		satisfy_table_orders()
+	if event.is_action_pressed("set_building_mode"):
+		set_buidling_mode()
+	if event.is_action_pressed("set_running_mode"):
+		set_running_mode()
 
 
 # Finds any node of class/type Table and calls satisfyAllOrders()
@@ -17,4 +21,11 @@ func satisfy_table_orders() -> void:
 			node.satisfyAllOrders()
 			
 			
-			
+func set_buidling_mode():
+	print("Global key event: Setting building mode")
+	GameManager.game_state = GameManager.GameState.BUILDING
+
+
+func set_running_mode():
+	print("Global key event: Setting running mode")
+	GameManager.game_state = GameManager.GameState.RUNNING

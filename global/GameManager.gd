@@ -7,10 +7,15 @@ static var sides_in_play: Array[String]
 
 enum GameState {
 	RUNNING,
-	GAME_OVER
+	GAME_OVER,
+	BUILDING
 }
-static var game_state: GameState = GameState.RUNNING
+static var game_state: GameState = GameState.RUNNING: set = _set_game_state
 
+
+static func _set_game_state(value: GameState):
+	game_state = value
+	Signals.game_state_changed.emit(value)
 
 static func _restart():
 	print("restart Game")

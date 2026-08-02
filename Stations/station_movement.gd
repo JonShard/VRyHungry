@@ -16,8 +16,16 @@ var ghost_materials: Array[StandardMaterial3D] = []
 const GHOST_COLOR_VALID: Color = Color(0, 1, 0, 0.35)
 const GHOST_COLOR_INVALID: Color = Color(1, 0, 0, 0.35)
 
-# TODO: public toggle to disable handle in build mode.
-# TODO: If game exits build mode, drop the handle before  disabling it.
+
+func set_move_handle_enabled(enabled: bool) -> void:
+	move_handle.visible = enabled
+	move_handle.enabled = enabled
+	if enabled:
+		move_handle.drop()
+
+
+func _on_game_state_changed(new_state: GameManager.GameState) -> void:
+	set_move_handle_enabled(new_state == GameManager.GameState.BUILDING)
 
 
 func _ready() -> void:
@@ -39,6 +47,8 @@ func _ready() -> void:
 	move_ghost.visible = false
 	_cache_ghost_materials()
 	_set_ghost_color(GHOST_COLOR_VALID)
+	set_move_handle_enabled(false)
+	Signals.game_state_changed.connect(_on_game_state_changed)
 
 
 func _cache_ghost_materials() -> void:
