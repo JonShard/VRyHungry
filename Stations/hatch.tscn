@@ -18,7 +18,7 @@ albedo_color = Color(0.38, 0.35162666, 0.3268, 1)
 [sub_resource type="BoxShape3D" id="BoxShape3D_vlqg6"]
 size = Vector3(0.6, 0.34027833, 0.6)
 
-[node name="Hatch" type="StaticBody3D" unique_id=1341321603]
+[node name="Hatch" type="StaticBody3D" unique_id=1341321603 groups=["persistent_inventory"]]
 
 [node name="XRToolsSnapZone" type="Area3D" parent="." unique_id=2093161322 groups=["station"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2495586, 0)

@@ -17,6 +17,7 @@ static func _set_game_state(value: GameState):
 	game_state = value
 	Signals.game_state_changed.emit(value)
 
+
 static func _restart():
 	print("restart Game")
 	game_state = GameState.RUNNING
@@ -45,6 +46,3 @@ static  func game_over():
 	print("Game Over")
 	game_state = GameState.GAME_OVER
 	Signals.game_over.emit()
-	
-	
-	

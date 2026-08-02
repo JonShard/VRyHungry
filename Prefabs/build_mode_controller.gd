@@ -1,0 +1,38 @@
+extends Node
+class_name BuildModeController
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	Signals.game_state_changed.connect(_on_game_state_changed)
+
+
+func _on_game_state_changed(new_state: GameManager.GameState) -> void:
+	print("BuildModeController: game_state_changed to %s" % new_state)
+	if new_state == GameManager.GameState.BUILDING:
+		despawn_unheld_pickables()
+
+
+# Despawn all food_items unless it's in a "persistent_inventory" snap_zone
+func despawn_unheld_pickables():
+	var root = get_tree().get_root()
+	var pickables: Array[Node] = []
+	_collect_pickables(root, pickables)
+	for pickable in pickables:
+		if not Helper.find_food_item(pickable):
+			continue
+		var held_by: Node = pickable.get_picked_up_by()
+		if not held_by:
+			NetworkManager.despawn_item(pickable)
+			continue
+		if not held_by.is_in_group("persistent_inventory"):
+			held_by.get_parent().print_tree_pretty()
+			print("BuildModeController despawn_unheld_pickables held_by: %s, pickable: %s " % [held_by, pickable])
+			NetworkManager.despawn_item(pickable)
+			
+
+func _collect_pickables(node: Node, out_array: Array) -> void:
+	if node is XRToolsPickable:
+		out_array.append(node)
+	for child in node.get_children():
+		if child is Node:
+			_collect_pickables(child, out_array)

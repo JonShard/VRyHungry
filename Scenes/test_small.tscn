@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://efaec6ymgabo" path="res://stations/Counter.tscn" id="7_jnxsa"]
 [ext_resource type="PackedScene" uid="uid://drwuhqb3pjtiy" path="res://items/potato.tscn" id="8_1qeqw"]
 [ext_resource type="PackedScene" uid="uid://dlw5geheupgpt" path="res://stations/hatch.tscn" id="8_atgwk"]
+[ext_resource type="Script" uid="uid://bsdpd18i1i17s" path="res://prefabs/build_mode_controller.gd" id="9_atgwk"]
 
 [sub_resource type="Environment" id="Environment_bvwq1"]
 background_mode = 2
@@ -99,3 +100,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, 0, 0)
 
 [node name="Hatch2" parent="." unique_id=1755144529 instance=ExtResource("8_atgwk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 0, 0)
+
+[node name="BuildModeController" type="Node" parent="." unique_id=1876729190]
+script = ExtResource("9_atgwk")
