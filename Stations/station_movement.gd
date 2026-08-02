@@ -85,6 +85,13 @@ func _set_ghost_color(color: Color) -> void:
 
 func _handle_pickup(_by: Node) -> void:
 	print("StationMovement handle pickup")
+	if move_handle.get_picked_up_by() is XRToolsSnapZone:
+		print("StationMovement handle pickup by snap zone, dropping and resetting position")
+		move_handle.drop()
+		move_handle.global_position = station.global_position + Vector3(0, original_y_pos, 0)
+		move_handle.rotation = station.rotation
+		return
+		
 	moving = true
 	move_ghost.visible = true
 	station.visible = false
