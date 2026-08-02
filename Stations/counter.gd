@@ -1,6 +1,7 @@
 extends StaticBody3D
 
 @export var chop_work_steps: float = 5.0
+@export var chop_min_speed: float = 2.0
 
 @export var audio: AudioStreamPlayer3D
 @export var chop_audio: AudioStream
@@ -92,6 +93,17 @@ func _on_gesture_area_body_entered(body: Node3D) -> void:
 		if process_result == "":
 			print("Counter: knife entered but nothing to chop")
 			return
+
+		var speed := 0.0
+		if body is RigidBody3D:
+			speed = body.linear_velocity.length()
+		elif body is CharacterBody3D:
+			speed = body.velocity.length()
+
+		if speed < chop_min_speed:
+			print("Counter: knife too slow for chopping: ", speed)
+			return
+
 		add_work(chop_work_steps)
 
 
