@@ -1,0 +1,115 @@
+[gd_scene format=3 uid="uid://cvucwxibtol5f"]
+
+[ext_resource type="Script" uid="uid://bu0g23cfrqy0m" path="res://stations/station_movement.gd" id="1_ldy6a"]
+[ext_resource type="Script" uid="uid://bfrlpbsqg5lqr" path="res://addons/godot-xr-tools/objects/pickable.gd" id="2_tbkb3"]
+[ext_resource type="PackedScene" uid="uid://c25yxb0vt53vc" path="res://addons/godot-xr-tools/objects/grab_points/grab_point_hand_left.tscn" id="3_36r14"]
+[ext_resource type="Animation" uid="uid://db62hs5s4n2b3" path="res://addons/godot-xr-tools/hands/animations/left/Grip 4.res" id="4_dy2gh"]
+[ext_resource type="Script" uid="uid://dvobm6vcfnqe8" path="res://addons/godot-xr-tools/hands/poses/hand_pose_settings.gd" id="5_2muex"]
+[ext_resource type="PackedScene" uid="uid://ctw7nbntd5pcj" path="res://addons/godot-xr-tools/objects/grab_points/grab_point_hand_right.tscn" id="6_372qd"]
+[ext_resource type="Animation" uid="uid://d1xnpyc08njjx" path="res://addons/godot-xr-tools/hands/animations/right/Grip 4.res" id="7_uxgrt"]
+[ext_resource type="Script" uid="uid://bwd0pe2udb5xo" path="res://Net/net_pickable.gd" id="8_7mccn"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_m1xbq"]
+size = Vector3(0.1, 0.1, 0.1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_24d3s"]
+albedo_color = Color(0.1764706, 1, 1, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_vlqg6"]
+material = SubResource("StandardMaterial3D_24d3s")
+size = Vector3(0.1, 0.1, 0.1)
+
+[sub_resource type="Resource" id="Resource_lc22d"]
+script = ExtResource("5_2muex")
+closed_pose = ExtResource("4_dy2gh")
+metadata/_custom_type_script = "uid://dvobm6vcfnqe8"
+
+[sub_resource type="Resource" id="Resource_qyiot"]
+script = ExtResource("5_2muex")
+closed_pose = ExtResource("7_uxgrt")
+metadata/_custom_type_script = "uid://dvobm6vcfnqe8"
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_np_cube"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = false
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:quaternion")
+properties/1/spawn = false
+properties/1/replication_mode = 1
+properties/2/path = NodePath("NetPickable:net_held_by")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vlqg6"]
+size = Vector3(0.5, 1, 0.5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vlqg6"]
+transparency = 1
+albedo_color = Color(1, 0.78999996, 0.39999998, 0.4627451)
+
+[node name="StationMovement" type="Node3D" unique_id=946873975 node_paths=PackedStringArray("move_handle", "move_ghost")]
+script = ExtResource("1_ldy6a")
+move_handle = NodePath("MoveHandle")
+move_ghost = NodePath("MoveGhost")
+
+[node name="MoveHandle" type="RigidBody3D" parent="." unique_id=954108203 groups=["platalbe_item"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.08, 0)
+collision_layer = 4
+collision_mask = 196615
+axis_lock_linear_y = true
+axis_lock_angular_x = true
+axis_lock_angular_z = true
+mass = 0.004
+gravity_scale = 0.5
+linear_damp = 100.0
+script = ExtResource("2_tbkb3")
+release_mode = 1
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MoveHandle" unique_id=1692047616]
+shape = SubResource("BoxShape3D_m1xbq")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="MoveHandle" unique_id=1134464542]
+mesh = SubResource("BoxMesh_vlqg6")
+
+[node name="GrabPointHandLeft" parent="MoveHandle" unique_id=358095191 instance=ExtResource("3_36r14")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.067650706, 0.04601878, -0.08606844)
+hand_pose = SubResource("Resource_lc22d")
+
+[node name="GrabPointHandRight" parent="MoveHandle" unique_id=694601824 instance=ExtResource("6_372qd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06531982, 0.042291984, -0.08604182)
+hand_pose = SubResource("Resource_qyiot")
+
+[node name="NetPickable" type="MultiplayerSynchronizer" parent="MoveHandle" unique_id=404907673]
+replication_config = SubResource("SceneReplicationConfig_np_cube")
+script = ExtResource("8_7mccn")
+
+[node name="MoveGhost" type="Area3D" parent="." unique_id=1305344236]
+visible = false
+collision_layer = 0
+collision_mask = 524295
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MoveGhost" unique_id=2074041383]
+shape = SubResource("BoxShape3D_vlqg6")
+
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="MoveGhost" unique_id=283929246]
+collision_layer = 0
+collision_mask = 524291
+
+[node name="CSGBox3D" type="CSGBox3D" parent="MoveGhost/CSGCombiner3D" unique_id=1786907045]
+size = Vector3(0.6, 1, 0.6)
+material = SubResource("StandardMaterial3D_vlqg6")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="MoveGhost/CSGCombiner3D" unique_id=684823657]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5642835, 0)
+size = Vector3(0.03, 0.03, 0.3)
+material = SubResource("StandardMaterial3D_vlqg6")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="MoveGhost/CSGCombiner3D/CSGBox3D2" unique_id=286640707]
+transform = Transform3D(0.70451534, 0, -0.7096888, 0, 1, 0, 0.7096888, 0, 0.70451534, -0.046803005, 0, -0.096979)
+size = Vector3(0.03, 0.03, 0.12021485)
+material = SubResource("StandardMaterial3D_vlqg6")
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="MoveGhost/CSGCombiner3D/CSGBox3D2" unique_id=1791902851]
+transform = Transform3D(0.7073421, 0, 0.7068714, 0, 1, 0, -0.7068714, 0, 0.7073421, 0.04550519, 0, -0.096264325)
+size = Vector3(0.03, 0.03, 0.12021485)
+material = SubResource("StandardMaterial3D_vlqg6")
