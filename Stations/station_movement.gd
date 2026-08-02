@@ -3,6 +3,7 @@ extends Node
 @export var snap_grid_size: float = 0.6
 
 @export var move_handle: XRToolsPickable
+@export var move_ghost: Area3D
 @export var station: StaticBody3D
 
 var move_handle_rigid: RigidBody3D

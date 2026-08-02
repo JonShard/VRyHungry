@@ -46,6 +46,13 @@ properties/2/path = NodePath("NetPickable:net_held_by")
 properties/2/spawn = true
 properties/2/replication_mode = 1
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_vlqg6"]
+size = Vector3(0.6, 1, 0.6)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vlqg6"]
+transparency = 1
+albedo_color = Color(1, 0.78999996, 0.39999998, 0.4627451)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_kdxnr"]
 size = Vector3(0.6, 1, 0.6)
 
@@ -237,6 +244,37 @@ hand_pose = SubResource("Resource_qyiot")
 replication_config = SubResource("SceneReplicationConfig_np_cube")
 script = ExtResource("15_trny8")
 
+[node name="MoveGhost" type="Area3D" parent="." unique_id=2098037388]
+visible = false
+collision_layer = 0
+collision_mask = 589831
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MoveGhost" unique_id=486115686]
+shape = SubResource("BoxShape3D_vlqg6")
+
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="MoveGhost" unique_id=1333337859]
+collision_layer = 0
+collision_mask = 524291
+
+[node name="CSGBox3D" type="CSGBox3D" parent="MoveGhost/CSGCombiner3D" unique_id=57421268]
+size = Vector3(0.6, 1, 0.6)
+material = SubResource("StandardMaterial3D_vlqg6")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="MoveGhost/CSGCombiner3D" unique_id=425705177]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5642835, 0)
+size = Vector3(0.03, 0.03, 0.3)
+material = SubResource("StandardMaterial3D_vlqg6")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="MoveGhost/CSGCombiner3D/CSGBox3D2" unique_id=2083880227]
+transform = Transform3D(0.70451534, 0, -0.7096888, 0, 1, 0, 0.7096888, 0, 0.70451534, -0.046803005, 0, -0.096979)
+size = Vector3(0.03, 0.03, 0.12021485)
+material = SubResource("StandardMaterial3D_vlqg6")
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="MoveGhost/CSGCombiner3D/CSGBox3D2" unique_id=1953362838]
+transform = Transform3D(0.7073421, 0, 0.7068714, 0, 1, 0, -0.7068714, 0, 0.7073421, 0.04550519, 0, -0.096264325)
+size = Vector3(0.03, 0.03, 0.12021485)
+material = SubResource("StandardMaterial3D_vlqg6")
+
 [node name="Hob" type="StaticBody3D" parent="." unique_id=1332123047]
 script = ExtResource("1_7jc4g")
 
@@ -259,10 +297,13 @@ shape = SubResource("BoxShape3D_7uuqv")
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="Hob/XRToolsSnapZone" unique_id=1991627595]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.022546828, -0.5270121, 0.36528283)
 
+[node name="ProgressBar3D" parent="Hob" unique_id=654673176 instance=ExtResource("3_7uuqv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.74736404, -0.09216304)
+
 [node name="CSGCombiner3D" type="CSGCombiner3D" parent="Hob" unique_id=70901698]
 
 [node name="CSGBox3D" type="CSGBox3D" parent="Hob/CSGCombiner3D" unique_id=1111505172]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.00894776)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00071543455, 3.7252903e-09, -0.008516133)
 size = Vector3(0.6, 1, 0.5821045)
 
 [node name="CSGCylinder3D" type="CSGCylinder3D" parent="Hob/CSGCombiner3D/CSGBox3D" unique_id=1338463939]
@@ -344,9 +385,6 @@ size = Vector3(0.55, 0.096, 0.14)
 root_path = NodePath("../..")
 replication_config = SubResource("SceneReplicationConfig_np_hob")
 
-[node name="ProgressBar3D" parent="Hob" unique_id=654673176 instance=ExtResource("3_7uuqv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.74736404, -0.09216304)
-
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Hob" unique_id=1525460719]
 root_node = NodePath("../..")
 libraries/ = SubResource("AnimationLibrary_ac5f3")
@@ -357,7 +395,8 @@ light_color = Color(1, 0.13725491, 0, 1)
 light_energy = 0.0
 omni_range = 0.5
 
-[node name="Movement" type="Node" parent="Hob" unique_id=1004484356 node_paths=PackedStringArray("move_handle", "station")]
+[node name="Movement" type="Node" parent="Hob" unique_id=1004484356 node_paths=PackedStringArray("move_handle", "move_ghost", "station")]
 script = ExtResource("7_akjp4")
 move_handle = NodePath("../../MoveHandle")
+move_ghost = NodePath("../../MoveGhost")
 station = NodePath("..")
