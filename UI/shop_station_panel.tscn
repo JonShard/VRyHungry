@@ -1,0 +1,91 @@
+[gd_scene format=3 uid="uid://u7rpukx5ebqo"]
+
+[ext_resource type="Script" uid="uid://bkal73wu2ajoi" path="res://UI/shop_station_button.gd" id="1_5sumr"]
+[ext_resource type="Texture2D" uid="uid://dw71nomipotqu" path="res://icon.svg" id="2_e1k4i"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k4f0j"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.44921166, 0.47363085, 0.49934196, 0.6)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="LabelSettings" id="LabelSettings_24d3s"]
+font_size = 18
+
+[node name="Panel" type="Panel" unique_id=2079583080 node_paths=PackedStringArray("name_label", "cost_label", "button")]
+custom_minimum_size = Vector2(80, 80)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_k4f0j")
+script = ExtResource("1_5sumr")
+name_label = NodePath("PanelName/Name")
+cost_label = NodePath("PanelCost/Cost")
+button = NodePath("Button")
+
+[node name="Button" type="Button" parent="." unique_id=1482490300]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 3.0
+offset_top = 3.0
+offset_right = -3.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 2
+icon = ExtResource("2_e1k4i")
+icon_alignment = 1
+expand_icon = true
+
+[node name="PanelName" type="Panel" parent="." unique_id=580016879]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.391
+
+[node name="Name" type="Label" parent="PanelName" unique_id=455863013]
+layout_mode = 1
+anchors_preset = -1
+offset_left = 4.0
+offset_top = 6.0
+offset_right = 122.0
+offset_bottom = 32.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Station"
+label_settings = SubResource("LabelSettings_24d3s")
+
+[node name="PanelCost" type="Panel" parent="." unique_id=1959621473]
+custom_maximum_size = Vector2(60, -1)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.411
+anchor_top = 0.65
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="Cost" type="Label" parent="PanelCost" unique_id=924064438]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -34.0
+offset_top = -29.0
+offset_right = -6.0
+offset_bottom = -6.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "999$"
+horizontal_alignment = 2
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

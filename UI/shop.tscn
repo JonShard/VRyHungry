@@ -1,0 +1,294 @@
+[gd_scene format=3 uid="uid://dihdlvlebtp5j"]
+
+[ext_resource type="Script" uid="uid://xrfp03b32j1t" path="res://UI/shop_ui.gd" id="1_2k6ie"]
+[ext_resource type="PackedScene" uid="uid://u7rpukx5ebqo" path="res://UI/shop_station_panel.tscn" id="1_pogqh"]
+[ext_resource type="PackedScene" uid="uid://efaec6ymgabo" path="res://stations/Counter.tscn" id="2_35otv"]
+[ext_resource type="Texture2D" uid="uid://c0nd4nh4vja73" path="res://textures/shop/counter.png" id="3_74fni"]
+[ext_resource type="PackedScene" uid="uid://j7caslh27nor" path="res://stations/Hob.tscn" id="4_l3qkl"]
+[ext_resource type="Texture2D" uid="uid://ejby14dl1svr" path="res://textures/shop/hob.png" id="5_2k6ie"]
+[ext_resource type="PackedScene" uid="uid://dvrk268s7gkxh" path="res://stations/sink.tscn" id="6_rktus"]
+[ext_resource type="Texture2D" uid="uid://ecdu0qqhib4" path="res://textures/shop/sink.png" id="7_4titf"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_vlqg6"]
+font_size = 35
+outline_size = 10
+outline_color = Color(0.1, 0.1, 0.1, 1)
+
+[node name="Shop" type="Panel" unique_id=783244304]
+offset_right = 540.0
+offset_bottom = 546.0
+script = ExtResource("1_2k6ie")
+
+[node name="Title" type="Label" parent="." unique_id=502212741]
+layout_mode = 1
+anchors_preset = -1
+offset_left = 20.0
+offset_top = 20.0
+text = "Shop"
+label_settings = SubResource("LabelSettings_vlqg6")
+
+[node name="Money" type="Label" parent="." unique_id=273879940]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_top = 20.0
+offset_right = -20.0
+grow_horizontal = 0
+pivot_offset_ratio = Vector2(1, 0)
+text = "X $"
+label_settings = SubResource("LabelSettings_vlqg6")
+horizontal_alignment = 2
+
+[node name="TabContainer" type="TabContainer" parent="." unique_id=783976311]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 80.0
+offset_right = -20.0
+offset_bottom = -20.0
+current_tab = 0
+
+[node name="Stations" type="GridContainer" parent="TabContainer" unique_id=189446761]
+layout_mode = 2
+columns = 6
+metadata/_tab_index = 0
+
+[node name="StationButton" parent="TabContainer/Stations" unique_id=2079583080 instance=ExtResource("1_pogqh")]
+layout_mode = 2
+station_scene = ExtResource("2_35otv")
+icon_texture = ExtResource("3_74fni")
+station_name = "Counter"
+cost = 30
+
+[node name="Panel2" parent="TabContainer/Stations" unique_id=467593590 instance=ExtResource("1_pogqh")]
+layout_mode = 2
+station_scene = ExtResource("4_l3qkl")
+icon_texture = ExtResource("5_2k6ie")
+station_name = "Hob"
+cost = 50
+
+[node name="Panel3" parent="TabContainer/Stations" unique_id=1096388793 instance=ExtResource("1_pogqh")]
+layout_mode = 2
+station_scene = ExtResource("6_rktus")
+icon_texture = ExtResource("7_4titf")
+station_name = "Sink"
+cost = 40
+
+[node name="StationButton2" parent="TabContainer/Stations" unique_id=1037758002 instance=ExtResource("1_pogqh")]
+layout_mode = 2
+station_scene = ExtResource("2_35otv")
+icon_texture = ExtResource("3_74fni")
+station_name = "Counter"
+cost = 30
+
+[node name="Panel4" parent="TabContainer/Stations" unique_id=1667497770 instance=ExtResource("1_pogqh")]
+layout_mode = 2
+station_scene = ExtResource("4_l3qkl")
+icon_texture = ExtResource("5_2k6ie")
+station_name = "Hob"
+cost = 50
+
+[node name="Panel5" parent="TabContainer/Stations" unique_id=1982065975 instance=ExtResource("1_pogqh")]
+layout_mode = 2
+station_scene = ExtResource("6_rktus")
+icon_texture = ExtResource("7_4titf")
+station_name = "Sink"
+cost = 40
+
+[node name="StationButton3" parent="TabContainer/Stations" unique_id=1301410231 instance=ExtResource("1_pogqh")]
+layout_mode = 2
+station_scene = ExtResource("2_35otv")
+icon_texture = ExtResource("3_74fni")
+station_name = "Counter"
+cost = 30
+
+[node name="Panel6" parent="TabContainer/Stations" unique_id=1995120839 instance=ExtResource("1_pogqh")]
+layout_mode = 2
+station_scene = ExtResource("4_l3qkl")
+icon_texture = ExtResource("5_2k6ie")
+station_name = "Hob"
+cost = 50
+
+[node name="Panel7" parent="TabContainer/Stations" unique_id=761089034 instance=ExtResource("1_pogqh")]
+layout_mode = 2
+station_scene = ExtResource("6_rktus")
+icon_texture = ExtResource("7_4titf")
+station_name = "Sink"
+cost = 40
+
+[node name="StationButton4" parent="TabContainer/Stations" unique_id=1417297413 instance=ExtResource("1_pogqh")]
+layout_mode = 2
+station_scene = ExtResource("2_35otv")
+icon_texture = ExtResource("3_74fni")
+station_name = "Counter"
+cost = 30
+
+[node name="Panel8" parent="TabContainer/Stations" unique_id=1691237963 instance=ExtResource("1_pogqh")]
+layout_mode = 2
+station_scene = ExtResource("4_l3qkl")
+icon_texture = ExtResource("5_2k6ie")
+station_name = "Hob"
+cost = 50
+
+[node name="Panel9" parent="TabContainer/Stations" unique_id=1365829405 instance=ExtResource("1_pogqh")]
+layout_mode = 2
+station_scene = ExtResource("6_rktus")
+icon_texture = ExtResource("7_4titf")
+station_name = "Sink"
+cost = 40
+
+[node name="StationButton5" parent="TabContainer/Stations" unique_id=2041495798 instance=ExtResource("1_pogqh")]
+layout_mode = 2
+station_scene = ExtResource("2_35otv")
+icon_texture = ExtResource("3_74fni")
+station_name = "Counter"
+cost = 30
+
+[node name="Panel10" parent="TabContainer/Stations" unique_id=1193707247 instance=ExtResource("1_pogqh")]
+layout_mode = 2
+station_scene = ExtResource("4_l3qkl")
+icon_texture = ExtResource("5_2k6ie")
+station_name = "Hob"
+cost = 50
+
+[node name="Panel11" parent="TabContainer/Stations" unique_id=1812217593 instance=ExtResource("1_pogqh")]
+layout_mode = 2
+station_scene = ExtResource("6_rktus")
+icon_texture = ExtResource("7_4titf")
+station_name = "Sink"
+cost = 40
+
+[node name="StationButton6" parent="TabContainer/Stations" unique_id=495155208 instance=ExtResource("1_pogqh")]
+layout_mode = 2
+station_scene = ExtResource("2_35otv")
+icon_texture = ExtResource("3_74fni")
+station_name = "Counter"
+cost = 30
+
+[node name="Panel12" parent="TabContainer/Stations" unique_id=773081956 instance=ExtResource("1_pogqh")]
+layout_mode = 2
+station_scene = ExtResource("4_l3qkl")
+icon_texture = ExtResource("5_2k6ie")
+station_name = "Hob"
+cost = 50
+
+[node name="Panel13" parent="TabContainer/Stations" unique_id=1722465236 instance=ExtResource("1_pogqh")]
+layout_mode = 2
+station_scene = ExtResource("6_rktus")
+icon_texture = ExtResource("7_4titf")
+station_name = "Sink"
+cost = 40
+
+[node name="StationButton7" parent="TabContainer/Stations" unique_id=920721283 instance=ExtResource("1_pogqh")]
+layout_mode = 2
+station_scene = ExtResource("2_35otv")
+icon_texture = ExtResource("3_74fni")
+station_name = "Counter"
+cost = 30
+
+[node name="Panel14" parent="TabContainer/Stations" unique_id=280005981 instance=ExtResource("1_pogqh")]
+layout_mode = 2
+station_scene = ExtResource("4_l3qkl")
+icon_texture = ExtResource("5_2k6ie")
+station_name = "Hob"
+cost = 50
+
+[node name="Panel15" parent="TabContainer/Stations" unique_id=1032476128 instance=ExtResource("1_pogqh")]
+layout_mode = 2
+station_scene = ExtResource("6_rktus")
+icon_texture = ExtResource("7_4titf")
+station_name = "Sink"
+cost = 40
+
+[node name="StationButton8" parent="TabContainer/Stations" unique_id=1596739090 instance=ExtResource("1_pogqh")]
+layout_mode = 2
+station_scene = ExtResource("2_35otv")
+icon_texture = ExtResource("3_74fni")
+station_name = "Counter"
+cost = 30
+
+[node name="Panel16" parent="TabContainer/Stations" unique_id=1045125889 instance=ExtResource("1_pogqh")]
+layout_mode = 2
+station_scene = ExtResource("4_l3qkl")
+icon_texture = ExtResource("5_2k6ie")
+station_name = "Hob"
+cost = 50
+
+[node name="Panel17" parent="TabContainer/Stations" unique_id=85646771 instance=ExtResource("1_pogqh")]
+layout_mode = 2
+station_scene = ExtResource("6_rktus")
+icon_texture = ExtResource("7_4titf")
+station_name = "Sink"
+cost = 40
+
+[node name="StationButton9" parent="TabContainer/Stations" unique_id=883484649 instance=ExtResource("1_pogqh")]
+layout_mode = 2
+station_scene = ExtResource("2_35otv")
+icon_texture = ExtResource("3_74fni")
+station_name = "Counter"
+cost = 30
+
+[node name="Panel18" parent="TabContainer/Stations" unique_id=259381012 instance=ExtResource("1_pogqh")]
+layout_mode = 2
+station_scene = ExtResource("4_l3qkl")
+icon_texture = ExtResource("5_2k6ie")
+station_name = "Hob"
+cost = 50
+
+[node name="Panel19" parent="TabContainer/Stations" unique_id=1701937266 instance=ExtResource("1_pogqh")]
+layout_mode = 2
+station_scene = ExtResource("6_rktus")
+icon_texture = ExtResource("7_4titf")
+station_name = "Sink"
+cost = 40
+
+[node name="StationButton10" parent="TabContainer/Stations" unique_id=381125476 instance=ExtResource("1_pogqh")]
+layout_mode = 2
+station_scene = ExtResource("2_35otv")
+icon_texture = ExtResource("3_74fni")
+station_name = "Counter"
+cost = 30
+
+[node name="Panel20" parent="TabContainer/Stations" unique_id=1573978940 instance=ExtResource("1_pogqh")]
+layout_mode = 2
+station_scene = ExtResource("4_l3qkl")
+icon_texture = ExtResource("5_2k6ie")
+station_name = "Hob"
+cost = 50
+
+[node name="Panel21" parent="TabContainer/Stations" unique_id=555544070 instance=ExtResource("1_pogqh")]
+layout_mode = 2
+station_scene = ExtResource("6_rktus")
+icon_texture = ExtResource("7_4titf")
+station_name = "Sink"
+cost = 40
+
+[node name="Food" type="GridContainer" parent="TabContainer" unique_id=422899445]
+visible = false
+layout_mode = 2
+columns = 6
+metadata/_tab_index = 1
+
+[node name="StationButton" parent="TabContainer/Food" unique_id=586692243 instance=ExtResource("1_pogqh")]
+layout_mode = 2
+station_scene = ExtResource("2_35otv")
+icon_texture = ExtResource("3_74fni")
+station_name = "Counter"
+cost = 30
+
+[node name="Panel2" parent="TabContainer/Food" unique_id=918076583 instance=ExtResource("1_pogqh")]
+layout_mode = 2
+station_scene = ExtResource("4_l3qkl")
+icon_texture = ExtResource("5_2k6ie")
+station_name = "Hob"
+cost = 50
+
+[node name="Panel3" parent="TabContainer/Food" unique_id=387664331 instance=ExtResource("1_pogqh")]
+layout_mode = 2
+station_scene = ExtResource("6_rktus")
+icon_texture = ExtResource("7_4titf")
+station_name = "Sink"
+cost = 40

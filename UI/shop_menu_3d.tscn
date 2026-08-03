@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://cmxe1av5nsxyq"]
+
+[ext_resource type="PackedScene" uid="uid://dihdlvlebtp5j" path="res://UI/shop.tscn" id="1_e5js8"]
+[ext_resource type="PackedScene" uid="uid://clujaf3u776a3" path="res://addons/godot-xr-tools/objects/viewport_2d_in_3d.tscn" id="1_qtkxm"]
+
+[node name="ShopMenu3D" type="Node3D" unique_id=331240263]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, 0)
+
+[node name="Viewport2Din3D" parent="." unique_id=651579338 instance=ExtResource("1_qtkxm")]
+scene = ExtResource("1_e5js8")
+viewport_size = Vector2(1185.485, 733.795)
+transparent = 1
+scene_properties_keys = PackedStringArray("shop_ui.gd")

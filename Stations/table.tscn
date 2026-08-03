@@ -37,6 +37,8 @@ station = NodePath("../Table")
 
 [node name="Table" type="StaticBody3D" parent="." unique_id=1863572470 groups=["station", "table"]]
 script = ExtResource("1_2vcpj")
+thinking_duration = 1.0
+ordering_duration = 4.0
 money_sound = ExtResource("2_jslhm")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Table" unique_id=228053941]
