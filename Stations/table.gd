@@ -24,6 +24,7 @@ const lbl_eating: String = "Eating..."
 ### Finite State Machine ####
 
 enum TableState {
+	IDLE,			 # Don't update table. incorrect GameState
 	EMPTY, 			 # Just finished eating or havent eaten yet
 	THINKING,
 	ORDERING,		 # Wating for player to take their order
@@ -36,8 +37,8 @@ enum TableState {
 ## state transitions only ever run where NetworkManager.owns_world() is true
 ## (the whole station's _process is gated off elsewhere for non-owners, see
 ## NetworkManager._gate_station). The setters below just refresh the display,
-## so both the server (via _setState) and clients (via incoming sync) show
-## the same text. Use _setState(), never assign _state directly.
+## so both the server (via _set_state) and clients (via incoming sync) show
+## the same text. Use _set_state(), never assign _state directly.
 var _state: TableState = TableState.EMPTY
 var _state_time: float = 0.0
 var _state_duration: float = 0.0 # set in _set_state_time
@@ -72,7 +73,7 @@ func satisfyAllOrders() -> void:
 	_unsatisfied_orders.clear()
 	_original_orders.clear()
 	clearAllFood()
-	_setState(TableState.EMPTY)
+	_set_state(TableState.EMPTY)
 
 
 func clearAllFood() -> void:
@@ -124,7 +125,7 @@ func _ready() -> void:
 		snap_zone_node.has_picked_up.connect(_on_object_picked_up)
 		snap_zone_node.has_dropped.connect(_on_object_dropped)
 	set_process(true)
-	_setState(TableState.EMPTY)
+	_set_state(TableState.EMPTY)
 
 
 func _on_object_picked_up(_item) -> void:
@@ -165,7 +166,7 @@ func _place_order_if_player():
 		return
 	if _players_count > 0:
 		place_order()
-		_setState(TableState.WAITING_PRIMARY)
+		_set_state(TableState.WAITING_PRIMARY)
 
 
 # func _get_plate_controller_from_item(_item: Node) -> PlateController:
@@ -224,11 +225,11 @@ func _absorb_item_if_correct(_item: Node) -> void:
 func _update_state_from_orders():
 	print("Table _update_state_from_orders: unsatisfied_orders: ", _unsatisfied_orders)
 	if _unsatisfied_orders.size() > 0 and _state != TableState.EATING:
-		_setState(TableState.WAITING_FRIEND)
+		_set_state(TableState.WAITING_FRIEND)
 
 	# Table has everything it wants. Start eating
 	elif _unsatisfied_orders.is_empty() and _state != TableState.EATING:
-		_setState(TableState.EATING)
+		_set_state(TableState.EATING)
 
 
 func _collect_money_from_food():
@@ -255,10 +256,15 @@ func _set_snap_zones_enabled(value: bool) -> void:
 
 ## Server-only state transition: sets the new state's timer and assigns
 ## _state (whose setter refreshes the display on every peer).
-func _setState(newState: TableState) -> void:
+func _set_state(newState: TableState) -> void:
 	print("Table State START: ", TableState.keys()[newState])
 
 	match newState:
+		TableState.IDLE:
+			_state_time = 0.0
+			_state_duration = 0.0
+			_state = newState
+			customers.visible = false
 		TableState.EMPTY:
 			_state_time = randf_range(3, 7)
 			_state_duration = _state_time
@@ -299,15 +305,15 @@ func _state_end(oldState: TableState):
 	match oldState:
 		TableState.EMPTY:
 			customers.visible = true
-			_setState(TableState.THINKING)
+			_set_state(TableState.THINKING)
 
 		TableState.THINKING:
-			_setState(TableState.ORDERING)
+			_set_state(TableState.ORDERING)
 
 		TableState.EATING:
 			clearAllFood()
 			_set_snap_zones_enabled(true)
-			_setState(TableState.EMPTY)
+			_set_state(TableState.EMPTY)
 
 		TableState.ORDERING, TableState.WAITING_PRIMARY, TableState.WAITING_FRIEND:
 			label_3d.text = lbl_gameover
@@ -326,6 +332,10 @@ func _refresh_display() -> void:
 		push_error("Table missing progress bar or label")
 		return
 	match _state:
+		TableState.IDLE:
+			progress_bar.set_bar_visible(false)
+			label_3d.text = ""
+			label_3d_time.text = ""
 		TableState.EMPTY:
 			progress_bar.set_bar_visible(false)
 			label_3d.text = ""
@@ -356,6 +366,18 @@ func _process(delta: float) -> void:
 	_refresh_display()
 	_place_order_if_player()
 	
+	# If build mode, set, exit loop, be idle
+	if GameManager.game_state == GameManager.GameState.BUILDING and not _state == TableState.IDLE:
+		_set_state(TableState.IDLE)
+		return
+	# Game running, reenter loop
+	elif GameManager.game_state == GameManager.GameState.RUNNING and _state == TableState.IDLE:
+		_set_state(TableState.EMPTY)
+		return
+	# Still idle, do nothing
+	elif  _state == TableState.IDLE:
+		return
+
 	# Wait for state to finish
 	if _state_time > 0.0:
 		_state_time = max(0.0, _state_time - delta)
