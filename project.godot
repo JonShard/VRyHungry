@@ -29,7 +29,7 @@ file_logging/enable_file_logging=true
 
 [display]
 
-window/size/viewport_width=1800
+window/size/viewport_width=1000
 window/size/viewport_height=650
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"

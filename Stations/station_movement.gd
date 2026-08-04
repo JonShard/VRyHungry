@@ -27,7 +27,11 @@ func set_move_handle_enabled(enabled: bool) -> void:
 func _on_game_state_changed(new_state: GameManager.GameState) -> void:
 	set_move_handle_enabled(new_state == GameManager.GameState.BUILDING)
 
-
+func _on_station_bought(_instance: Node3D):
+	print("StationMovement _on_station_bought")
+	if GameManager.game_state == GameManager.GameState.BUILDING:
+		set_move_handle_enabled(true)
+		
 func _ready() -> void:
 	if not station:
 		push_error("StationMovement is missing referece to station")
@@ -42,6 +46,7 @@ func _ready() -> void:
 	original_station_transform = station.global_transform
 	move_handle.picked_up.connect(_handle_pickup)
 	move_handle.dropped.connect(_handle_drop)
+	Signals.station_bought.connect(_on_station_bought)
 
 	move_ghost.monitoring = true
 	move_ghost.visible = false
@@ -118,14 +123,8 @@ func _process(_delta: float) -> void:
 	if not moving:
 		return
 
-	var target_transform: Transform3D = move_handle.global_transform
-	target_transform.origin.x = snappedf(target_transform.origin.x, snap_grid_size)
-	target_transform.origin.z = snappedf(target_transform.origin.z, snap_grid_size)
-	target_transform.origin.y = original_station_transform.origin.y
-	var target_yaw: float = snappedf(move_handle.global_rotation_degrees.y, 90)
-	target_transform.basis = Basis(Vector3.UP, deg_to_rad(target_yaw))
-
-	move_ghost.global_transform = target_transform
+	move_ghost.global_transform = Helper.get_snapped_transform(move_handle)
+	move_ghost.global_transform.origin.y = original_station_transform.origin.y
 	if _is_move_position_valid():
 		_set_ghost_color(GHOST_COLOR_VALID)
 	else:
