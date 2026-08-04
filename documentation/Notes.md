@@ -26,6 +26,7 @@ splitter
 mixer
 blender
 dishwasher
+flinger / catapult
 
 ## Storage
 shelf
@@ -48,5 +49,13 @@ inserter
 belts share inventory
 
 tables share 
+
+
+Shared INventory
+    Raycasts[]
+    Area3D
+
+    list
+
 
 

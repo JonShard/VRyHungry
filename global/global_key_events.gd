@@ -9,6 +9,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		set_buidling_mode()
 	if event.is_action_pressed("set_running_mode"):
 		set_running_mode()
+	if event.is_action_pressed("set_game_over"):
+		set_game_over()
 
 
 # Finds any node of class/type Table and calls satisfyAllOrders()
@@ -29,3 +31,7 @@ func set_buidling_mode():
 func set_running_mode():
 	print("Global key event: Setting running mode")
 	GameManager.game_state = GameManager.GameState.RUNNING
+
+func set_game_over():
+	print("Global key event: Setting game over")
+	GameManager.game_state = GameManager.GameState.GAME_OVER

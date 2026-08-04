@@ -30,13 +30,9 @@ button = NodePath("Button")
 
 [node name="Button" type="Button" parent="." unique_id=1482490300]
 layout_mode = 1
-anchors_preset = -1
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 3.0
-offset_top = 3.0
-offset_right = -3.0
-offset_bottom = -3.0
 grow_horizontal = 2
 grow_vertical = 2
 icon = ExtResource("2_e1k4i")
