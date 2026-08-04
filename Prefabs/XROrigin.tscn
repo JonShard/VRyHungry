@@ -111,10 +111,12 @@ bones/21/rotation = Quaternion(-0.06251818, -0.00022572002, -0.115392834, 0.9913
 bones/22/rotation = Quaternion(0.058578636, 0.021648303, -0.26990518, 0.9608596)
 bones/23/rotation = Quaternion(0.006871769, -0.0035727466, -0.21195254, 0.97724926)
 
-[node name="BoneAttachment3D" type="BoneAttachment3D" parent="XRControllerLeftHand/LeftHand/Hand_low_L/Armature/Skeleton3D" index="1" unique_id=506224189]
+[node name="BoneAttachment3D" type="BoneAttachment3D" parent="XRControllerLeftHand/LeftHand/Hand_low_L/Armature/Skeleton3D" index="1" unique_id=774348011]
 transform = Transform3D(0.5408296, 0.8408128, -0.023173608, -0.08262672, 0.08052427, 0.99332196, 0.83706397, -0.5353032, 0.11302349, 0.039901964, 0.040282845, -0.15009598)
 bone_name = "Index_Tip_L"
 bone_idx = 9
+
+[node name="Poke" parent="XRControllerLeftHand/LeftHand/Hand_low_L/Armature/Skeleton3D/BoneAttachment3D" unique_id=259928841 instance=ExtResource("7_1fmci")]
 
 [node name="AnimationTree" parent="XRControllerLeftHand/LeftHand" index="1"]
 tree_root = SubResource("AnimationNodeBlendTree_yfij0")

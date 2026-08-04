@@ -4,6 +4,7 @@ extends Panel
 @onready var money_label: Label = $Money
 
 var controller: XRController3D = null
+var other_controller: XRController3D = null
 const INPUT_TOGGLE_COOLDOWN := 0.15
 
 var enabled: bool = false: set = _set_enabled
@@ -13,8 +14,12 @@ var viewport: XRToolsViewport2DIn3D
 
 func _ready() -> void:
 	detect_hand_from_xr_ancestor()
+
 	if controller:
-		controller.button_pressed.connect(_on_tracker_button_pressed)
+		controller.button_pressed.connect(_on_controller_button_pressed)
+	if other_controller:
+		other_controller.button_pressed.connect(_on_other_controller_button_pressed)
+
 	viewport = get_parent().get_parent() as XRToolsViewport2DIn3D
 	if not viewport:
 		push_error("Shop UI could not find XRToolsViewport2DIn3D grand parent")
@@ -32,13 +37,30 @@ func toggle_shop():
 
 
 func _set_enabled(value: bool) -> void:
-		enabled = value
-		visible = value
+	enabled = value
+	visible = value
+	if viewport:
 		viewport.enabled = value
 
+	_set_poke_enabled_for_controller(other_controller, value)
 
-func _on_tracker_button_pressed(button_name: String) -> void:
-	print("Shop _on_tracker_button_pressed, button: ", button_name)
+
+
+func _set_poke_enabled_for_controller(controller_node: XRController3D, value: bool) -> void:
+	if not controller_node:
+		return
+
+	var poke_node = Helper.find_first_child_of_type(controller_node, XRToolsPoke)
+	if poke_node:
+		print("Shop UI _set_poke_enabled_for_controller: ", poke_node.get_path(), " poke enabled: ", value)
+		poke_node.enabled = value
+		poke_node.visible = value
+	else:
+		print("Shop UI _set_poke_enabled_for_controller: ", controller_node.name, " poke not found")
+
+# For some reason, this is called every frame the button is down. So we need our own timer.
+func _on_controller_button_pressed(button_name: String) -> void:
+	print("Shop _on_controller_button_pressed, button: ", button_name)
 	var now := Time.get_ticks_msec() / 1000.0
 	if now - _last_toggle_time < INPUT_TOGGLE_COOLDOWN:
 		return
@@ -48,16 +70,23 @@ func _on_tracker_button_pressed(button_name: String) -> void:
 		toggle_shop()
 
 
+func _on_other_controller_button_pressed(button_name: String) -> void:
+	# If user opens menu on other hand. Close this one.
+	if enabled and button_name == "ax_button":
+		enabled = false
+
+
 func detect_hand_from_xr_ancestor() -> void:
-	var curr: Node = get_parent()
-	# Climb up the tree until we find an XRNode3D/XRController3D or hit root
-	while curr != null:
-		if curr is XRController3D:
-			controller = curr
-			break
-		curr = curr.get_parent()
-	
+	controller = XRHelpers.get_xr_controller(self)
 	if not controller:
 		push_error("Shop UI could not find XRController3D ancestor")
-	else:
-		print ("Shop UI detected hand: ", controller.get_tracker_hand())
+		return
+
+	var left_controller := XRHelpers.get_left_controller(self)
+	var right_controller := XRHelpers.get_right_controller(self)
+
+	if controller == left_controller:
+		other_controller = right_controller
+	elif controller == right_controller:
+		other_controller = left_controller
+	print("Shop UI detected hand: ", controller.get_tracker_hand())

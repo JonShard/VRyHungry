@@ -11,6 +11,9 @@
 [ext_resource type="Script" uid="uid://bsdpd18i1i17s" path="res://prefabs/build_mode_controller.gd" id="9_atgwk"]
 [ext_resource type="PackedScene" uid="uid://dvrk268s7gkxh" path="res://stations/sink.tscn" id="10_dhas4"]
 [ext_resource type="PackedScene" uid="uid://caf0xanmxbshy" path="res://stations/table.tscn" id="11_gaw43"]
+[ext_resource type="PackedScene" uid="uid://clujaf3u776a3" path="res://addons/godot-xr-tools/objects/viewport_2d_in_3d.tscn" id="12_n58f2"]
+[ext_resource type="PackedScene" uid="uid://xtcei2uvd5li" path="res://UI/game_over_panel.tscn" id="13_hooyg"]
+[ext_resource type="Script" uid="uid://cwijoksyou1ey" path="res://scenes/GameOvercontroler.gd" id="14_cqmpj"]
 
 [sub_resource type="Environment" id="Environment_bvwq1"]
 background_mode = 2
@@ -111,3 +114,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, 0.5, 0)
 
 [node name="Table" parent="." unique_id=1863572470 instance=ExtResource("11_gaw43")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 0.5, 1.8)
+
+[node name="GameOverPanel" parent="." unique_id=522901881 instance=ExtResource("12_n58f2")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -4.428178, 2.8122003, 3)
+scene = ExtResource("13_hooyg")
+viewport_size = Vector2(900, 600)
+transparent = 0
+filter = false
+scene_properties_keys = PackedStringArray("game_over_panel.gd")
+
+[node name="controler" type="Node" parent="GameOverPanel" unique_id=1442195864]
+script = ExtResource("14_cqmpj")

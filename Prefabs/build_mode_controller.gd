@@ -7,7 +7,7 @@ func _ready() -> void:
 
 
 func _on_game_state_changed(new_state: GameManager.GameState) -> void:
-	print("BuildModeController: game_state_changed to %s" % new_state)
+	print("BuildModeController: game_state_changed to %s" % GameManager.GameState.keys()[new_state])
 	if new_state == GameManager.GameState.BUILDING:
 		despawn_unheld_pickables()
 
