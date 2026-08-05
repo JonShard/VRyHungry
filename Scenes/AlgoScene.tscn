@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://22shbqdvnwgo"]
 
-[ext_resource type="Script" path="res://main.gd" id="1_m3h4l"]
+[ext_resource type="Script" uid="uid://d1cefhe3yyyds" path="res://Net/multiplayer_world.gd" id="1_nlnup"]
 [ext_resource type="PackedScene" uid="uid://j5s5wus7tuhb" path="res://prefabs/XROrigin.tscn" id="2_8pfaf"]
 [ext_resource type="Material" uid="uid://cmia50cfqxxo4" path="res://textures/dev_material_3d.tres" id="3_gatbn"]
 [ext_resource type="PackedScene" uid="uid://j7caslh27nor" path="res://stations/Hob.tscn" id="4_3lufs"]
@@ -13,10 +13,10 @@
 [ext_resource type="PackedScene" uid="uid://cwnwo4i28upap" path="res://stations/raw_burger_dispenser.tscn" id="15_m3h4l"]
 [ext_resource type="PackedScene" uid="uid://efaec6ymgabo" path="res://stations/Counter.tscn" id="15_tpcje"]
 [ext_resource type="PackedScene" uid="uid://caf0xanmxbshy" path="res://stations/table.tscn" id="16_g2k6a"]
-[ext_resource type="Script" uid="uid://k8ywnvlhcic4" path="res://scenes/testworldLoad.gd" id="16_m3h4l"]
+[ext_resource type="Script" uid="uid://k8ywnvlhcic4" path="res://test/testworldLoad.gd" id="16_m3h4l"]
 [ext_resource type="PackedScene" uid="uid://clujaf3u776a3" path="res://addons/godot-xr-tools/objects/viewport_2d_in_3d.tscn" id="17_gatbn"]
 [ext_resource type="PackedScene" uid="uid://xtcei2uvd5li" path="res://UI/game_over_panel.tscn" id="18_3lufs"]
-[ext_resource type="Script" uid="uid://cwijoksyou1ey" path="res://scenes/GameOvercontroler.gd" id="19_3lufs"]
+[ext_resource type="Script" uid="uid://cwijoksyou1ey" path="res://prefabs/GameOvercontroler.gd" id="19_3lufs"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vlqg6"]
 size = Vector3(16, 0.1, 16)
@@ -38,7 +38,8 @@ sdfgi_enabled = true
 size = Vector3(16, 10, 0.1)
 
 [node name="Main" type="Node3D" unique_id=1312265607]
-script = ExtResource("1_m3h4l")
+script = ExtResource("1_nlnup")
+populate_from_layout = false
 
 [node name="XROrigin3D" parent="." unique_id=2055526621 instance=ExtResource("2_8pfaf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
@@ -47,8 +48,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
 transform = Transform3D(-0.8660254, -0.43301278, 0.24999999, 0.3022632, -0.05510214, 0.9516306, -0.39829266, 0.8997021, 0.17860365, 0, 0, 0)
 
 [node name="Table" parent="." unique_id=1863572470 instance=ExtResource("16_g2k6a")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 2.739665, 0.47583598, -1.1895752)
-primary_duration = 35.0
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 2.739665, -0.023897558, -1.1895752)
 
 [node name="Floor" type="StaticBody3D" parent="." unique_id=122279514]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
@@ -64,10 +64,10 @@ mesh = SubResource("BoxMesh_24d3s")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -1.2)
 
 [node name="Hob2" parent="." unique_id=496572049 instance=ExtResource("4_3lufs")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0.5, -1.2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0.00026646256, -1.2)
 
 [node name="Hob3" parent="." unique_id=421567982 instance=ExtResource("4_3lufs")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, 0.5, -1.2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, 0.00026646256, -1.2)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1177077250]
 environment = SubResource("Environment_bvwq1")
@@ -76,31 +76,31 @@ environment = SubResource("Environment_bvwq1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8, 0.015, -1.2)
 
 [node name="Sink" parent="." unique_id=2055277359 instance=ExtResource("12_ah4xa")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5997182, 0.5, -1.2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5997182, 0.00026646256, -1.2)
 
 [node name="Sink2" parent="." unique_id=1692612192 instance=ExtResource("12_ah4xa")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1997182, 0.5, -1.2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1997182, 0.00026646256, -1.2)
 
 [node name="DirtStation" parent="." unique_id=160842153 instance=ExtResource("13_46xi2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8000001, 0.5, -1.2)
 
 [node name="Counter2" parent="." unique_id=368890752 instance=ExtResource("15_tpcje")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.8, 0.5, -0.6)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.8, 0.00026646256, -0.6)
 
 [node name="Counter3" parent="." unique_id=1498817646 instance=ExtResource("15_tpcje")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.8, 0.5, 0)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.8, 0.00026646256, 0)
 
 [node name="Counter4" parent="." unique_id=906748771 instance=ExtResource("15_tpcje")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.8, 0.5, 0.6)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.8, 0.00026646256, 0.6)
 
 [node name="Counter5" parent="." unique_id=1487893288 instance=ExtResource("15_tpcje")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -0.6, 0.5, 1.2)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -0.6, 0.00026646256, 1.2)
 
 [node name="Counter6" parent="." unique_id=1154936647 instance=ExtResource("15_tpcje")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0.5, 1.2)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0.00026646256, 1.2)
 
 [node name="Counter7" parent="." unique_id=990260272 instance=ExtResource("15_tpcje")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0.6, 0.5, 1.2)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0.6, 0.00026646256, 1.2)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=315740174]
 

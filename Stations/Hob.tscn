@@ -175,10 +175,11 @@ station = NodePath("../Hob")
 script = ExtResource("1_7jc4g")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Hob" unique_id=1283846023]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.51483154, 0)
 shape = SubResource("BoxShape3D_kdxnr")
 
 [node name="XRToolsSnapZone" type="Area3D" parent="Hob" unique_id=538157739 groups=["station"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5270121, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0418437, 0)
 collision_layer = 65536
 collision_mask = 65540
 script = ExtResource("2_er1dp")
@@ -194,9 +195,10 @@ shape = SubResource("BoxShape3D_7uuqv")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.022546828, -0.5270121, 0.36528283)
 
 [node name="ProgressBar3D" parent="Hob" unique_id=654673176 instance=ExtResource("3_7uuqv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.74736404, -0.09216304)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2621956, -0.09216304)
 
 [node name="CSGCombiner3D" type="CSGCombiner3D" parent="Hob" unique_id=70901698]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.51483154, 0)
 
 [node name="CSGBox3D" type="CSGBox3D" parent="Hob/CSGCombiner3D" unique_id=1111505172]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00071543455, 3.7252903e-09, -0.008516133)
@@ -286,7 +288,7 @@ root_node = NodePath("../..")
 libraries/ = SubResource("AnimationLibrary_ac5f3")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="Hob" unique_id=1618457623]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5053487, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0201802, 0)
 light_color = Color(1, 0.13725491, 0, 1)
 light_energy = 0.0
 omni_range = 0.5

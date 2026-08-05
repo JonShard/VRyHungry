@@ -8,6 +8,16 @@
 [ext_resource type="Texture2D" uid="uid://ejby14dl1svr" path="res://textures/shop/hob.png" id="5_2k6ie"]
 [ext_resource type="PackedScene" uid="uid://dvrk268s7gkxh" path="res://stations/sink.tscn" id="6_rktus"]
 [ext_resource type="Texture2D" uid="uid://ecdu0qqhib4" path="res://textures/shop/sink.png" id="7_4titf"]
+[ext_resource type="PackedScene" uid="uid://caf0xanmxbshy" path="res://stations/table.tscn" id="9_84wnh"]
+[ext_resource type="PackedScene" uid="uid://cwnwo4i28upap" path="res://stations/raw_burger_dispenser.tscn" id="9_vl3v4"]
+[ext_resource type="Texture2D" uid="uid://dpaqhbpmk7exf" path="res://textures/shop/raw_burger.png" id="10_rkek4"]
+[ext_resource type="Texture2D" uid="uid://cv3grgonwlakt" path="res://textures/shop/table.png" id="10_sb5p3"]
+[ext_resource type="PackedScene" uid="uid://c6rift56ql3f8" path="res://stations/BurgerBunsDispenser.tscn" id="11_4m5wg"]
+[ext_resource type="Texture2D" uid="uid://bmomecu0058xg" path="res://textures/shop/burger_buns.png" id="12_84wnh"]
+[ext_resource type="PackedScene" uid="uid://ck5tuftqmyiue" path="res://stations/plate_dispenser.tscn" id="13_4m5wg"]
+[ext_resource type="Texture2D" uid="uid://cjrwhtsjjhtu7" path="res://textures/shop/plates.png" id="14_84wnh"]
+[ext_resource type="PackedScene" uid="uid://sc6i0i1f0o48" path="res://stations/potato_dispenser.tscn" id="17_pdan6"]
+[ext_resource type="Texture2D" uid="uid://blekcmdjkxs0q" path="res://textures/shop/potatoes.png" id="18_6lkkh"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_vlqg6"]
 font_size = 35
@@ -49,15 +59,14 @@ offset_left = 20.0
 offset_top = 80.0
 offset_right = -20.0
 offset_bottom = -20.0
-current_tab = 1
+current_tab = 0
 
 [node name="Stations" type="GridContainer" parent="TabContainer" unique_id=189446761]
-visible = false
 layout_mode = 2
 columns = 6
 metadata/_tab_index = 0
 
-[node name="StationButton" parent="TabContainer/Stations" unique_id=2079583080 instance=ExtResource("1_pogqh")]
+[node name="Panel1" parent="TabContainer/Stations" unique_id=2079583080 instance=ExtResource("1_pogqh")]
 layout_mode = 2
 station_scene = ExtResource("2_35otv")
 icon_texture = ExtResource("3_74fni")
@@ -69,226 +78,52 @@ layout_mode = 2
 station_scene = ExtResource("4_l3qkl")
 icon_texture = ExtResource("5_2k6ie")
 station_name = "Hob"
-cost = 50
+cost = 60
 
 [node name="Panel3" parent="TabContainer/Stations" unique_id=1096388793 instance=ExtResource("1_pogqh")]
 layout_mode = 2
 station_scene = ExtResource("6_rktus")
 icon_texture = ExtResource("7_4titf")
 station_name = "Sink"
-cost = 40
-
-[node name="StationButton2" parent="TabContainer/Stations" unique_id=1037758002 instance=ExtResource("1_pogqh")]
-layout_mode = 2
-station_scene = ExtResource("2_35otv")
-icon_texture = ExtResource("3_74fni")
-station_name = "Counter"
 cost = 30
 
-[node name="Panel4" parent="TabContainer/Stations" unique_id=1667497770 instance=ExtResource("1_pogqh")]
+[node name="Panel4" parent="TabContainer/Stations" unique_id=699590599 instance=ExtResource("1_pogqh")]
 layout_mode = 2
-station_scene = ExtResource("4_l3qkl")
-icon_texture = ExtResource("5_2k6ie")
-station_name = "Hob"
+station_scene = ExtResource("9_84wnh")
+icon_texture = ExtResource("10_sb5p3")
+station_name = "Table"
 cost = 50
 
-[node name="Panel5" parent="TabContainer/Stations" unique_id=1982065975 instance=ExtResource("1_pogqh")]
+[node name="Panel5" parent="TabContainer/Stations" unique_id=387664331 instance=ExtResource("1_pogqh")]
 layout_mode = 2
-station_scene = ExtResource("6_rktus")
-icon_texture = ExtResource("7_4titf")
-station_name = "Sink"
-cost = 40
-
-[node name="StationButton3" parent="TabContainer/Stations" unique_id=1301410231 instance=ExtResource("1_pogqh")]
-layout_mode = 2
-station_scene = ExtResource("2_35otv")
-icon_texture = ExtResource("3_74fni")
-station_name = "Counter"
-cost = 30
-
-[node name="Panel6" parent="TabContainer/Stations" unique_id=1995120839 instance=ExtResource("1_pogqh")]
-layout_mode = 2
-station_scene = ExtResource("4_l3qkl")
-icon_texture = ExtResource("5_2k6ie")
-station_name = "Hob"
-cost = 50
-
-[node name="Panel7" parent="TabContainer/Stations" unique_id=761089034 instance=ExtResource("1_pogqh")]
-layout_mode = 2
-station_scene = ExtResource("6_rktus")
-icon_texture = ExtResource("7_4titf")
-station_name = "Sink"
-cost = 40
-
-[node name="StationButton4" parent="TabContainer/Stations" unique_id=1417297413 instance=ExtResource("1_pogqh")]
-layout_mode = 2
-station_scene = ExtResource("2_35otv")
-icon_texture = ExtResource("3_74fni")
-station_name = "Counter"
-cost = 30
-
-[node name="Panel8" parent="TabContainer/Stations" unique_id=1691237963 instance=ExtResource("1_pogqh")]
-layout_mode = 2
-station_scene = ExtResource("4_l3qkl")
-icon_texture = ExtResource("5_2k6ie")
-station_name = "Hob"
-cost = 50
-
-[node name="Panel9" parent="TabContainer/Stations" unique_id=1365829405 instance=ExtResource("1_pogqh")]
-layout_mode = 2
-station_scene = ExtResource("6_rktus")
-icon_texture = ExtResource("7_4titf")
-station_name = "Sink"
-cost = 40
-
-[node name="StationButton5" parent="TabContainer/Stations" unique_id=2041495798 instance=ExtResource("1_pogqh")]
-layout_mode = 2
-station_scene = ExtResource("2_35otv")
-icon_texture = ExtResource("3_74fni")
-station_name = "Counter"
-cost = 30
-
-[node name="Panel10" parent="TabContainer/Stations" unique_id=1193707247 instance=ExtResource("1_pogqh")]
-layout_mode = 2
-station_scene = ExtResource("4_l3qkl")
-icon_texture = ExtResource("5_2k6ie")
-station_name = "Hob"
-cost = 50
-
-[node name="Panel11" parent="TabContainer/Stations" unique_id=1812217593 instance=ExtResource("1_pogqh")]
-layout_mode = 2
-station_scene = ExtResource("6_rktus")
-icon_texture = ExtResource("7_4titf")
-station_name = "Sink"
-cost = 40
-
-[node name="StationButton6" parent="TabContainer/Stations" unique_id=495155208 instance=ExtResource("1_pogqh")]
-layout_mode = 2
-station_scene = ExtResource("2_35otv")
-icon_texture = ExtResource("3_74fni")
-station_name = "Counter"
-cost = 30
-
-[node name="Panel12" parent="TabContainer/Stations" unique_id=773081956 instance=ExtResource("1_pogqh")]
-layout_mode = 2
-station_scene = ExtResource("4_l3qkl")
-icon_texture = ExtResource("5_2k6ie")
-station_name = "Hob"
-cost = 50
-
-[node name="Panel13" parent="TabContainer/Stations" unique_id=1722465236 instance=ExtResource("1_pogqh")]
-layout_mode = 2
-station_scene = ExtResource("6_rktus")
-icon_texture = ExtResource("7_4titf")
-station_name = "Sink"
-cost = 40
-
-[node name="StationButton7" parent="TabContainer/Stations" unique_id=920721283 instance=ExtResource("1_pogqh")]
-layout_mode = 2
-station_scene = ExtResource("2_35otv")
-icon_texture = ExtResource("3_74fni")
-station_name = "Counter"
-cost = 30
-
-[node name="Panel14" parent="TabContainer/Stations" unique_id=280005981 instance=ExtResource("1_pogqh")]
-layout_mode = 2
-station_scene = ExtResource("4_l3qkl")
-icon_texture = ExtResource("5_2k6ie")
-station_name = "Hob"
-cost = 50
-
-[node name="Panel15" parent="TabContainer/Stations" unique_id=1032476128 instance=ExtResource("1_pogqh")]
-layout_mode = 2
-station_scene = ExtResource("6_rktus")
-icon_texture = ExtResource("7_4titf")
-station_name = "Sink"
-cost = 40
-
-[node name="StationButton8" parent="TabContainer/Stations" unique_id=1596739090 instance=ExtResource("1_pogqh")]
-layout_mode = 2
-station_scene = ExtResource("2_35otv")
-icon_texture = ExtResource("3_74fni")
-station_name = "Counter"
-cost = 30
-
-[node name="Panel16" parent="TabContainer/Stations" unique_id=1045125889 instance=ExtResource("1_pogqh")]
-layout_mode = 2
-station_scene = ExtResource("4_l3qkl")
-icon_texture = ExtResource("5_2k6ie")
-station_name = "Hob"
-cost = 50
-
-[node name="Panel17" parent="TabContainer/Stations" unique_id=85646771 instance=ExtResource("1_pogqh")]
-layout_mode = 2
-station_scene = ExtResource("6_rktus")
-icon_texture = ExtResource("7_4titf")
-station_name = "Sink"
-cost = 40
-
-[node name="StationButton9" parent="TabContainer/Stations" unique_id=883484649 instance=ExtResource("1_pogqh")]
-layout_mode = 2
-station_scene = ExtResource("2_35otv")
-icon_texture = ExtResource("3_74fni")
-station_name = "Counter"
-cost = 30
-
-[node name="Panel18" parent="TabContainer/Stations" unique_id=259381012 instance=ExtResource("1_pogqh")]
-layout_mode = 2
-station_scene = ExtResource("4_l3qkl")
-icon_texture = ExtResource("5_2k6ie")
-station_name = "Hob"
-cost = 50
-
-[node name="Panel19" parent="TabContainer/Stations" unique_id=1701937266 instance=ExtResource("1_pogqh")]
-layout_mode = 2
-station_scene = ExtResource("6_rktus")
-icon_texture = ExtResource("7_4titf")
-station_name = "Sink"
-cost = 40
-
-[node name="StationButton10" parent="TabContainer/Stations" unique_id=381125476 instance=ExtResource("1_pogqh")]
-layout_mode = 2
-station_scene = ExtResource("2_35otv")
-icon_texture = ExtResource("3_74fni")
-station_name = "Counter"
-cost = 30
-
-[node name="Panel20" parent="TabContainer/Stations" unique_id=1573978940 instance=ExtResource("1_pogqh")]
-layout_mode = 2
-station_scene = ExtResource("4_l3qkl")
-icon_texture = ExtResource("5_2k6ie")
-station_name = "Hob"
-cost = 50
-
-[node name="Panel21" parent="TabContainer/Stations" unique_id=555544070 instance=ExtResource("1_pogqh")]
-layout_mode = 2
-station_scene = ExtResource("6_rktus")
-icon_texture = ExtResource("7_4titf")
-station_name = "Sink"
-cost = 40
+station_scene = ExtResource("13_4m5wg")
+icon_texture = ExtResource("14_84wnh")
+station_name = "Plates"
+cost = 80
 
 [node name="Food" type="GridContainer" parent="TabContainer" unique_id=422899445]
+visible = false
 layout_mode = 2
 columns = 6
 metadata/_tab_index = 1
 
-[node name="StationButton" parent="TabContainer/Food" unique_id=586692243 instance=ExtResource("1_pogqh")]
+[node name="Panel1" parent="TabContainer/Food" unique_id=586692243 instance=ExtResource("1_pogqh")]
 layout_mode = 2
-station_scene = ExtResource("2_35otv")
-icon_texture = ExtResource("3_74fni")
-station_name = "Counter"
-cost = 30
+station_scene = ExtResource("9_vl3v4")
+icon_texture = ExtResource("10_rkek4")
+station_name = "Raw Burgers"
+cost = 60
 
 [node name="Panel2" parent="TabContainer/Food" unique_id=918076583 instance=ExtResource("1_pogqh")]
 layout_mode = 2
-station_scene = ExtResource("4_l3qkl")
-icon_texture = ExtResource("5_2k6ie")
-station_name = "Hob"
-cost = 50
+station_scene = ExtResource("11_4m5wg")
+icon_texture = ExtResource("12_84wnh")
+station_name = "Burger Buns"
+cost = 60
 
-[node name="Panel3" parent="TabContainer/Food" unique_id=387664331 instance=ExtResource("1_pogqh")]
+[node name="Panel3" parent="TabContainer/Food" unique_id=370542353 instance=ExtResource("1_pogqh")]
 layout_mode = 2
-station_scene = ExtResource("6_rktus")
-icon_texture = ExtResource("7_4titf")
-station_name = "Sink"
-cost = 40
+station_scene = ExtResource("17_pdan6")
+icon_texture = ExtResource("18_6lkkh")
+station_name = "Potatos"
+cost = 60

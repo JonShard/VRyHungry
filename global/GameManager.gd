@@ -1,7 +1,7 @@
 class_name GameManager
 extends Node
 
-static var money: int = 100
+static var money: int = 1000
 static var meals_in_play: Array[String]
 static var sides_in_play: Array[String]
 

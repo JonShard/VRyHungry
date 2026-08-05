@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bodj8op527o2c"]
 
-[ext_resource type="Script" uid="uid://d1cefhe3yyyds" path="res://scenes/multiplayer_world.gd" id="1_6uucx"]
+[ext_resource type="Script" uid="uid://d1cefhe3yyyds" path="res://Net/multiplayer_world.gd" id="1_6uucx"]
 [ext_resource type="PackedScene" uid="uid://j5s5wus7tuhb" path="res://prefabs/XROrigin.tscn" id="2_j7vd1"]
 [ext_resource type="Material" uid="uid://cmia50cfqxxo4" path="res://textures/dev_material_3d.tres" id="3_ssbaf"]
 [ext_resource type="Sky" uid="uid://c1abtpwhdm2d5" path="res://textures/sky/NightSkyHDRI009_16K.tres" id="4_081u3"]
@@ -34,7 +34,6 @@ size = Vector3(15, 20, 0.1)
 
 [node name="Main" type="Node3D" unique_id=1312265607]
 script = ExtResource("1_6uucx")
-populate_from_layout = true
 
 [node name="XROrigin3D" parent="." unique_id=2055526621 groups=["local_xr_origin"] instance=ExtResource("2_j7vd1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.36171648, 0, 0.81835127)
@@ -85,10 +84,10 @@ transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 7.50
 shape = SubResource("BoxShape3D_arao0")
 
 [node name="Hob" parent="." unique_id=1687971542 instance=ExtResource("5_t1fa7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.014911681, 0)
 
 [node name="Sink" parent="." unique_id=2055277359 instance=ExtResource("6_6jhmh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0.014911681, 0)
 
 [node name="Plate" parent="." unique_id=190487773 instance=ExtResource("7_bowes")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4050963, 1.1702834, 0.049627244)
@@ -106,7 +105,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.28692234, 1.0149999, 1.1)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.40037438, 1.0094403, 1.1)
 
 [node name="Counter" parent="." unique_id=1487893288 instance=ExtResource("12_j5uvh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0.014911681, 0)
 
 [node name="Counter2" parent="." unique_id=860178119 instance=ExtResource("12_j5uvh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.014911681, 0)

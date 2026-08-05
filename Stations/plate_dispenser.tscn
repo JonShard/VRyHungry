@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://ck5tuftqmyiue"]
 
+[ext_resource type="PackedScene" uid="uid://cvucwxibtol5f" path="res://stations/StationMovement.tscn" id="1_jgjsq"]
 [ext_resource type="Script" uid="uid://0y6wnjcsum6" path="res://stations/item_dispenser.gd" id="1_jm0ik"]
 [ext_resource type="PackedScene" uid="uid://bp3v1jl8pctro" path="res://Containers/plate.tscn" id="2_tfo2i"]
 [ext_resource type="Script" uid="uid://cquqe4f1m1sw6" path="res://addons/godot-xr-tools/objects/snap_zone.gd" id="3_lr065"]
@@ -9,13 +10,19 @@
 radius = 0.3
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_24d3s"]
+height = 1.0
 radius = 0.3
 
-[node name="PlateDispenser" type="StaticBody3D" unique_id=710538846]
+[node name="PlateDispenser" type="Node3D" unique_id=53391541]
+
+[node name="StationMovement" parent="." unique_id=946873975 node_paths=PackedStringArray("station") instance=ExtResource("1_jgjsq")]
+station = NodePath("../PlateDispenser")
+
+[node name="PlateDispenser" type="StaticBody3D" parent="." unique_id=710538846]
 script = ExtResource("1_jm0ik")
 item_scene = ExtResource("2_tfo2i")
 
-[node name="XRToolsSnapZone" type="Area3D" parent="." unique_id=238176038]
+[node name="XRToolsSnapZone" type="Area3D" parent="PlateDispenser" unique_id=238176038]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00070536137, 1.1603245, -0.002165556)
 collision_layer = 65536
 collision_mask = 65536
@@ -23,85 +30,88 @@ script = ExtResource("3_lr065")
 snap_mode = 1
 metadata/_custom_type_script = "uid://cquqe4f1m1sw6"
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="XRToolsSnapZone" unique_id=1942470044]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PlateDispenser/XRToolsSnapZone" unique_id=1942470044]
 shape = SubResource("SphereShape3D_xmbo2")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=831688237]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PlateDispenser" unique_id=831688237]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("CylinderShape3D_24d3s")
 
-[node name="SlideOffDome" parent="." unique_id=1427609426 instance=ExtResource("4_tfo2i")]
+[node name="SlideOffDome" parent="PlateDispenser" unique_id=1427609426 instance=ExtResource("4_tfo2i")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.061363697, 0)
 
-[node name="CSGCombiner3D" type="CSGCombiner3D" parent="." unique_id=696108271]
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="PlateDispenser" unique_id=696108271]
 
-[node name="CSGCylinder3D" type="CSGCylinder3D" parent="CSGCombiner3D" unique_id=1339763385]
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="PlateDispenser/CSGCombiner3D" unique_id=1339763385]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 radius = 0.3
+height = 1.0
 sides = 32
 
-[node name="Plates" type="Node3D" parent="." unique_id=1364909922]
+[node name="Plates" type="Node3D" parent="PlateDispenser" unique_id=1364909922]
 
-[node name="CSGCombiner3D" type="CSGCombiner3D" parent="Plates" unique_id=2128650644]
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="PlateDispenser/Plates" unique_id=2128650644]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0289642, 0)
 autosmooth = true
 smoothing_angle = 103.9
 
-[node name="CSGCylinder3D" type="CSGCylinder3D" parent="Plates/CSGCombiner3D" unique_id=472067854]
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="PlateDispenser/Plates/CSGCombiner3D" unique_id=472067854]
 radius = 0.2
 height = 0.03
 sides = 16
 
-[node name="CSGCylinder3D" type="CSGCylinder3D" parent="Plates/CSGCombiner3D/CSGCylinder3D" unique_id=7092994]
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="PlateDispenser/Plates/CSGCombiner3D/CSGCylinder3D" unique_id=7092994]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.010312311, 0)
 operation = 2
 radius = 0.15
 height = 0.03
 sides = 16
 
-[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="Plates/CSGCombiner3D" unique_id=23957958]
+[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="PlateDispenser/Plates/CSGCombiner3D" unique_id=23957958]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.027119078, 0)
 radius = 0.15
 height = 0.02
 
-[node name="CSGCombiner3D2" type="CSGCombiner3D" parent="Plates" unique_id=404631280]
+[node name="CSGCombiner3D2" type="CSGCombiner3D" parent="PlateDispenser/Plates" unique_id=404631280]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0762081, 0)
 autosmooth = true
 smoothing_angle = 103.9
 
-[node name="CSGCylinder3D" type="CSGCylinder3D" parent="Plates/CSGCombiner3D2" unique_id=943162425]
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="PlateDispenser/Plates/CSGCombiner3D2" unique_id=943162425]
 radius = 0.2
 height = 0.03
 sides = 16
 
-[node name="CSGCylinder3D" type="CSGCylinder3D" parent="Plates/CSGCombiner3D2/CSGCylinder3D" unique_id=218364524]
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="PlateDispenser/Plates/CSGCombiner3D2/CSGCylinder3D" unique_id=218364524]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.010312311, 0)
 operation = 2
 radius = 0.15
 height = 0.03
 sides = 16
 
-[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="Plates/CSGCombiner3D2" unique_id=1548327331]
+[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="PlateDispenser/Plates/CSGCombiner3D2" unique_id=1548327331]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.027119078, 0)
 radius = 0.15
 height = 0.02
 
-[node name="CSGCombiner3D3" type="CSGCombiner3D" parent="Plates" unique_id=1506211353]
+[node name="CSGCombiner3D3" type="CSGCombiner3D" parent="PlateDispenser/Plates" unique_id=1506211353]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1214186, 0)
 autosmooth = true
 smoothing_angle = 103.9
 
-[node name="CSGCylinder3D" type="CSGCylinder3D" parent="Plates/CSGCombiner3D3" unique_id=739830577]
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="PlateDispenser/Plates/CSGCombiner3D3" unique_id=739830577]
 radius = 0.2
 height = 0.03
 sides = 16
 
-[node name="CSGCylinder3D" type="CSGCylinder3D" parent="Plates/CSGCombiner3D3/CSGCylinder3D" unique_id=1882120753]
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="PlateDispenser/Plates/CSGCombiner3D3/CSGCylinder3D" unique_id=1882120753]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.010312311, 0)
 operation = 2
 radius = 0.15
 height = 0.03
 sides = 16
 
-[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="Plates/CSGCombiner3D3" unique_id=1904629745]
+[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="PlateDispenser/Plates/CSGCombiner3D3" unique_id=1904629745]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.027119078, 0)
 radius = 0.15
 height = 0.02

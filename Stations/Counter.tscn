@@ -9,7 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://bxbocxdaayvwx" path="res://UI/progress_bar.tscn" id="6_racgh"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_24d3s"]
-size = Vector3(0.6, 1, 0.6)
+size = Vector3(0.48521727, 0.040039063, 0.41994628)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vlqg6"]
 size = Vector3(0.3, 0.05, 0.3)
@@ -39,16 +39,18 @@ knife = NodePath("Knife")
 progress_bar = NodePath("ProgressBar3D")
 
 [node name="CollisionShape3DCuttingBoard" type="CollisionShape3D" parent="Counter" unique_id=706340473]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00157471, 0.51688915, 0.00070264935)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00088502467, 1.0178218, 0.0009101778)
 shape = SubResource("BoxShape3D_24d3s")
 
 [node name="CollisionShape3DCounter" type="CollisionShape3D" parent="Counter" unique_id=895680269]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5038623, 0)
 shape = SubResource("BoxShape3D_24d3s")
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="Counter" unique_id=1941838513]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5038623, 0)
 
 [node name="GestureArea" type="Area3D" parent="Counter" unique_id=398687137]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.54, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0438623, 0)
 collision_layer = 0
 collision_mask = 65536
 
@@ -56,12 +58,12 @@ collision_mask = 65536
 shape = SubResource("BoxShape3D_vlqg6")
 
 [node name="Knife" parent="Counter" unique_id=1675596942 instance=ExtResource("3_3gvdi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.78000003, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2838624, 0)
 freeze = true
 release_mode = 1
 
 [node name="XRToolsSnapZone" type="Area3D" parent="Counter" unique_id=1647380272 groups=["station"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5608841, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0647464, 0)
 collision_layer = 65536
 collision_mask = 65540
 script = ExtResource("1_dlkho")
@@ -76,9 +78,10 @@ shape = SubResource("BoxShape3D_1ntq7")
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="Counter/XRToolsSnapZone" unique_id=1786831079]
 
 [node name="ProgressBar3D" parent="Counter" unique_id=654673176 instance=ExtResource("6_racgh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.78000003, -0.18)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2838624, -0.18)
 
 [node name="CSGCombiner3D" type="CSGCombiner3D" parent="Counter" unique_id=451757283]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5038623, 0)
 
 [node name="CSGBox3D" type="CSGBox3D" parent="Counter/CSGCombiner3D" unique_id=305755330]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.046, -0.025)

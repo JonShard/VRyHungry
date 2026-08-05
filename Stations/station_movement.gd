@@ -1,7 +1,5 @@
 extends Node
 
-@export var snap_grid_size: float = 0.6
-
 @export var move_handle: XRToolsPickable
 @export var move_ghost: Area3D
 @export var station: StaticBody3D
@@ -138,6 +136,11 @@ func _is_move_position_valid() -> bool:
 			continue
 		if body == station:
 			continue
+		# If body is a pickable that is held by a snapzone that is part of this station
+		var pickable = body as XRToolsPickable
+		if pickable and pickable is XRToolsPickable and Helper.is_node_decendant_of(pickable.get_picked_up_by(), get_parent()):
+				continue
+				
 		return false
 
 	for area in move_ghost.get_overlapping_areas():

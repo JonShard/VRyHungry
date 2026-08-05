@@ -41,7 +41,7 @@ properties/2/spawn = true
 properties/2/replication_mode = 1
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vlqg6"]
-size = Vector3(0.5, 1, 0.5)
+size = Vector3(0.5, 0.87231445, 0.5)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vlqg6"]
 transparency = 1
@@ -53,7 +53,7 @@ move_handle = NodePath("MoveHandle")
 move_ghost = NodePath("MoveGhost")
 
 [node name="MoveHandle" type="RigidBody3D" parent="." unique_id=954108203 groups=["platalbe_item"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.08, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 collision_layer = 4
 collision_mask = 196615
 axis_lock_linear_y = true
@@ -84,11 +84,11 @@ replication_config = SubResource("SceneReplicationConfig_np_cube")
 script = ExtResource("8_7mccn")
 
 [node name="MoveGhost" type="Area3D" parent="." unique_id=1305344236]
-visible = false
 collision_layer = 0
-collision_mask = 524295
+collision_mask = 524291
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MoveGhost" unique_id=2074041383]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.44934082, 0)
 shape = SubResource("BoxShape3D_vlqg6")
 
 [node name="CSGCombiner3D" type="CSGCombiner3D" parent="MoveGhost" unique_id=283929246]
@@ -96,20 +96,26 @@ collision_layer = 0
 collision_mask = 524291
 
 [node name="CSGBox3D" type="CSGBox3D" parent="MoveGhost/CSGCombiner3D" unique_id=1786907045]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 size = Vector3(0.6, 1, 0.6)
 material = SubResource("StandardMaterial3D_vlqg6")
 
 [node name="CSGBox3D2" type="CSGBox3D" parent="MoveGhost/CSGCombiner3D" unique_id=684823657]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5642835, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 size = Vector3(0.03, 0.03, 0.3)
 material = SubResource("StandardMaterial3D_vlqg6")
 
 [node name="CSGBox3D2" type="CSGBox3D" parent="MoveGhost/CSGCombiner3D/CSGBox3D2" unique_id=286640707]
-transform = Transform3D(0.70451534, 0, -0.7096888, 0, 1, 0, 0.7096888, 0, 0.70451534, -0.046803005, 0, -0.096979)
+transform = Transform3D(0.70451534, 0, -0.7096888, 0, 1, 0, 0.7096888, 0, 0.70451534, -0.046803005, 0.5, -0.096979)
 size = Vector3(0.03, 0.03, 0.12021485)
 material = SubResource("StandardMaterial3D_vlqg6")
 
 [node name="CSGBox3D3" type="CSGBox3D" parent="MoveGhost/CSGCombiner3D/CSGBox3D2" unique_id=1791902851]
-transform = Transform3D(0.7073421, 0, 0.7068714, 0, 1, 0, -0.7068714, 0, 0.7073421, 0.04550519, 0, -0.096264325)
+transform = Transform3D(0.7073421, 0, 0.7068714, 0, 1, 0, -0.7068714, 0, 0.7073421, 0.04550519, 0.5, -0.096264325)
 size = Vector3(0.03, 0.03, 0.12021485)
+material = SubResource("StandardMaterial3D_vlqg6")
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="MoveGhost/CSGCombiner3D/CSGBox3D2" unique_id=83757100]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -0.020843491)
+size = Vector3(0.03, 0.03, 0.25904542)
 material = SubResource("StandardMaterial3D_vlqg6")

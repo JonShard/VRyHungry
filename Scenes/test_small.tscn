@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dbgu4r127ke5v"]
 
-[ext_resource type="Script" uid="uid://d1cefhe3yyyds" path="res://scenes/multiplayer_world.gd" id="1_atgwk"]
+[ext_resource type="Script" uid="uid://d1cefhe3yyyds" path="res://Net/multiplayer_world.gd" id="1_atgwk"]
 [ext_resource type="Sky" uid="uid://c1abtpwhdm2d5" path="res://textures/sky/NightSkyHDRI009_16K.tres" id="2_1jq86"]
 [ext_resource type="PackedScene" uid="uid://j5s5wus7tuhb" path="res://prefabs/XROrigin.tscn" id="3_bryd6"]
 [ext_resource type="Material" uid="uid://cmia50cfqxxo4" path="res://textures/dev_material_3d.tres" id="4_kpgm6"]
@@ -13,7 +13,8 @@
 [ext_resource type="PackedScene" uid="uid://caf0xanmxbshy" path="res://stations/table.tscn" id="11_gaw43"]
 [ext_resource type="PackedScene" uid="uid://clujaf3u776a3" path="res://addons/godot-xr-tools/objects/viewport_2d_in_3d.tscn" id="12_n58f2"]
 [ext_resource type="PackedScene" uid="uid://xtcei2uvd5li" path="res://UI/game_over_panel.tscn" id="13_hooyg"]
-[ext_resource type="Script" uid="uid://cwijoksyou1ey" path="res://scenes/GameOvercontroler.gd" id="14_cqmpj"]
+[ext_resource type="Script" uid="uid://cwijoksyou1ey" path="res://prefabs/GameOvercontroler.gd" id="14_cqmpj"]
+[ext_resource type="PackedScene" uid="uid://sc6i0i1f0o48" path="res://stations/potato_dispenser.tscn" id="15_hooyg"]
 
 [sub_resource type="Environment" id="Environment_bvwq1"]
 background_mode = 2
@@ -92,10 +93,9 @@ transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 9.93
 shape = SubResource("BoxShape3D_24d3s")
 
 [node name="Hob" parent="." unique_id=1687971542 instance=ExtResource("5_gfdi7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.507, 0)
 
 [node name="Counter" parent="." unique_id=1487893288 instance=ExtResource("7_jnxsa")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0.512, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0, 0)
 
 [node name="Potato" parent="." unique_id=962444046 instance=ExtResource("8_1qeqw")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.273382, 1.5940565, -0.036002517)
@@ -110,13 +110,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 0, 0)
 script = ExtResource("9_atgwk")
 
 [node name="Sink" parent="." unique_id=1559059799 instance=ExtResource("10_dhas4")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, 0.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, 0, 0)
 
 [node name="Table" parent="." unique_id=1863572470 instance=ExtResource("11_gaw43")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 0.5, 1.8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8, 0, 1.8)
 
 [node name="GameOverPanel" parent="." unique_id=522901881 instance=ExtResource("12_n58f2")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -4.428178, 2.8122003, 3)
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 2.7718225, 2.8122003, 1.8000003)
 scene = ExtResource("13_hooyg")
 viewport_size = Vector2(900, 600)
 transparent = 0
@@ -125,3 +125,6 @@ scene_properties_keys = PackedStringArray("game_over_panel.gd")
 
 [node name="controler" type="Node" parent="GameOverPanel" unique_id=1442195864]
 script = ExtResource("14_cqmpj")
+
+[node name="PotatoDispenser" parent="." unique_id=1410160280 instance=ExtResource("15_hooyg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8000002, 0, 0)

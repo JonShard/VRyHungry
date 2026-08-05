@@ -191,11 +191,11 @@ station = NodePath("../Sink")
 script = ExtResource("1_7hh4b")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Sink" unique_id=964735164]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0012329221, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.507675, 0)
 shape = SubResource("BoxShape3D_l02yb")
 
 [node name="XRToolsSnapZone" type="Area3D" parent="Sink" unique_id=1762550988 groups=["station"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.44614658, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9525887, 0)
 collision_layer = 65536
 collision_mask = 65540
 script = ExtResource("2_3ocod")
@@ -210,6 +210,7 @@ shape = SubResource("BoxShape3D_ai6d4")
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="Sink/XRToolsSnapZone" unique_id=1926328538]
 
 [node name="CSGCombiner3D" type="CSGCombiner3D" parent="Sink" unique_id=311064646]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.50644207, 0)
 
 [node name="CSGBox3D" type="CSGBox3D" parent="Sink/CSGCombiner3D" unique_id=1147823280]
 size = Vector3(0.6, 1, 0.6)
@@ -244,9 +245,10 @@ size = Vector3(1, 1.2053223, 0.352417)
 replication_config = SubResource("SceneReplicationConfig_np_sink")
 
 [node name="ProgressBar3D" parent="Sink" unique_id=654673176 instance=ExtResource("4_1pinr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8164611, -0.035980098)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3229032, -0.035980098)
 
 [node name="bubbles" type="CSGCombiner3D" parent="Sink" unique_id=1624244242]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.50644207, 0)
 visible = false
 
 [node name="CSGSphere3D" type="CSGSphere3D" parent="Sink/bubbles" unique_id=1363004819]
@@ -265,6 +267,7 @@ radius = 0.08
 material = SubResource("StandardMaterial3D_0gbf8")
 
 [node name="water" type="CSGCombiner3D" parent="Sink" unique_id=1050686091]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.50644207, 0)
 visible = false
 
 [node name="CSGBox3D" type="CSGBox3D" parent="Sink/water" unique_id=1224655006]
@@ -279,7 +282,7 @@ libraries/ = SubResource("AnimationLibrary_u2x8c")
 stream = SubResource("AudioStreamWAV_ai6d4")
 
 [node name="GPUParticles3D" type="GPUParticles3D" parent="Sink" unique_id=1688415718]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0002603531, 0.6479259, -0.03759767)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0002603531, 1.154368, -0.03759767)
 visible = false
 process_material = SubResource("ParticleProcessMaterial_hrheb")
 draw_pass_1 = SubResource("SphereMesh_bvwq1")

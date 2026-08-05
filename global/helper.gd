@@ -22,6 +22,20 @@ static func find_first_child_of_type(node: Node, type: Variant) -> Node:
 			return nested
 	return null
 	
+# Returns true if decendant is a decendant node of root, false otherwise. Returns false if either node is null.
+static func is_node_decendant_of(decendant: Node, root: Node) -> bool:
+	if not decendant or not root:
+		print("Helper.is_node_decendant_of: decendant or root is null")
+		return false
+	var current: Node = decendant
+	while current:
+		if current == root:
+			print("Helper.is_node_decendant_of: decendant %s is a descendant of root %s" % [decendant.name, root.name])
+			return true
+		current = current.get_parent()
+	print("Helper.is_node_decendant_of: decendant %s is NOT a descendant of root %s" % [decendant.name, root.name])
+	return false
+	
 
 # Returns a transform with position snapped to the 0.6 grid and rotation snapped to 90 degrees.
 static func get_snapped_transform(node: Node3D) -> Transform3D:
