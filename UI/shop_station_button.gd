@@ -10,7 +10,6 @@ extends Panel
 @export var button: Button
 
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	name_label.text = station_name
 	cost_label.text = str(cost) + "$"

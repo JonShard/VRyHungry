@@ -19,7 +19,7 @@ func _ready() -> void:
 		controller.button_pressed.connect(_on_controller_button_pressed)
 	if other_controller:
 		other_controller.button_pressed.connect(_on_other_controller_button_pressed)
-
+	Signals.station_bought.connect(_on_station_bought)
 	viewport = get_parent().get_parent() as XRToolsViewport2DIn3D
 	if not viewport:
 		push_error("Shop UI could not find XRToolsViewport2DIn3D grand parent")
@@ -75,6 +75,10 @@ func _on_other_controller_button_pressed(button_name: String) -> void:
 	if enabled and button_name == "ax_button":
 		enabled = false
 
+
+func _on_station_bought(instance) -> void:
+	enabled = false
+	
 
 func detect_hand_from_xr_ancestor() -> void:
 	controller = XRHelpers.get_xr_controller(self)
