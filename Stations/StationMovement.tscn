@@ -47,6 +47,17 @@ size = Vector3(0.5, 0.87231445, 0.5)
 transparency = 1
 albedo_color = Color(1, 0.78999996, 0.39999998, 0.4627451)
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_ldy6a"]
+properties/0/path = NodePath(".:visible")
+properties/0/spawn = false
+properties/0/replication_mode = 1
+properties/1/path = NodePath("../MoveHandle:position")
+properties/1/spawn = false
+properties/1/replication_mode = 1
+properties/2/path = NodePath("../MoveHandle:rotation")
+properties/2/spawn = false
+properties/2/replication_mode = 1
+
 [node name="StationMovement" type="Node3D" unique_id=946873975 node_paths=PackedStringArray("move_handle", "move_ghost")]
 script = ExtResource("1_ldy6a")
 move_handle = NodePath("MoveHandle")
@@ -119,3 +130,6 @@ material = SubResource("StandardMaterial3D_vlqg6")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -0.020843491)
 size = Vector3(0.03, 0.03, 0.25904542)
 material = SubResource("StandardMaterial3D_vlqg6")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="MoveGhost" unique_id=29758342]
+replication_config = SubResource("SceneReplicationConfig_ldy6a")
