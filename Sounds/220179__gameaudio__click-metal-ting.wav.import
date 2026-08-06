@@ -3,12 +3,12 @@
 importer="wav"
 type="AudioStreamWAV"
 uid="uid://b3wxawyrvuc6s"
-path="res://.godot/imported/220179__gameaudio__click-metal-ting.wav-82be282871110eef8fea8249619832d7.sample"
+path="res://.godot/imported/220179__gameaudio__click-metal-ting.wav-b01c457287fe42298a36c3de7c536c68.sample"
 
 [deps]
 
-source_file="res://sounds/220179__gameaudio__click-metal-ting.wav"
-dest_files=["res://.godot/imported/220179__gameaudio__click-metal-ting.wav-82be282871110eef8fea8249619832d7.sample"]
+source_file="res://Sounds/220179__gameaudio__click-metal-ting.wav"
+dest_files=["res://.godot/imported/220179__gameaudio__click-metal-ting.wav-b01c457287fe42298a36c3de7c536c68.sample"]
 
 [params]
 
