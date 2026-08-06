@@ -165,3 +165,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.7201865, 1.142413, 0.14773
 
 [node name="Plate3" parent="." unique_id=2004250522 instance=ExtResource("8_l1owj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5818124, 1.1085004, -0.4634577)
+
+[node name="WorldContent" type="Node3D" parent="." unique_id=1660879286]
+
+[node name="Players" type="Node3D" parent="." unique_id=494935131]

@@ -1,3 +1,4 @@
+class_name StationMovement
 extends Node
 
 @export var move_handle: XRToolsPickable
@@ -16,6 +17,7 @@ const GHOST_COLOR_INVALID: Color = Color(1, 0, 0, 0.35)
 
 
 func set_move_handle_enabled(enabled: bool) -> void:
+	print("StationMovement set_move_handle_enabled: ", enabled)
 	move_handle.visible = enabled
 	move_handle.enabled = enabled
 	if enabled:

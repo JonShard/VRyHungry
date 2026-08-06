@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://dxe05wp60jg3l"]
+
+[ext_resource type="Script" uid="uid://dww2icfivdsai" path="res://scenes/queue_controller.gd" id="1_ieivv"]
+[ext_resource type="PackedScene" uid="uid://bxbocxdaayvwx" path="res://UI/progress_bar.tscn" id="2_fn3y7"]
+
+[node name="QueueController" type="Node3D" unique_id=326512876 node_paths=PackedStringArray("progress_bar_3d", "label_3d")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
+script = ExtResource("1_ieivv")
+progress_bar_3d = NodePath("ProgressBar3D")
+label_3d = NodePath("Label3D")
+
+[node name="ProgressBar3D" parent="." unique_id=654673176 instance=ExtResource("2_fn3y7")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 2.4, 0)
+exponential = true
+
+[node name="Label3D" type="Label3D" parent="." unique_id=994715754]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.147749, 0)
+text = "X customers in queue"

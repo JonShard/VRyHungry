@@ -7,10 +7,9 @@
 [node name="SmallLine" type="Node3D" unique_id=1844128818]
 
 [node name="Hob" parent="." unique_id=1687971542 instance=ExtResource("1_1wuvq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.42000002, 0)
 
 [node name="Counter" parent="." unique_id=1487893288 instance=ExtResource("2_3qwcq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0.42000002, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0, 0)
 
 [node name="Sink" parent="." unique_id=2055277359 instance=ExtResource("3_3qwcq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 0.42000002, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 0, 0)
