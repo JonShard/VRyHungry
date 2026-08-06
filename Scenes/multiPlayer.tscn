@@ -1,15 +1,15 @@
 [gd_scene format=3 uid="uid://c30i6h32w8p47"]
 
 [ext_resource type="Script" uid="uid://d1cefhe3yyyds" path="res://Net/multiplayer_world.gd" id="1_kdan8"]
-[ext_resource type="PackedScene" uid="uid://j5s5wus7tuhb" path="res://prefabs/XROrigin.tscn" id="2_g30gi"]
-[ext_resource type="Material" uid="uid://cmia50cfqxxo4" path="res://textures/dev_material_3d.tres" id="3_75ecy"]
-[ext_resource type="Sky" uid="uid://c1abtpwhdm2d5" path="res://textures/sky/NightSkyHDRI009_16K.tres" id="5_c3xgf"]
-[ext_resource type="Script" uid="uid://fyd2rjramhbb" path="res://prefabs/kitchen_instantiator.gd" id="6_pw2j5"]
+[ext_resource type="PackedScene" uid="uid://j5s5wus7tuhb" path="res://Prefabs/XROrigin.tscn" id="2_g30gi"]
+[ext_resource type="Material" uid="uid://cmia50cfqxxo4" path="res://Textures/dev_material_3d.tres" id="3_75ecy"]
+[ext_resource type="Sky" uid="uid://c1abtpwhdm2d5" path="res://Textures/sky/NightSkyHDRI009_16K.tres" id="5_c3xgf"]
+[ext_resource type="Script" uid="uid://fyd2rjramhbb" path="res://Prefabs/kitchen_instantiator.gd" id="6_pw2j5"]
 [ext_resource type="PackedScene" uid="uid://damrxtlt7uswf" path="res://content/station_layouts/small_line.tscn" id="7_0sjqq"]
-[ext_resource type="PackedScene" uid="uid://j7caslh27nor" path="res://stations/Hob.tscn" id="8_0sjqq"]
-[ext_resource type="PackedScene" uid="uid://dm70ynyuw1a5u" path="res://prefabs/day_controller.tscn" id="9_5wx0o"]
-[ext_resource type="PackedScene" uid="uid://bnwb7imcotkod" path="res://prefabs/build_mode_controller.tscn" id="10_464r1"]
-[ext_resource type="PackedScene" uid="uid://dxe05wp60jg3l" path="res://scenes/queue_controller.tscn" id="11_de1dy"]
+[ext_resource type="PackedScene" uid="uid://j7caslh27nor" path="res://Stations/Hob.tscn" id="8_0sjqq"]
+[ext_resource type="PackedScene" uid="uid://dm70ynyuw1a5u" path="res://Prefabs/day_controller.tscn" id="9_5wx0o"]
+[ext_resource type="PackedScene" uid="uid://bnwb7imcotkod" path="res://Prefabs/build_mode_controller.tscn" id="10_464r1"]
+[ext_resource type="PackedScene" uid="uid://dxe05wp60jg3l" path="res://Scenes/queue_controller.tscn" id="11_de1dy"]
 [ext_resource type="Script" uid="uid://biu4qr3nr1eny" path="res://test/mp_test_driver.gd" id="99_mptst"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vlqg6"]
@@ -31,8 +31,10 @@ sdfgi_enabled = true
 [sub_resource type="BoxShape3D" id="BoxShape3D_arao0"]
 size = Vector3(15, 20, 0.1)
 
-[node name="Main" type="Node3D" unique_id=1312265607]
+[node name="Main" type="Node3D" unique_id=1312265607 node_paths=PackedStringArray("items_spawner", "players_spawner")]
 script = ExtResource("1_kdan8")
+items_spawner = NodePath("ItemsSpawner")
+players_spawner = NodePath("PlayersSpawner")
 
 [node name="XROrigin3D" parent="." unique_id=2055526621 groups=["local_xr_origin"] instance=ExtResource("2_g30gi")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.36171648, 0, 0.81835127)

@@ -23,6 +23,9 @@ const PLAYER_SCENE := preload("res://Player/net_player.tscn")
 var xr_interface: XRInterface
 var _populated := false
 
+@export var items_spawner: MultiplayerSpawner
+@export var players_spawner: MultiplayerSpawner
+
 
 func _ready() -> void:
 	xr_interface = XRServer.find_interface("OpenXR")
@@ -30,7 +33,7 @@ func _ready() -> void:
 		DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
 		get_viewport().use_xr = true
 
-	NetworkManager.register_world(self, $PlayersSpawner, $ItemsSpawner)
+	NetworkManager.register_world(self, players_spawner, items_spawner)
 	NetworkManager.player_joined.connect(_on_player_joined)
 	NetworkManager.player_left.connect(_on_player_left)
 	NetworkManager.session_started.connect(_on_session_started)

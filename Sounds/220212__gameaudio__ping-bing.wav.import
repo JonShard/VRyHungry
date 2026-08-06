@@ -3,12 +3,12 @@
 importer="wav"
 type="AudioStreamWAV"
 uid="uid://claw3d2wnyr6a"
-path="res://.godot/imported/220212__gameaudio__ping-bing.wav-04a5460471fa8fe82fe5d9bc5d946bb0.sample"
+path="res://.godot/imported/220212__gameaudio__ping-bing.wav-2a1049829e71a0034c7e8d18745663f1.sample"
 
 [deps]
 
-source_file="res://sounds/220212__gameaudio__ping-bing.wav"
-dest_files=["res://.godot/imported/220212__gameaudio__ping-bing.wav-04a5460471fa8fe82fe5d9bc5d946bb0.sample"]
+source_file="res://Sounds/220212__gameaudio__ping-bing.wav"
+dest_files=["res://.godot/imported/220212__gameaudio__ping-bing.wav-2a1049829e71a0034c7e8d18745663f1.sample"]
 
 [params]
 

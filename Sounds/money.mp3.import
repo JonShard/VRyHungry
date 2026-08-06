@@ -3,12 +3,12 @@
 importer="mp3"
 type="AudioStreamMP3"
 uid="uid://clkjwcawdqvta"
-path="res://.godot/imported/money.mp3-e3eae11b0c1923c268268b900bde9157.mp3str"
+path="res://.godot/imported/money.mp3-95c717b8402507d80974f4f4287b0b63.mp3str"
 
 [deps]
 
-source_file="res://sounds/money.mp3"
-dest_files=["res://.godot/imported/money.mp3-e3eae11b0c1923c268268b900bde9157.mp3str"]
+source_file="res://Sounds/money.mp3"
+dest_files=["res://.godot/imported/money.mp3-95c717b8402507d80974f4f4287b0b63.mp3str"]
 
 [params]
 
