@@ -76,3 +76,10 @@ Shared INventory
 
 ## Weird ideas
 - carry 4 plates. A snapzone on forearm that only accept plate, and drops it if tilted too much. Real waiter feel.
+
+
+## Research
+- Reasearch is its own currency. 
+- You unlock items in shop with reseach points. Then you can buy them. You "buy" the same tile twice.
+
+

@@ -74,6 +74,7 @@ mass = 0.004
 gravity_scale = 0.5
 linear_damp = 100.0
 script = ExtResource("2_tbkb3")
+picked_up_layer = 64
 release_mode = 1
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MoveHandle" unique_id=1692047616]

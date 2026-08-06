@@ -25,7 +25,6 @@ func despawn_unheld_pickables():
 			NetworkManager.despawn_item(pickable)
 			continue
 		if not held_by.is_in_group("persistent_inventory"):
-			held_by.get_parent().print_tree_pretty()
 			print("BuildModeController despawn_unheld_pickables held_by: %s, pickable: %s " % [held_by, pickable])
 			NetworkManager.despawn_item(pickable)
 			

@@ -96,11 +96,12 @@ func clearAllFood() -> void:
 
 
 # Group called from Queue when trying to assign customers to tables
-func try_consume_customer():
+func try_consume_customer() -> bool:
 	if _state == TableState.EMPTY:
 		print("Table try_consume_customer, consumed a customer")
 		_state_end(TableState.EMPTY)
-		Signals.consumed_customer.emit()
+		return true
+	return false
 
 
 func _ready() -> void:

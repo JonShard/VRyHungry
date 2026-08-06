@@ -59,9 +59,10 @@ offset_left = 20.0
 offset_top = 80.0
 offset_right = -20.0
 offset_bottom = -20.0
-current_tab = 0
+current_tab = 1
 
 [node name="Stations" type="GridContainer" parent="TabContainer" unique_id=189446761]
+visible = false
 layout_mode = 2
 columns = 6
 metadata/_tab_index = 0
@@ -102,7 +103,6 @@ station_name = "Plates"
 cost = 80
 
 [node name="Food" type="GridContainer" parent="TabContainer" unique_id=422899445]
-visible = false
 layout_mode = 2
 columns = 6
 metadata/_tab_index = 1

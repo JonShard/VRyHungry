@@ -1,3 +1,4 @@
+class_name QueueController
 extends Node3D
 
 @export var queue_patience: float = 120
@@ -7,24 +8,40 @@ extends Node3D
 
 
 var _customers: Array[float] = [] # Temp. Array of their patience
-
+var _tables: Array[Node3D] = []
 
 func _ready() -> void:
 	progress_bar_3d.override_fill_color(Color.YELLOW)
 	progress_bar_3d.exponential = true
 	Signals.request_customer_spawn.connect(_on_request_customer_spawn)
-	Signals.consumed_customer.connect(on_consumed_customer)
+	Signals.game_state_changed.connect(_on_game_state_changed)
+
+
+func _on_game_state_changed(new_state: GameManager.GameState) -> void:
+	if new_state == GameManager.GameState.RUNNING:
+		_rebuild_table_list()
 
 func _on_request_customer_spawn() -> void:
 	spawn_customer()
 
 
-func on_consumed_customer() -> void:
-	_customers.pop_front()
-
-
 func spawn_customer()  -> void:
 	_customers.append(queue_patience)
+
+
+func _rebuild_table_list() -> void:
+	_tables.clear()
+	_tables.append_array(get_tree().get_nodes_in_group("table"))
+	print("QueueController _rebuild_table_list complete: ", _tables)
+
+
+func _try_to_assign_customers() -> void:
+	for customer in _customers:
+		for table: Table in _tables:
+			var result: bool = table.try_consume_customer()
+			if result == true:
+				_customers.pop_front()
+				break
 
 
 func _process(delta: float) -> void:
@@ -34,10 +51,7 @@ func _process(delta: float) -> void:
 		if _customers[i] <= 0:
 			GameManager.game_over()
 
-	# Try to assign customers to tables
-	for customer in _customers:
-		get_tree().call_group("table", "try_consume_customer") 
-
+	_try_to_assign_customers()
 
 	# Update visuals
 	if not _customers.is_empty():

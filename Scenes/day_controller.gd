@@ -44,6 +44,7 @@ func finish_current_day() -> void:
 func _process(delta: float) -> void:
 	if GameManager.game_state != GameManager.GameState.RUNNING:
 		return
+		
 	day_time_remaining -= delta
 	var customers_at_this_time = GameManager.customers_per_day  * get_day_progression()
 	#print("DayController: customers_at_this_time: ", customers_at_this_time)
