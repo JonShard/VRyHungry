@@ -3,12 +3,12 @@
 importer="wav"
 type="AudioStreamWAV"
 uid="uid://bdnsgt7xt3261"
-path="res://.godot/imported/220194__gameaudio__click-heavy.wav-aca40ed286d93eb365d527a162fd3129.sample"
+path="res://.godot/imported/220194__gameaudio__click-heavy.wav-43269bff3c60e2451b470f929c6b6bb8.sample"
 
 [deps]
 
-source_file="res://Sounds/220194__gameaudio__click-heavy.wav"
-dest_files=["res://.godot/imported/220194__gameaudio__click-heavy.wav-aca40ed286d93eb365d527a162fd3129.sample"]
+source_file="res://sounds/220194__gameaudio__click-heavy.wav"
+dest_files=["res://.godot/imported/220194__gameaudio__click-heavy.wav-43269bff3c60e2451b470f929c6b6bb8.sample"]
 
 [params]
 

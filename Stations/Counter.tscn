@@ -8,6 +8,8 @@
 [ext_resource type="PackedScene" uid="uid://dgk88esxip5xi" path="res://items/knife.tscn" id="3_3gvdi"]
 [ext_resource type="PackedScene" uid="uid://bxbocxdaayvwx" path="res://UI/progress_bar.tscn" id="6_racgh"]
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_3jbl6"]
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_24d3s"]
 size = Vector3(0.48521727, 0.040039063, 0.41994628)
 
@@ -30,6 +32,9 @@ albedo_color = Color(1.1759251, 0.741115, 0.5692133, 1)
 
 [node name="StationMovement" parent="." unique_id=946873975 node_paths=PackedStringArray("station") instance=ExtResource("1_3jbl6")]
 station = NodePath("../Counter")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1583772931]
+replication_config = SubResource("SceneReplicationConfig_3jbl6")
 
 [node name="Counter" type="StaticBody3D" parent="." unique_id=1487893288 node_paths=PackedStringArray("audio", "knife", "progress_bar") groups=["station"]]
 script = ExtResource("1_oapbh")

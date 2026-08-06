@@ -17,20 +17,20 @@ size = Vector3(0.6, 0.12802735, 0.6)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gkb3v"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_np_hob"]
-properties/0/path = NodePath(".:time_cooked")
-properties/0/spawn = true
+properties/0/path = NodePath("Hob:time_cooked")
+properties/0/spawn = false
 properties/0/replication_mode = 1
-properties/1/path = NodePath(".:cooking_result_time")
-properties/1/spawn = true
+properties/1/path = NodePath("Hob:cooking_result")
+properties/1/spawn = false
 properties/1/replication_mode = 1
-properties/2/path = NodePath(".:cooking_result")
-properties/2/spawn = true
+properties/2/path = NodePath("Hob:cooking_result_time")
+properties/2/spawn = false
 properties/2/replication_mode = 1
 properties/3/path = NodePath("Hob:position")
-properties/3/spawn = true
+properties/3/spawn = false
 properties/3/replication_mode = 1
 properties/4/path = NodePath("Hob:rotation")
-properties/4/spawn = true
+properties/4/spawn = false
 properties/4/replication_mode = 1
 
 [sub_resource type="Animation" id="Animation_7uuqv"]

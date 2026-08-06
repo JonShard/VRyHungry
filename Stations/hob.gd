@@ -10,9 +10,9 @@ extends StaticBody3D
 ## on a client: only the world owner runs the station's _process and its snap
 ## zone, so a client never reaches the code below by itself and would otherwise
 ## show a hob that never lights up.
-var time_cooked: float = 0.0: set = _set_time_cooked
-var cooking_result: String = "": set = _set_cooking_result
-var cooking_result_time: float = 0.0: set = _set_cooking_result_time
+@export var time_cooked: float = 0.0: set = _set_time_cooked
+@export var cooking_result: String = "": set = _set_cooking_result
+@export var cooking_result_time: float = 0.0: set = _set_cooking_result_time
 
 
 func _set_time_cooked(value: float) -> void:
