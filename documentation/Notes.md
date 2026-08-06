@@ -83,3 +83,11 @@ Shared INventory
 - You unlock items in shop with reseach points. Then you can buy them. You "buy" the same tile twice.
 
 
+
+
+
+## NEtwork TOTO
+- Make gamemanager a node with syncroniser
+- All stations 
+
+- Client purchases don't spawn

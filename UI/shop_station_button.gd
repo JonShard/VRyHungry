@@ -27,9 +27,16 @@ func _buy_station() -> void:
 	var forward: Vector3 = -transform.basis.z.normalized()
 	transform.origin += (forward * 0.6)
 	var instance = NetworkManager.spawn_item(station_scene.resource_path, transform)
+
+	if NetworkManager.is_online() and not NetworkManager.is_server():
+		_ask_server_to_spawn.rpc_id(1, station_scene.resource_path, transform)
+
 	Signals.station_bought.emit(instance)
 	
-	
+@rpc("reliable")
+func _ask_server_to_spawn(station_scene_path, transform):
+	NetworkManager.spawn_item(station_scene_path, transform)
+
 func _process(_delta: float) -> void:
 	button.disabled = GameManager.money < cost
 	
