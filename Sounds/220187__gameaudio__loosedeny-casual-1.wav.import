@@ -3,12 +3,12 @@
 importer="wav"
 type="AudioStreamWAV"
 uid="uid://1ccsqbju32ey"
-path="res://.godot/imported/220187__gameaudio__loosedeny-casual-1.wav-2e7c1356ffec0a1e5b732b21f42e21a0.sample"
+path="res://.godot/imported/220187__gameaudio__loosedeny-casual-1.wav-cb0e560d42c6026ded2d2e240e614433.sample"
 
 [deps]
 
-source_file="res://sounds/220187__gameaudio__loosedeny-casual-1.wav"
-dest_files=["res://.godot/imported/220187__gameaudio__loosedeny-casual-1.wav-2e7c1356ffec0a1e5b732b21f42e21a0.sample"]
+source_file="res://Sounds/220187__gameaudio__loosedeny-casual-1.wav"
+dest_files=["res://.godot/imported/220187__gameaudio__loosedeny-casual-1.wav-cb0e560d42c6026ded2d2e240e614433.sample"]
 
 [params]
 
