@@ -146,9 +146,9 @@ func _on_player_left(peer_id: int) -> void:
 
 func _on_session_ended() -> void:
 	NetworkManager.log_line("Session ended, returning to main menu")
-	get_tree().change_scene_to_file("res://Scenes/mainMenu.tscn")
+	get_tree().change_scene_to_file("res://scenes/mainMenu.tscn")
 
 
 func _on_connection_failed() -> void:
 	NetworkManager.log_line("Connection failed, returning to main menu")
-	get_tree().change_scene_to_file("res://Scenes/mainMenu.tscn")
+	get_tree().change_scene_to_file("res://scenes/mainMenu.tscn")

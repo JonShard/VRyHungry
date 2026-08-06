@@ -31,7 +31,7 @@ const END_HOLD := 3.0
 ## scene and has to receive the whole layout over the network — the same path a
 ## client joining mid-session takes.
 const SERVER_SCENE := "res://test/multiPlayerTest.tscn"
-const CLIENT_SCENE := "res://Scenes/multiPlayer.tscn"
+const CLIENT_SCENE := "res://scenes/multiPlayer.tscn"
 
 
 func _run() -> void:

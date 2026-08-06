@@ -5,8 +5,8 @@ extends Control
 ## multiplayer game, or join one by IP, driving scene switches + NetworkManager
 ## directly.
 
-const JON_SCENE := "res://Scenes/JonScene.tscn"
-const MULTIPLAYER_SCENE := "res://Scenes/multiPlayer.tscn"
+const JON_SCENE := "res://scenes/JonScene.tscn"
+const MULTIPLAYER_SCENE := "res://scenes/multiPlayer.tscn"
 const SETTINGS_PATH := "user://vryhungry_settings.cfg"
 
 var _ip := "127.0.0.1"

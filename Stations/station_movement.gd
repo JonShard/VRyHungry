@@ -52,7 +52,7 @@ func _ready() -> void:
 	move_ghost.visible = false
 	_cache_ghost_materials()
 	_set_ghost_color(GHOST_COLOR_VALID)
-	set_move_handle_enabled(false)
+	set_move_handle_enabled(GameManager.game_state == GameManager.GameState.BUILDING)
 	Signals.game_state_changed.connect(_on_game_state_changed)
 
 
