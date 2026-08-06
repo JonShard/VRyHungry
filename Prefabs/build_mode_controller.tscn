@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bnwb7imcotkod"]
+
+[ext_resource type="Script" uid="uid://bsdpd18i1i17s" path="res://prefabs/build_mode_controller.gd" id="1_7i0c4"]
+
+[node name="BuildModeController" type="Node" unique_id=552013109]
+script = ExtResource("1_7i0c4")

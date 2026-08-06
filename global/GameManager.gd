@@ -1,17 +1,28 @@
 class_name GameManager
 extends Node
 
+const STAR_DAY_FREQUENCY: int = 3 
+
 static var money: int = 1000
+static var day_number: int = 1
 static var meals_in_play: Array[String]
 static var sides_in_play: Array[String]
+
+# GameConfig - difficulty settings
+static var day_length_seconds: float = 60.0
+static var customers_per_day: float = 5.0
+static var customers_count_increase_per_day: float = 1.0
+static var group_min_size: int = 1
+static var group_max_size: int = 2
+
 
 enum GameState {
 	RUNNING,
 	GAME_OVER,
 	BUILDING
 }
-static var game_state: GameState = GameState.RUNNING: set = _set_game_state
 
+static var game_state: GameState = GameState.BUILDING: set = _set_game_state
 
 static func _set_game_state(value: GameState):
 	game_state = value

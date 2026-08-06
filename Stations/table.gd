@@ -22,7 +22,6 @@ const lbl_gameover: String = "Game Over!"
 const lbl_eating: String = "Eating..."
 
 ### Finite State Machine ####
-
 enum TableState {
 	IDLE,			 # Don't update table. incorrect GameState
 	EMPTY, 			 # Just finished eating or havent eaten yet
@@ -50,10 +49,11 @@ var _players_count: int = 0
 func place_order() -> void:
 	print("Table place_order()")
 	var new_orders: Array[String] = _unsatisfied_orders.duplicate()
-	for _i in range(0, randi_range(1, 2)):
-		new_orders.append(GameManager.get_random_meal())
-	for _i in range(0, randi_range(0, 1)):
-		new_orders.append(GameManager.get_random_side())
+	# for _i in range(0, randi_range(1, 2)):
+	# 	new_orders.append(GameManager.get_random_meal())
+	# for _i in range(0, randi_range(0, 1)):
+	# 	new_orders.append(GameManager.get_random_side())
+	new_orders.append(GameManager.get_random_meal())
 	_unsatisfied_orders = new_orders
 	_original_orders = _unsatisfied_orders.duplicate()
 
@@ -94,6 +94,13 @@ func clearAllFood() -> void:
 			zone.drop_object()
 			NetworkManager.despawn_item(held_object)
 
+
+# Group called from Queue when trying to assign customers to tables
+func try_consume_customer():
+	if _state == TableState.EMPTY:
+		print("Table try_consume_customer, consumed a customer")
+		_state_end(TableState.EMPTY)
+		Signals.consumed_customer.emit()
 
 
 func _ready() -> void:
@@ -266,8 +273,6 @@ func _set_state(newState: TableState) -> void:
 			_state = newState
 			customers.visible = false
 		TableState.EMPTY:
-			_state_time = randf_range(3, 7)
-			_state_duration = _state_time
 			customers.visible = false
 			_state = newState
 		TableState.THINKING:
@@ -364,6 +369,8 @@ func _refresh_display() -> void:
 
 func _process(delta: float) -> void:
 	_refresh_display()
+	if GameManager.game_state == GameManager.GameState.GAME_OVER:
+		return
 	_place_order_if_player()
 	
 	# If build mode, set, exit loop, be idle
@@ -377,6 +384,10 @@ func _process(delta: float) -> void:
 	# Still idle, do nothing
 	elif  _state == TableState.IDLE:
 		return
+
+	# No counting down if wer're empty
+	if _state == TableState.EMPTY:
+		return	
 
 	# Wait for state to finish
 	if _state_time > 0.0:

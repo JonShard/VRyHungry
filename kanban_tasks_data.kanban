@@ -22,14 +22,16 @@
 			"uuid": "211e4050-31cd-4425-a2ba-8ca56b4764cd",
 			"title": "Todo",
 			"tasks": [
-				"55ac73b8-4378-4b58-bf3c-33f64590c804"
+				"55ac73b8-4378-4b58-bf3c-33f64590c804",
+				"dcdef6be-39f9-44b3-a892-b74afe880909"
 			]
 		},
 		{
 			"uuid": "fab8a81b-7ca9-4026-96bb-ed66ea58ef2e",
 			"title": "Doing",
 			"tasks": [
-				"f8073eb2-8786-47b7-b63f-fa70c3f7115a"
+				"f8073eb2-8786-47b7-b63f-fa70c3f7115a",
+				"ba3c1f0c-1d34-431a-9e42-f80f8d8159a4"
 			]
 		},
 		{
@@ -272,6 +274,20 @@
 			"uuid": "caf459e5-bb88-47dd-bf15-254a3d70c30f",
 			"title": "Station Snap_zones should cover the whole station",
 			"description": "",
+			"category": "bf4ec62e-526e-4027-876f-0b22bd17f79a",
+			"steps": []
+		},
+		{
+			"uuid": "ba3c1f0c-1d34-431a-9e42-f80f8d8159a4",
+			"title": "QueueController",
+			"description": "- A customer is a simple goto point object. has queue_patience float\n- A customer is spawned in street, told to move to QueueController Area\n- A QueueController tracks the entered customer and tells it to take a queue position \n- A QueueController displays a progress bar above door of queue_patience of the customer in the Area3D with the least patience.\n- On new table available, QueueController tells front customer in queue to sit at table\n\n",
+			"category": "bf4ec62e-526e-4027-876f-0b22bd17f79a",
+			"steps": []
+		},
+		{
+			"uuid": "dcdef6be-39f9-44b3-a892-b74afe880909",
+			"title": "Customer Pathfinder",
+			"description": "- A customer is a simple goto point object. has queue_patience float\n- A customer is spawned in street, told to move to QueueController Area\n- A QueueController tracks the entered customer and tells it to take a queue position \n- A QueueController displays a progress bar above door of queue_patience of the customer in the Area3D with the least patience.\n- On new table available, QueueController tells front customer in queue to sit at table\n\n",
 			"category": "bf4ec62e-526e-4027-876f-0b22bd17f79a",
 			"steps": []
 		}

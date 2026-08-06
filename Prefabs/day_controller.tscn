@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://dm70ynyuw1a5u"]
+
+[ext_resource type="Script" uid="uid://bbr5arulbeuvq" path="res://scenes/day_controller.gd" id="1_lna8j"]
+
+[node name="DayController" type="Node" unique_id=1418639156]
+script = ExtResource("1_lna8j")

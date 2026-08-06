@@ -58,7 +58,21 @@ Shared INventory
     list
 
 
+## Customer design
+- A customer is a simple goto point object. has queue_patience float
+- A customer is spawned in street, told to move to QueueController Area
+- A QueueController tracks the entered customer and tells it to take a queue position 
+- A QueueController displays a progress bar above door of queue_patience of the customer in the Area3D with the least patience.
+- On new table available, QueueController tells front customer in queue to sit at table
+
+
+
 
 
 ## Modifiers
 - Disposable plates. no washing. much less money
+
+
+
+## Weird ideas
+- carry 4 plates. A snapzone on forearm that only accept plate, and drops it if tilted too much. Real waiter feel.
