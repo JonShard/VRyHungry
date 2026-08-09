@@ -22,6 +22,7 @@ XRToolsRumbleManager="*uid://by853dk86g1qw"
 NetworkManager="*res://Net/network_manager.gd"
 GlobalKeyEvents="*uid://c60unagog5oi1"
 Signals="*uid://fuux6cxfjwdc"
+GameManager="*uid://y4sol8l8vih1"
 
 [debug]
 
