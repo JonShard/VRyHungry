@@ -88,6 +88,7 @@ Shared INventory
 
 ## NEtwork TOTO
 - Make gamemanager a node with syncroniser
-- All stations 
-
-- Client purchases don't spawn
+- All stations need syncronizers
+- Pickable not synced cooked burger on hob example
+- Client purchases don't spawn items from shop. RPC adventure
+- Client can not move stations including hobs, on_move handle drop is called, network pickable authority is given. but station not moved
