@@ -176,10 +176,10 @@ var _despawn_timers_seen := {}
 
 # Items live either baked in the scene root or, once spawned at runtime, under
 # WorldContent. Look in both.
-func _find(name: String) -> Node3D:
-	var n := _world.get_node_or_null(name)
+func _find(node_name: String) -> Node3D:
+	var n := _world.get_node_or_null(node_name)
 	if not n:
-		n = _world.get_node_or_null("WorldContent/" + name)
+		n = _world.get_node_or_null("WorldContent/" + node_name)
 	return n as Node3D
 
 
@@ -965,10 +965,10 @@ func _snapshot() -> Dictionary:
 		for child in root.get_children():
 			if child is XRToolsPickable and not child.is_queued_for_deletion():
 				out[str(child.name)] = _describe(child)
-	for name in WATCHED_STATIONS:
-		var station := _find(name)
+	for station_name in WATCHED_STATIONS:
+		var station := _find(station_name)
 		if station:
-			out["station:" + name] = _describe_station(station)
+			out["station:" + station_name] = _describe_station(station)
 	return out
 
 
@@ -1016,37 +1016,37 @@ func _fetch_client_snapshot() -> Dictionary:
 # Compare the server's view with the client's, returning a list of differences.
 func _compare(server: Dictionary, client: Dictionary) -> Array[String]:
 	var problems: Array[String] = []
-	for name in server:
-		if not client.has(name):
-			problems.append("'%s' exists on the server but NOT on the client" % name)
-	for name in client:
-		if not server.has(name):
-			problems.append("'%s' exists on the client but NOT on the server (ghost copy)" % name)
-	for name in server:
-		if not client.has(name):
+	for entity_name in server:
+		if not client.has(entity_name):
+			problems.append("'%s' exists on the server but NOT on the client" % entity_name)
+	for entity_name in client:
+		if not server.has(entity_name):
+			problems.append("'%s' exists on the client but NOT on the server (ghost copy)" % entity_name)
+	for entity_name in server:
+		if not client.has(entity_name):
 			continue
-		var s: Dictionary = server[name]
-		var c: Dictionary = client[name]
+		var s: Dictionary = server[entity_name]
+		var c: Dictionary = client[entity_name]
 		# Stations are compared on their displayed state, not a position.
 		if s.has("pos") and c.has("pos"):
 			var dist: float = (s["pos"] as Vector3).distance_to(c["pos"])
 			if dist > SYNC_POS_TOLERANCE:
-				problems.append("%s is %.3fm apart (server %s vs client %s)" % [name, dist, s["pos"], c["pos"]])
+				problems.append("%s is %.3fm apart (server %s vs client %s)" % [entity_name, dist, s["pos"], c["pos"]])
 		for key in s:
 			# "_" keys are per-peer diagnostics, not things that must match.
 			if key == "pos" or key.begins_with("_"):
 				continue
 			if s[key] != c[key]:
-				problems.append("%s.%s: server=%s client=%s" % [name, key, s[key], c[key]])
+				problems.append("%s.%s: server=%s client=%s" % [entity_name, key, s[key], c[key]])
 	# Absolute invariants, checked per peer. A cross-peer diff can't catch a
 	# fault that happens identically on both sides.
 	for peer_name in ["server", "client"]:
 		var snap: Dictionary = server if peer_name == "server" else client
-		for name in snap:
-			var d: Dictionary = snap[name]
+		for entity_name in snap:
+			var d: Dictionary = snap[entity_name]
 			if d.has("visuals_attached") and not d["visuals_attached"]:
 				problems.append("on the %s, %s's food has come off the plate (%.3fm from it, limit %.2f)"
-					% [peer_name, name, d.get("_visual_offset", -1.0), MAX_VISUAL_OFFSET])
+					% [peer_name, entity_name, d.get("_visual_offset", -1.0), MAX_VISUAL_OFFSET])
 	return problems
 
 
@@ -1368,17 +1368,17 @@ func _assert_debug_camera() -> void:
 func _check_framing() -> void:
 	var size := get_viewport().get_visible_rect().size
 	var offscreen: Array[String] = []
-	for name in ["Counter2", "Counter", "Hob", "Sink", "DirtStation", "Plate"]:
-		var n := _find(name)
+	for station_name in ["Counter2", "Counter", "Hob", "Sink", "DirtStation", "Plate"]:
+		var n := _find(station_name)
 		if not n:
 			continue
 		var p := _debug_cam.unproject_position(n.global_position)
 		var frac := Vector2(p.x / size.x, p.y / size.y)
 		var on := not _debug_cam.is_position_behind(n.global_position) \
 			and frac.x > 0.02 and frac.x < 0.98 and frac.y > 0.02 and frac.y < 0.98
-		_log("  framing: %-12s at %.2f,%.2f of frame%s" % [name, frac.x, frac.y, "" if on else "  <-- OFF SCREEN"])
+		_log("  framing: %-12s at %.2f,%.2f of frame%s" % [station_name, frac.x, frac.y, "" if on else "  <-- OFF SCREEN"])
 		if not on:
-			offscreen.append(name)
+			offscreen.append(station_name)
 	if offscreen.is_empty():
 		_log("  framing: all test objects are in view")
 	else:

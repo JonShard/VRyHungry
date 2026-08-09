@@ -40,8 +40,8 @@ func _ready() -> void:
 # Enable the trigger only while snapped into a snap zone (not hand-held).
 func _on_item_picked_up(_item: Node3D) -> void:
 	var by := _pickable.get_picked_up_by()
-	var snapped: bool = by != null and by.has_method("is_xr_class") and by.is_xr_class("XRToolsSnapZone")
-	set_deferred("monitoring", snapped)
+	var is_snapped: bool = by != null and by.has_method("is_xr_class") and by.is_xr_class("XRToolsSnapZone")
+	set_deferred("monitoring", is_snapped)
 
 func _on_item_dropped(_item: Node3D) -> void:
 	set_deferred("monitoring", false)

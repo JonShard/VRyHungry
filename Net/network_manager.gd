@@ -331,7 +331,7 @@ func _try_snap_into_station(item: Node) -> void:
 		var by: Node = null
 		if item.has_method("get_picked_up_by"):
 			by = item.get_picked_up_by()
-		log_line("skipped snapping %s: already held by %s (grab-race guard)" % [item.name, by.get_path() if by else "?"])
+		log_line("skipped snapping %s: already held by %s (grab-race guard)" % [item.name, str(by.get_path()) if by else "?"])
 		return
 	for zone in _station_snap_zones():
 		if is_instance_valid(zone.picked_up_object):

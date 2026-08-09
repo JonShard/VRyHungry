@@ -18,7 +18,7 @@ var _pickable: XRToolsPickable
 # RigidBody3D default of STATIC) — captured once so it can be restored when
 # this peer regains ownership, instead of getting stuck on whatever
 # apply_held_state() last forced it to while non-authority.
-var _original_freeze_mode: int
+var _original_freeze_mode: RigidBody3D.FreezeMode
 
 # Same idea for the pickable's authored `enabled` flag, which the non-authority
 # branch of apply_held_state() clears while someone else is holding the item.
@@ -71,7 +71,7 @@ func _set_net_held_by(value: int) -> void:
 func apply_held_state() -> void:
 	if not _pickable:
 		return
-	if not NetworkManager.is_online() or is_multiplayer_authority():
+	if not NetworkManager.is_online() or (is_inside_tree() and is_multiplayer_authority()) :
 		_grab_race_logged = false
 		# We own this item's simulation (offline, loose+server, or currently
 		# holding it). If it's not actively in our own hand right now, make
@@ -205,5 +205,5 @@ func _holder_desc() -> String:
 		return "hand(%s)" % by.get_path()
 	if by is XRToolsSnapZone:
 		var station := by.get_parent()
-		return "zone(%s)" % (station.name if station else str(by.get_path()))
+		return "zone(%s)" % (str(station.name) if station else str(by.get_path()))
 	return "other(%s: %s)" % [by.get_class(), by.get_path()]

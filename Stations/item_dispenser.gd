@@ -10,7 +10,7 @@ func _ready() -> void:
 		push_error("Item dispenser is missing a reference to its snap zone child")
 
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if not NetworkManager.owns_world():
 		return
 	#if snap_zone.picked_up_object: # Player picked up this station

@@ -151,5 +151,5 @@ static func get_items_old() -> Array[Dictionary]:
 	return items
 
 
-static func _item(scene: String, name: String, pos: Vector3) -> Dictionary:
-	return {"scene": scene, "name": name, "xform": Transform3D(Basis(), pos), "props": {}}
+static func _item(scene: String, item_name: String, pos: Vector3) -> Dictionary:
+	return {"scene": scene, "name": item_name, "xform": Transform3D(Basis(), pos), "props": {}}

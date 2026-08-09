@@ -60,7 +60,6 @@ func _set_poke_enabled_for_controller(controller_node: XRController3D, value: bo
 
 # For some reason, this is called every frame the button is down. So we need our own timer.
 func _on_controller_button_pressed(button_name: String) -> void:
-	print("Shop _on_controller_button_pressed, button: ", button_name)
 	var now := Time.get_ticks_msec() / 1000.0
 	if now - _last_toggle_time < INPUT_TOGGLE_COOLDOWN:
 		return
@@ -76,7 +75,7 @@ func _on_other_controller_button_pressed(button_name: String) -> void:
 		enabled = false
 
 
-func _on_station_bought(instance) -> void:
+func _on_station_bought(_instance) -> void:
 	enabled = false
 	
 
