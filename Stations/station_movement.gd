@@ -9,7 +9,7 @@ var move_handle_rigid: RigidBody3D
 var original_collision_layer: int = 0
 var original_y_pos: float = 0.0
 var original_station_transform: Transform3D = Transform3D.IDENTITY
-var moving: bool = false
+@export var moving: bool = false
 var ghost_materials: Array[StandardMaterial3D] = []
 
 const GHOST_COLOR_VALID: Color = Color(0, 1, 0, 0.35)

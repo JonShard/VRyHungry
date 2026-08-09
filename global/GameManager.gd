@@ -2,7 +2,7 @@ extends Node
 
 const STAR_DAY_FREQUENCY: int = 3 
 
-var money: int = 0:
+var money: int = 1000:
 	get:
 		return money
 	set(value):

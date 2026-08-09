@@ -522,7 +522,8 @@ func _on_player_absent(peer_id: int) -> void:
 # --- Command-line driven test bootstrap -----------------------------------
 
 func _handle_cmdline() -> void:
-	var args := OS.get_cmdline_user_args()
+	print("Networkmanager _handle_cmdline()")
+	var args := OS.get_cmdline_args()
 	if args.has("--server"):
 		log_line("cmdline: --server")
 		host()

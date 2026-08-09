@@ -86,7 +86,7 @@ var _frame_index := 0
 
 
 func _ready() -> void:
-	var args := OS.get_cmdline_user_args()
+	var args := OS.get_cmdline_args()
 	_auto_mode = "--mptest" in args
 	# Opt-in only. This node also sits in the real multiplayer scene (so a client
 	# joining a test session has a driver), and must be completely inert during
@@ -788,7 +788,7 @@ func _setup_frames() -> void:
 		_frames_enabled = false
 		_log("frame capture disabled: a headless run has no rendered output to grab")
 		return
-	var role := "server" if "--server" in OS.get_cmdline_user_args() else "client"
+	var role := "server" if "--server" in OS.get_cmdline_args() else "client"
 	_frames_dir = "res://logs/mptest_frames_%s" % role
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(_frames_dir))
 	# Clear out a previous run's frames, or the GIF would splice the two together.
@@ -1410,7 +1410,7 @@ func _banner(s: String) -> void:
 # would otherwise fight over one file (the engine's own godot.log has exactly
 # that problem when two peers run at once — it rotates per process).
 func _open_log() -> void:
-	var role := "server" if "--server" in OS.get_cmdline_user_args() else "client"
+	var role := "server" if "--server" in OS.get_cmdline_args() else "client"
 	var path := "res://logs/mptest_%s.log" % role
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("res://logs"))
 	_log_file = FileAccess.open(path, FileAccess.WRITE)

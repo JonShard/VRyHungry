@@ -36,9 +36,6 @@ properties/0/replication_mode = 1
 properties/1/path = NodePath(".:quaternion")
 properties/1/spawn = false
 properties/1/replication_mode = 1
-properties/2/path = NodePath("NetPickable:net_held_by")
-properties/2/spawn = true
-properties/2/replication_mode = 1
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vlqg6"]
 size = Vector3(0.5, 0.87231445, 0.5)
@@ -51,12 +48,15 @@ albedo_color = Color(1, 0.78999996, 0.39999998, 0.4627451)
 properties/0/path = NodePath(".:visible")
 properties/0/spawn = false
 properties/0/replication_mode = 1
-properties/1/path = NodePath("../MoveHandle:position")
+properties/1/path = NodePath(".:position")
 properties/1/spawn = false
 properties/1/replication_mode = 1
-properties/2/path = NodePath("../MoveHandle:rotation")
+properties/2/path = NodePath(".:rotation")
 properties/2/spawn = false
 properties/2/replication_mode = 1
+properties/3/path = NodePath("..:moving")
+properties/3/spawn = false
+properties/3/replication_mode = 1
 
 [node name="StationMovement" type="Node3D" unique_id=946873975 node_paths=PackedStringArray("move_handle", "move_ghost")]
 script = ExtResource("1_ldy6a")

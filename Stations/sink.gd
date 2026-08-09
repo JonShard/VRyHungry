@@ -10,9 +10,9 @@ const plate_wash_time: float = 3.0
 ## display when they change. Only the world owner runs this station's _process
 ## and snap zone, so without this a client never updates its bar — it stayed
 ## frozen on screen long after the plate came out clean.
-var time_washed: float = 0.0: set = _set_time_washed
-var is_washing: bool = false: set = _set_is_washing
-var plate: PlateController = null
+@export var time_washed: float = 0.0: set = _set_time_washed
+@export var is_washing: bool = false: set = _set_is_washing
+@export var plate: PlateController = null
 
 
 func _set_time_washed(value: float) -> void:

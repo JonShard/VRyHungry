@@ -7,6 +7,17 @@
 [ext_resource type="PackedScene" uid="uid://mpapt5mkbuao" path="res://prefabs/slide_off_dome.tscn" id="5_mep2a"]
 [ext_resource type="PackedScene" uid="uid://cvucwxibtol5f" path="res://stations/StationMovement.tscn" id="6_8ou8n"]
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_8ou8n"]
+properties/0/path = NodePath("RawBurgerDispenser:position")
+properties/0/spawn = false
+properties/0/replication_mode = 1
+properties/1/path = NodePath("RawBurgerDispenser:rotation")
+properties/1/spawn = false
+properties/1/replication_mode = 1
+properties/2/path = NodePath("RawBurgerDispenser:visible")
+properties/2/spawn = false
+properties/2/replication_mode = 1
+
 [sub_resource type="SphereShape3D" id="SphereShape3D_xmbo2"]
 radius = 0.3
 
@@ -21,6 +32,9 @@ albedo_texture = ExtResource("4_1f5le")
 
 [node name="StationMovement" parent="." unique_id=946873975 node_paths=PackedStringArray("station") instance=ExtResource("6_8ou8n")]
 station = NodePath("../RawBurgerDispenser")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1886082284]
+replication_config = SubResource("SceneReplicationConfig_8ou8n")
 
 [node name="RawBurgerDispenser" type="StaticBody3D" parent="." unique_id=235630131]
 script = ExtResource("1_gkb3v")

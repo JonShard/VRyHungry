@@ -6,6 +6,17 @@
 [ext_resource type="Script" uid="uid://cquqe4f1m1sw6" path="res://addons/godot-xr-tools/objects/snap_zone.gd" id="4_fx1kw"]
 [ext_resource type="PackedScene" uid="uid://mpapt5mkbuao" path="res://prefabs/slide_off_dome.tscn" id="5_ur331"]
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_8orw3"]
+properties/0/path = NodePath("PotatoDispenser:position")
+properties/0/spawn = false
+properties/0/replication_mode = 1
+properties/1/path = NodePath("PotatoDispenser:rotation")
+properties/1/spawn = false
+properties/1/replication_mode = 1
+properties/2/path = NodePath("PotatoDispenser:visible")
+properties/2/spawn = false
+properties/2/replication_mode = 1
+
 [sub_resource type="SphereShape3D" id="SphereShape3D_xmbo2"]
 radius = 0.3
 
@@ -20,6 +31,9 @@ albedo_color = Color(0.48, 0.34336, 0.1872, 1)
 
 [node name="StationMovement" parent="." unique_id=946873975 node_paths=PackedStringArray("station") instance=ExtResource("1_8orw3")]
 station = NodePath("../PotatoDispenser")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=41449367]
+replication_config = SubResource("SceneReplicationConfig_8orw3")
 
 [node name="PotatoDispenser" type="StaticBody3D" parent="." unique_id=1720683779]
 script = ExtResource("2_30d2d")

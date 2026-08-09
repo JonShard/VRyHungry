@@ -6,6 +6,17 @@
 [ext_resource type="Script" uid="uid://cquqe4f1m1sw6" path="res://addons/godot-xr-tools/objects/snap_zone.gd" id="3_lr065"]
 [ext_resource type="PackedScene" uid="uid://mpapt5mkbuao" path="res://prefabs/slide_off_dome.tscn" id="4_tfo2i"]
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_jgjsq"]
+properties/0/path = NodePath("PlateDispenser:position")
+properties/0/spawn = false
+properties/0/replication_mode = 1
+properties/1/path = NodePath("PlateDispenser:rotation")
+properties/1/spawn = false
+properties/1/replication_mode = 1
+properties/2/path = NodePath("PlateDispenser:visible")
+properties/2/spawn = false
+properties/2/replication_mode = 1
+
 [sub_resource type="SphereShape3D" id="SphereShape3D_xmbo2"]
 radius = 0.3
 
@@ -17,6 +28,9 @@ radius = 0.3
 
 [node name="StationMovement" parent="." unique_id=946873975 node_paths=PackedStringArray("station") instance=ExtResource("1_jgjsq")]
 station = NodePath("../PlateDispenser")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=901684173]
+replication_config = SubResource("SceneReplicationConfig_jgjsq")
 
 [node name="PlateDispenser" type="StaticBody3D" parent="." unique_id=710538846]
 script = ExtResource("1_jm0ik")

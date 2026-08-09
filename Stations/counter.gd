@@ -11,9 +11,9 @@ extends StaticBody3D
 
 # Chopping state. Follow the hob/sink pattern so the display refreshes when
 # values change; only the world owner runs the station's process in practice.
-var process_result: String = "": set = _set_result
-var process_result_work: float = 0.0: set = _set_result_work
-var work_progress: float = 0.0: set = _set_work_progress
+@export var process_result: String = "": set = _set_result
+@export var process_result_work: float = 0.0: set = _set_result_work
+@export var work_progress: float = 0.0: set = _set_work_progress
 
 
 func _ready() -> void:

@@ -8,14 +8,6 @@
 [ext_resource type="Material" uid="uid://d1djvskv4n4m3" path="res://textures/hob_off.tres" id="4_8qpxk"]
 [ext_resource type="Material" uid="uid://db7c7w4apwti7" path="res://textures/hob_on.tres" id="6_m7l4u"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_kdxnr"]
-size = Vector3(0.6, 1, 0.6)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_7uuqv"]
-size = Vector3(0.6, 0.12802735, 0.6)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gkb3v"]
-
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_np_hob"]
 properties/0/path = NodePath("Hob:time_cooked")
 properties/0/spawn = false
@@ -32,6 +24,17 @@ properties/3/replication_mode = 1
 properties/4/path = NodePath("Hob:rotation")
 properties/4/spawn = false
 properties/4/replication_mode = 1
+properties/5/path = NodePath("Hob:visible")
+properties/5/spawn = false
+properties/5/replication_mode = 1
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_kdxnr"]
+size = Vector3(0.6, 1, 0.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7uuqv"]
+size = Vector3(0.6, 0.12802735, 0.6)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gkb3v"]
 
 [sub_resource type="Animation" id="Animation_7uuqv"]
 length = 0.001
@@ -171,6 +174,9 @@ _data = {
 [node name="StationMovement" parent="." unique_id=946873975 node_paths=PackedStringArray("station") instance=ExtResource("1_pydjp")]
 station = NodePath("../Hob")
 
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=768992259]
+replication_config = SubResource("SceneReplicationConfig_np_hob")
+
 [node name="Hob" type="StaticBody3D" parent="." unique_id=1332123047]
 script = ExtResource("1_7jc4g")
 
@@ -278,10 +284,6 @@ size = Vector3(0.55, 0.835, 0.072)
 [node name="CSGBox3D4" type="CSGBox3D" parent="Hob/CSGCombiner3D" unique_id=1978186019]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.003479004, -0.45215607, 0.24655426)
 size = Vector3(0.55, 0.096, 0.14)
-
-[node name="Sync" type="MultiplayerSynchronizer" parent="Hob" unique_id=768992259]
-root_path = NodePath("../..")
-replication_config = SubResource("SceneReplicationConfig_np_hob")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Hob" unique_id=1525460719]
 root_node = NodePath("../..")

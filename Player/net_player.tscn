@@ -1,6 +1,6 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene format=3 uid="uid://c58ns7csdahjy"]
 
-[ext_resource type="Script" path="res://Player/net_player.gd" id="1_np001"]
+[ext_resource type="Script" uid="uid://bncuxh7j7ix5q" path="res://Player/net_player.gd" id="1_np001"]
 [ext_resource type="PackedScene" uid="uid://bq86r4yll8po" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/left_fullglove_low.tscn" id="2_np002"]
 [ext_resource type="PackedScene" uid="uid://xqimcf20s2jp" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/right_fullglove_low.tscn" id="3_np003"]
 
@@ -28,17 +28,16 @@ properties/5/path = NodePath("RightHand:quaternion")
 properties/5/spawn = false
 properties/5/replication_mode = 1
 
-[node name="NetPlayer" type="Node3D"]
+[node name="NetPlayer" type="Node3D" unique_id=70287099]
 script = ExtResource("1_np001")
 
-[node name="Head" type="MeshInstance3D" parent="."]
+[node name="Head" type="MeshInstance3D" parent="." unique_id=56588259]
 mesh = SubResource("CapsuleMesh_np004")
 
-[node name="LeftHand" parent="." instance=ExtResource("2_np002")]
+[node name="LeftHand" parent="." unique_id=1703673184 instance=ExtResource("2_np002")]
 
-[node name="RightHand" parent="." instance=ExtResource("3_np003")]
+[node name="RightHand" parent="." unique_id=325341465 instance=ExtResource("3_np003")]
 
-[node name="Sync" type="MultiplayerSynchronizer" parent="."]
-root_path = NodePath("..")
-replication_config = SubResource("SceneReplicationConfig_np005")
+[node name="Sync" type="MultiplayerSynchronizer" parent="." unique_id=529459963]
 replication_interval = 0.033
+replication_config = SubResource("SceneReplicationConfig_np005")

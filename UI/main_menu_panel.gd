@@ -48,7 +48,7 @@ func _ready() -> void:
 ## --server / --join <ip> on the command line skip straight to the multiplayer
 ## scene, same as the previously headless-tested main.tscn flow.
 func _bypass_menu_for_cmdline() -> bool:
-	var args := OS.get_cmdline_user_args()
+	var args := OS.get_cmdline_args()
 	if args.has("--server"):
 		NetworkManager.request_host()
 		get_tree().change_scene_to_file.call_deferred(MULTIPLAYER_SCENE)

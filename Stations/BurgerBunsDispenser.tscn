@@ -6,6 +6,17 @@
 [ext_resource type="PackedScene" uid="uid://c0lknik4noobs" path="res://items/BurgerBuns.tscn" id="2_1q74o"]
 [ext_resource type="PackedScene" uid="uid://mpapt5mkbuao" path="res://prefabs/slide_off_dome.tscn" id="4_rf1b2"]
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_u2p81"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = false
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = false
+properties/1/replication_mode = 1
+properties/2/path = NodePath(".:visible")
+properties/2/spawn = false
+properties/2/replication_mode = 1
+
 [sub_resource type="SphereShape3D" id="SphereShape3D_xmbo2"]
 radius = 0.3
 
@@ -20,6 +31,10 @@ albedo_color = Color(0.6784191, 0.54546416, 0.016760282, 1)
 
 [node name="StationMovement" parent="." unique_id=946873975 node_paths=PackedStringArray("station") instance=ExtResource("1_u2p81")]
 station = NodePath("../BurgerBunsDispenser")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=904562637]
+root_path = NodePath("../BurgerBunsDispenser")
+replication_config = SubResource("SceneReplicationConfig_u2p81")
 
 [node name="BurgerBunsDispenser" type="StaticBody3D" parent="." unique_id=1720683779]
 script = ExtResource("1_myl3s")
