@@ -2,7 +2,7 @@ extends Node
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("quit_game"):
-		get_tree().quit()
+		all_quit_game.rpc()
 	if event.is_action_pressed("satisfy_table_orders"):
 		satisfy_table_orders()
 	if event.is_action_pressed("set_building_mode"):
@@ -12,6 +12,10 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("set_game_over"):
 		set_game_over()
 
+# Kill all clients
+@rpc("any_peer", "call_local", "reliable")
+func all_quit_game():
+	get_tree().quit()
 
 # Finds any node of class/type Table and calls satisfyAllOrders()
 func satisfy_table_orders() -> void:
