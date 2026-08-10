@@ -112,8 +112,8 @@ func _populate_world_if_owner() -> void:
 
 
 func _init_recipes():
-	GameManager.meals_in_play = ["hamburger"]
-	GameManager.sides_in_play = ["cube"]
+	GameManager.set_meals_in_play(["hamburger"])
+	GameManager.set_sides_in_play(["cube"])
 
 
 # Free the authored template nodes. Done immediately rather than with

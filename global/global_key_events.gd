@@ -25,13 +25,13 @@ func satisfy_table_orders() -> void:
 			
 func set_buidling_mode():
 	print("Global key event: Setting building mode")
-	GameManager.game_state = GameManager.GameState.BUILDING
+	GameManager.set_game_state(GameManager.GameState.BUILDING)
 
 
 func set_running_mode():
 	print("Global key event: Setting running mode")
-	GameManager.game_state = GameManager.GameState.RUNNING
+	GameManager.set_game_state(GameManager.GameState.RUNNING)
 
 func set_game_over():
 	print("Global key event: Setting game over")
-	GameManager.game_state = GameManager.GameState.GAME_OVER
+	GameManager.set_game_state(GameManager.GameState.GAME_OVER)

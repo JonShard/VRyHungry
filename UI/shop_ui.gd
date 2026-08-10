@@ -34,6 +34,8 @@ func toggle_shop():
 	if GameManager.game_state == GameManager.GameState.BUILDING:
 		print("Shop UI toggle shop")
 		enabled = !enabled
+		print ("Shop UI _process: money=", GameManager.money, " label text=", money_label.text)
+
 
 
 func _set_enabled(value: bool) -> void:
@@ -77,7 +79,9 @@ func _on_other_controller_button_pressed(button_name: String) -> void:
 
 func _on_station_bought(_instance) -> void:
 	enabled = false
-	
+	money_label.text = str(GameManager.money) + "$"
+	print("Shop UI _on_station_bought: new money: ", GameManager.money)
+
 
 func detect_hand_from_xr_ancestor() -> void:
 	controller = XRHelpers.get_xr_controller(self)

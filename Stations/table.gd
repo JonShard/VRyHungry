@@ -250,9 +250,9 @@ func _collect_money_from_food():
 		var food_item: FoodItem = Helper.find_food_item(held_object)
 		if plate:
 			for fi: FoodItem in plate.get_food_items():
-				GameManager.money += fi.sell_value
+				GameManager.set_money(GameManager.money + fi.sell_value)
 		elif food_item:
-			GameManager.money += food_item.sell_value
+			GameManager.set_money(GameManager.money + food_item.sell_value)
 
 	print("Table _collect_money_from_food(), money: ", GameManager.money)
 

@@ -2,141 +2,200 @@ extends Node
 
 const STAR_DAY_FREQUENCY: int = 3 
 
-var money: int = 1000:
-	get:
-		return money
-	set(value):
-		if not multiplayer.is_server():
-			push_warning("Clients cannot modify money directly.")
-			return
-		money = max(0, value)
-		_sync_money.rpc(money)
+var money: int = 1000: 
+	get: return money
+		
+func set_money(value):
+	if multiplayer.is_server():
+		money =  max(0,value)
+		client_sync_money.rpc(money)
+		print("GameManager: set_money money set to ", money)
+	else:
+		print("GameManager: set_money client/(peer_id=", multiplayer.get_unique_id(), ") attempted to set money directly, sending request to server")
+		server_set_money.rpc_id(1, value)
 
-@rpc("authority", "call_remote", "reliable") # Server updates clients
-func _sync_money(new_amount: int) -> void:
-	money = new_amount
+@rpc("any_peer", "call_remote", "reliable")  # CLIENT -> SERVER: Request a change
+func server_set_money(value: int) -> void: set_money(value)
+
+@rpc("authority", "call_remote", "reliable") # SERVER -> CLIENTS: Replicate new change
+func client_sync_money(value: int) -> void: money = value
 
 
 var day_number: int = 1:
 	get:
 		return day_number
-	set(value):
-		if not multiplayer.is_server():
-			push_warning("Clients cannot modify day_number directly.")
-			return
+
+func set_day_number(value: int) -> void:
+	if multiplayer.is_server():
 		day_number = value
-		_sync_day_number.rpc(day_number)
+		client_sync_day_number.rpc(day_number)
+		print("GameManager: set_day_number day_number set to ", day_number)
+	else:
+		print("GameManager: set_day_number client/(peer_id=", multiplayer.get_unique_id(), ") attempted to set day_number directly, sending request to server")
+		server_set_day_number.rpc_id(1, value)
+
+@rpc("any_peer", "call_remote", "reliable")
+func server_set_day_number(value: int) -> void:
+	set_day_number(value)
 
 @rpc("authority", "call_remote", "reliable")
-func _sync_day_number(new_value: int) -> void:
-	day_number = new_value
+func client_sync_day_number(value: int) -> void:
+	day_number = value
 
 
 var meals_in_play: Array[String] = []:
 	get:
 		return meals_in_play
-	set(value):
-		if not multiplayer.is_server():
-			push_warning("Clients cannot modify meals_in_play directly.")
-			return
+
+func set_meals_in_play(value: Array[String]) -> void:
+	if multiplayer.is_server():
 		meals_in_play = value
-		_sync_meals_in_play.rpc(meals_in_play)
+		client_sync_meals_in_play.rpc(meals_in_play)
+		print("GameManager: set_meals_in_play meals_in_play set to ", meals_in_play)
+	else:
+		print("GameManager: set_meals_in_play client/(peer_id=", multiplayer.get_unique_id(), ") attempted to set meals_in_play directly, sending request to server")
+		server_set_meals_in_play.rpc_id(1, value)
+
+@rpc("any_peer", "call_remote", "reliable")
+func server_set_meals_in_play(value: Array[String]) -> void:
+	set_meals_in_play(value)
 
 @rpc("authority", "call_remote", "reliable")
-func _sync_meals_in_play(new_value: Array[String]) -> void:
-	meals_in_play = new_value
+func client_sync_meals_in_play(value: Array[String]) -> void:
+	meals_in_play = value
 
 
 var sides_in_play: Array[String] = []:
 	get:
 		return sides_in_play
-	set(value):
-		if not multiplayer.is_server():
-			push_warning("Clients cannot modify sides_in_play directly.")
-			return
+
+func set_sides_in_play(value: Array[String]) -> void:
+	if multiplayer.is_server():
 		sides_in_play = value
-		_sync_sides_in_play.rpc(sides_in_play)
+		client_sync_sides_in_play.rpc(sides_in_play)
+		print("GameManager: set_sides_in_play sides_in_play set to ", sides_in_play)
+	else:
+		print("GameManager: set_sides_in_play client/(peer_id=", multiplayer.get_unique_id(), ") attempted to set sides_in_play directly, sending request to server")
+		server_set_sides_in_play.rpc_id(1, value)
+
+@rpc("any_peer", "call_remote", "reliable")
+func server_set_sides_in_play(value: Array[String]) -> void:
+	set_sides_in_play(value)
 
 @rpc("authority", "call_remote", "reliable")
-func _sync_sides_in_play(new_value: Array[String]) -> void:
-	sides_in_play = new_value
+func client_sync_sides_in_play(value: Array[String]) -> void:
+	sides_in_play = value
 
 
 # GameConfig - difficulty settings
 var day_length_seconds: float = 60.0:
 	get:
 		return day_length_seconds
-	set(value):
-		if not multiplayer.is_server():
-			push_warning("Clients cannot modify day_length_seconds directly.")
-			return
+
+func set_day_length_seconds(value: float) -> void:
+	if multiplayer.is_server():
 		day_length_seconds = value
-		_sync_day_length_seconds.rpc(day_length_seconds)
+		client_sync_day_length_seconds.rpc(day_length_seconds)
+		print("GameManager: set_day_length_seconds day_length_seconds set to ", day_length_seconds)
+	else:
+		print("GameManager: set_day_length_seconds client/(peer_id=", multiplayer.get_unique_id(), ") attempted to set day_length_seconds directly, sending request to server")
+		server_set_day_length_seconds.rpc_id(1, value)
+
+@rpc("any_peer", "call_remote", "reliable")
+func server_set_day_length_seconds(value: float) -> void:
+	set_day_length_seconds(value)
 
 @rpc("authority", "call_remote", "reliable")
-func _sync_day_length_seconds(new_value: float) -> void:
-	day_length_seconds = new_value
+func client_sync_day_length_seconds(value: float) -> void:
+	day_length_seconds = value
 
 
 var customers_per_day: float = 5.0:
 	get:
 		return customers_per_day
-	set(value):
-		if not multiplayer.is_server():
-			push_warning("Clients cannot modify customers_per_day directly.")
-			return
+
+func set_customers_per_day(value: float) -> void:
+	if multiplayer.is_server():
 		customers_per_day = value
-		_sync_customers_per_day.rpc(customers_per_day)
+		client_sync_customers_per_day.rpc(customers_per_day)
+		print("GameManager: set_customers_per_day customers_per_day set to ", customers_per_day)
+	else:
+		print("GameManager: set_customers_per_day client/(peer_id=", multiplayer.get_unique_id(), ") attempted to set customers_per_day directly, sending request to server")
+		server_set_customers_per_day.rpc_id(1, value)
+
+@rpc("any_peer", "call_remote", "reliable")
+func server_set_customers_per_day(value: float) -> void:
+	set_customers_per_day(value)
 
 @rpc("authority", "call_remote", "reliable")
-func _sync_customers_per_day(new_value: float) -> void:
-	customers_per_day = new_value
+func client_sync_customers_per_day(value: float) -> void:
+	customers_per_day = value
 
 
 var customers_count_increase_per_day: float = 1.0:
 	get:
 		return customers_count_increase_per_day
-	set(value):
-		if not multiplayer.is_server():
-			push_warning("Clients cannot modify customers_count_increase_per_day directly.")
-			return
+
+func set_customers_count_increase_per_day(value: float) -> void:
+	if multiplayer.is_server():
 		customers_count_increase_per_day = value
-		_sync_customers_count_increase_per_day.rpc(customers_count_increase_per_day)
+		client_sync_customers_count_increase_per_day.rpc(customers_count_increase_per_day)
+		print("GameManager: set_customers_count_increase_per_day customers_count_increase_per_day set to ", customers_count_increase_per_day)
+	else:
+		print("GameManager: set_customers_count_increase_per_day client/(peer_id=", multiplayer.get_unique_id(), ") attempted to set customers_count_increase_per_day directly, sending request to server")
+		server_set_customers_count_increase_per_day.rpc_id(1, value)
+
+@rpc("any_peer", "call_remote", "reliable")
+func server_set_customers_count_increase_per_day(value: float) -> void:
+	set_customers_count_increase_per_day(value)
 
 @rpc("authority", "call_remote", "reliable")
-func _sync_customers_count_increase_per_day(new_value: float) -> void:
-	customers_count_increase_per_day = new_value
+func client_sync_customers_count_increase_per_day(value: float) -> void:
+	customers_count_increase_per_day = value
 
 
 var group_min_size: int = 1:
 	get:
 		return group_min_size
-	set(value):
-		if not multiplayer.is_server():
-			push_warning("Clients cannot modify group_min_size directly.")
-			return
+
+func set_group_min_size(value: int) -> void:
+	if multiplayer.is_server():
 		group_min_size = value
-		_sync_group_min_size.rpc(group_min_size)
+		client_sync_group_min_size.rpc(group_min_size)
+		print("GameManager: set_group_min_size group_min_size set to ", group_min_size)
+	else:
+		print("GameManager: set_group_min_size client/(peer_id=", multiplayer.get_unique_id(), ") attempted to set group_min_size directly, sending request to server")
+		server_set_group_min_size.rpc_id(1, value)
+
+@rpc("any_peer", "call_remote", "reliable")
+func server_set_group_min_size(value: int) -> void:
+	set_group_min_size(value)
 
 @rpc("authority", "call_remote", "reliable")
-func _sync_group_min_size(new_value: int) -> void:
-	group_min_size = new_value
+func client_sync_group_min_size(value: int) -> void:
+	group_min_size = value
 
 
 var group_max_size: int = 2:
 	get:
 		return group_max_size
-	set(value):
-		if not multiplayer.is_server():
-			push_warning("Clients cannot modify group_max_size directly.")
-			return
+
+func set_group_max_size(value: int) -> void:
+	if multiplayer.is_server():
 		group_max_size = value
-		_sync_group_max_size.rpc(group_max_size)
+		client_sync_group_max_size.rpc(group_max_size)
+		print("GameManager: set_group_max_size group_max_size set to ", group_max_size)
+	else:
+		print("GameManager: set_group_max_size client/(peer_id=", multiplayer.get_unique_id(), ") attempted to set group_max_size directly, sending request to server")
+		server_set_group_max_size.rpc_id(1, value)
+
+@rpc("any_peer", "call_remote", "reliable")
+func server_set_group_max_size(value: int) -> void:
+	set_group_max_size(value)
 
 @rpc("authority", "call_remote", "reliable")
-func _sync_group_max_size(new_value: int) -> void:
-	group_max_size = new_value
-
+func client_sync_group_max_size(value: int) -> void:
+	group_max_size = value
 
 
 enum GameState {
@@ -148,17 +207,24 @@ enum GameState {
 var game_state: GameState = GameState.BUILDING:
 	get:
 		return game_state
-	set(value):
-		if not multiplayer.is_server():
-			push_warning("Clients cannot modify game_state directly.")
-			return
+
+func set_game_state(value: GameState) -> void:
+	if multiplayer.is_server():
 		game_state = value
-		_sync_game_state.rpc(game_state)
+		client_sync_game_state.rpc(game_state)
 		Signals.game_state_changed.emit(game_state)
+		print("GameManager: set_game_state game_state set to ", game_state)
+	else:
+		print("GameManager: set_game_state client/(peer_id=", multiplayer.get_unique_id(), ") attempted to set game_state directly, sending request to server")
+		server_set_game_state.rpc_id(1, value)
+
+@rpc("any_peer", "call_remote", "reliable")
+func server_set_game_state(value: GameState) -> void:
+	set_game_state(value)
 
 @rpc("authority", "call_remote", "reliable")
-func _sync_game_state(new_value: GameState) -> void:
-	game_state = new_value
+func client_sync_game_state(value: GameState) -> void:
+	game_state = value
 	Signals.game_state_changed.emit(game_state)
 
 

@@ -22,7 +22,8 @@ func _on_button_pressed() -> void:
 	
 	
 func _buy_station() -> void:
-	GameManager.money -= cost
+	print("ShopStationButton _buy_station:, ", "cost=", cost, " current money=", GameManager.money)
+	GameManager.set_money(GameManager.money - cost)
 	var transform = Helper.get_snapped_transform(XRHelpers.get_xr_origin(self).get_node_or_null("PlayerBody"))
 	var forward: Vector3 = -transform.basis.z.normalized()
 	transform.origin += (forward * 0.6)
@@ -33,7 +34,7 @@ func _buy_station() -> void:
 
 	Signals.station_bought.emit(instance)
 	
-@rpc("reliable")
+@rpc("any_peer", "call_remote", "reliable")
 func _ask_server_to_spawn(station_scene_path, transform):
 	NetworkManager.spawn_item(station_scene_path, transform)
 

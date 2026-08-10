@@ -9,7 +9,7 @@ var customers_served: int = 0
 
 
 func _ready() -> void:
-	GameManager.game_state = GameManager.GameState.BUILDING
+	GameManager.set_game_state(GameManager.GameState.BUILDING)
 	Signals.game_state_changed.connect(_on_game_state_changed)
 
 
@@ -32,8 +32,8 @@ func _reset_values() -> void:
 func start_next_day() -> void:
 	print("DayController: start_next_day")
 	_reset_values()
-	GameManager.customers_per_day += GameManager.customers_count_increase_per_day
-	GameManager.day_number += 1
+	GameManager.set_customers_per_day(GameManager.customers_per_day + GameManager.customers_count_increase_per_day)
+	GameManager.set_day_number(GameManager.day_number + 1)
 	
 	
 func finish_current_day() -> void:
