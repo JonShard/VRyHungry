@@ -1,5 +1,7 @@
 extends Node
 
+const enable_debug = true
+
 ## Global Logger singleton for consistent logging across the game.
 ## All logs are prefixed with [peer_id]: to identify which instance is logging.
 ## Uses print_rich with colorized backgrounds for log type, local time, peer IDs, and script context.
@@ -283,6 +285,8 @@ func error(message: String, args: Array = [], script_name: String = "", function
 
 func debug(message: String, args: Array = [], script_name: String = "", function_name: String = "") -> void:
 	"""Log a debug message."""
+	if not enable_debug:
+		return
 	var formatted = _format_message(message, args)
 	var peer_id_str = _get_peer_id()
 	_print_rich_log(peer_id_str, "debug", formatted, script_name, function_name)
