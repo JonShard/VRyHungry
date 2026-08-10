@@ -51,9 +51,7 @@ func _set_net_held_by(value: int) -> void:
 	var old := net_held_by
 	net_held_by = value
 	if old != value and NetworkManager.is_online():
-		print("%s net_held_by: %d -> %d (local state: %s, authority=%d)" % [
-			_pickable.name, old, value, _holder_desc(), get_multiplayer_authority()
-		])
+		SweetLogger.debug("{0} net_held_by: {1} -> {2} (local state: {3}, authority={4})", [_pickable.name, old, value, _holder_desc(), get_multiplayer_authority()], "net_pickable.gd", "_set_net_held_by")
 	apply_held_state()
 
 
@@ -84,12 +82,7 @@ func apply_held_state() -> void:
 				or _pickable.collision_mask != _pickable.original_collision_mask
 			if changed:
 				if NetworkManager.is_online():
-					print(
-						"%s: reclaiming ownership, restoring freeze_mode %d->%d collision_mask %d->%d" % [
-							_pickable.name, _pickable.freeze_mode, _original_freeze_mode,
-							_pickable.collision_mask, _pickable.original_collision_mask
-						]
-					)
+					SweetLogger.debug("{0}: reclaiming ownership, restoring freeze_mode {1}->{2} collision_mask {3}->{4}", [_pickable.name, _pickable.freeze_mode, _original_freeze_mode, _pickable.collision_mask, _pickable.original_collision_mask], "net_pickable.gd", "apply_held_state")
 				_pickable.freeze_mode = _original_freeze_mode
 				_pickable.collision_mask = _pickable.original_collision_mask
 		# Unlike freeze/collision (which XRToolsPickable manages itself while
@@ -104,9 +97,7 @@ func apply_held_state() -> void:
 		# driver that then fell out of the station.
 		if _pickable.enabled != _original_enabled:
 			if NetworkManager.is_online():
-				print("%s: reclaiming ownership, restoring enabled %s->%s" % [
-					_pickable.name, _pickable.enabled, _original_enabled
-				])
+				SweetLogger.debug("{0}: reclaiming ownership, restoring enabled {1}->{2}", [_pickable.name, _pickable.enabled, _original_enabled], "net_pickable.gd", "apply_held_state")
 			_pickable.enabled = _original_enabled
 		return
 	# A net_held_by/position sync update can race ahead of the
@@ -119,21 +110,13 @@ func apply_held_state() -> void:
 		# Log once per grab, not once per tick.
 		if NetworkManager.is_online() and not _grab_race_logged:
 			_grab_race_logged = true
-			print(
-				"%s: ignoring non-authority sync (net_held_by=%d) — still actively held by our own hand (grab-race guard)" % [
-					_pickable.name, net_held_by
-				]
-			)
+			SweetLogger.debug("{0}: ignoring non-authority sync (net_held_by={1}) — still actively held by our own hand (grab-race guard)", [_pickable.name, net_held_by], "net_pickable.gd", "apply_held_state")
 		return
 	_grab_race_logged = false
 	# Someone else owns it: stop simulating locally, just follow the sync.
 	if _pickable.is_picked_up():
 		if NetworkManager.is_online():
-			print(
-				"%s: was held by %s on this peer, but authority now says peer %d owns it — force-dropping" % [
-					_pickable.name, _holder_desc(), net_held_by
-				]
-			)
+			SweetLogger.debug("{0}: was held by {1} on this peer, but authority now says peer {2} owns it — force-dropping", [_pickable.name, _holder_desc(), net_held_by], "net_pickable.gd", "apply_held_state")
 		_pickable.drop()
 	# Bail out when we're already in the follow-the-sync state. Without this the
 	# writes below (and the line logged with them) repeated every tick for every
@@ -165,10 +148,10 @@ func _on_picked_up(_p) -> void:
 		# addon's own "grab out of a snap zone" shortcut mid-cascade) — not a
 		# player-initiated hand grab, so no authority request from here.
 		if NetworkManager.is_online():
-			print("%s picked up by %s (not a hand) — no authority request" % [_pickable.name, _holder_desc()])
+			SweetLogger.debug("{0} picked up by {1} (not a hand) — no authority request", [_pickable.name, _holder_desc()], "net_pickable.gd", "_on_picked_up")
 		return
 	if NetworkManager.is_online():
-		print("%s grabbed by hand (authority was peer %d), requesting authority" % [_pickable.name, net_held_by])
+		SweetLogger.debug("{0} grabbed by hand (authority was peer {1}), requesting authority", [_pickable.name, net_held_by], "net_pickable.gd", "_on_picked_up")
 	NetworkManager.request_item_authority_from(_pickable.get_path())
 
 
@@ -177,12 +160,10 @@ func _on_dropped(_p) -> void:
 	# apply_held_state() losing authority (see above) must not re-report.
 	if not is_multiplayer_authority():
 		if NetworkManager.is_online():
-			print("%s dropped locally, but we aren't its authority (peer %d is) — not reporting" % [_pickable.name, net_held_by])
+			SweetLogger.debug("{0} dropped locally, but we aren't its authority (peer {1} is) — not reporting", [_pickable.name, net_held_by], "net_pickable.gd", "_on_dropped")
 		return
 	if NetworkManager.is_online():
-		print("%s dropped, reporting release to server (lin=%s ang=%s)" % [
-			_pickable.name, _pickable.linear_velocity, _pickable.angular_velocity
-		])
+		SweetLogger.debug("{0} dropped, reporting release to server (lin={1} ang={2})", [_pickable.name, _pickable.linear_velocity, _pickable.angular_velocity], "net_pickable.gd", "_on_dropped")
 	# Send our own final transform too: we were the authority until now, and the
 	# server's copy may not have received our last position sync yet.
 	NetworkManager.release_item_authority_from(

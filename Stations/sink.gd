@@ -59,7 +59,7 @@ func _refresh_progress_bar() -> void:
 
 
 func _on_object_picked_up(_item) -> void:
-	print("Sink: object picked up: ", _item)
+	SweetLogger.debug("object picked up: {0}", [_item], "sink.gd", "_on_object_picked_up")
 	plate = _item.get_node_or_null("PlateController") as PlateController
 	if plate:
 		# The setter starts the effects and shows the bar, here and on clients.
@@ -67,7 +67,7 @@ func _on_object_picked_up(_item) -> void:
 
 
 func _on_object_dropped(_item) -> void:
-	print("Sink: object drop ")
+	SweetLogger.debug("object drop", [], "sink.gd", "_on_object_dropped")
 	_reset_sink()
 
 
@@ -81,14 +81,14 @@ func complete_washing():
 			return
 		plate.is_dirty = false
 		_reset_sink()
-		print("Sink washing complete!")
+		SweetLogger.debug("washing complete!", [], "sink.gd", "complete_washing")
 
 
 func _process(delta: float) -> void:
 	if is_washing:
 		time_washed += wash_speed * delta
 		_refresh_progress_bar()
-		print("Sink washing plate: ", time_washed)
+		SweetLogger.debug("washing plate: {0}", [time_washed], "sink.gd", "_process")
 
 	if time_washed >= plate_wash_time:
 		complete_washing()

@@ -10,7 +10,7 @@ var _food_item: FoodItem
 
 
 func _ready() -> void:
-	print("CombinableItem _ready(): ", _pickable.name)
+	SweetLogger.debug("_ready(): {0}", [_pickable.name], "combinable_item.gd", "_ready")
 	_food_item = get_parent().get_node_or_null("FoodItem") as FoodItem
 	if not _food_item:
 		push_error("CombinableItem is missing FoodItem reference. must be a sibling of a FoodItem on ", get_parent().name, ".")
@@ -52,24 +52,24 @@ func _on_body_entered(body: Node3D) -> void:
 	if not NetworkManager.owns_world():
 		return
 	if _combining or body == _pickable:
-		print("CombinableItem _on_body_entered: other is our own pickable")
+		SweetLogger.debug("other is our own pickable", [], "combinable_item.gd", "_on_body_entered")
 		return
 
 	var other := Helper.find_food_item(body)
 	if not other:
-		print("CombinableItem _on_body_entered: other is not a foodItem")
+		SweetLogger.debug("other is not a foodItem", [], "combinable_item.gd", "_on_body_entered")
 		return
 
 	var result: PackedScene = RecipeManager.get_combination_result(_food_item.id, other.id)
 	if not result:
-		print("CombinableItem _on_body_entered: There is no recipe for %s + %s" % [_food_item.id, other.id])
+		SweetLogger.debug("There is no recipe for {0} + {1}", [_food_item.id, other.id], "combinable_item.gd", "_on_body_entered")
 		return
 
 	_combine(body, result)
 
 # Instantiate the result of combination and free the two ingredient items
 func _combine(other_body: Node3D, result: PackedScene) -> void:
-	print("CombinableItem _combine: combining %s + %s into %s" % [_food_item.id, Helper.find_food_item(other_body).id, result.resource_path])
+	SweetLogger.debug("combining {0} + {1} into {2}", [_food_item.id, Helper.find_food_item(other_body).id, result.resource_path], "combinable_item.gd", "_combine")
 
 	# Get Snapzone
 	var snap_zone := _pickable.get_picked_up_by()

@@ -111,22 +111,22 @@ static func get_item_scene(item_id: StringName) -> PackedScene:
 static func print_all_recipes() -> void:
 	load_recipes()
 	if not _loaded:
-		print("RecipeManager: could not load recipes.yaml; no recipes printed.")
+		SweetLogger.warning("could not load recipes.yaml; no recipes printed.", [], "RecipeManager.gd", "print_all_recipes")
 		return
 
 	if _combining_map.is_empty():
-		print("RecipeManager: no combining recipes found")
+		SweetLogger.warning("no combining recipes found", [], "RecipeManager.gd", "print_all_recipes")
 		return
 
-	print("#### RecipeManager: Loaded recipes ####")
+	SweetLogger.info("#### RecipeManager: Loaded recipes ####", [], "RecipeManager.gd", "print_all_recipes")
 	_print_combining_recipes()
-	print("")
+	SweetLogger.info("", [], "RecipeManager.gd", "print_all_recipes")
 	_print_cooking_recipes()
-	print("")
+	SweetLogger.info("", [], "RecipeManager.gd", "print_all_recipes")
 	_print_chopping_recipes()
-	print("")
+	SweetLogger.info("", [], "RecipeManager.gd", "print_all_recipes")
 	_print_rolling_recipes()
-	print("")
+	SweetLogger.info("", [], "RecipeManager.gd", "print_all_recipes")
 	_print_augmenting_recipes()
 
 static func _print_combining_recipes() -> void:
@@ -135,12 +135,12 @@ static func _print_combining_recipes() -> void:
 		var key_str = str(pair_key)
 		var separator_index = key_str.find("|")
 		if separator_index == -1:
-			print("RecipeManager: invalid combining map key '%s'" % key_str)
+			SweetLogger.warning("invalid combining map key '{0}'", [key_str], "RecipeManager.gd", "_print_combining_recipes")
 			continue
 
 		var first = key_str.substr(0, separator_index)
 		var second = key_str.substr(separator_index + 1, key_str.length() - separator_index - 1)
-		print("  %s <-combine-- %s + %s" % [result_id, first, second])
+		SweetLogger.info("  {0} <-combine-- {1} + {2}", [result_id, first, second], "RecipeManager.gd", "_print_combining_recipes")
 
 
 static func _print_cooking_recipes() -> void:
@@ -148,22 +148,22 @@ static func _print_cooking_recipes() -> void:
 		var cook_defs = _cooking_map[cooked_id]
 		if typeof(cook_defs) == TYPE_ARRAY:
 			for cook_def in cook_defs:
-				print("  %s <-cook-- %s - time: %.1f" % [cooked_id, cook_def["ingredient"], cook_def["time"]])
+				SweetLogger.info("  {0} <-cook-- {1} - time: {2}", [cooked_id, cook_def["ingredient"], cook_def["time"]], "RecipeManager.gd", "_print_cooking_recipes")
 		else:
 			var cook_def = cook_defs
-			print("  %s <-cook-- %s - time: %.1f" % [cooked_id, cook_def["ingredient"], cook_def["time"]])
+			SweetLogger.info("  {0} <-cook-- {1} - time: {2}", [cooked_id, cook_def["ingredient"], cook_def["time"]], "RecipeManager.gd", "_print_cooking_recipes")
 
 
 static func _print_chopping_recipes() -> void:
 	for chopped_id in _chopping_map.keys():
 		var chop_def = _chopping_map[chopped_id]
-		print("  %s <-chop-- %s - work: %.1f" % [chopped_id, chop_def["ingredient"], chop_def["work"]])
+		SweetLogger.info("  {0} <-chop-- {1} - work: {2}", [chopped_id, chop_def["ingredient"], chop_def["work"]], "RecipeManager.gd", "_print_chopping_recipes")
 
 
 static func _print_rolling_recipes() -> void:
 	for rolled_id in _rolling_map.keys():
 		var roll_def = _rolling_map[rolled_id]
-		print("  %s <-roll-- %s - work: %.1f" % [rolled_id, roll_def["ingredient"], roll_def["work"]])
+		SweetLogger.info("  {0} <-roll-- {1} - work: {2}", [rolled_id, roll_def["ingredient"], roll_def["work"]], "RecipeManager.gd", "_print_rolling_recipes")
 
 
 static func _print_augmenting_recipes() -> void:
@@ -171,7 +171,7 @@ static func _print_augmenting_recipes() -> void:
 		var augment_def = _augmenting_map[target_id]
 		for ingredient_id in augment_def.keys():
 			var attr_key = augment_def[ingredient_id]
-			print("  %s <-augment-- %s adds attribute '%s'" % [target_id, ingredient_id, attr_key])
+			SweetLogger.info("  {0} <-augment-- {1} adds attribute '{2}'", [target_id, ingredient_id, attr_key], "RecipeManager.gd", "_print_augmenting_recipes")
 
 
 static func _build_scene_paths() -> void:

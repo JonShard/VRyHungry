@@ -32,9 +32,9 @@ func _process(_delta: float) -> void:
 
 func toggle_shop():
 	if GameManager.game_state == GameManager.GameState.BUILDING:
-		print("Shop UI toggle shop")
+		SweetLogger.debug("toggle shop", [], "shop_ui.gd", "toggle_shop")
 		enabled = !enabled
-		print ("Shop UI _process: money=", GameManager.money, " label text=", money_label.text)
+		SweetLogger.debug("_process: money={0} label text={1}", [GameManager.money, money_label.text], "shop_ui.gd", "toggle_shop")
 
 
 
@@ -54,11 +54,11 @@ func _set_poke_enabled_for_controller(controller_node: XRController3D, value: bo
 
 	var poke_node = Helper.find_first_child_of_type(controller_node, XRToolsPoke)
 	if poke_node:
-		print("Shop UI _set_poke_enabled_for_controller: ", poke_node.get_path(), " poke enabled: ", value)
+		SweetLogger.debug("_set_poke_enabled_for_controller: {0} poke enabled: {1}", [poke_node.get_path(), value], "shop_ui.gd", "_set_poke_enabled_for_controller")
 		poke_node.enabled = value
 		poke_node.visible = value
 	else:
-		print("Shop UI _set_poke_enabled_for_controller: ", controller_node.name, " poke not found")
+		SweetLogger.debug("_set_poke_enabled_for_controller: {0} poke not found", [controller_node.name], "shop_ui.gd", "_set_poke_enabled_for_controller")
 
 # For some reason, this is called every frame the button is down. So we need our own timer.
 func _on_controller_button_pressed(button_name: String) -> void:
@@ -80,7 +80,7 @@ func _on_other_controller_button_pressed(button_name: String) -> void:
 func _on_station_bought(_instance) -> void:
 	enabled = false
 	money_label.text = str(GameManager.money) + "$"
-	print("Shop UI _on_station_bought: new money: ", GameManager.money)
+	SweetLogger.debug("_on_station_bought: new money: {0}", [GameManager.money], "shop_ui.gd", "_on_station_bought")
 
 
 func detect_hand_from_xr_ancestor() -> void:
@@ -96,4 +96,4 @@ func detect_hand_from_xr_ancestor() -> void:
 		other_controller = right_controller
 	elif controller == right_controller:
 		other_controller = left_controller
-	print("Shop UI detected hand: ", controller.get_tracker_hand())
+	SweetLogger.debug("detected hand: {0}", [controller.get_tracker_hand()], "shop_ui.gd", "detect_hand_from_xr_ancestor")

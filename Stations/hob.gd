@@ -67,26 +67,26 @@ func _refresh_display() -> void:
 	progress_bar.override_fill_color(Color.RED if cooking_result == "charcoal" else Color.GREEN)
 
 func _on_object_picked_up(_item) -> void:
-	print("Hob: object picked up: ", _item)
+	SweetLogger.debug("object picked up: {0}", [_item], "hob.gd", "_on_object_picked_up")
 
 	# Find the CookableItem in held object
 	var _food_item = _item.get_node_or_null("FoodItem") as FoodItem
 	if not _food_item:
-		print("Hob: held object is not a FoodItem")
+		SweetLogger.debug("held object is not a FoodItem", [], "hob.gd", "_on_object_picked_up")
 		return
 	var result = RecipeManager.get_cooking_result(_food_item.id)
 	if not result:
-		print("Hob: held a FoodItem that is not cookable, id: %s  result: %s" % [_food_item.id, result])
+		SweetLogger.debug("held a FoodItem that is not cookable, id: {0} result: {1}", [_food_item.id, result], "hob.gd", "_on_object_picked_up")
 		return
 
 	cooking_result = result
 	cooking_result_time = RecipeManager.get_cooking_time(_food_item.id)
-	print("Hob: set cooking_result ", cooking_result)
+	SweetLogger.debug("set cooking_result {0}", [cooking_result], "hob.gd", "_on_object_picked_up")
 	# The setters above already refresh the display and start the flames.
 
 
 func _on_object_dropped(_item) -> void:
-	print("Hob: object drop ")
+	SweetLogger.debug("object drop", [], "hob.gd", "_on_object_dropped")
 	time_cooked = 0
 	cooking_result = ""
 	cooking_result_time = 0
@@ -95,7 +95,7 @@ func _on_object_dropped(_item) -> void:
 func convert_held_to_item(_item: String) -> void:
 	if not NetworkManager.owns_world():
 		return
-	print("Hob converting ", _item)
+	SweetLogger.debug("converting {0}", [_item], "hob.gd", "convert_held_to_item")
 
 	var old_pickable = snap_zone.picked_up_object
 	if not old_pickable:
@@ -108,7 +108,7 @@ func convert_held_to_item(_item: String) -> void:
 	var new_scene_instance = NetworkManager.spawn_item(RecipeManager.get_item_scene(_item).resource_path, original_transform)
 
 	# Drop and free the old item and pick up the new one
-	print("Hob freeing old_pickable  ", old_pickable)
+	SweetLogger.debug("freeing old_pickable {0}", [old_pickable], "hob.gd", "convert_held_to_item")
 	snap_zone.drop_object()
 	NetworkManager.despawn_item(old_pickable)
 	snap_zone.pick_up_object(new_scene_instance)

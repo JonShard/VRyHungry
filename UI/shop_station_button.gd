@@ -17,12 +17,12 @@ func _ready() -> void:
 
 
 func _on_button_pressed() -> void:
-	print("ShopStationButton buy ", station_name)
+	SweetLogger.debug("buy {0}", [station_name], "shop_station_button.gd", "_on_button_pressed")
 	_buy_station()
 	
 	
 func _buy_station() -> void:
-	print("ShopStationButton _buy_station:, ", "cost=", cost, " current money=", GameManager.money)
+	SweetLogger.debug("_buy_station: cost={0} current money={1}", [cost, GameManager.money], "shop_station_button.gd", "_buy_station")
 	GameManager.set_money(GameManager.money - cost)
 	var transform = Helper.get_snapped_transform(XRHelpers.get_xr_origin(self).get_node_or_null("PlayerBody"))
 	var forward: Vector3 = -transform.basis.z.normalized()

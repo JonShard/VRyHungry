@@ -29,13 +29,13 @@ func _ready() -> void:
 func _on_body_entered(body: Node3D) -> void:
 	if not NetworkManager.owns_world():
 		return
-	print("Container enabled: ", enabled)
+	SweetLogger.debug("enabled: {0}", [enabled], "container.gd", "_on_body_entered")
 	if not enabled:
-		print("Container disabled in  _on_body_entered body")
+		SweetLogger.debug("disabled in _on_body_entered body", [], "container.gd", "_on_body_entered")
 		return
 	if not body.is_in_group(target_group):
 		return
-	print("Container _on_body_entered body: ", body)
+	SweetLogger.debug("body: {0}", [body], "container.gd", "_on_body_entered")
 
 
 	# If one of us is in a station
@@ -46,14 +46,14 @@ func _on_body_entered(body: Node3D) -> void:
 
 		# If enough space, add item
 		var food_item = body.get_node("FoodItem")
-		print("Container in station found %s of type %s: %s" % [target_group, FoodItem.Type.keys()[food_item.type], body.name])
+		SweetLogger.debug("in station found {0} of type {1}: {2}", [target_group, FoodItem.Type.keys()[food_item.type], body.name], "container.gd", "_on_body_entered")
 		var meal_count := contained_items.filter(func(f): return f.type == FoodItem.Type.MEAL).size()
 		var side_count := contained_items.filter(func(f): return f.type == FoodItem.Type.SIDE).size()
 		if food_item.type == FoodItem.Type.MEAL and meal_count < meal_positions.size():
-			print("Container adding meal")
+			SweetLogger.debug("adding meal", [], "container.gd", "_on_body_entered")
 			_add_item(body)
 		if food_item.type == FoodItem.Type.SIDE and side_count < side_positions.size():
-			print("Container adding side")
+			SweetLogger.debug("adding side", [], "container.gd", "_on_body_entered")
 			_add_item(body)
 
 
@@ -93,7 +93,7 @@ func _add_item(item: Node3D) -> void:
 	NetworkManager.despawn_item(item)
 	# In case the container is on a table that needs to register this addition,
 	# ask all table in scene to absorb any new items.
-	print("Container group call absorb_items()")
+	SweetLogger.debug("group call absorb_items()", [], "container.gd", "_add_item")
 	get_tree().call_group("table", "absorb_items") 
 
 

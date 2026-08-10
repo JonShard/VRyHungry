@@ -32,7 +32,7 @@ func spawn_customer()  -> void:
 func _rebuild_table_list() -> void:
 	_tables.clear()
 	_tables.append_array(get_tree().get_nodes_in_group("table"))
-	print("QueueController _rebuild_table_list complete: ", _tables)
+	SweetLogger.debug("_rebuild_table_list complete: {0}", [_tables], "queue_controller.gd", "_rebuild_table_list")
 
 
 func _try_to_assign_customers() -> void:

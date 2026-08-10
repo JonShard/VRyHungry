@@ -522,7 +522,7 @@ func _on_player_absent(peer_id: int) -> void:
 # --- Command-line driven test bootstrap -----------------------------------
 
 func _handle_cmdline() -> void:
-	print("Networkmanager _handle_cmdline()")
+	SweetLogger.info("Networkmanager _handle_cmdline()", [], "network_manager.gd", "_handle_cmdline")
 	var args := OS.get_cmdline_args()
 	if args.has("--server"):
 		log_line("cmdline: --server")
@@ -554,7 +554,7 @@ func log_line(s: String) -> void:
 	if p != null and p.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED:
 		id = multiplayer.get_unique_id()
 	var line := "[NET %d] %s" % [id, s]
-	print(line)
+	SweetLogger.info(line, [], "network_manager.gd", "log_line")
 	if _log_file:
 		_log_file.store_line(line)
 		_log_file.flush()

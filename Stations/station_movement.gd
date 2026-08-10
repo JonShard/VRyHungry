@@ -21,7 +21,7 @@ const GHOST_COLOR_INVALID: Color = Color(1, 0, 0, 0.35)
 
 
 func set_move_handle_enabled(enabled: bool) -> void:
-	print("StationMovement set_move_handle_enabled: ", enabled)
+	SweetLogger.debug("set_move_handle_enabled: {0}", [enabled], "station_movement.gd", "set_move_handle_enabled")
 	move_handle.visible = enabled
 	move_handle.enabled = enabled
 	if enabled:
@@ -32,7 +32,7 @@ func _on_game_state_changed(new_state: GameManager.GameState) -> void:
 	set_move_handle_enabled(new_state == GameManager.GameState.BUILDING)
 
 func _on_station_bought(_instance: Node3D):
-	print("StationMovement _on_station_bought")
+	SweetLogger.info("_on_station_bought")
 	if GameManager.game_state == GameManager.GameState.BUILDING:
 		set_move_handle_enabled(true)
 		
@@ -93,9 +93,9 @@ func _set_ghost_color(color: Color) -> void:
 
 
 func _handle_pickup(_by: Node) -> void:
-	print("StationMovement handle pickup")
+	SweetLogger.info("handle pickup")
 	if move_handle.get_picked_up_by() is XRToolsSnapZone:
-		print("StationMovement handle pickup by snap zone, dropping and resetting position")
+		SweetLogger.info("handle pickup by snap zone, dropping and resetting position")
 		move_handle.drop()
 		move_handle.global_position = station.global_position + Vector3(0, original_handle_y_pos, 0)
 		move_handle.rotation = station.rotation
@@ -115,7 +115,7 @@ func _handle_pickup(_by: Node) -> void:
 
 
 func _handle_drop(_by: Node) -> void:
-	print("StationMovement handle drop")
+	SweetLogger.info("handle drop")
 	moving = false
 	move_ghost.visible = false
 	station.visible = true
@@ -129,11 +129,11 @@ func _handle_drop(_by: Node) -> void:
 		if is_valid:
 			station.global_transform = move_ghost.global_transform
 			move_handle.global_transform = move_ghost.global_transform.translated(Vector3(0, original_handle_y_pos, 0))
-			print("StationMovement handle drop (local apply), station authority: ", station.get_multiplayer_authority(), " move_handle authority: ", move_handle.get_multiplayer_authority())
+			SweetLogger.debug("handle drop (local apply), station authority: {0} move_handle authority: {1}", [station.get_multiplayer_authority(), move_handle.get_multiplayer_authority()], "station_movement.gd", "_handle_drop")
 		else:
 			station.global_transform = original_station_transform
 			move_handle.global_transform = original_station_transform.translated(Vector3(0, original_handle_y_pos, 0))
-			print("StationMovement handle drop (local reject), restoring original position")
+			SweetLogger.debug("handle drop (local reject), restoring original position", [], "station_movement.gd", "_handle_drop")
 
 func _process(_delta: float) -> void:
 	if not moving:
@@ -161,7 +161,7 @@ func _process(_delta: float) -> void:
 
 func _is_move_position_valid() -> bool:
 	for body in move_ghost.get_overlapping_bodies():
-		print("Overlapping body: ", body)
+		SweetLogger.debug("Overlapping body: {0}", [body], "station_movement.gd", "_is_move_position_valid")
 		if body == move_handle:
 			continue
 		if body == station:
@@ -193,7 +193,7 @@ func server_handle_drop(new_transform: Transform3D, client_thinks_valid: bool):
 		server_update_move_ghost_transform.rpc(original_trans)
 		server_update_handle_transform.rpc(original_trans.translated(Vector3(0, original_handle_y_pos, 0)))
 		server_update_visibility.rpc(false, true)
-		print("StationMovement server_handle_drop: transform rejected (invalid)")
+		SweetLogger.debug("server_handle_drop: transform rejected (invalid)", [], "station_movement.gd", "server_handle_drop")
 		return
 
 	server_update_station_transform.rpc(new_transform)
@@ -201,32 +201,32 @@ func server_handle_drop(new_transform: Transform3D, client_thinks_valid: bool):
 	server_update_handle_transform.rpc(new_transform.translated(Vector3(0, original_handle_y_pos, 0)))
 	server_update_visibility.rpc(false, true)
 	
-	print("StationMovement server_handle_drop: transform applied")
+	SweetLogger.debug("server_handle_drop: transform applied", [], "station_movement.gd", "server_handle_drop")
 
 
 @rpc("any_peer", "call_local", "reliable") # Server updates clients
 func server_update_station_transform(new_transform: Transform3D) -> void:
-	print("StationMovement server_update_station_transform")
+	SweetLogger.debug("server_update_station_transform", [], "station_movement.gd", "server_update_station_transform")
 	station.global_transform = new_transform
 	original_station_transform = new_transform
 
 
 @rpc("any_peer", "call_local", "reliable") # Server updates clients
 func server_update_handle_transform(new_transform: Transform3D) -> void:
-	print("StationMovement server_update_handle_transform")
+	SweetLogger.debug("server_update_handle_transform", [], "station_movement.gd", "server_update_handle_transform")
 	move_handle.global_transform = new_transform
 
 
 
 @rpc("any_peer", "call_local", "reliable")
 func server_update_visibility(ghost_visible: bool, station_visible: bool) -> void:
-	print("StationMovement server_update_visibility")
+	SweetLogger.debug("server_update_visibility", [], "station_movement.gd", "server_update_visibility")
 	move_ghost.visible = ghost_visible
 	station.visible = station_visible
 
 
 @rpc("any_peer", "call_local", "unreliable")
 func server_update_move_ghost_transform(new_transform: Transform3D, new_color: Color = Color.YELLOW) -> void:
-	print("StationMovement server_update_move_ghost_transform")
+	SweetLogger.debug("server_update_move_ghost_transform", [], "station_movement.gd", "server_update_move_ghost_transform")
 	move_ghost.global_transform = new_transform
 	_set_ghost_color(new_color)

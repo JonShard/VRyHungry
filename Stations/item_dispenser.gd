@@ -21,6 +21,6 @@ func _process(_delta: float) -> void:
 		#return
 		#
 	if not snap_zone.picked_up_object:
-		print("Item dispenser is missing item, spawning new item")
+		SweetLogger.debug("missing item, spawning new item", [], "item_dispenser.gd", "_process")
 		var new_item = NetworkManager.spawn_item(item_scene.resource_path, snap_zone.global_transform)
 		snap_zone.pick_up_object(new_item)

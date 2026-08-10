@@ -11,7 +11,7 @@ func _makeDirty(item) -> void:
 		return
 	var plate: PlateController = item.get_node_or_null("PlateController") as PlateController
 	if not plate:
-		print("Dirt Station: held object is not a Plate")
+		SweetLogger.debug("held object is not a Plate", [], "dirt_station.gd", "_makeDirty")
 		return
 	if not plate.is_dirty:
 		plate.is_dirty = true

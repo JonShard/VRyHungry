@@ -23,6 +23,8 @@ NetworkManager="*res://Net/network_manager.gd"
 GlobalKeyEvents="*uid://c60unagog5oi1"
 Signals="*uid://fuux6cxfjwdc"
 GameManager="*uid://y4sol8l8vih1"
+SweetLogger="*uid://cdfw054e8nhxv"
+MoveWindows="*uid://de8j52uus1pbv"
 
 [debug]
 
@@ -32,12 +34,13 @@ file_logging/enable_file_logging=true
 
 window/size/viewport_width=1000
 window/size/viewport_height=650
+window/size/initial_position_type=0
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/godot-xr-tools/plugin.cfg", "res://addons/kanban_tasks/plugin.cfg", "res://addons/yaml/plugin.cfg")
+enabled=PackedStringArray("res://addons/godot-xr-tools/plugin.cfg", "res://addons/kanban_tasks/plugin.cfg", "res://addons/sweet-logger/plugin.cfg", "res://addons/yaml/plugin.cfg")
 
 [filesystem]
 
