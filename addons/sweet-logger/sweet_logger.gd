@@ -1,7 +1,7 @@
 extends Node
 
 const enable_debug = true
-
+var frame_count = 0
 # Inside SweetLogger or a static helper class:
 static func get_current_function_name() -> String:
 	var stack = get_stack()
@@ -16,6 +16,9 @@ static func get_caller_file_name() -> String:
 	if stack.size() > 2:
 		return stack[2].source.get_file() # e.g., "station.gd"
 	return "unknown_file"
+
+func _process(delta: float) -> void:
+	frame_count += 1
 
 
 ## Global Logger singleton for consistent logging across the game.
@@ -95,7 +98,7 @@ const TIMESTAMP_BG_COLOR = "#1e3a5f"
 #===================================================================================#
 ## Column widths for alignment (in characters)
 const PEER_ID_COLUMN_WIDTH = 6
-const LOG_TYPE_COLUMN_WIDTH = 7
+const LOG_TYPE_COLUMN_WIDTH = 13
 ## Default mm:ss:ms; with SHOW_TIMESTAMP_HOURS, hh:mm:ss:ms
 const TIMESTAMP_COLUMN_WIDTH_MMSSMS = 9
 const TIMESTAMP_COLUMN_WIDTH_HHMMSSMS = 12
@@ -220,7 +223,7 @@ func _print_rich_log(peer_id_str: String, log_type: String, message: String, scr
 
 	# Use peer ID directly without "Peer" prefix
 	var peer_label = peer_id_str
-	var log_type_label = log_type.to_upper()
+	var log_type_label = str(frame_count) + " - " + log_type.to_upper()
 
 	# Pad peer ID column for alignment
 	var peer_padded = _truncate_text(_pad_text(peer_label, PEER_ID_COLUMN_WIDTH), TRUNCATE_PEER_NAME)
