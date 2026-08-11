@@ -3,12 +3,12 @@
 importer="wav"
 type="AudioStreamWAV"
 uid="uid://daiv8ubwdbidf"
-path="res://.godot/imported/220195__gameaudio__click-wooden-1.wav-f161e2c5a53d686c65d143b45f33acb1.sample"
+path="res://.godot/imported/220195__gameaudio__click-wooden-1.wav-9368ef861eabf2cf1d5bd0db33c616c8.sample"
 
 [deps]
 
-source_file="res://sounds/220195__gameaudio__click-wooden-1.wav"
-dest_files=["res://.godot/imported/220195__gameaudio__click-wooden-1.wav-f161e2c5a53d686c65d143b45f33acb1.sample"]
+source_file="res://Sounds/220195__gameaudio__click-wooden-1.wav"
+dest_files=["res://.godot/imported/220195__gameaudio__click-wooden-1.wav-9368ef861eabf2cf1d5bd0db33c616c8.sample"]
 
 [params]
 

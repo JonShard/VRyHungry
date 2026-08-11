@@ -42,7 +42,7 @@ func _on_body_entered(body: Node3D) -> void:
 	var picked_by = xr_pickable.get_picked_up_by()
 	var body_pickable = body as XRToolsPickable
 	var body_picked_by = body_pickable.get_picked_up_by() if body_pickable else null
-	if (picked_by and picked_by.is_in_group("station")) or (body_picked_by and body_picked_by.is_in_group("station")):
+	if (picked_by and picked_by.is_in_group("station_zone")) or (body_picked_by and body_picked_by.is_in_group("station_zone")):
 
 		# If enough space, add item
 		var food_item = body.get_node("FoodItem")

@@ -36,11 +36,11 @@ station = NodePath("../BurgerBunsDispenser")
 root_path = NodePath("../BurgerBunsDispenser")
 replication_config = SubResource("SceneReplicationConfig_u2p81")
 
-[node name="BurgerBunsDispenser" type="StaticBody3D" parent="." unique_id=1720683779]
+[node name="BurgerBunsDispenser" type="StaticBody3D" parent="." unique_id=1720683779 groups=["station"]]
 script = ExtResource("1_myl3s")
 item_scene = ExtResource("2_1q74o")
 
-[node name="XRToolsSnapZone" type="Area3D" parent="BurgerBunsDispenser" unique_id=805334513]
+[node name="XRToolsSnapZone" type="Area3D" parent="BurgerBunsDispenser" unique_id=805334513 groups=["station_zone"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00070536137, 1.0162505, -0.002165556)
 collision_layer = 65536
 collision_mask = 65536

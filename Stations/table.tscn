@@ -60,7 +60,7 @@ shape = SubResource("BoxShape3D_24d3s")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.094791204, 0.9715525, 0.0012244582)
 shape = SubResource("BoxShape3D_24d3s")
 
-[node name="XRToolsSnapZone" type="Area3D" parent="Table" unique_id=1947858647 groups=["station"]]
+[node name="XRToolsSnapZone" type="Area3D" parent="Table" unique_id=1947858647 groups=["station_zone"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0285525, 0)
 collision_layer = 65536
 collision_mask = 65540

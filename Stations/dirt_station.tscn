@@ -52,7 +52,7 @@ mesh = SubResource("BoxMesh_ay2w6")
 transform = Transform3D(0.9999992, 0, 0, 0, 0.99999946, 0, 0, 0, 0.9999992, 0.002797456, 0.6309581, -0.2812457)
 text = "Dirt"
 
-[node name="XRToolsSnapZone" type="Area3D" parent="DirtStation" unique_id=333161027 groups=["station"]]
+[node name="XRToolsSnapZone" type="Area3D" parent="DirtStation" unique_id=333161027 groups=["station_zone"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0313971, 0)
 collision_layer = 65536
 collision_mask = 65540

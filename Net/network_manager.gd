@@ -175,13 +175,21 @@ func _spawn_item_from_data(data: Variant) -> Node:
 # item-authority RPCs are what let clients still grab a server-held item by
 # hand. Runs before the node enters the tree, so its own _ready() sees the
 # final (disabled) state.
+#
+# Group contract (see also _station_snap_zones): "station" marks the body that
+# runs the station's script, "station_zone" marks its snap zones. Station scenes
+# wrap that body in a Node3D (for StationMovement), and spawn_item hands us that
+# wrapper, so accept either and recurse — a type check on the node we're handed
+# silently gated nothing for stations whose root isn't the body itself.
 func _gate_station(node: Node) -> void:
-	if not (node is StaticBody3D):
+	if not node.is_in_group("station"):
+		for child in node.find_children("*", "", true, false):
+			if child.is_in_group("station"):
+				_gate_station(child)
 		return
-	for child in node.get_children():
-		if child is XRToolsSnapZone:
-			child.enabled = false
-			child.set_process(false)
+	for zone in node.find_children("*", "XRToolsSnapZone", true, false):
+		zone.enabled = false
+		zone.set_process(false)
 	node.set_process(false)
 	log_line("gated station (non-owner peer): %s" % node.name)
 
@@ -280,14 +288,16 @@ func _do_release_item_authority(item_path: NodePath, lin: Vector3, ang: Vector3,
 	_try_snap_into_station.call_deferred(item)
 
 
-# All station snap zones in the world (every XRToolsSnapZone child of a node in
-# the "station" group — some stations, e.g. Table, have more than one).
+# All station snap zones in the world (every XRToolsSnapZone under a node in the
+# "station" group — some stations, e.g. Table, have more than one). Derived from
+# the station body rather than from the "station_zone" group directly, so zones
+# that are deliberately not server-placeable (the player's Hatch) stay out.
 func _station_snap_zones() -> Array:
 	var zones := []
 	for station in get_tree().get_nodes_in_group("station"):
-		for child in station.get_children():
-			if child is XRToolsSnapZone:
-				zones.append(child)
+		for zone in station.find_children("*", "XRToolsSnapZone", true, false):
+			if not zones.has(zone):
+				zones.append(zone)
 	return zones
 
 

@@ -169,7 +169,7 @@ _data = {
 &"hob": SubResource("Animation_6oyg1")
 }
 
-[node name="Hob" type="Node3D" unique_id=172418174 groups=["station"]]
+[node name="Hob" type="Node3D" unique_id=172418174]
 
 [node name="StationMovement" parent="." unique_id=946873975 node_paths=PackedStringArray("station") instance=ExtResource("1_pydjp")]
 station = NodePath("../Hob")
@@ -177,14 +177,14 @@ station = NodePath("../Hob")
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=768992259]
 replication_config = SubResource("SceneReplicationConfig_np_hob")
 
-[node name="Hob" type="StaticBody3D" parent="." unique_id=1332123047]
+[node name="Hob" type="StaticBody3D" parent="." unique_id=1332123047 groups=["station"]]
 script = ExtResource("1_7jc4g")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Hob" unique_id=1283846023]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.51483154, 0)
 shape = SubResource("BoxShape3D_kdxnr")
 
-[node name="XRToolsSnapZone" type="Area3D" parent="Hob" unique_id=538157739 groups=["station"]]
+[node name="XRToolsSnapZone" type="Area3D" parent="Hob" unique_id=538157739 groups=["station_zone"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0418437, 0)
 collision_layer = 65536
 collision_mask = 65540

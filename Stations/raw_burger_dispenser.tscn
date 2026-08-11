@@ -36,11 +36,11 @@ station = NodePath("../RawBurgerDispenser")
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1886082284]
 replication_config = SubResource("SceneReplicationConfig_8ou8n")
 
-[node name="RawBurgerDispenser" type="StaticBody3D" parent="." unique_id=235630131]
+[node name="RawBurgerDispenser" type="StaticBody3D" parent="." unique_id=235630131 groups=["station"]]
 script = ExtResource("1_gkb3v")
 item_scene = ExtResource("2_mep2a")
 
-[node name="XRToolsSnapZone" type="Area3D" parent="RawBurgerDispenser" unique_id=1523586273]
+[node name="XRToolsSnapZone" type="Area3D" parent="RawBurgerDispenser" unique_id=1523586273 groups=["station_zone"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00070536137, 1.0645258, -0.002165556)
 collision_layer = 65536
 collision_mask = 65536
