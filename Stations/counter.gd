@@ -91,7 +91,7 @@ func _on_gesture_area_body_entered(body: Node3D) -> void:
 	SweetLogger.debug("gesture area entered: {0}", [body])
 	if body.is_in_group("chopping_tool"):
 		if process_result == "":
-			SweetLogger.debug("knife entered but nothing to chop", [])
+			SweetLogger.debug("knife entered but nothing to chop")
 			return
 
 		var speed := 0.0
@@ -111,7 +111,7 @@ func _on_object_picked_up(_item: Variant) -> void:
 	SweetLogger.debug("object picked up: {0}", [_item])
 	var food_item = Helper.find_food_item(_item)
 	if not food_item:
-		SweetLogger.debug("held object is not a FoodItem", [])
+		SweetLogger.debug("held object is not a FoodItem")
 		return
 	
 	var result = RecipeManager.get_chopping_result(food_item.id)
@@ -125,7 +125,7 @@ func _on_object_picked_up(_item: Variant) -> void:
 
 
 func _on_object_dropped(_item: Variant) -> void:
-	SweetLogger.debug("object drop", [])
+	SweetLogger.debug("object drop")
 	work_progress = 0
 	process_result = ""
 	process_result_work = 0

@@ -94,12 +94,16 @@ const TIMESTAMP_BG_COLOR = "#1e3a5f"
 # WIDTHS
 #===================================================================================#
 ## Column widths for alignment (in characters)
-const PEER_ID_COLUMN_WIDTH = 10
-const LOG_TYPE_COLUMN_WIDTH = 8
+const PEER_ID_COLUMN_WIDTH = 6
+const LOG_TYPE_COLUMN_WIDTH = 6
 ## Default mm:ss:ms; with SHOW_TIMESTAMP_HOURS, hh:mm:ss:ms
 const TIMESTAMP_COLUMN_WIDTH_MMSSMS = 9
 const TIMESTAMP_COLUMN_WIDTH_HHMMSSMS = 12
-const SCRIPT_FUNCTION_COLUMN_WIDTH = 40
+const SCRIPT_FUNCTION_COLUMN_WIDTH = 45
+
+const TRUNCATE_PEER_NAME = 6
+const TRUNCATE_SCRIPT_NAME = 18
+const TRUNCATE_FUNCTION_NAME = 30
 #===================================================================================#
 
 # CONFIGURATION
@@ -111,7 +115,7 @@ var _peer_color_cache: Dictionary = {}
 @export var SHOW_SCRIPT_NAME = true
 @export var SHOW_FUNCTION_NAME = true
 ## When false (default), timestamp is local mm:ss:ms. When true, local hh:mm:ss:ms (wider column).
-@export var SHOW_TIMESTAMP_HOURS = false
+@export var SHOW_TIMESTAMP_HOURS = true
 #===================================================================================#
 
 # GETTERS
@@ -219,7 +223,7 @@ func _print_rich_log(peer_id_str: String, log_type: String, message: String, scr
 	var log_type_label = log_type.to_upper()
 
 	# Pad peer ID column for alignment
-	var peer_padded = _pad_text(peer_label, PEER_ID_COLUMN_WIDTH)
+	var peer_padded = _truncate_text(_pad_text(peer_label, PEER_ID_COLUMN_WIDTH), TRUNCATE_PEER_NAME)
 
 	# Format peer ID with its background color
 	var peer_formatted = _format_rich_text(peer_padded, peer_color.bg_color, peer_color.text_color)
@@ -238,11 +242,11 @@ func _print_rich_log(peer_id_str: String, log_type: String, message: String, scr
 	var script_function_parts: Array[String] = []
 
 	if SHOW_SCRIPT_NAME and script_name != "":
-		var script_truncated = _truncate_text(script_name, 18)
+		var script_truncated = _truncate_text(script_name, TRUNCATE_SCRIPT_NAME)
 		script_function_parts.append(script_truncated)
 
 	if SHOW_FUNCTION_NAME and function_name != "":
-		var function_truncated = _truncate_text(function_name, 20)
+		var function_truncated = _truncate_text(function_name, TRUNCATE_FUNCTION_NAME)
 		script_function_parts.append(function_truncated)
 
 	if not script_function_parts.is_empty():

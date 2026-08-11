@@ -9,10 +9,10 @@ func _ready() -> void:
 	if not kitchen_scene:
 		push_error("StationSpawner missing kitchen_scene")
 		
-	SweetLogger.debug("initializing", [])
+	SweetLogger.debug("initializing")
 
 	if NetworkManager.owns_world():
-		SweetLogger.debug("initializing on server", [])
+		SweetLogger.debug("initializing on server")
 		# Later we will do procedural generation here.
 		# For now we just load a scene.
 		NetworkManager.call_deferred("spawn_item", kitchen_scene.resource_path, transform)

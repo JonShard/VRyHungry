@@ -42,7 +42,7 @@ func _run() -> void:
 	_clear_previous_results(logs_dir)
 
 	print_rich("[b]Running the multiplayer test suite...[/b]")
-	SweetLogger.info("the editor will be unresponsive until it finishes (~2 minutes)", [])
+	SweetLogger.info("the editor will be unresponsive until it finishes (~2 minutes)")
 
 	var server_pid := _launch(exe, project_dir, ["--server"], SERVER_SCENE)
 	if server_pid <= 0:
@@ -108,7 +108,7 @@ func _print_report(logs_dir: String) -> void:
 		push_error("No report at %s — the run did not finish. Check logs/mptest_server.log" % path)
 		return
 	var text := FileAccess.get_file_as_string(path)
-	SweetLogger.info("", [])
+	SweetLogger.info("")
 	# Colour the summary so a failure is obvious in the Output panel.
 	for line in text.split("\n"):
 		if line.begins_with("FAIL") or line.contains("RESULT: FAILED"):

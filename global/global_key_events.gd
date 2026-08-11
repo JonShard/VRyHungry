@@ -28,14 +28,14 @@ func satisfy_table_orders() -> void:
 			
 			
 func set_buidling_mode():
-	SweetLogger.info("Setting building mode", [])
+	SweetLogger.info("Setting building mode")
 	GameManager.set_game_state(GameManager.GameState.BUILDING)
 
 
 func set_running_mode():
-	SweetLogger.info("Setting running mode", [])
+	SweetLogger.info("Setting running mode")
 	GameManager.set_game_state(GameManager.GameState.RUNNING)
 
 func set_game_over():
-	SweetLogger.info("Setting game over", [])
+	SweetLogger.info("Setting game over")
 	GameManager.set_game_state(GameManager.GameState.GAME_OVER)

@@ -72,7 +72,7 @@ func _on_object_picked_up(_item) -> void:
 	# Find the CookableItem in held object
 	var _food_item = _item.get_node_or_null("FoodItem") as FoodItem
 	if not _food_item:
-		SweetLogger.debug("held object is not a FoodItem", [])
+		SweetLogger.debug("held object is not a FoodItem")
 		return
 	var result = RecipeManager.get_cooking_result(_food_item.id)
 	if not result:
@@ -86,7 +86,7 @@ func _on_object_picked_up(_item) -> void:
 
 
 func _on_object_dropped(_item) -> void:
-	SweetLogger.debug("object drop", [])
+	SweetLogger.debug("object drop")
 	time_cooked = 0
 	cooking_result = ""
 	cooking_result_time = 0

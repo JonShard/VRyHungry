@@ -133,7 +133,7 @@ func _handle_drop(_by: Node) -> void:
 		else:
 			station.global_transform = original_station_transform
 			move_handle.global_transform = original_station_transform.translated(Vector3(0, original_handle_y_pos, 0))
-			SweetLogger.debug("handle drop (local reject), restoring original position", [])
+			SweetLogger.debug("handle drop (local reject), restoring original position")
 
 func _process(_delta: float) -> void:
 	if not is_moving:
@@ -193,7 +193,7 @@ func server_handle_drop(new_transform: Transform3D, client_thinks_valid: bool):
 		server_update_move_ghost_transform.rpc(original_trans)
 		server_update_handle_transform.rpc(original_trans.translated(Vector3(0, original_handle_y_pos, 0)))
 		server_update_visibility.rpc(false, true)
-		SweetLogger.debug("server_handle_drop: transform rejected (invalid)", [])
+		SweetLogger.debug("server_handle_drop: transform rejected (invalid)")
 		return
 
 	server_update_station_transform.rpc(new_transform)
@@ -201,32 +201,32 @@ func server_handle_drop(new_transform: Transform3D, client_thinks_valid: bool):
 	server_update_handle_transform.rpc(new_transform.translated(Vector3(0, original_handle_y_pos, 0)))
 	server_update_visibility.rpc(false, true)
 	
-	SweetLogger.debug("server_handle_drop: transform applied", [])
+	SweetLogger.debug("server_handle_drop: transform applied")
 
 
 @rpc("any_peer", "call_local", "reliable") # Server updates clients
 func server_update_station_transform(new_transform: Transform3D) -> void:
-	SweetLogger.debug("server_update_station_transform", [])
+	SweetLogger.debug("server_update_station_transform")
 	station.global_transform = new_transform
 	original_station_transform = new_transform
 
 
 @rpc("any_peer", "call_local", "reliable") # Server updates clients
 func server_update_handle_transform(new_transform: Transform3D) -> void:
-	SweetLogger.debug("server_update_handle_transform", [])
+	SweetLogger.debug("server_update_handle_transform")
 	move_handle.global_transform = new_transform
 
 
 
 @rpc("any_peer", "call_local", "reliable")
 func server_update_visibility(ghost_visible: bool, station_visible: bool) -> void:
-	SweetLogger.debug("server_update_visibility", [])
+	SweetLogger.debug("server_update_visibility")
 	move_ghost.visible = ghost_visible
 	station.visible = station_visible
 
 
 @rpc("any_peer", "call_local", "unreliable")
 func server_update_move_ghost_transform(new_transform: Transform3D, new_color: Color = Color.YELLOW) -> void:
-	SweetLogger.debug("server_update_move_ghost_transform", [])
+	SweetLogger.debug("server_update_move_ghost_transform")
 	move_ghost.global_transform = new_transform
 	_set_ghost_color(new_color)

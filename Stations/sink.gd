@@ -67,7 +67,7 @@ func _on_object_picked_up(_item) -> void:
 
 
 func _on_object_dropped(_item) -> void:
-	SweetLogger.debug("object drop", [])
+	SweetLogger.debug("object drop")
 	_reset_sink()
 
 
@@ -81,7 +81,7 @@ func complete_washing():
 			return
 		plate.is_dirty = false
 		_reset_sink()
-		SweetLogger.debug("washing complete!", [])
+		SweetLogger.debug("washing complete!")
 
 
 func _process(delta: float) -> void:

@@ -47,7 +47,7 @@ var _players_count: int = 0
 
 
 func place_order() -> void:
-	SweetLogger.debug("place_order()", [])
+	SweetLogger.debug("place_order()")
 	var new_orders: Array[String] = _unsatisfied_orders.duplicate()
 	# for _i in range(0, randi_range(1, 2)):
 	# 	new_orders.append(GameManager.get_random_meal())
@@ -59,7 +59,7 @@ func place_order() -> void:
 
 
 func absorb_items():
-	SweetLogger.debug("absorb_items()", [])
+	SweetLogger.debug("absorb_items()")
 	for snap_zone_node in snap_zones:
 		var held_object = snap_zone_node.picked_up_object
 		if not held_object:
@@ -69,7 +69,7 @@ func absorb_items():
 		
 		
 func satisfyAllOrders() -> void:
-	SweetLogger.debug("satisfyAllOrders()", [])
+	SweetLogger.debug("satisfyAllOrders()")
 	_unsatisfied_orders.clear()
 	_original_orders.clear()
 	clearAllFood()
@@ -77,7 +77,7 @@ func satisfyAllOrders() -> void:
 
 
 func clearAllFood() -> void:
-	SweetLogger.debug("clearAllFood()", [])
+	SweetLogger.debug("clearAllFood()")
 	for zone in snap_zones:
 		var held_object = zone.picked_up_object
 		if not held_object:
@@ -98,7 +98,7 @@ func clearAllFood() -> void:
 # Group called from Queue when trying to assign customers to tables
 func try_consume_customer() -> bool:
 	if _state == TableState.EMPTY:
-		SweetLogger.debug("try_consume_customer, consumed a customer", [])
+		SweetLogger.debug("try_consume_customer, consumed a customer")
 		_state_end(TableState.EMPTY)
 		return true
 	return false
@@ -183,15 +183,15 @@ func _place_order_if_player():
 
 func _get_plate_controller_from_item(_item: Node) -> PlateController:
 	if not _item:
-		SweetLogger.debug("_item is null", [])
+		SweetLogger.debug("_item is null")
 		return null
 
 	for child in _item.get_children():
 		if child is PlateController:
-			SweetLogger.debug("found child", [])
+			SweetLogger.debug("found child")
 			return child
 	
-	SweetLogger.debug("no match", [])
+	SweetLogger.debug("no match")
 	return null
 
 
@@ -211,7 +211,7 @@ func _absorb_item_if_correct(_item: Node) -> void:
 		# Absorm items from the plate we want
 		for food_item: FoodItem in plate_controller.container.contained_items: # TOOD: handle registering the meal again when a side is added to the plate
 			if food_item.id in _unsatisfied_orders and not food_item.is_absorbed:
-				SweetLogger.debug("_absorb_item_if_correct held a plate with FoodItem that is in unsatisfied orders, removing it", [])
+				SweetLogger.debug("_absorb_item_if_correct held a plate with FoodItem that is in unsatisfied orders, removing it")
 				(plate_controller.get_parent() as XRToolsPickable).get_picked_up_by().enabled = false # Lock meal that is deliverd
 				_unsatisfied_orders.erase(food_item.id)
 				food_item.is_absorbed = true
@@ -221,13 +221,13 @@ func _absorb_item_if_correct(_item: Node) -> void:
 	# Side pickable item, no container
 	var food_item: FoodItem = Helper.find_food_item(_item)
 	if food_item and food_item.type == FoodItem.Type.SIDE:
-		SweetLogger.debug("_absorb_item_if_correct held a side that is in unsatisfied orders, removing it", [])
+		SweetLogger.debug("_absorb_item_if_correct held a side that is in unsatisfied orders, removing it")
 		# Do not lock snap zone here. Problem if table want many meals, but to many sides have filled up slots, so can't place plates.
 		_unsatisfied_orders.erase(food_item.id)
 		_update_state_from_orders()
 		return
 
-	SweetLogger.debug("absorb_item_if_correct() held object is not a Plate or Side", [])
+	SweetLogger.debug("absorb_item_if_correct() held object is not a Plate or Side")
 
 
 func _update_state_from_orders():

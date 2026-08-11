@@ -32,7 +32,7 @@ func _process(_delta: float) -> void:
 
 func toggle_shop():
 	if GameManager.game_state == GameManager.GameState.BUILDING:
-		SweetLogger.debug("toggle shop", [])
+		SweetLogger.debug("toggle shop")
 		enabled = !enabled
 		SweetLogger.debug("_process: money={0} label text={1}", [GameManager.money, money_label.text])
 
@@ -54,7 +54,7 @@ func _set_poke_enabled_for_controller(controller_node: XRController3D, value: bo
 
 	var poke_node = Helper.find_first_child_of_type(controller_node, XRToolsPoke)
 	if poke_node:
-		SweetLogger.debug("_set_poke_enabled_for_controller: {0} poke enabled: {1}", [poke_node.get_path(), value])
+		SweetLogger.debug("_set_poke_enabled_for_controller: {0} poke enabled: {1}", [poke_node.name, value])
 		poke_node.enabled = value
 		poke_node.visible = value
 	else:

@@ -52,12 +52,12 @@ func _on_body_entered(body: Node3D) -> void:
 	if not NetworkManager.owns_world():
 		return
 	if _combining or body == _pickable:
-		SweetLogger.debug("other is our own pickable", [])
+		SweetLogger.debug("other is our own pickable")
 		return
 
 	var other := Helper.find_food_item(body)
 	if not other:
-		SweetLogger.debug("other is not a foodItem", [])
+		SweetLogger.debug("other is not a foodItem")
 		return
 
 	var result: PackedScene = RecipeManager.get_combination_result(_food_item.id, other.id)

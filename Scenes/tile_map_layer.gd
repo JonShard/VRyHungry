@@ -119,9 +119,9 @@ func get_next(size, walls):
 	for wall in walls:
 		SweetLogger.debug("get_next wall: {0}", [wall])
 		if wall["der"][1] == 0:
-			SweetLogger.debug("get_next horizontal wall", [])
+			SweetLogger.debug("get_next horizontal wall")
 			if size[0]<wall["len"]-6:
-				SweetLogger.debug("TileMapLayer get_next length 6 less can go anywhere", [])
+				SweetLogger.debug("TileMapLayer get_next length 6 less can go anywhere")
 				if wall["der"][0] == 1:offset[1] = wall["pos"][1]
 				else: offset[1] = wall["pos"][1]-size[1]
 				
@@ -130,16 +130,16 @@ func get_next(size, walls):
 				if size[0]+offset[0]>wall["pos"][0]+wall["len"]-3:offset[0] = wall["len"]-(3+size[0])
 				
 			elif size[0]<=wall["len"]-3:
-				SweetLogger.debug("TileMapLayer get_next 3 less needs to be on a corner", [])
+				SweetLogger.debug("TileMapLayer get_next 3 less needs to be on a corner")
 				if wall["der"][0] == 1:offset[1] = wall["pos"][1]
 				else: offset[1] = wall["pos"][1]-size[1]
 				
 				if randi_range(0, 1):offset[0]=wall["pos"][0]+wall["len"]-size[0]
 				else:offset[0] = wall["pos"][0]
 		else:
-			SweetLogger.debug("get_next vertical wall", [])
+			SweetLogger.debug("get_next vertical wall")
 			if size[1]<wall["len"]-6:
-				SweetLogger.debug("TileMapLayer get_next length 6 less can go anywhere", [])
+				SweetLogger.debug("TileMapLayer get_next length 6 less can go anywhere")
 				if wall["der"][1] == 1:offset[0] = wall["pos"][0]
 				else: offset[0] = wall["pos"][0]-size[0]
 				
@@ -148,7 +148,7 @@ func get_next(size, walls):
 				if size[1]+offset[1]>wall["len"]-3:offset[1] = wall["len"]-(3+size[1])
 				
 			elif size[1]<=wall["len"]-3:
-				SweetLogger.debug("TileMapLayer get_next 3 less needs to be on a corner", [])
+				SweetLogger.debug("TileMapLayer get_next 3 less needs to be on a corner")
 				if wall["der"][1] == 1:offset[0] = wall["pos"][0]
 				else: offset[0] = wall["pos"][0]-size[0]
 				SweetLogger.debug("get_next offset: {0}", [offset])

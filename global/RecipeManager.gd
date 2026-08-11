@@ -111,22 +111,22 @@ static func get_item_scene(item_id: StringName) -> PackedScene:
 static func print_all_recipes() -> void:
 	load_recipes()
 	if not _loaded:
-		SweetLogger.warning("could not load recipes.yaml; no recipes printed.", [])
+		SweetLogger.warning("could not load recipes.yaml; no recipes printed.")
 		return
 
 	if _combining_map.is_empty():
-		SweetLogger.warning("no combining recipes found", [])
+		SweetLogger.warning("no combining recipes found")
 		return
 
-	SweetLogger.info("#### RecipeManager: Loaded recipes ####", [])
+	SweetLogger.info("#### RecipeManager: Loaded recipes ####")
 	_print_combining_recipes()
-	SweetLogger.info("", [])
+	SweetLogger.info("")
 	_print_cooking_recipes()
-	SweetLogger.info("", [])
+	SweetLogger.info("")
 	_print_chopping_recipes()
-	SweetLogger.info("", [])
+	SweetLogger.info("")
 	_print_rolling_recipes()
-	SweetLogger.info("", [])
+	SweetLogger.info("")
 	_print_augmenting_recipes()
 
 static func _print_combining_recipes() -> void:

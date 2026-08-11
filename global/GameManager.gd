@@ -238,7 +238,7 @@ func get_random_meal() -> String:
 
 
 func get_random_side() -> String:
-	SweetLogger.debug("get_random_side()", [])
+	SweetLogger.debug("get_random_side()")
 	if sides_in_play.size() == 0:
 		push_error("GameManager: get_random_side() called but sides_in_play is empty")
 		return ""
@@ -248,11 +248,11 @@ func get_random_side() -> String:
 
 
 func _restart():
-	SweetLogger.info("restart Game", [])
+	SweetLogger.info("restart Game")
 	game_state = GameState.RUNNING
 
 
 func game_over():
-	SweetLogger.info("Game Over", [])
+	SweetLogger.info("Game Over")
 	game_state = GameState.GAME_OVER
 	Signals.game_over.emit()
