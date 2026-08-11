@@ -384,14 +384,15 @@ func _refresh_display() -> void:
 
 func _process(delta: float) -> void:
 	_refresh_display()
+	_place_order_if_player()
+	SweetLogger.error("State {0} time: {1} duration: {2}", [TableState.keys()[_state], _state_time, _state_duration])
+
 	if not NetworkManager.owns_world():
 		SweetLogger.error("Is not server, return")
 		return
-	SweetLogger.error("Is server, UPDATING!!!")
 
 	if GameManager.game_state == GameManager.GameState.GAME_OVER:
 		return
-	_place_order_if_player()
 	
 	# If build mode, set, exit loop, be idle
 	if GameManager.game_state == GameManager.GameState.BUILDING and not _state == TableState.IDLE:
