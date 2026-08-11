@@ -92,9 +92,20 @@ func _set_ghost_color(color: Color) -> void:
 		material.albedo_color = color
 
 
+func _apply_visibility_state(ghost_visible: bool, station_visible: bool) -> void:
+	move_ghost.visible = ghost_visible
+	station.visible = station_visible
+	if not NetworkManager.is_online():
+		return
+	if multiplayer.is_server():
+		server_update_visibility(ghost_visible, station_visible)
+	else:
+		server_update_visibility.rpc_id(1, ghost_visible, station_visible)
+
+
 func _handle_pickup(_by: Node) -> void:
 	SweetLogger.info("handle pickup")
-	if move_handle.get_picked_up_by() is XRToolsSnapZone:
+	if move_handle.get_picked_up_by() and move_handle.get_picked_up_by() is XRToolsSnapZone:
 		SweetLogger.info("handle pickup by snap zone, dropping and resetting position")
 		move_handle.drop()
 		move_handle.global_position = station.global_position + Vector3(0, original_handle_y_pos, 0)
@@ -105,20 +116,13 @@ func _handle_pickup(_by: Node) -> void:
 	station.collision_layer = 0
 	original_station_transform = station.global_transform
 	move_ghost.global_transform = original_station_transform
-	if NetworkManager.is_online():
-		# Ask the server to update visibility (reliable)
-		server_update_visibility.rpc_id(1, true, false)
-	else:
-		# If not connected to server (single-player or test), apply locally
-		move_ghost.visible = true
-		station.visible = false
+	_apply_visibility_state(true, false)
 
 
 func _handle_drop(_by: Node) -> void:
 	SweetLogger.info("handle drop")
 	is_moving = false
-	move_ghost.visible = false
-	station.visible = true
+	_apply_visibility_state(false, true)
 	station.collision_layer = original_collision_layer
 
 	var is_valid: bool = _is_move_position_valid()
@@ -133,7 +137,8 @@ func _handle_drop(_by: Node) -> void:
 		else:
 			station.global_transform = original_station_transform
 			move_handle.global_transform = original_station_transform.translated(Vector3(0, original_handle_y_pos, 0))
-			SweetLogger.debug("handle drop (local reject), restoring original position")
+			SweetLogger.debug("handle drop (local reject), restoring original position", [])
+
 
 func _process(_delta: float) -> void:
 	if not is_moving:
@@ -202,6 +207,10 @@ func server_handle_drop(new_transform: Transform3D, client_thinks_valid: bool):
 	server_update_visibility.rpc(false, true)
 	
 	SweetLogger.debug("server_handle_drop: transform applied")
+
+@rpc("any_peer", "call_local", "reliable") # Server updates clients
+func server_artificial_pickup():
+	_handle_pickup(self) # Arg is not used, but required of the signal.
 
 
 @rpc("any_peer", "call_local", "reliable") # Server updates clients
