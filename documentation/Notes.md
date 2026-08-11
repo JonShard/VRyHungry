@@ -8,7 +8,7 @@
 
 - Contaioner / plate sometimes doesn't sync to clients that it picked someting up. Only when client moves a plate near a hamburger that is in a station,
 
-
+- Update stations to have enable function thaat _tate_stations in network manager calls instead of disableing processing
 
 
 ## Stations

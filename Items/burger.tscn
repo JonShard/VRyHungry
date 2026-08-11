@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dpot5qie20vf6"]
 
 [ext_resource type="PackedScene" uid="uid://c8l60rnugru40" path="res://addons/godot-xr-tools/objects/pickable.tscn" id="1_fco8w"]
-[ext_resource type="Texture2D" uid="uid://cexxfyw03hr81" path="res://textures/1.png" id="2_r8jvx"]
+[ext_resource type="Texture2D" uid="uid://7jt8macx4f5m" path="res://textures/1.png" id="2_r8jvx"]
 [ext_resource type="PackedScene" uid="uid://c25yxb0vt53vc" path="res://addons/godot-xr-tools/objects/grab_points/grab_point_hand_left.tscn" id="3_qixic"]
 [ext_resource type="Animation" uid="uid://db62hs5s4n2b3" path="res://addons/godot-xr-tools/hands/animations/left/Grip 4.res" id="4_bw8vh"]
 [ext_resource type="Script" uid="uid://dvobm6vcfnqe8" path="res://addons/godot-xr-tools/hands/poses/hand_pose_settings.gd" id="5_w8sii"]
@@ -69,3 +69,5 @@ replication_config = SubResource("SceneReplicationConfig_np_burger")
 script = ExtResource("20_netpk")
 
 [node name="DespawningItem" parent="." index="6" unique_id=303090111 instance=ExtResource("10_l4hsd")]
+
+[node name="SoundManager" type="Node3D" parent="." index="7" unique_id=118155212]
