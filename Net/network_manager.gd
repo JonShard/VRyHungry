@@ -389,7 +389,7 @@ func is_server() -> bool:
 func is_online() -> bool:
 	var p := multiplayer.multiplayer_peer
 	return p != null and not (p is OfflineMultiplayerPeer)
-
+	
 
 ## True on the machine that owns authoritative world logic: the server when
 ## online, or the single player when offline. Station logic and spawning should

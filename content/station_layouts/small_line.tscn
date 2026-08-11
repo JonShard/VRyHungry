@@ -3,6 +3,10 @@
 [ext_resource type="PackedScene" uid="uid://j7caslh27nor" path="res://stations/Hob.tscn" id="1_1wuvq"]
 [ext_resource type="PackedScene" uid="uid://efaec6ymgabo" path="res://stations/Counter.tscn" id="2_3qwcq"]
 [ext_resource type="PackedScene" uid="uid://dvrk268s7gkxh" path="res://stations/sink.tscn" id="3_3qwcq"]
+[ext_resource type="PackedScene" uid="uid://c6rift56ql3f8" path="res://stations/BurgerBunsDispenser.tscn" id="4_5eled"]
+[ext_resource type="PackedScene" uid="uid://cwnwo4i28upap" path="res://stations/raw_burger_dispenser.tscn" id="5_0342k"]
+[ext_resource type="PackedScene" uid="uid://ck5tuftqmyiue" path="res://stations/plate_dispenser.tscn" id="6_b5gb1"]
+[ext_resource type="PackedScene" uid="uid://caf0xanmxbshy" path="res://stations/table.tscn" id="7_0342k"]
 
 [node name="SmallLine" type="Node3D" unique_id=1844128818]
 
@@ -12,4 +16,16 @@
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0, 0)
 
 [node name="Sink" parent="." unique_id=2055277359 instance=ExtResource("3_3qwcq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, 0, 0)
+
+[node name="BurgerBunsDispenser" parent="." unique_id=1410160280 instance=ExtResource("4_5eled")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, 0, 0)
+
+[node name="RawBurgerDispenser" parent="." unique_id=383615587 instance=ExtResource("5_0342k")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 0, 0)
+
+[node name="PlateDispenser" parent="." unique_id=53391541 instance=ExtResource("6_b5gb1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8000001, 0, 0)
+
+[node name="Table" parent="." unique_id=987495548 instance=ExtResource("7_0342k")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 0, 1.2)

@@ -172,7 +172,7 @@ func _is_move_position_valid() -> bool:
 		var pickable = body as XRToolsPickable
 		if pickable and pickable is XRToolsPickable and Helper.is_node_decendant_of(pickable.get_picked_up_by(), get_parent()):
 				continue
-				
+		
 		return false
 
 	for area in move_ghost.get_overlapping_areas():
@@ -184,7 +184,7 @@ func _is_move_position_valid() -> bool:
 	return true
 
 
-@rpc("any_peer", "call_remote", "reliable")
+@rpc("any_peer", "call_local", "reliable")
 func server_handle_drop(new_transform: Transform3D, client_thinks_valid: bool):
 	SweetLogger.debug("enter")
 	if not multiplayer.is_server():
@@ -209,6 +209,7 @@ func server_handle_drop(new_transform: Transform3D, client_thinks_valid: bool):
 	_was_last_pos_valid = true
 
 	SweetLogger.debug("transform applied")
+
 
 @rpc("any_peer", "call_local", "reliable") # Server updates clients
 func server_artificial_pickup():
