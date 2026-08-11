@@ -9,7 +9,7 @@ var move_handle_rigid: RigidBody3D
 var original_collision_layer: int = 0
 var original_handle_y_pos: float = 0.0
 var original_station_transform: Transform3D = Transform3D.IDENTITY
-@export var moving: bool = false
+@export var is_moving: bool = false
 var ghost_materials: Array[StandardMaterial3D] = []
 
 # Ghost update throttling (clients send unreliable RPCs to server at this rate)
@@ -21,7 +21,7 @@ const GHOST_COLOR_INVALID: Color = Color(1, 0, 0, 0.35)
 
 
 func set_move_handle_enabled(enabled: bool) -> void:
-	SweetLogger.debug("set_move_handle_enabled: {0}", [enabled], "station_movement.gd", "set_move_handle_enabled")
+	SweetLogger.debug("set_move_handle_enabled: {0}", [enabled])
 	move_handle.visible = enabled
 	move_handle.enabled = enabled
 	if enabled:
@@ -101,7 +101,7 @@ func _handle_pickup(_by: Node) -> void:
 		move_handle.rotation = station.rotation
 		return
 	
-	moving = true
+	is_moving = true
 	station.collision_layer = 0
 	original_station_transform = station.global_transform
 	move_ghost.global_transform = original_station_transform
@@ -116,7 +116,7 @@ func _handle_pickup(_by: Node) -> void:
 
 func _handle_drop(_by: Node) -> void:
 	SweetLogger.info("handle drop")
-	moving = false
+	is_moving = false
 	move_ghost.visible = false
 	station.visible = true
 	station.collision_layer = original_collision_layer
@@ -129,14 +129,14 @@ func _handle_drop(_by: Node) -> void:
 		if is_valid:
 			station.global_transform = move_ghost.global_transform
 			move_handle.global_transform = move_ghost.global_transform.translated(Vector3(0, original_handle_y_pos, 0))
-			SweetLogger.debug("handle drop (local apply), station authority: {0} move_handle authority: {1}", [station.get_multiplayer_authority(), move_handle.get_multiplayer_authority()], "station_movement.gd", "_handle_drop")
+			SweetLogger.debug("handle drop (local apply), station authority: {0} move_handle authority: {1}", [station.get_multiplayer_authority(), move_handle.get_multiplayer_authority()])
 		else:
 			station.global_transform = original_station_transform
 			move_handle.global_transform = original_station_transform.translated(Vector3(0, original_handle_y_pos, 0))
-			SweetLogger.debug("handle drop (local reject), restoring original position", [], "station_movement.gd", "_handle_drop")
+			SweetLogger.debug("handle drop (local reject), restoring original position", [])
 
 func _process(_delta: float) -> void:
-	if not moving:
+	if not is_moving:
 		return
 
 	# Update the ghost locally for instant feedback and send throttled unreliable RPCs to the server
@@ -161,7 +161,7 @@ func _process(_delta: float) -> void:
 
 func _is_move_position_valid() -> bool:
 	for body in move_ghost.get_overlapping_bodies():
-		SweetLogger.debug("Overlapping body: {0}", [body], "station_movement.gd", "_is_move_position_valid")
+		SweetLogger.debug("Overlapping body: {0}", [body])
 		if body == move_handle:
 			continue
 		if body == station:
@@ -193,7 +193,7 @@ func server_handle_drop(new_transform: Transform3D, client_thinks_valid: bool):
 		server_update_move_ghost_transform.rpc(original_trans)
 		server_update_handle_transform.rpc(original_trans.translated(Vector3(0, original_handle_y_pos, 0)))
 		server_update_visibility.rpc(false, true)
-		SweetLogger.debug("server_handle_drop: transform rejected (invalid)", [], "station_movement.gd", "server_handle_drop")
+		SweetLogger.debug("server_handle_drop: transform rejected (invalid)", [])
 		return
 
 	server_update_station_transform.rpc(new_transform)
@@ -201,32 +201,32 @@ func server_handle_drop(new_transform: Transform3D, client_thinks_valid: bool):
 	server_update_handle_transform.rpc(new_transform.translated(Vector3(0, original_handle_y_pos, 0)))
 	server_update_visibility.rpc(false, true)
 	
-	SweetLogger.debug("server_handle_drop: transform applied", [], "station_movement.gd", "server_handle_drop")
+	SweetLogger.debug("server_handle_drop: transform applied", [])
 
 
 @rpc("any_peer", "call_local", "reliable") # Server updates clients
 func server_update_station_transform(new_transform: Transform3D) -> void:
-	SweetLogger.debug("server_update_station_transform", [], "station_movement.gd", "server_update_station_transform")
+	SweetLogger.debug("server_update_station_transform", [])
 	station.global_transform = new_transform
 	original_station_transform = new_transform
 
 
 @rpc("any_peer", "call_local", "reliable") # Server updates clients
 func server_update_handle_transform(new_transform: Transform3D) -> void:
-	SweetLogger.debug("server_update_handle_transform", [], "station_movement.gd", "server_update_handle_transform")
+	SweetLogger.debug("server_update_handle_transform", [])
 	move_handle.global_transform = new_transform
 
 
 
 @rpc("any_peer", "call_local", "reliable")
 func server_update_visibility(ghost_visible: bool, station_visible: bool) -> void:
-	SweetLogger.debug("server_update_visibility", [], "station_movement.gd", "server_update_visibility")
+	SweetLogger.debug("server_update_visibility", [])
 	move_ghost.visible = ghost_visible
 	station.visible = station_visible
 
 
 @rpc("any_peer", "call_local", "unreliable")
 func server_update_move_ghost_transform(new_transform: Transform3D, new_color: Color = Color.YELLOW) -> void:
-	SweetLogger.debug("server_update_move_ghost_transform", [], "station_movement.gd", "server_update_move_ghost_transform")
+	SweetLogger.debug("server_update_move_ghost_transform", [])
 	move_ghost.global_transform = new_transform
 	_set_ghost_color(new_color)

@@ -42,7 +42,7 @@ func _run() -> void:
 	_clear_previous_results(logs_dir)
 
 	print_rich("[b]Running the multiplayer test suite...[/b]")
-	SweetLogger.info("the editor will be unresponsive until it finishes (~2 minutes)", [], "run_tests_in_editor.gd", "_run")
+	SweetLogger.info("the editor will be unresponsive until it finishes (~2 minutes)", [])
 
 	var server_pid := _launch(exe, project_dir, ["--server"], SERVER_SCENE)
 	if server_pid <= 0:
@@ -61,7 +61,7 @@ func _run() -> void:
 		OS.delay_msec(500)
 		waited += 0.5
 	if OS.is_process_running(server_pid):
-		SweetLogger.warning("timed out after {0}s, stopping the instances", [TIMEOUT_SEC], "run_tests_in_editor.gd", "_run")
+		SweetLogger.warning("timed out after {0}s, stopping the instances", [TIMEOUT_SEC])
 		OS.kill(server_pid)
 	if OS.is_process_running(client_pid):
 		OS.kill(client_pid)
@@ -108,7 +108,7 @@ func _print_report(logs_dir: String) -> void:
 		push_error("No report at %s — the run did not finish. Check logs/mptest_server.log" % path)
 		return
 	var text := FileAccess.get_file_as_string(path)
-	SweetLogger.info("", [], "run_tests_in_editor.gd", "_print_report")
+	SweetLogger.info("", [])
 	# Colour the summary so a failure is obvious in the Output panel.
 	for line in text.split("\n"):
 		if line.begins_with("FAIL") or line.contains("RESULT: FAILED"):
@@ -118,8 +118,8 @@ func _print_report(logs_dir: String) -> void:
 		elif line.begins_with("PASS"):
 			print_rich("[color=gray]%s[/color]" % line)
 		else:
-			SweetLogger.info("{0}", [line], "run_tests_in_editor.gd", "_print_report")
-	SweetLogger.info("report: {0}", [path], "run_tests_in_editor.gd", "_print_report")
+			SweetLogger.info("{0}", [line])
+	SweetLogger.info("report: {0}", [path])
 
 
 func _build_gif(project_dir: String, logs_dir: String) -> void:

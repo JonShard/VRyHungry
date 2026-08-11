@@ -1419,11 +1419,11 @@ func _open_log() -> void:
 		path = OS.get_environment("TEMP").path_join("vryhungry_mptest_%s.log" % role)
 		_log_file = FileAccess.open(path, FileAccess.WRITE)
 	_log_path = ProjectSettings.globalize_path(path)
-	SweetLogger.info("[MPTEST] step log -> {0}", [_log_path], "mp_test_driver.gd", "_open_log")
+	SweetLogger.info("[MPTEST] step log -> {0}", [_log_path])
 
 
 func _log(s: String) -> void:
-	SweetLogger.info("[MPTEST {0}] {1}", [_role, s], "mp_test_driver.gd", "_log")
+	SweetLogger.info("[MPTEST {0}] {1}", [_role, s])
 	if _log_file:
 		_log_file.store_line(s)
 		_log_file.flush()

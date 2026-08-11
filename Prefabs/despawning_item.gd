@@ -41,7 +41,7 @@ func _process(delta: float) -> void:
 	# Count down to zero and despawn
 	_time_left -= delta
 	if _time_left <= 0:
-		SweetLogger.debug("despawning {0}", [get_parent()], "despawning_item.gd", "_process")
+		SweetLogger.debug("despawning {0}", [get_parent()])
 		NetworkManager.despawn_item(get_parent())
 		# Stop counting: despawn_item() only queues the free, so without this we
 		# keep re-reporting the same item every frame until it actually goes.

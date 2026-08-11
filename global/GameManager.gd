@@ -9,9 +9,9 @@ func set_money(value):
 	if multiplayer.is_server():
 		money =  max(0,value)
 		client_sync_money.rpc(money)
-		SweetLogger.info("set_money money set to {0}", [money], "GameManager.gd", "set_money")
+		SweetLogger.info("set_money money set to {0}", [money])
 	else:
-		SweetLogger.info("set_money client/(peer_id={0}) attempted to set money directly, sending request to server", [multiplayer.get_unique_id()], "GameManager.gd", "set_money")
+		SweetLogger.info("set_money client/(peer_id={0}) attempted to set money directly, sending request to server", [multiplayer.get_unique_id()])
 		server_set_money.rpc_id(1, value)
 
 @rpc("any_peer", "call_remote", "reliable")  # CLIENT -> SERVER: Request a change
@@ -29,9 +29,9 @@ func set_day_number(value: int) -> void:
 	if multiplayer.is_server():
 		day_number = value
 		client_sync_day_number.rpc(day_number)
-		SweetLogger.info("set_day_number day_number set to {0}", [day_number], "GameManager.gd", "set_day_number")
+		SweetLogger.info("set_day_number day_number set to {0}", [day_number])
 	else:
-		SweetLogger.info("set_day_number client/(peer_id={0}) attempted to set day_number directly, sending request to server", [multiplayer.get_unique_id()], "GameManager.gd", "set_day_number")
+		SweetLogger.info("set_day_number client/(peer_id={0}) attempted to set day_number directly, sending request to server", [multiplayer.get_unique_id()])
 		server_set_day_number.rpc_id(1, value)
 
 @rpc("any_peer", "call_remote", "reliable")
@@ -51,9 +51,9 @@ func set_meals_in_play(value: Array[String]) -> void:
 	if multiplayer.is_server():
 		meals_in_play = value
 		client_sync_meals_in_play.rpc(meals_in_play)
-		SweetLogger.info("set_meals_in_play meals_in_play set to {0}", [meals_in_play], "GameManager.gd", "set_meals_in_play")
+		SweetLogger.info("set_meals_in_play meals_in_play set to {0}", [meals_in_play])
 	else:
-		SweetLogger.info("set_meals_in_play client/(peer_id={0}) attempted to set meals_in_play directly, sending request to server", [multiplayer.get_unique_id()], "GameManager.gd", "set_meals_in_play")
+		SweetLogger.info("set_meals_in_play client/(peer_id={0}) attempted to set meals_in_play directly, sending request to server", [multiplayer.get_unique_id()])
 		server_set_meals_in_play.rpc_id(1, value)
 
 @rpc("any_peer", "call_remote", "reliable")
@@ -73,9 +73,9 @@ func set_sides_in_play(value: Array[String]) -> void:
 	if multiplayer.is_server():
 		sides_in_play = value
 		client_sync_sides_in_play.rpc(sides_in_play)
-		SweetLogger.info("set_sides_in_play sides_in_play set to {0}", [sides_in_play], "GameManager.gd", "set_sides_in_play")
+		SweetLogger.info("set_sides_in_play sides_in_play set to {0}", [sides_in_play])
 	else:
-		SweetLogger.info("set_sides_in_play client/(peer_id={0}) attempted to set sides_in_play directly, sending request to server", [multiplayer.get_unique_id()], "GameManager.gd", "set_sides_in_play")
+		SweetLogger.info("set_sides_in_play client/(peer_id={0}) attempted to set sides_in_play directly, sending request to server", [multiplayer.get_unique_id()])
 		server_set_sides_in_play.rpc_id(1, value)
 
 @rpc("any_peer", "call_remote", "reliable")
@@ -96,9 +96,9 @@ func set_day_length_seconds(value: float) -> void:
 	if multiplayer.is_server():
 		day_length_seconds = value
 		client_sync_day_length_seconds.rpc(day_length_seconds)
-		SweetLogger.info("set_day_length_seconds day_length_seconds set to {0}", [day_length_seconds], "GameManager.gd", "set_day_length_seconds")
+		SweetLogger.info("set_day_length_seconds day_length_seconds set to {0}", [day_length_seconds])
 	else:
-		SweetLogger.info("set_day_length_seconds client/(peer_id={0}) attempted to set day_length_seconds directly, sending request to server", [multiplayer.get_unique_id()], "GameManager.gd", "set_day_length_seconds")
+		SweetLogger.info("set_day_length_seconds client/(peer_id={0}) attempted to set day_length_seconds directly, sending request to server", [multiplayer.get_unique_id()])
 		server_set_day_length_seconds.rpc_id(1, value)
 
 @rpc("any_peer", "call_remote", "reliable")
@@ -118,9 +118,9 @@ func set_customers_per_day(value: float) -> void:
 	if multiplayer.is_server():
 		customers_per_day = value
 		client_sync_customers_per_day.rpc(customers_per_day)
-		SweetLogger.info("set_customers_per_day customers_per_day set to {0}", [customers_per_day], "GameManager.gd", "set_customers_per_day")
+		SweetLogger.info("set_customers_per_day customers_per_day set to {0}", [customers_per_day])
 	else:
-		SweetLogger.info("set_customers_per_day client/(peer_id={0}) attempted to set customers_per_day directly, sending request to server", [multiplayer.get_unique_id()], "GameManager.gd", "set_customers_per_day")
+		SweetLogger.info("set_customers_per_day client/(peer_id={0}) attempted to set customers_per_day directly, sending request to server", [multiplayer.get_unique_id()])
 		server_set_customers_per_day.rpc_id(1, value)
 
 @rpc("any_peer", "call_remote", "reliable")
@@ -140,9 +140,9 @@ func set_customers_count_increase_per_day(value: float) -> void:
 	if multiplayer.is_server():
 		customers_count_increase_per_day = value
 		client_sync_customers_count_increase_per_day.rpc(customers_count_increase_per_day)
-		SweetLogger.info("set_customers_count_increase_per_day customers_count_increase_per_day set to {0}", [customers_count_increase_per_day], "GameManager.gd", "set_customers_count_increase_per_day")
+		SweetLogger.info("set_customers_count_increase_per_day customers_count_increase_per_day set to {0}", [customers_count_increase_per_day])
 	else:
-		SweetLogger.info("set_customers_count_increase_per_day client/(peer_id={0}) attempted to set customers_count_increase_per_day directly, sending request to server", [multiplayer.get_unique_id()], "GameManager.gd", "set_customers_count_increase_per_day")
+		SweetLogger.info("set_customers_count_increase_per_day client/(peer_id={0}) attempted to set customers_count_increase_per_day directly, sending request to server", [multiplayer.get_unique_id()])
 		server_set_customers_count_increase_per_day.rpc_id(1, value)
 
 @rpc("any_peer", "call_remote", "reliable")
@@ -162,9 +162,9 @@ func set_group_min_size(value: int) -> void:
 	if multiplayer.is_server():
 		group_min_size = value
 		client_sync_group_min_size.rpc(group_min_size)
-		SweetLogger.info("set_group_min_size group_min_size set to {0}", [group_min_size], "GameManager.gd", "set_group_min_size")
+		SweetLogger.info("set_group_min_size group_min_size set to {0}", [group_min_size])
 	else:
-		SweetLogger.info("set_group_min_size client/(peer_id={0}) attempted to set group_min_size directly, sending request to server", [multiplayer.get_unique_id()], "GameManager.gd", "set_group_min_size")
+		SweetLogger.info("set_group_min_size client/(peer_id={0}) attempted to set group_min_size directly, sending request to server", [multiplayer.get_unique_id()])
 		server_set_group_min_size.rpc_id(1, value)
 
 @rpc("any_peer", "call_remote", "reliable")
@@ -184,9 +184,9 @@ func set_group_max_size(value: int) -> void:
 	if multiplayer.is_server():
 		group_max_size = value
 		client_sync_group_max_size.rpc(group_max_size)
-		SweetLogger.info("set_group_max_size group_max_size set to {0}", [group_max_size], "GameManager.gd", "set_group_max_size")
+		SweetLogger.info("set_group_max_size group_max_size set to {0}", [group_max_size])
 	else:
-		SweetLogger.info("set_group_max_size client/(peer_id={0}) attempted to set group_max_size directly, sending request to server", [multiplayer.get_unique_id()], "GameManager.gd", "set_group_max_size")
+		SweetLogger.info("set_group_max_size client/(peer_id={0}) attempted to set group_max_size directly, sending request to server", [multiplayer.get_unique_id()])
 		server_set_group_max_size.rpc_id(1, value)
 
 @rpc("any_peer", "call_remote", "reliable")
@@ -213,9 +213,9 @@ func set_game_state(value: GameState) -> void:
 		game_state = value
 		client_sync_game_state.rpc(game_state)
 		Signals.game_state_changed.emit(game_state)
-		SweetLogger.info("set_game_state game_state set to {0}", [game_state], "GameManager.gd", "set_game_state")
+		SweetLogger.info("set_game_state game_state set to {0}", [game_state])
 	else:
-		SweetLogger.info("set_game_state client/(peer_id={0}) attempted to set game_state directly, sending request to server", [multiplayer.get_unique_id()], "GameManager.gd", "set_game_state")
+		SweetLogger.info("set_game_state client/(peer_id={0}) attempted to set game_state directly, sending request to server", [multiplayer.get_unique_id()])
 		server_set_game_state.rpc_id(1, value)
 
 @rpc("any_peer", "call_remote", "reliable")
@@ -233,12 +233,12 @@ func get_random_meal() -> String:
 		push_error("GameManager: get_random_meal() called but meals_in_play is empty")
 		return ""
 	var rand_index = randi() % meals_in_play.size()
-	SweetLogger.debug("get_random_meal() returning {0}", [meals_in_play[rand_index]], "GameManager.gd", "get_random_meal")
+	SweetLogger.debug("get_random_meal() returning {0}", [meals_in_play[rand_index]])
 	return meals_in_play[rand_index]
 
 
 func get_random_side() -> String:
-	SweetLogger.debug("get_random_side()", [], "GameManager.gd", "get_random_side")
+	SweetLogger.debug("get_random_side()", [])
 	if sides_in_play.size() == 0:
 		push_error("GameManager: get_random_side() called but sides_in_play is empty")
 		return ""
@@ -248,11 +248,11 @@ func get_random_side() -> String:
 
 
 func _restart():
-	SweetLogger.info("restart Game", [], "GameManager.gd", "_restart")
+	SweetLogger.info("restart Game", [])
 	game_state = GameState.RUNNING
 
 
 func game_over():
-	SweetLogger.info("Game Over", [], "GameManager.gd", "game_over")
+	SweetLogger.info("Game Over", [])
 	game_state = GameState.GAME_OVER
 	Signals.game_over.emit()

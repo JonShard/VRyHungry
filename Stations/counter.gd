@@ -47,7 +47,7 @@ func _set_result(value: String) -> void:
 	if not process_result.is_empty():
 		knife.visible = true
 		knife.enabled = true
-		SweetLogger.debug("chopping recipe set: {0}", [process_result], "counter.gd", "_set_result")
+		SweetLogger.debug("chopping recipe set: {0}", [process_result])
 	else:
 		_hide_all_tools()
 
@@ -71,7 +71,7 @@ func _refresh_progress_bar() -> void:
 
 # Add work from gesture area (knife hits). This increments the chopping progress.
 func add_work(work: float) -> void:
-	SweetLogger.debug("add_work: {0}", [work], "counter.gd", "add_work")
+	SweetLogger.debug("add_work: {0}", [work])
 	# Only the world owner should drive the authoritative state. Guarding is
 	# handled by higher-level NetworkManager logic elsewhere, mirror hob's
 	# convert_held_to_item which checks ownership before spawning.
@@ -82,16 +82,16 @@ func add_work(work: float) -> void:
 		audio.play()
 	# If we've reached the required time, convert the held item
 	if process_result != "" and process_result_work > 0 and work_progress >= process_result_work:
-		SweetLogger.debug("chopping complete, converting item to: {0}", [process_result], "counter.gd", "add_work")
+		SweetLogger.debug("chopping complete, converting item to: {0}", [process_result])
 		work_progress = 0
 		convert_held_to_item(process_result)
 
 
 func _on_gesture_area_body_entered(body: Node3D) -> void:
-	SweetLogger.debug("gesture area entered: {0}", [body], "counter.gd", "_on_gesture_area_body_entered")
+	SweetLogger.debug("gesture area entered: {0}", [body])
 	if body.is_in_group("chopping_tool"):
 		if process_result == "":
-			SweetLogger.debug("knife entered but nothing to chop", [], "counter.gd", "_on_gesture_area_body_entered")
+			SweetLogger.debug("knife entered but nothing to chop", [])
 			return
 
 		var speed := 0.0
@@ -101,31 +101,31 @@ func _on_gesture_area_body_entered(body: Node3D) -> void:
 			speed = body.velocity.length()
 
 		if speed < chop_min_speed:
-			SweetLogger.debug("knife too slow for chopping: {0}", [speed], "counter.gd", "_on_gesture_area_body_entered")
+			SweetLogger.debug("knife too slow for chopping: {0}", [speed])
 			return
 
 		add_work(chop_work_steps)
 
 
 func _on_object_picked_up(_item: Variant) -> void:
-	SweetLogger.debug("object picked up: {0}", [_item], "counter.gd", "_on_object_picked_up")
+	SweetLogger.debug("object picked up: {0}", [_item])
 	var food_item = Helper.find_food_item(_item)
 	if not food_item:
-		SweetLogger.debug("held object is not a FoodItem", [], "counter.gd", "_on_object_picked_up")
+		SweetLogger.debug("held object is not a FoodItem", [])
 		return
 	
 	var result = RecipeManager.get_chopping_result(food_item.id)
 	if not result:
-		SweetLogger.debug("held a FoodItem that is not choppable, id: {0} process_result: {1}", [food_item.id, result], "counter.gd", "_on_object_picked_up")
+		SweetLogger.debug("held a FoodItem that is not choppable, id: {0} process_result: {1}", [food_item.id, result])
 		return
 
 	process_result = result
 	process_result_work = RecipeManager.get_chopping_work(food_item.id)
-	SweetLogger.debug("set process_result {0} work: {1}", [process_result, process_result_work], "counter.gd", "_on_object_picked_up")
+	SweetLogger.debug("set process_result {0} work: {1}", [process_result, process_result_work])
 
 
 func _on_object_dropped(_item: Variant) -> void:
-	SweetLogger.debug("object drop", [], "counter.gd", "_on_object_dropped")
+	SweetLogger.debug("object drop", [])
 	work_progress = 0
 	process_result = ""
 	process_result_work = 0
@@ -135,7 +135,7 @@ func _on_object_dropped(_item: Variant) -> void:
 func convert_held_to_item(_item: String) -> void:
 	if not NetworkManager.owns_world():
 		return
-	SweetLogger.debug("converting {0}", [_item], "counter.gd", "convert_held_to_item")
+	SweetLogger.debug("converting {0}", [_item])
 
 	var old_pickable = snap_zone.picked_up_object
 	if not old_pickable:
@@ -145,7 +145,7 @@ func convert_held_to_item(_item: String) -> void:
 	var original_transform = old_pickable.global_transform
 	var new_scene_instance = NetworkManager.spawn_item(RecipeManager.get_item_scene(_item).resource_path, original_transform)
 
-	SweetLogger.debug("freeing old_pickable {0}", [old_pickable], "counter.gd", "convert_held_to_item")
+	SweetLogger.debug("freeing old_pickable {0}", [old_pickable])
 	snap_zone.drop_object()
 	NetworkManager.despawn_item(old_pickable)
 	snap_zone.pick_up_object(new_scene_instance)

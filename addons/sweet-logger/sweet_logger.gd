@@ -2,6 +2,22 @@ extends Node
 
 const enable_debug = true
 
+# Inside SweetLogger or a static helper class:
+static func get_current_function_name() -> String:
+	var stack = get_stack()
+	# Index 0 is 'get_current_function_name'
+	# Index 1 is the function that called 'get_current_function_name'
+	if stack.size() > 2:
+		return stack[2].function
+	return "unknown_func"
+
+static func get_caller_file_name() -> String:
+	var stack = get_stack()
+	if stack.size() > 2:
+		return stack[2].source.get_file() # e.g., "station.gd"
+	return "unknown_file"
+
+
 ## Global Logger singleton for consistent logging across the game.
 ## All logs are prefixed with [peer_id]: to identify which instance is logging.
 ## Uses print_rich with colorized backgrounds for log type, local time, peer IDs, and script context.
@@ -261,24 +277,40 @@ func _print_rich_log(peer_id_str: String, log_type: String, message: String, scr
 #===================================================================================#
 func log(message: String, args: Array = [], script_name: String = "", function_name: String = "") -> void:
 	"""Basic log function with peer_id prefix."""
+	if script_name.is_empty():
+		script_name = get_caller_file_name()
+	if function_name.is_empty():
+		function_name = get_current_function_name()
 	var formatted = _format_message(message, args)
 	var peer_id_str = _get_peer_id()
 	_print_rich_log(peer_id_str, "log", formatted, script_name, function_name)
 
 func info(message: String, args: Array = [], script_name: String = "", function_name: String = "") -> void:
 	"""Log an informational message."""
+	if script_name.is_empty():
+		script_name = get_caller_file_name()
+	if function_name.is_empty():
+		function_name = get_current_function_name()
 	var formatted = _format_message(message, args)
 	var peer_id_str = _get_peer_id()
 	_print_rich_log(peer_id_str, "info", formatted, script_name, function_name)
 
 func warning(message: String, args: Array = [], script_name: String = "", function_name: String = "") -> void:
 	"""Log a warning message."""
+	if script_name.is_empty():
+		script_name = get_caller_file_name()
+	if function_name.is_empty():
+		function_name = get_current_function_name()
 	var formatted = _format_message(message, args)
 	var peer_id_str = _get_peer_id()
 	_print_rich_log(peer_id_str, "warning", formatted, script_name, function_name)
 
 func error(message: String, args: Array = [], script_name: String = "", function_name: String = "") -> void:
 	"""Log an error message."""
+	if script_name.is_empty():
+		script_name = get_caller_file_name()
+	if function_name.is_empty():
+		function_name = get_current_function_name()
 	var formatted = _format_message(message, args)
 	var peer_id_str = _get_peer_id()
 	_print_rich_log(peer_id_str, "error", formatted, script_name, function_name)
@@ -287,6 +319,10 @@ func debug(message: String, args: Array = [], script_name: String = "", function
 	"""Log a debug message."""
 	if not enable_debug:
 		return
+	if script_name.is_empty():
+		script_name = get_caller_file_name()
+	if function_name.is_empty():
+		function_name = get_current_function_name()
 	var formatted = _format_message(message, args)
 	var peer_id_str = _get_peer_id()
 	_print_rich_log(peer_id_str, "debug", formatted, script_name, function_name)

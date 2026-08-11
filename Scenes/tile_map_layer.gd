@@ -114,14 +114,14 @@ func get_next(size, walls):
 	var offset = [-1,-1]
 	
 	walls.shuffle()
-	SweetLogger.debug("get_next size: {0}", [size], "tile_map_layer.gd", "get_next")
+	SweetLogger.debug("get_next size: {0}", [size])
 	
 	for wall in walls:
-		SweetLogger.debug("get_next wall: {0}", [wall], "tile_map_layer.gd", "get_next")
+		SweetLogger.debug("get_next wall: {0}", [wall])
 		if wall["der"][1] == 0:
-			SweetLogger.debug("get_next horizontal wall", [], "tile_map_layer.gd", "get_next")
+			SweetLogger.debug("get_next horizontal wall", [])
 			if size[0]<wall["len"]-6:
-				SweetLogger.debug("TileMapLayer get_next length 6 less can go anywhere", [], "tile_map_layer.gd", "get_next")
+				SweetLogger.debug("TileMapLayer get_next length 6 less can go anywhere", [])
 				if wall["der"][0] == 1:offset[1] = wall["pos"][1]
 				else: offset[1] = wall["pos"][1]-size[1]
 				
@@ -130,16 +130,16 @@ func get_next(size, walls):
 				if size[0]+offset[0]>wall["pos"][0]+wall["len"]-3:offset[0] = wall["len"]-(3+size[0])
 				
 			elif size[0]<=wall["len"]-3:
-				SweetLogger.debug("TileMapLayer get_next 3 less needs to be on a corner", [], "tile_map_layer.gd", "get_next")
+				SweetLogger.debug("TileMapLayer get_next 3 less needs to be on a corner", [])
 				if wall["der"][0] == 1:offset[1] = wall["pos"][1]
 				else: offset[1] = wall["pos"][1]-size[1]
 				
 				if randi_range(0, 1):offset[0]=wall["pos"][0]+wall["len"]-size[0]
 				else:offset[0] = wall["pos"][0]
 		else:
-			SweetLogger.debug("get_next vertical wall", [], "tile_map_layer.gd", "get_next")
+			SweetLogger.debug("get_next vertical wall", [])
 			if size[1]<wall["len"]-6:
-				SweetLogger.debug("TileMapLayer get_next length 6 less can go anywhere", [], "tile_map_layer.gd", "get_next")
+				SweetLogger.debug("TileMapLayer get_next length 6 less can go anywhere", [])
 				if wall["der"][1] == 1:offset[0] = wall["pos"][0]
 				else: offset[0] = wall["pos"][0]-size[0]
 				
@@ -148,10 +148,10 @@ func get_next(size, walls):
 				if size[1]+offset[1]>wall["len"]-3:offset[1] = wall["len"]-(3+size[1])
 				
 			elif size[1]<=wall["len"]-3:
-				SweetLogger.debug("TileMapLayer get_next 3 less needs to be on a corner", [], "tile_map_layer.gd", "get_next")
+				SweetLogger.debug("TileMapLayer get_next 3 less needs to be on a corner", [])
 				if wall["der"][1] == 1:offset[0] = wall["pos"][0]
 				else: offset[0] = wall["pos"][0]-size[0]
-				SweetLogger.debug("get_next offset: {0}", [offset], "tile_map_layer.gd", "get_next")
+				SweetLogger.debug("get_next offset: {0}", [offset])
 				
 				if randi() % 2:offset[1]=wall["pos"][1]+wall["len"]-size[1]
 				else:offset[1] = wall["pos"][1]
@@ -165,7 +165,7 @@ func get_next(size, walls):
 func draw_room(Size, offset=Vector2i(0, 0)):
 	var walls = []
 	offset = Vector2i(offset[0], offset[1])
-	SweetLogger.debug("draw_room size: {0} offset: {1}", [Size, offset], "tile_map_layer.gd", "draw_room")
+	SweetLogger.debug("draw_room size: {0} offset: {1}", [Size, offset])
 	
 	for i in range(Size[0]):
 		tile_map.set_cell(Vector2i(i+offset[0],offset[1]), 0, Vector2i(1,1))

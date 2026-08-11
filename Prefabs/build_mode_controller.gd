@@ -25,7 +25,7 @@ func despawn_unheld_pickables():
 			NetworkManager.despawn_item(pickable)
 			continue
 		if not held_by.is_in_group("persistent_inventory"):
-			SweetLogger.debug("despawn_unheld_pickables held_by: {0}, pickable: {1}", [held_by, pickable], "build_mode_controller.gd", "despawn_unheld_pickables")
+			SweetLogger.debug("despawn_unheld_pickables held_by: {0}, pickable: {1}", [held_by, pickable])
 			NetworkManager.despawn_item(pickable)
 			
 

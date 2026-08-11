@@ -111,22 +111,22 @@ static func get_item_scene(item_id: StringName) -> PackedScene:
 static func print_all_recipes() -> void:
 	load_recipes()
 	if not _loaded:
-		SweetLogger.warning("could not load recipes.yaml; no recipes printed.", [], "RecipeManager.gd", "print_all_recipes")
+		SweetLogger.warning("could not load recipes.yaml; no recipes printed.", [])
 		return
 
 	if _combining_map.is_empty():
-		SweetLogger.warning("no combining recipes found", [], "RecipeManager.gd", "print_all_recipes")
+		SweetLogger.warning("no combining recipes found", [])
 		return
 
-	SweetLogger.info("#### RecipeManager: Loaded recipes ####", [], "RecipeManager.gd", "print_all_recipes")
+	SweetLogger.info("#### RecipeManager: Loaded recipes ####", [])
 	_print_combining_recipes()
-	SweetLogger.info("", [], "RecipeManager.gd", "print_all_recipes")
+	SweetLogger.info("", [])
 	_print_cooking_recipes()
-	SweetLogger.info("", [], "RecipeManager.gd", "print_all_recipes")
+	SweetLogger.info("", [])
 	_print_chopping_recipes()
-	SweetLogger.info("", [], "RecipeManager.gd", "print_all_recipes")
+	SweetLogger.info("", [])
 	_print_rolling_recipes()
-	SweetLogger.info("", [], "RecipeManager.gd", "print_all_recipes")
+	SweetLogger.info("", [])
 	_print_augmenting_recipes()
 
 static func _print_combining_recipes() -> void:
@@ -135,12 +135,12 @@ static func _print_combining_recipes() -> void:
 		var key_str = str(pair_key)
 		var separator_index = key_str.find("|")
 		if separator_index == -1:
-			SweetLogger.warning("invalid combining map key '{0}'", [key_str], "RecipeManager.gd", "_print_combining_recipes")
+			SweetLogger.warning("invalid combining map key '{0}'", [key_str])
 			continue
 
 		var first = key_str.substr(0, separator_index)
 		var second = key_str.substr(separator_index + 1, key_str.length() - separator_index - 1)
-		SweetLogger.info("  {0} <-combine-- {1} + {2}", [result_id, first, second], "RecipeManager.gd", "_print_combining_recipes")
+		SweetLogger.info("  {0} <-combine-- {1} + {2}", [result_id, first, second])
 
 
 static func _print_cooking_recipes() -> void:
@@ -171,7 +171,7 @@ static func _print_augmenting_recipes() -> void:
 		var augment_def = _augmenting_map[target_id]
 		for ingredient_id in augment_def.keys():
 			var attr_key = augment_def[ingredient_id]
-			SweetLogger.info("  {0} <-augment-- {1} adds attribute '{2}'", [target_id, ingredient_id, attr_key], "RecipeManager.gd", "_print_augmenting_recipes")
+			SweetLogger.info("  {0} <-augment-- {1} adds attribute '{2}'", [target_id, ingredient_id, attr_key])
 
 
 static func _build_scene_paths() -> void:
