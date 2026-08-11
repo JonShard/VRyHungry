@@ -385,8 +385,10 @@ func _refresh_display() -> void:
 func _process(delta: float) -> void:
 	_refresh_display()
 	if not NetworkManager.owns_world():
+		SweetLogger.error("Is not server, return")
 		return
-		
+	SweetLogger.error("Is server, UPDATING!!!")
+
 	if GameManager.game_state == GameManager.GameState.GAME_OVER:
 		return
 	_place_order_if_player()

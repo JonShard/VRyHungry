@@ -6,6 +6,7 @@
 - pickables being picked up is not RELIABLY synced
 - sounds played on pickable in new script / node, when collides or picked_up or dropped, server tells  clinetns with RPC to play sound
 
+- Contaioner / plate sometimes doesn't sync to clients that it picked someting up.
 
 
 
