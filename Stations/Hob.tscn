@@ -27,6 +27,9 @@ properties/4/replication_mode = 1
 properties/5/path = NodePath("Hob:visible")
 properties/5/spawn = false
 properties/5/replication_mode = 1
+properties/6/path = NodePath("Hob/XRToolsSnapZone:picked_up_ranged")
+properties/6/spawn = false
+properties/6/replication_mode = 1
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_kdxnr"]
 size = Vector3(0.6, 1, 0.6)

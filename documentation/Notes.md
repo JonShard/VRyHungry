@@ -1,3 +1,15 @@
+
+- despan flicker for clien broken
+- client keep autorityu of thrown object until lands
+- in build mode, snap zones off, stations disabled
+- players can steal from each others hands
+- pickables being picked up is not RELIABLY synced
+
+- frame couinter in log
+
+
+
+
 ## Stations
 counter
 hob

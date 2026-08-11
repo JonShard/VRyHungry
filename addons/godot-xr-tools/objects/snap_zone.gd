@@ -53,7 +53,7 @@ enum SnapMode {
 
 # Public fields
 var closest_object : Node3D = null
-var picked_up_object : Node3D = null
+@export var picked_up_object : Node3D = null
 var picked_up_ranged : bool = true
 
 
