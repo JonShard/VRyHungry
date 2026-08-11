@@ -15,7 +15,7 @@ var ghost_materials: Array[StandardMaterial3D] = []
 # Ghost update throttling (clients send unreliable RPCs to server at this rate)
 var ghost_send_interval: float = 0.1  # seconds (10 Hz)
 var _ghost_send_accum: float = 0.0
-
+var _was_last_pos_valid: bool = false
 const GHOST_COLOR_VALID: Color = Color(0, 1, 0, 0.35)
 const GHOST_COLOR_INVALID: Color = Color(1, 0, 0, 0.35)
 
@@ -37,6 +37,7 @@ func _on_station_bought(_instance: Node3D):
 		set_move_handle_enabled(true)
 		
 func _ready() -> void:
+	SweetLogger.debug("enter")
 	if not station:
 		push_error("StationMovement is missing referece to station")
 	if not move_handle:
@@ -52,11 +53,11 @@ func _ready() -> void:
 	move_handle.dropped.connect(_handle_drop)
 	Signals.station_bought.connect(_on_station_bought)
 
-	move_ghost.monitoring = true
-	move_ghost.visible = false
 	_cache_ghost_materials()
 	_set_ghost_color(GHOST_COLOR_VALID)
 	set_move_handle_enabled(GameManager.game_state == GameManager.GameState.BUILDING)
+	move_ghost.monitoring = true
+	move_ghost.visible = false
 	Signals.game_state_changed.connect(_on_game_state_changed)
 
 
@@ -144,10 +145,6 @@ func _process(_delta: float) -> void:
 	if not is_moving:
 		return
 
-	# Update the ghost locally for instant feedback and send throttled unreliable RPCs to the server
-	move_ghost.visible = true
-	station.visible = false
-
 	move_ghost.global_transform = Helper.get_snapped_transform(move_handle)
 	move_ghost.global_transform.origin.y = original_station_transform.origin.y
 	
@@ -189,6 +186,7 @@ func _is_move_position_valid() -> bool:
 
 @rpc("any_peer", "call_remote", "reliable")
 func server_handle_drop(new_transform: Transform3D, client_thinks_valid: bool):
+	SweetLogger.debug("enter")
 	if not multiplayer.is_server():
 		return
 	if not (client_thinks_valid):
@@ -197,45 +195,50 @@ func server_handle_drop(new_transform: Transform3D, client_thinks_valid: bool):
 		server_update_station_transform.rpc(original_trans)
 		server_update_move_ghost_transform.rpc(original_trans)
 		server_update_handle_transform.rpc(original_trans.translated(Vector3(0, original_handle_y_pos, 0)))
-		server_update_visibility.rpc(false, true)
-		SweetLogger.debug("server_handle_drop: transform rejected (invalid)")
+		if not _was_last_pos_valid: # Edge case
+			server_update_visibility.rpc(false, true)
+			SweetLogger.warning("Can not not reset visibility to normal when the last pos was invalid")
+		SweetLogger.debug("transform rejected (invalid)")
+		_was_last_pos_valid = false
 		return
 
 	server_update_station_transform.rpc(new_transform)
 	server_update_move_ghost_transform.rpc(new_transform)
 	server_update_handle_transform.rpc(new_transform.translated(Vector3(0, original_handle_y_pos, 0)))
 	server_update_visibility.rpc(false, true)
-	
-	SweetLogger.debug("server_handle_drop: transform applied")
+	_was_last_pos_valid = true
+
+	SweetLogger.debug("transform applied")
 
 @rpc("any_peer", "call_local", "reliable") # Server updates clients
 func server_artificial_pickup():
+	SweetLogger.debug("enter")
 	_handle_pickup(self) # Arg is not used, but required of the signal.
 
 
 @rpc("any_peer", "call_local", "reliable") # Server updates clients
 func server_update_station_transform(new_transform: Transform3D) -> void:
-	SweetLogger.debug("server_update_station_transform")
+	SweetLogger.debug("entered")
 	station.global_transform = new_transform
 	original_station_transform = new_transform
 
 
 @rpc("any_peer", "call_local", "reliable") # Server updates clients
 func server_update_handle_transform(new_transform: Transform3D) -> void:
-	SweetLogger.debug("server_update_handle_transform")
+	SweetLogger.debug("entered")
 	move_handle.global_transform = new_transform
 
 
 
 @rpc("any_peer", "call_local", "reliable")
 func server_update_visibility(ghost_visible: bool, station_visible: bool) -> void:
-	SweetLogger.debug("server_update_visibility")
+	SweetLogger.debug("entered")
 	move_ghost.visible = ghost_visible
 	station.visible = station_visible
 
 
 @rpc("any_peer", "call_local", "unreliable")
-func server_update_move_ghost_transform(new_transform: Transform3D, new_color: Color = Color.YELLOW) -> void:
-	SweetLogger.debug("server_update_move_ghost_transform")
+func server_update_move_ghost_transform(new_transform: Transform3D, new_color: Color = GHOST_COLOR_VALID) -> void:
+	SweetLogger.debug("entered")
 	move_ghost.global_transform = new_transform
 	_set_ghost_color(new_color)
