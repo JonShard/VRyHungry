@@ -4,8 +4,8 @@
 - in build mode, snap zones off, stations disabled
 - players can steal from each others hands
 - pickables being picked up is not RELIABLY synced
+- sounds played on pickable in new script / node, when collides or picked_up or dropped, server tells  clinetns with RPC to play sound
 
-- frame couinter in log
 
 
 

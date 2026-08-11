@@ -57,6 +57,11 @@ func place_order() -> void:
 	_unsatisfied_orders = new_orders
 	_original_orders = _unsatisfied_orders.duplicate()
 
+@rpc("any_peer", "call_remote", "reliable")
+func server_place_order() -> void:
+	if NetworkManager.owns_world():
+		place_order()
+
 
 func absorb_items():
 	SweetLogger.debug("absorb_items()")
@@ -379,6 +384,9 @@ func _refresh_display() -> void:
 
 func _process(delta: float) -> void:
 	_refresh_display()
+	if not NetworkManager.owns_world():
+		return
+		
 	if GameManager.game_state == GameManager.GameState.GAME_OVER:
 		return
 	_place_order_if_player()

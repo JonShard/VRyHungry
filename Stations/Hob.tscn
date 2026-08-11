@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://bsn8vhv5adxdo" path="res://stations/hob.gd" id="1_7jc4g"]
 [ext_resource type="PackedScene" uid="uid://cvucwxibtol5f" path="res://stations/StationMovement.tscn" id="1_pydjp"]
 [ext_resource type="Script" uid="uid://cquqe4f1m1sw6" path="res://addons/godot-xr-tools/objects/snap_zone.gd" id="2_er1dp"]
-[ext_resource type="AudioStream" uid="uid://bqtk1adk8umbx" path="res://sounds/220197__gameaudio__click-basic.wav" id="3_6oyg1"]
+[ext_resource type="AudioStream" uid="uid://dmyuqe5058sv3" path="res://sounds/220197__gameaudio__click-basic.wav" id="3_6oyg1"]
 [ext_resource type="PackedScene" uid="uid://bxbocxdaayvwx" path="res://UI/progress_bar.tscn" id="3_7uuqv"]
 [ext_resource type="Material" uid="uid://d1djvskv4n4m3" path="res://textures/hob_off.tres" id="4_8qpxk"]
 [ext_resource type="Material" uid="uid://db7c7w4apwti7" path="res://textures/hob_on.tres" id="6_m7l4u"]
@@ -27,9 +27,6 @@ properties/4/replication_mode = 1
 properties/5/path = NodePath("Hob:visible")
 properties/5/spawn = false
 properties/5/replication_mode = 1
-properties/6/path = NodePath("Hob/XRToolsSnapZone:picked_up_ranged")
-properties/6/spawn = false
-properties/6/replication_mode = 1
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_kdxnr"]
 size = Vector3(0.6, 1, 0.6)
@@ -202,6 +199,7 @@ shape = SubResource("BoxShape3D_7uuqv")
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="Hob/XRToolsSnapZone" unique_id=1991627595]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.022546828, -0.5270121, 0.36528283)
+stream = ExtResource("3_6oyg1")
 
 [node name="ProgressBar3D" parent="Hob" unique_id=654673176 instance=ExtResource("3_7uuqv")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2621956, -0.09216304)
