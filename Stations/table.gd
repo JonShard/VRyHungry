@@ -38,11 +38,11 @@ enum TableState {
 ## NetworkManager._gate_station). The setters below just refresh the display,
 ## so both the server (via _set_state) and clients (via incoming sync) show
 ## the same text. Use _set_state(), never assign _state directly.
-var _state: TableState = TableState.EMPTY
-var _state_time: float = 0.0
-var _state_duration: float = 0.0 # set in _set_state_time
+@export var _state: TableState = TableState.EMPTY
+@export var _state_time: float = 0.0
+@export var _state_duration: float = 0.0 # set in _set_state_time
 var _original_orders: Array[String] = []
-var _unsatisfied_orders: Array[String] = []
+@export var _unsatisfied_orders: Array[String] = []
 var _players_count: int = 0
 
 
