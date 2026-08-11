@@ -34,7 +34,7 @@ func _ready() -> void:
 
 	for i in range(8):
 	
-		next_room = Vector2i(randi_range(mane_size[0]/(3+i),mane_size[0]/(2+i)), randi_range(mane_size[1]/(3+i), mane_size[1]/(2+i)))
+		next_room = Vector2i(randi_range(4,mane_size[0]/(1+i)), randi_range(4, mane_size[1]/(1+i)))
 		good = []
 		if next_room[0]>4 and next_room[1]>4:
 			for x in range(mane_size[0]):
