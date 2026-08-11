@@ -165,6 +165,12 @@ func _spawn_item_from_data(data: Variant) -> Node:
 		inst.set(key, data["props"][key])
 	if not owns_world():
 		_gate_station(inst)
+		# ...and again once the node is in the tree. Gating before _ready() is what
+		# keeps a station from ever ticking on a client, but a station's own
+		# _ready() runs afterwards and can undo it (table.gd re-arms its state
+		# machine with set_process(true)). The deferred pass runs after every
+		# _ready() in this frame and re-asserts the gate.
+		_gate_station.call_deferred(inst)
 	return inst
 
 
@@ -187,11 +193,17 @@ func _gate_station(node: Node) -> void:
 			if child.is_in_group("station"):
 				_gate_station(child)
 		return
+	# Only report a gate that actually changed something: this runs a second time
+	# (deferred) for every spawned station, and on a re-gate that found nothing to
+	# do there is nothing worth logging.
+	var changed := node.is_processing()
 	for zone in node.find_children("*", "XRToolsSnapZone", true, false):
+		changed = changed or zone.enabled or zone.is_processing()
 		zone.enabled = false
 		zone.set_process(false)
 	node.set_process(false)
-	log_line("gated station (non-owner peer): %s" % node.name)
+	if changed:
+		log_line("gated station (non-owner peer): %s" % node.name)
 
 
 ## Gate every station already sitting in the scene tree, for peers that don't

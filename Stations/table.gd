@@ -132,7 +132,13 @@ func _ready() -> void:
 	for snap_zone_node in snap_zones:
 		snap_zone_node.has_picked_up.connect(_on_object_picked_up)
 		snap_zone_node.has_dropped.connect(_on_object_dropped)
-	set_process(true)
+	# Never on a client: the state machine is server-authoritative and _state is
+	# synced down. NetworkManager._gate_station() already turned processing off,
+	# but a spawned station is gated BEFORE its _ready() runs, so an unconditional
+	# set_process(true) here would quietly re-arm the FSM on every client — and
+	# _state_end(EATING) re-enables the snap zones, which then fight the server
+	# for items sitting on the table.
+	set_process(NetworkManager.owns_world())
 	_set_state(TableState.EMPTY)
 
 
@@ -258,8 +264,11 @@ func _collect_money_from_food():
 
 
 func _set_snap_zones_enabled(value: bool) -> void:
+	# Enabling is the world owner's call only — a client's zones stay gated no
+	# matter what state its copy of the FSM thinks it is in.
+	var enabled := value and NetworkManager.owns_world()
 	for zone in snap_zones:
-		zone.enabled = value
+		zone.enabled = enabled
 
 
 ## Server-only state transition: sets the new state's timer and assigns
