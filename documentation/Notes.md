@@ -1,4 +1,20 @@
+### Station inheritence suggestion
+Station
+  WorkStation (performs work on a food item to convert it)
+    Hob
+    Sink
+    Counter
+  StorageStation (one snap zone and list of positions, FILO item dispenser, like a gun magazine)
+    Shelf
+    PlateRak
+    Dishwasher
+  SharedInventoryStation (one snap zone, shares a list of connected stations with which items exist in each of them)
+    Table
+    Belt
+  Dispenser
 
+
+### Multiplayer bugs
 - despan flicker for clien broken
 - client keep autorityu of thrown object until lands
 - in build mode, snap zones off, stations disabled

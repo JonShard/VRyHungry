@@ -37,7 +37,7 @@ func _on_station_bought(_instance: Node3D):
 		set_move_handle_enabled(true)
 		
 func _ready() -> void:
-	SweetLogger.debug("enter")
+	SweetLogger.debug("->[]")
 	if not station:
 		push_error("StationMovement is missing referece to station")
 	if not move_handle:
@@ -105,7 +105,7 @@ func _apply_visibility_state(ghost_visible: bool, station_visible: bool) -> void
 
 
 func _handle_pickup(_by: Node) -> void:
-	SweetLogger.info("handle pickup")
+	SweetLogger.debug("->[]")
 	if move_handle.get_picked_up_by() and move_handle.get_picked_up_by() is XRToolsSnapZone:
 		SweetLogger.info("handle pickup by snap zone, dropping and resetting position")
 		move_handle.drop()
@@ -186,7 +186,7 @@ func _is_move_position_valid() -> bool:
 
 @rpc("any_peer", "call_local", "reliable")
 func server_handle_drop(new_transform: Transform3D, client_thinks_valid: bool):
-	SweetLogger.debug("enter")
+	SweetLogger.debug("->[]")
 	if not multiplayer.is_server():
 		return
 	if not (client_thinks_valid):
@@ -213,33 +213,33 @@ func server_handle_drop(new_transform: Transform3D, client_thinks_valid: bool):
 
 @rpc("any_peer", "call_local", "reliable") # Server updates clients
 func server_artificial_pickup():
-	SweetLogger.debug("enter")
+	SweetLogger.debug("->[]")
 	_handle_pickup(self) # Arg is not used, but required of the signal.
 
 
 @rpc("any_peer", "call_local", "reliable") # Server updates clients
 func server_update_station_transform(new_transform: Transform3D) -> void:
-	SweetLogger.debug("entered")
+	SweetLogger.debug("->[]")
 	station.global_transform = new_transform
 	original_station_transform = new_transform
 
 
 @rpc("any_peer", "call_local", "reliable") # Server updates clients
 func server_update_handle_transform(new_transform: Transform3D) -> void:
-	SweetLogger.debug("entered")
+	SweetLogger.debug("->[]")
 	move_handle.global_transform = new_transform
 
 
 
 @rpc("any_peer", "call_local", "reliable")
 func server_update_visibility(ghost_visible: bool, station_visible: bool) -> void:
-	SweetLogger.debug("entered")
+	SweetLogger.debug("->[]")
 	move_ghost.visible = ghost_visible
 	station.visible = station_visible
 
 
 @rpc("any_peer", "call_local", "unreliable")
 func server_update_move_ghost_transform(new_transform: Transform3D, new_color: Color = GHOST_COLOR_VALID) -> void:
-	SweetLogger.debug("entered")
+	SweetLogger.debug("->[]")
 	move_ghost.global_transform = new_transform
 	_set_ghost_color(new_color)

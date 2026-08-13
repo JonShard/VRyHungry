@@ -116,7 +116,8 @@ func apply_held_state() -> void:
 	# Someone else owns it: stop simulating locally, just follow the sync.
 	if _pickable.is_picked_up():
 		if NetworkManager.is_online():
-			SweetLogger.debug("{0}: was held by {1} on this peer, but authority now says peer {2} owns it — force-dropping", [_pickable.name, _holder_desc(), net_held_by])
+			# Jon's note: When we get this warning, it usually mean a client-side snapzone is not disabled, and is fighting the server over the item.
+			SweetLogger.warning("{0}: was held by {1} on this peer, but authority now says peer {2} owns it — force-dropping", [_pickable.name, _holder_desc(), net_held_by])
 		_pickable.drop()
 	# Bail out when we're already in the follow-the-sync state. Without this the
 	# writes below (and the line logged with them) repeated every tick for every

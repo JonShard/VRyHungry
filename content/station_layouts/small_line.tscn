@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://damrxtlt7uswf"]
 
-[ext_resource type="PackedScene" uid="uid://j7caslh27nor" path="res://stations/Hob.tscn" id="1_1wuvq"]
+[ext_resource type="PackedScene" uid="uid://b052o1fgwq5bw" path="res://stations/Hob.tscn" id="1_1wuvq"]
 [ext_resource type="PackedScene" uid="uid://efaec6ymgabo" path="res://stations/Counter.tscn" id="2_3qwcq"]
 [ext_resource type="PackedScene" uid="uid://dvrk268s7gkxh" path="res://stations/sink.tscn" id="3_3qwcq"]
 [ext_resource type="PackedScene" uid="uid://c6rift56ql3f8" path="res://stations/BurgerBunsDispenser.tscn" id="4_5eled"]
@@ -9,8 +9,6 @@
 [ext_resource type="PackedScene" uid="uid://caf0xanmxbshy" path="res://stations/table.tscn" id="7_0342k"]
 
 [node name="SmallLine" type="Node3D" unique_id=1844128818]
-
-[node name="Hob" parent="." unique_id=1687971542 instance=ExtResource("1_1wuvq")]
 
 [node name="Counter" parent="." unique_id=1487893288 instance=ExtResource("2_3qwcq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0, 0)
@@ -29,3 +27,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8000001, 0, 0)
 
 [node name="Table" parent="." unique_id=987495548 instance=ExtResource("7_0342k")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 0, 1.2)
+
+[node name="Hob" parent="." unique_id=707500902 instance=ExtResource("1_1wuvq")]

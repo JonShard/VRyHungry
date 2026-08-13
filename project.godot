@@ -53,6 +53,7 @@ station="Hobs, Counters ..."
 table="all nodes with table script"
 chopping_tool="A pickable body that chops"
 persistent_inventory="A station that keeps it's held items in build mode"
+station_zone="The snap_zone node on stations should have this"
 
 [input]
 

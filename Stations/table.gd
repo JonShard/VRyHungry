@@ -385,7 +385,7 @@ func _refresh_display() -> void:
 func _process(delta: float) -> void:
 	_refresh_display()
 	_place_order_if_player()
-	SweetLogger.error("State {0} time: {1} duration: {2}", [TableState.keys()[_state], _state_time, _state_duration])
+	#SweetLogger.error("State {0} time: {1} duration: {2}", [TableState.keys()[_state], _state_time, _state_duration])
 
 	if not NetworkManager.owns_world():
 		SweetLogger.error("Is not server, return")

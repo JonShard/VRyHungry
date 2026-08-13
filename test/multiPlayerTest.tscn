@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://j5s5wus7tuhb" path="res://prefabs/XROrigin.tscn" id="2_j7vd1"]
 [ext_resource type="Material" uid="uid://cmia50cfqxxo4" path="res://textures/dev_material_3d.tres" id="3_ssbaf"]
 [ext_resource type="Sky" uid="uid://c1abtpwhdm2d5" path="res://textures/sky/NightSkyHDRI009_16K.tres" id="4_081u3"]
-[ext_resource type="PackedScene" uid="uid://j7caslh27nor" path="res://stations/Hob.tscn" id="5_t1fa7"]
+[ext_resource type="PackedScene" uid="uid://j7caslh27nor" path="res://stations/Hob_old.tscn" id="5_t1fa7"]
 [ext_resource type="PackedScene" uid="uid://dvrk268s7gkxh" path="res://stations/sink.tscn" id="6_6jhmh"]
 [ext_resource type="PackedScene" uid="uid://bp3v1jl8pctro" path="res://Containers/plate.tscn" id="7_bowes"]
 [ext_resource type="PackedScene" uid="uid://cnjwtnhwh0i8q" path="res://stations/dirt_station.tscn" id="8_pvl84"]

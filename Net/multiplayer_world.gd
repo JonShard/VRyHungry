@@ -68,7 +68,6 @@ func _exit_tree() -> void:
 
 
 func _on_session_started(_is_server: bool) -> void:
-	NetworkManager.gate_existing_stations()
 	_populate_world_if_owner()
 
 

@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bu6jt26pq2y0k"]
 
 [ext_resource type="PackedScene" uid="uid://q37nqadkibbp" path="res://environment/door.tscn" id="1_hgrxd"]
-[ext_resource type="PackedScene" uid="uid://j7caslh27nor" path="res://stations/Hob.tscn" id="1_p8umn"]
+[ext_resource type="PackedScene" uid="uid://j7caslh27nor" path="res://stations/Hob_old.tscn" id="1_p8umn"]
 [ext_resource type="PackedScene" uid="uid://caf0xanmxbshy" path="res://stations/table.tscn" id="2_d63j6"]
 [ext_resource type="PackedScene" uid="uid://dlw5geheupgpt" path="res://stations/hatch.tscn" id="3_d63j6"]
 [ext_resource type="PackedScene" uid="uid://da6yrsnxvsrif" path="res://environment/wall.tscn" id="4_41vpv"]

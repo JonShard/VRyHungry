@@ -163,61 +163,7 @@ func _spawn_item_from_data(data: Variant) -> Node:
 		inst.name = data["name"]
 	for key in data.get("props", {}):
 		inst.set(key, data["props"][key])
-	if not owns_world():
-		_gate_station(inst)
-		# ...and again once the node is in the tree. Gating before _ready() is what
-		# keeps a station from ever ticking on a client, but a station's own
-		# _ready() runs afterwards and can undo it (table.gd re-arms its state
-		# machine with set_process(true)). The deferred pass runs after every
-		# _ready() in this frame and re-asserts the gate.
-		_gate_station.call_deferred(inst)
 	return inst
-
-
-# Stations run their own logic and auto-grab (XRToolsSnapZone with
-# snap_mode=RANGE) identically on every peer by default, which would let each
-# peer independently grab/simulate the same shared object. Disable both on
-# every peer except the one that owns world logic; the server-authoritative
-# item-authority RPCs are what let clients still grab a server-held item by
-# hand. Runs before the node enters the tree, so its own _ready() sees the
-# final (disabled) state.
-#
-# Group contract (see also _station_snap_zones): "station" marks the body that
-# runs the station's script, "station_zone" marks its snap zones. Station scenes
-# wrap that body in a Node3D (for StationMovement), and spawn_item hands us that
-# wrapper, so accept either and recurse — a type check on the node we're handed
-# silently gated nothing for stations whose root isn't the body itself.
-func _gate_station(node: Node) -> void:
-	if not node.is_in_group("station"):
-		for child in node.find_children("*", "", true, false):
-			if child.is_in_group("station"):
-				_gate_station(child)
-		return
-	# Only report a gate that actually changed something: this runs a second time
-	# (deferred) for every spawned station, and on a re-gate that found nothing to
-	# do there is nothing worth logging.
-	var changed := node.is_processing()
-	for zone in node.find_children("*", "XRToolsSnapZone", true, false):
-		changed = changed or zone.enabled or zone.is_processing()
-		zone.enabled = false
-		zone.set_process(false)
-	node.set_process(false)
-	if changed:
-		log_line("gated station (non-owner peer): %s" % node.name)
-
-
-## Gate every station already sitting in the scene tree, for peers that don't
-## own world logic. Stations that arrive through spawn_item() are gated as they
-## are built (see _spawn_item_from_data), but ones baked into a scene file never
-## pass through there — leaving a client running its own snap zones, which then
-## grab items straight out of the local hand and fight the server's
-## authoritative placement. Idempotent, so it's safe on every session start.
-func gate_existing_stations() -> void:
-	if owns_world():
-		return
-	for station in get_tree().get_nodes_in_group("station"):
-		_gate_station(station)
-
 
 # --- Item grab-authority transfer -----------------------------------------
 
@@ -418,22 +364,6 @@ func is_online() -> bool:
 ## only run where this is true, so state has one source of truth.
 func owns_world() -> bool:
 	return not is_online() or is_server()
-
-
-# --- Station work-progress seam -------------------------------------------
-
-## Reusable entry point for a client to contribute work to a station (e.g. a
-## future chopping/gesture station). The client detects the gesture locally and
-## calls this; the server validates and accumulates. Timer-driven stations like
-## the Hob don't need it, but it is the drop-in seam for input-driven ones.
-@rpc("any_peer", "reliable")
-func submit_work(station_path: NodePath, amount: float) -> void:
-	if not is_server():
-		return
-	var station := get_node_or_null(station_path)
-	if station and station.has_method("add_work"):
-		log_line("submit_work: peer %d contributed %.2f to %s" % [multiplayer.get_remote_sender_id(), amount, station.name])
-		station.add_work(multiplayer.get_remote_sender_id(), amount)
 
 
 ## Called by the world scene once it's ready, passing its spawners. Must run

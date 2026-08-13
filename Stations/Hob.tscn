@@ -1,40 +1,14 @@
-[gd_scene format=3 uid="uid://j7caslh27nor"]
+[gd_scene format=3 uid="uid://b052o1fgwq5bw"]
 
+[ext_resource type="PackedScene" uid="uid://cbs8jiqe8rcmn" path="res://abstract/station.tscn" id="1_2p1q6"]
 [ext_resource type="Script" uid="uid://bsn8vhv5adxdo" path="res://stations/hob.gd" id="1_7jc4g"]
-[ext_resource type="PackedScene" uid="uid://cvucwxibtol5f" path="res://stations/StationMovement.tscn" id="1_pydjp"]
-[ext_resource type="Script" uid="uid://cquqe4f1m1sw6" path="res://addons/godot-xr-tools/objects/snap_zone.gd" id="2_er1dp"]
-[ext_resource type="AudioStream" uid="uid://dmyuqe5058sv3" path="res://sounds/220197__gameaudio__click-basic.wav" id="3_6oyg1"]
-[ext_resource type="PackedScene" uid="uid://bxbocxdaayvwx" path="res://UI/progress_bar.tscn" id="3_7uuqv"]
 [ext_resource type="Material" uid="uid://d1djvskv4n4m3" path="res://textures/hob_off.tres" id="4_8qpxk"]
 [ext_resource type="Material" uid="uid://db7c7w4apwti7" path="res://textures/hob_on.tres" id="6_m7l4u"]
 
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_np_hob"]
-properties/0/path = NodePath("Hob:time_cooked")
-properties/0/spawn = false
-properties/0/replication_mode = 1
-properties/1/path = NodePath("Hob:cooking_result")
-properties/1/spawn = false
-properties/1/replication_mode = 1
-properties/2/path = NodePath("Hob:cooking_result_time")
-properties/2/spawn = false
-properties/2/replication_mode = 1
-properties/3/path = NodePath("Hob:position")
-properties/3/spawn = false
-properties/3/replication_mode = 1
-properties/4/path = NodePath("Hob:rotation")
-properties/4/spawn = false
-properties/4/replication_mode = 1
-properties/5/path = NodePath("Hob:visible")
-properties/5/spawn = false
-properties/5/replication_mode = 1
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_kdxnr"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_l0sax"]
 size = Vector3(0.6, 1, 0.6)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_7uuqv"]
-size = Vector3(0.6, 0.12802735, 0.6)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gkb3v"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bmu77"]
 
 [sub_resource type="Animation" id="Animation_7uuqv"]
 length = 0.001
@@ -163,134 +137,124 @@ tracks/4/keys = {
 "values": [1.0, 0.0, 1.0]
 }
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_ac5f3"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_pydjp"]
 _data = {
 &"RESET": SubResource("Animation_7uuqv"),
 &"hob": SubResource("Animation_6oyg1")
 }
 
-[node name="Hob" type="Node3D" unique_id=172418174]
+[node name="Hob" unique_id=707500902 instance=ExtResource("1_2p1q6")]
 
-[node name="StationMovement" parent="." unique_id=946873975 node_paths=PackedStringArray("station") instance=ExtResource("1_pydjp")]
+[node name="StationMovement" parent="." index="0" unique_id=946873975 node_paths=PackedStringArray("station")]
 station = NodePath("../Hob")
 
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=768992259]
-replication_config = SubResource("SceneReplicationConfig_np_hob")
+[node name="ProgressBar3D" parent="." index="4" unique_id=654673176]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -0.18)
 
-[node name="Hob" type="StaticBody3D" parent="." unique_id=1332123047 groups=["station"]]
-script = ExtResource("1_7jc4g")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Hob" unique_id=1283846023]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.51483154, 0)
-shape = SubResource("BoxShape3D_kdxnr")
-
-[node name="XRToolsSnapZone" type="Area3D" parent="Hob" unique_id=538157739 groups=["station_zone"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0418437, 0)
-collision_layer = 65536
-collision_mask = 65540
-script = ExtResource("2_er1dp")
-stash_sound = ExtResource("3_6oyg1")
+[node name="SnapZone" parent="." index="5" unique_id=1315859105]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.048892, 0)
 snap_mode = 1
-metadata/_custom_type_script = "uid://cquqe4f1m1sw6"
 
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="Hob/XRToolsSnapZone" unique_id=370920392]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.000975132, 0)
-shape = SubResource("BoxShape3D_7uuqv")
+[node name="Hob" type="StaticBody3D" parent="." index="6" unique_id=732560156 node_paths=PackedStringArray("animation_player", "notification_audio", "ambient_audio", "progress_bar", "snap_zone", "synchronizer") groups=["station"]]
+script = ExtResource("1_7jc4g")
+animation_player = NodePath("AnimationPlayer")
+notification_audio = NodePath("../AudioStreamPlayer3DPulse")
+ambient_audio = NodePath("../AudioStreamPlayer3DContinous")
+progress_bar = NodePath("../ProgressBar3D")
+snap_zone = NodePath("../SnapZone")
+synchronizer = NodePath("../MultiplayerSynchronizer")
 
-[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="Hob/XRToolsSnapZone" unique_id=1991627595]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.022546828, -0.5270121, 0.36528283)
-stream = ExtResource("3_6oyg1")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hob" index="0" unique_id=3886639]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.51483154, 0)
+shape = SubResource("BoxShape3D_l0sax")
 
-[node name="ProgressBar3D" parent="Hob" unique_id=654673176 instance=ExtResource("3_7uuqv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2621956, -0.09216304)
-
-[node name="CSGCombiner3D" type="CSGCombiner3D" parent="Hob" unique_id=70901698]
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="Hob" index="1" unique_id=1047451362]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.51483154, 0)
 
-[node name="CSGBox3D" type="CSGBox3D" parent="Hob/CSGCombiner3D" unique_id=1111505172]
+[node name="CSGBox3D" type="CSGBox3D" parent="Hob/CSGCombiner3D" index="0" unique_id=797498087]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00071543455, 3.7252903e-09, -0.008516133)
 size = Vector3(0.6, 1, 0.5821045)
 
-[node name="CSGCylinder3D" type="CSGCylinder3D" parent="Hob/CSGCombiner3D/CSGBox3D" unique_id=1338463939]
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="Hob/CSGCombiner3D/CSGBox3D" index="0" unique_id=1788217430]
 transform = Transform3D(0.8943019, 0, 0, 0, 0.8943019, 0, 0, 0, 0.8943019, 0, 0.5103538, -7.827557e-05)
 operation = 2
 radius = 0.25976563
 height = 0.08898926
 sides = 32
 
-[node name="CSGTorus3D3" type="CSGTorus3D" parent="Hob/CSGCombiner3D" unique_id=666891341]
+[node name="CSGTorus3D3" type="CSGTorus3D" parent="Hob/CSGCombiner3D" index="1" unique_id=1365654856]
 transform = Transform3D(0.8943019, 0, 0, 0, 0.8943019, 0, 0, 0, 0.8943019, 0, 0.5003869, -7.827557e-05)
 inner_radius = 0.09153879
 outer_radius = 0.120084204
 sides = 32
 material = ExtResource("4_8qpxk")
 
-[node name="CSGTorus3D2" type="CSGTorus3D" parent="Hob/CSGCombiner3D" unique_id=24541894]
+[node name="CSGTorus3D2" type="CSGTorus3D" parent="Hob/CSGCombiner3D" index="2" unique_id=2113291709]
 transform = Transform3D(0.8943019, 0, 0, 0, 0.8943019, 0, 0, 0, 0.8943019, 0, 0.5003869, -7.827557e-05)
 inner_radius = 0.15036294
 outer_radius = 0.17592031
 sides = 32
 material = ExtResource("4_8qpxk")
 
-[node name="CSGTorus3D" type="CSGTorus3D" parent="Hob/CSGCombiner3D" unique_id=1901978664]
+[node name="CSGTorus3D" type="CSGTorus3D" parent="Hob/CSGCombiner3D" index="3" unique_id=196825717]
 transform = Transform3D(0.8943019, 0, 0, 0, 0.8943019, 0, 0, 0, 0.8943019, 0, 0.5003869, -7.827557e-05)
 inner_radius = 0.20426142
 outer_radius = 0.2321898
 sides = 32
 material = ExtResource("4_8qpxk")
 
-[node name="CSGCylinder3D" type="CSGCylinder3D" parent="Hob/CSGCombiner3D" unique_id=1107239311]
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="Hob/CSGCombiner3D" index="4" unique_id=893001662]
 transform = Transform3D(0.8943019, 0, 0, 0, 0.8943019, 0, 0, 0, 0.8943019, 0, 0.4498226, -7.827557e-05)
 radius = 0.071777344
 height = 0.09637451
 sides = 32
 
-[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="Hob/CSGCombiner3D" unique_id=435540815]
+[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="Hob/CSGCombiner3D" index="5" unique_id=1086831704]
 transform = Transform3D(0.8943019, 0, 0, 0, -3.9091177e-08, 0.8943019, 0, -0.8943019, -3.9091177e-08, 0, 0.48668858, -0.0020651226)
 radius = 0.008
 height = 0.44487303
 
-[node name="CSGCylinder3D3" type="CSGCylinder3D" parent="Hob/CSGCombiner3D" unique_id=878171801]
+[node name="CSGCylinder3D3" type="CSGCylinder3D" parent="Hob/CSGCombiner3D" index="6" unique_id=145519146]
 transform = Transform3D(-3.9091177e-08, -0.8943019, -3.9091177e-08, 0, -3.9091177e-08, 0.8943019, -0.8943019, 3.9091177e-08, 1.7087296e-15, 0, 0.48668858, -0.0020651226)
 radius = 0.008
 height = 0.44487303
 
-[node name="CSGCylinder3D4" type="CSGCylinder3D" parent="Hob/CSGCombiner3D" unique_id=1619646436]
+[node name="CSGCylinder3D4" type="CSGCylinder3D" parent="Hob/CSGCombiner3D" index="7" unique_id=905149123]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, -0.20412213, 0.42728558, 0.26171687)
 radius = 0.044433594
 height = 0.10932617
-material = SubResource("StandardMaterial3D_gkb3v")
+material = SubResource("StandardMaterial3D_bmu77")
 
-[node name="CSGCylinder3D5" type="CSGCylinder3D" parent="Hob/CSGCombiner3D" unique_id=548846612]
+[node name="CSGCylinder3D5" type="CSGCylinder3D" parent="Hob/CSGCombiner3D" index="8" unique_id=2028954364]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0.12531614, 0.42728558, 0.26171687)
 radius = 0.044433594
 height = 0.10932617
-material = SubResource("StandardMaterial3D_gkb3v")
+material = SubResource("StandardMaterial3D_bmu77")
 
-[node name="CSGCylinder3D6" type="CSGCylinder3D" parent="Hob/CSGCombiner3D" unique_id=1208989647]
+[node name="CSGCylinder3D6" type="CSGCylinder3D" parent="Hob/CSGCombiner3D" index="9" unique_id=1588021797]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0.22979808, 0.42728558, 0.26171687)
 radius = 0.044433594
 height = 0.10932617
-material = SubResource("StandardMaterial3D_gkb3v")
+material = SubResource("StandardMaterial3D_bmu77")
 
-[node name="CSGBox3D2" type="CSGBox3D" parent="Hob/CSGCombiner3D" unique_id=465340362]
+[node name="CSGBox3D2" type="CSGBox3D" parent="Hob/CSGCombiner3D" index="10" unique_id=1620789236]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.039733887, -0.07685089, 0.29250562)
 operation = 2
 size = Vector3(1.0999756, 0.8462982, 0.072387695)
 
-[node name="CSGBox3D3" type="CSGBox3D" parent="Hob/CSGCombiner3D" unique_id=1813079759]
+[node name="CSGBox3D3" type="CSGBox3D" parent="Hob/CSGCombiner3D" index="11" unique_id=1140499039]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.003479004, -0.08253479, 0.2656765)
 size = Vector3(0.55, 0.835, 0.072)
 
-[node name="CSGBox3D4" type="CSGBox3D" parent="Hob/CSGCombiner3D" unique_id=1978186019]
+[node name="CSGBox3D4" type="CSGBox3D" parent="Hob/CSGCombiner3D" index="12" unique_id=923397574]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.003479004, -0.45215607, 0.24655426)
 size = Vector3(0.55, 0.096, 0.14)
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Hob" unique_id=1525460719]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Hob" index="2" unique_id=1592340772]
 root_node = NodePath("../..")
-libraries/ = SubResource("AnimationLibrary_ac5f3")
+libraries/ = SubResource("AnimationLibrary_pydjp")
 
-[node name="OmniLight3D" type="OmniLight3D" parent="Hob" unique_id=1618457623]
+[node name="OmniLight3D" type="OmniLight3D" parent="Hob" index="3" unique_id=2050713654]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0201802, 0)
 light_color = Color(1, 0.13725491, 0, 1)
 light_energy = 0.0

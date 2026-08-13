@@ -46,3 +46,10 @@ static func get_snapped_transform(node: Node3D) -> Transform3D:
 	var target_yaw: float = snappedf(node.global_rotation_degrees.y, 90)
 	new_transform.basis = Basis(Vector3.UP, deg_to_rad(target_yaw))
 	return new_transform
+
+static func get_node_from_path(from: Node, node_path: NodePath) -> Node3D:
+	var item := from.get_node_or_null(node_path) as Node3D
+	if not item:
+		SweetLogger.warning("Could not resolve node from node_path: {0}, are the trees in sync?", [node_path])
+		return null
+	return item
