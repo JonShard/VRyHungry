@@ -1,22 +1,10 @@
 [gd_scene format=3 uid="uid://cwnwo4i28upap"]
 
+[ext_resource type="PackedScene" uid="uid://cbs8jiqe8rcmn" path="res://abstract/station.tscn" id="1_station"]
 [ext_resource type="Script" uid="uid://0y6wnjcsum6" path="res://stations/item_dispenser.gd" id="1_gkb3v"]
 [ext_resource type="PackedScene" uid="uid://dpot5qie20vf6" path="res://items/burger.tscn" id="2_mep2a"]
-[ext_resource type="Script" uid="uid://cquqe4f1m1sw6" path="res://addons/godot-xr-tools/objects/snap_zone.gd" id="3_3xuvi"]
 [ext_resource type="Texture2D" uid="uid://cexxfyw03hr81" path="res://textures/1.png" id="4_1f5le"]
 [ext_resource type="PackedScene" uid="uid://mpapt5mkbuao" path="res://prefabs/slide_off_dome.tscn" id="5_mep2a"]
-[ext_resource type="PackedScene" uid="uid://cvucwxibtol5f" path="res://stations/StationMovement.tscn" id="6_8ou8n"]
-
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_8ou8n"]
-properties/0/path = NodePath("RawBurgerDispenser:position")
-properties/0/spawn = false
-properties/0/replication_mode = 1
-properties/1/path = NodePath("RawBurgerDispenser:rotation")
-properties/1/spawn = false
-properties/1/replication_mode = 1
-properties/2/path = NodePath("RawBurgerDispenser:visible")
-properties/2/spawn = false
-properties/2/replication_mode = 1
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_xmbo2"]
 radius = 0.3
@@ -28,28 +16,25 @@ radius = 0.3
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_di04w"]
 albedo_texture = ExtResource("4_1f5le")
 
-[node name="RawBurgerDispenser" type="Node3D" unique_id=383615587]
+[node name="RawBurgerDispenser" unique_id=707500902 instance=ExtResource("1_station")]
 
-[node name="StationMovement" parent="." unique_id=946873975 node_paths=PackedStringArray("station") instance=ExtResource("6_8ou8n")]
+[node name="StationMovement" parent="." index="0" unique_id=946873975 node_paths=PackedStringArray("station")]
 station = NodePath("../RawBurgerDispenser")
 
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1886082284]
-replication_config = SubResource("SceneReplicationConfig_8ou8n")
-
-[node name="RawBurgerDispenser" type="StaticBody3D" parent="." unique_id=235630131 groups=["station"]]
-script = ExtResource("1_gkb3v")
-item_scene = ExtResource("2_mep2a")
-
-[node name="XRToolsSnapZone" type="Area3D" parent="RawBurgerDispenser" unique_id=1523586273 groups=["station_zone"]]
+[node name="SnapZone" parent="." index="5" unique_id=1315859105]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00070536137, 1.0645258, -0.002165556)
 collision_layer = 65536
 collision_mask = 65536
-script = ExtResource("3_3xuvi")
 snap_mode = 1
-metadata/_custom_type_script = "uid://cquqe4f1m1sw6"
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="RawBurgerDispenser/XRToolsSnapZone" unique_id=2105824734]
+[node name="CollisionShape3D" parent="SnapZone" index="0"]
 shape = SubResource("SphereShape3D_xmbo2")
+
+[node name="RawBurgerDispenser" type="StaticBody3D" parent="." index="6" unique_id=235630131 node_paths=PackedStringArray("snap_zone", "synchronizer") groups=["station"]]
+script = ExtResource("1_gkb3v")
+item_scene = ExtResource("2_mep2a")
+snap_zone = NodePath("../SnapZone")
+synchronizer = NodePath("../MultiplayerSynchronizer")
 
 [node name="SlideOffDome" parent="RawBurgerDispenser" unique_id=1427609426 instance=ExtResource("5_mep2a")]
 

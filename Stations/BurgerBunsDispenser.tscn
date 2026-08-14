@@ -1,21 +1,9 @@
 [gd_scene format=3 uid="uid://c6rift56ql3f8"]
 
+[ext_resource type="PackedScene" uid="uid://cbs8jiqe8rcmn" path="res://abstract/station.tscn" id="1_station"]
 [ext_resource type="Script" uid="uid://0y6wnjcsum6" path="res://stations/item_dispenser.gd" id="1_myl3s"]
-[ext_resource type="Script" uid="uid://cquqe4f1m1sw6" path="res://addons/godot-xr-tools/objects/snap_zone.gd" id="1_p30r1"]
-[ext_resource type="PackedScene" uid="uid://cvucwxibtol5f" path="res://stations/StationMovement.tscn" id="1_u2p81"]
 [ext_resource type="PackedScene" uid="uid://c0lknik4noobs" path="res://items/BurgerBuns.tscn" id="2_1q74o"]
 [ext_resource type="PackedScene" uid="uid://mpapt5mkbuao" path="res://prefabs/slide_off_dome.tscn" id="4_rf1b2"]
-
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_u2p81"]
-properties/0/path = NodePath(".:position")
-properties/0/spawn = false
-properties/0/replication_mode = 1
-properties/1/path = NodePath(".:rotation")
-properties/1/spawn = false
-properties/1/replication_mode = 1
-properties/2/path = NodePath(".:visible")
-properties/2/spawn = false
-properties/2/replication_mode = 1
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_xmbo2"]
 radius = 0.3
@@ -27,29 +15,25 @@ radius = 0.3
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vlqg6"]
 albedo_color = Color(0.6784191, 0.54546416, 0.016760282, 1)
 
-[node name="BurgerBunsDispenser" type="Node3D" unique_id=1410160280]
+[node name="BurgerBunsDispenser" unique_id=707500902 instance=ExtResource("1_station")]
 
-[node name="StationMovement" parent="." unique_id=946873975 node_paths=PackedStringArray("station") instance=ExtResource("1_u2p81")]
+[node name="StationMovement" parent="." index="0" unique_id=946873975 node_paths=PackedStringArray("station")]
 station = NodePath("../BurgerBunsDispenser")
 
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=904562637]
-root_path = NodePath("../BurgerBunsDispenser")
-replication_config = SubResource("SceneReplicationConfig_u2p81")
-
-[node name="BurgerBunsDispenser" type="StaticBody3D" parent="." unique_id=1720683779 groups=["station"]]
-script = ExtResource("1_myl3s")
-item_scene = ExtResource("2_1q74o")
-
-[node name="XRToolsSnapZone" type="Area3D" parent="BurgerBunsDispenser" unique_id=805334513 groups=["station_zone"]]
+[node name="SnapZone" parent="." index="5" unique_id=1315859105]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00070536137, 1.0162505, -0.002165556)
 collision_layer = 65536
 collision_mask = 65536
-script = ExtResource("1_p30r1")
 snap_mode = 1
-metadata/_custom_type_script = "uid://cquqe4f1m1sw6"
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BurgerBunsDispenser/XRToolsSnapZone" unique_id=1104626493]
+[node name="CollisionShape3D" parent="SnapZone" index="0"]
 shape = SubResource("SphereShape3D_xmbo2")
+
+[node name="BurgerBunsDispenser" type="StaticBody3D" parent="." index="6" unique_id=1720683779 node_paths=PackedStringArray("snap_zone", "synchronizer") groups=["station"]]
+script = ExtResource("1_myl3s")
+item_scene = ExtResource("2_1q74o")
+snap_zone = NodePath("../SnapZone")
+synchronizer = NodePath("../MultiplayerSynchronizer")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="BurgerBunsDispenser" unique_id=1470079357]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)

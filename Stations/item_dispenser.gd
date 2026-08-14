@@ -1,25 +1,26 @@
-extends StaticBody3D
+class_name ItemDispenser
+extends Station
 
-@export var item_scene : PackedScene
-@onready var snap_zone: XRToolsSnapZone = $XRToolsSnapZone
+@export var item_scene: PackedScene
+
 
 func _ready() -> void:
+	super.ready()
+	SweetLogger.debug("ItemDispenser {0} _ready", [name])
 	if not item_scene:
 		SweetLogger.warning("{0} missing item_scene reference", [name])
-	if not snap_zone:
-		SweetLogger.warning("{0} missing snap_zone reference", [name])
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
+	super.process(delta)
 	if not NetworkManager.owns_world():
 		return
-	#if snap_zone.picked_up_object: # Player picked up this station
-		#if visible:
-			#snap_zone.picked_up_object.enabled = true
-		#else:
-			#snap_zone.picked_up_object.enabled = false
-		#return
-		#
+	if not enabled:
+		if snap_zone.picked_up_object:
+			var item := snap_zone.picked_up_object
+			snap_zone.drop_object()
+			NetworkManager.despawn_item(item)
+		return
 	if not snap_zone.picked_up_object:
 		SweetLogger.debug("Missing item, spawning new item")
 		var new_item = NetworkManager.spawn_item(item_scene.resource_path, snap_zone.global_transform)
