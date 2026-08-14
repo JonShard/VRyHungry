@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://cwnwo4i28upap" path="res://stations/raw_burger_dispenser.tscn" id="5_0342k"]
 [ext_resource type="PackedScene" uid="uid://ck5tuftqmyiue" path="res://stations/plate_dispenser.tscn" id="6_b5gb1"]
 [ext_resource type="PackedScene" uid="uid://caf0xanmxbshy" path="res://stations/table.tscn" id="7_0342k"]
+[ext_resource type="PackedScene" uid="uid://cnjwtnhwh0i8q" path="res://stations/dirt_station.tscn" id="8_b5gb1"]
 
 [node name="SmallLine" type="Node3D" unique_id=1844128818]
 
@@ -29,3 +30,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8000001, 0, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 0, 1.2)
 
 [node name="Hob" parent="." unique_id=707500902 instance=ExtResource("1_1wuvq")]
+
+[node name="DirtStation" parent="." unique_id=784427347 instance=ExtResource("8_b5gb1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8000001, 0, 0)

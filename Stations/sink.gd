@@ -1,94 +1,71 @@
-extends StaticBody3D
+class_name Sink
+extends WorkStation
 
 const plate_wash_time: float = 3.0
 @export_range(0.0, 10.0, 0.1) var wash_speed: float = 1.0
 
-@onready var snap_zone: XRToolsSnapZone = $XRToolsSnapZone
-@onready var progress_bar: ProgressBar3D = $ProgressBar3D
-
-## Washing state. Both are replicated (see sink.tscn's Sync node) and refresh the
-## display when they change. Only the world owner runs this station's _process
-## and snap zone, so without this a client never updates its bar — it stayed
-## frozen on screen long after the plate came out clean.
-@export var time_washed: float = 0.0: set = _set_time_washed
-@export var is_washing: bool = false: set = _set_is_washing
-@export var plate: PlateController = null
+var plate: PlateController = null
 
 
-func _set_time_washed(value: float) -> void:
-	if is_equal_approx(time_washed, value):
+func _ready() -> void:
+	super.ready()
+	SweetLogger.debug("Sink {0} _ready", [name])
+
+
+func _start_washing(work: float) -> void:
+	if not enabled:
 		return
-	time_washed = value
-	_refresh_progress_bar()
+	result_id = "clean"
+	max_work = work
+	SweetLogger.info("Start washing - max_work: {0}", [max_work])
 
-
-func _set_is_washing(value: bool) -> void:
-	if is_washing == value:
-		return
-	is_washing = value
-	_refresh_progress_bar()
-	_set_effects_playing(is_washing)
-
-
-# Water, bubbles and the animation follow the washing state on every peer, not
-# just the one running the logic.
-func _set_effects_playing(playing: bool) -> void:
+func _set_effects_playing(is_playing: bool) -> void:
+	SweetLogger.debug("Set Sink effects: {0}", [is_playing])
 	var player := get_node_or_null("AnimationPlayer") as AnimationPlayer
 	if player:
-		player.play("working" if playing else "RESET")
+		player.play("working" if is_playing else "RESET")
 	for effect in ["water", "bubbles", "GPUParticles3D"]:
 		var node := get_node_or_null(effect) as Node3D
 		if node:
-			node.visible = playing
-
-func _ready() -> void:
-	if not progress_bar or progress_bar is not ProgressBar3D:
-		SweetLogger.warning("{0} missing progress_bar reference", [name])
-
-	snap_zone.has_picked_up.connect(_on_object_picked_up)
-	snap_zone.has_dropped.connect(_on_object_dropped)
-	progress_bar.override_fill_color(Color.DODGER_BLUE)
-	_refresh_progress_bar()
- 
-
-func _refresh_progress_bar() -> void:
-	if not progress_bar:
-		return
-	progress_bar.set_progress(clampf(float(time_washed) / plate_wash_time, 0.0, 1.0))
-	progress_bar.set_bar_visible(is_washing)
-
-
-func _on_object_picked_up(_item) -> void:
-	SweetLogger.debug("Object picked up: {0}", [_item])
-	plate = _item.get_node_or_null("PlateController") as PlateController
-	if plate:
-		# The setter starts the effects and shows the bar, here and on clients.
-		is_washing = plate.is_dirty
-
-
-func _on_object_dropped(_item) -> void:
-	SweetLogger.debug("Object drop")
-	_reset_sink()
-
-
-func _reset_sink():
-	time_washed = 0
-	is_washing = false
-	plate = null
-
-func complete_washing():
-		if not plate:
-			return
-		plate.is_dirty = false
-		_reset_sink()
-		SweetLogger.debug("Washing complete")
+			node.visible = is_playing
 
 
 func _process(delta: float) -> void:
-	if is_washing:
-		time_washed += wash_speed * delta
-		_refresh_progress_bar()
-		SweetLogger.debug("Washing plate: {0}", [time_washed])
+	super.process(delta)
+	if not enabled:
+		return
+	if result_id:
+		add_work(wash_speed * delta)
 
-	if time_washed >= plate_wash_time:
-		complete_washing()
+
+# Called from Station base class
+func refresh_display() -> void:
+	super.refresh_display()
+	progress_bar.override_fill_color(Color.DODGER_BLUE)
+
+
+# Called from Station base class
+func on_object_picked_up(item: Node3D) -> void:
+	plate = item.get_node_or_null("PlateController") as PlateController
+	if not plate or not plate.is_dirty:
+		return
+	_set_effects_playing(true)
+	_start_washing(plate_wash_time)
+
+
+# Called from Station base class
+func on_object_dropped(_item: Node3D) -> void:
+	SweetLogger.debug("->[]")
+	_set_effects_playing(false)
+	plate = null
+	reset()
+
+
+# Called from Station base class
+func on_work_complete():
+	SweetLogger.debug("->[]")
+	_set_effects_playing(false)
+	plate.is_dirty = false
+	reset()
+
+

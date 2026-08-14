@@ -75,15 +75,15 @@ func add_work(work: float) -> void:
 	if work <= 0:
 		SweetLogger.warning("Work to add must be positive, work: {0}", [work])
 		return
-	if not NetworkManager.owns_world:
-		server_add_work(work)
+	if not NetworkManager.owns_world():
+		server_add_work.rpc_id(1, work)
 		return
 	if not result_id or result_id.is_empty():
 		SweetLogger.warning("Work can not be added when result_id is empty")
 		return
 	current_work += work
 	if current_work >= max_work:
-		_everyone_on_work_complete()
+		_everyone_on_work_complete.rpc()
 
 
 @rpc("any_peer", "call_remote", "reliable")
