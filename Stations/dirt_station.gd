@@ -1,12 +1,14 @@
-extends StaticBody3D
+class_name DirtStation
+extends Station
 
-@onready var snap_zone: XRToolsSnapZone = $XRToolsSnapZone
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	snap_zone.has_picked_up.connect(_makeDirty)
+	super.ready()
+	SweetLogger.debug("DirtStation {0} _ready", [name])
 
-func _makeDirty(item) -> void:
+
+# Called from Station base class
+func on_object_picked_up(item: Node3D) -> void:
 	if not NetworkManager.owns_world():
 		return
 	var plate: PlateController = item.get_node_or_null("PlateController") as PlateController
@@ -15,5 +17,3 @@ func _makeDirty(item) -> void:
 		return
 	if not plate.is_dirty:
 		plate.is_dirty = true
-	
- 

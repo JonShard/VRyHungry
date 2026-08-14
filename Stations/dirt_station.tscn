@@ -1,19 +1,7 @@
 [gd_scene format=3 uid="uid://cnjwtnhwh0i8q"]
 
+[ext_resource type="PackedScene" uid="uid://cbs8jiqe8rcmn" path="res://abstract/station.tscn" id="1_station"]
 [ext_resource type="Script" uid="uid://q7tpwmrbmu1m" path="res://stations/dirt_station.gd" id="1_hc1d4"]
-[ext_resource type="PackedScene" uid="uid://cvucwxibtol5f" path="res://stations/StationMovement.tscn" id="1_ucg2q"]
-[ext_resource type="Script" uid="uid://cquqe4f1m1sw6" path="res://addons/godot-xr-tools/objects/snap_zone.gd" id="2_v0ytd"]
-
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_ku4h3"]
-properties/0/path = NodePath(".:position")
-properties/0/spawn = false
-properties/0/replication_mode = 1
-properties/1/path = NodePath(".:rotation")
-properties/1/spawn = false
-properties/1/replication_mode = 1
-properties/2/path = NodePath(".:visible")
-properties/2/spawn = false
-properties/2/replication_mode = 1
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_24d3s"]
 size = Vector3(0.5, 1, 0.5)
@@ -28,17 +16,25 @@ size = Vector3(0.5, 1, 0.5)
 [sub_resource type="BoxShape3D" id="BoxShape3D_mep2a"]
 size = Vector3(0.81640625, 0.5635376, 0.79351807)
 
-[node name="DirtStation" type="Node3D" unique_id=784427347]
+[node name="DirtStation" unique_id=707500902 instance=ExtResource("1_station")]
 
-[node name="StationMovement" parent="." unique_id=946873975 node_paths=PackedStringArray("station") instance=ExtResource("1_ucg2q")]
+[node name="StationMovement" parent="." index="0" unique_id=946873975 node_paths=PackedStringArray("station")]
 station = NodePath("../DirtStation")
 
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1485614825]
-root_path = NodePath("../DirtStation")
-replication_config = SubResource("SceneReplicationConfig_ku4h3")
+[node name="SnapZone" parent="." index="5" unique_id=1315859105]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0313971, 0)
+collision_layer = 65536
+collision_mask = 65540
+snap_mode = 1
 
-[node name="DirtStation" type="StaticBody3D" parent="." unique_id=160842153 groups=["station"]]
+[node name="CollisionShape3D" parent="SnapZone" index="0"]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.008666992, -0.11009073, -0.009353638)
+shape = SubResource("BoxShape3D_mep2a")
+
+[node name="DirtStation" type="StaticBody3D" parent="." index="6" unique_id=160842153 node_paths=PackedStringArray("snap_zone", "synchronizer") groups=["station"]]
 script = ExtResource("1_hc1d4")
+snap_zone = NodePath("../SnapZone")
+synchronizer = NodePath("../MultiplayerSynchronizer")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="DirtStation" unique_id=1400366312]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
@@ -52,14 +48,3 @@ mesh = SubResource("BoxMesh_ay2w6")
 transform = Transform3D(0.9999992, 0, 0, 0, 0.99999946, 0, 0, 0, 0.9999992, 0.002797456, 0.6309581, -0.2812457)
 text = "Dirt"
 
-[node name="XRToolsSnapZone" type="Area3D" parent="DirtStation" unique_id=333161027 groups=["station_zone"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0313971, 0)
-collision_layer = 65536
-collision_mask = 65540
-script = ExtResource("2_v0ytd")
-snap_mode = 1
-metadata/_custom_type_script = "uid://cquqe4f1m1sw6"
-
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="DirtStation/XRToolsSnapZone" unique_id=1398712192]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.008666992, -0.11009073, -0.009353638)
-shape = SubResource("BoxShape3D_mep2a")
