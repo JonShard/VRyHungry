@@ -10,6 +10,19 @@ func _on_game_state_changed(new_state: GameManager.GameState) -> void:
 	SweetLogger.info("Game state changed to {0}", [GameManager.GameState.keys()[new_state]], "build_mode_controller.gd", "_on_game_state_changed")
 	if new_state == GameManager.GameState.BUILDING:
 		despawn_unheld_pickables()
+	if not NetworkManager.owns_world():
+		return
+	if new_state == GameManager.GameState.BUILDING:
+		_set_stations_enabled(false)
+	elif new_state == GameManager.GameState.RUNNING:
+		_set_stations_enabled(true)
+
+
+# Only Station-derived stations expose `enabled` (Table runs its own FSM).
+func _set_stations_enabled(value: bool) -> void:
+	for station in get_tree().get_nodes_in_group("station"):
+		if station is Station:
+			station.enabled = value
 
 
 # Despawn all food_items unless it's in a "persistent_inventory" snap_zone
@@ -26,6 +39,7 @@ func despawn_unheld_pickables():
 			continue
 		if not held_by.is_in_group("persistent_inventory"):
 			SweetLogger.debug("Despawn unheld pickable held_by: {0}, pickable: {1}", [held_by, pickable])
+			pickable.drop()
 			NetworkManager.despawn_item(pickable)
 			
 
