@@ -25,15 +25,15 @@ static func find_first_child_of_type(node: Node, type: Variant) -> Node:
 # Returns true if decendant is a decendant node of root, false otherwise. Returns false if either node is null.
 static func is_node_decendant_of(decendant: Node, root: Node) -> bool:
 	if not decendant or not root:
-		SweetLogger.debug("is_node_decendant_of: decendant or root is null")
+		SweetLogger.debug("Decendant or root is null")
 		return false
 	var current: Node = decendant
 	while current:
 		if current == root:
-			SweetLogger.debug("is_node_decendant_of: decendant {0} is a descendant of root {1}", [decendant.name, root.name])
+			SweetLogger.debug("Decendant {0} is a descendant of root {1}", [decendant.name, root.name])
 			return true
 		current = current.get_parent()
-	SweetLogger.debug("is_node_decendant_of: decendant {0} is NOT a descendant of root {1}", [decendant.name, root.name])
+	SweetLogger.debug("Decendant {0} is NOT a descendant of root {1}", [decendant.name, root.name])
 	return false
 	
 

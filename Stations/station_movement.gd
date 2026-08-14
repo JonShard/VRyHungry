@@ -21,7 +21,7 @@ const GHOST_COLOR_INVALID: Color = Color(1, 0, 0, 0.35)
 
 
 func set_move_handle_enabled(enabled: bool) -> void:
-	SweetLogger.debug("set_move_handle_enabled: {0}", [enabled])
+	SweetLogger.debug("Set move handle enabled: {0}", [enabled])
 	move_handle.visible = enabled
 	move_handle.enabled = enabled
 	if enabled:
@@ -32,18 +32,18 @@ func _on_game_state_changed(new_state: GameManager.GameState) -> void:
 	set_move_handle_enabled(new_state == GameManager.GameState.BUILDING)
 
 func _on_station_bought(_instance: Node3D):
-	SweetLogger.info("_on_station_bought")
+	SweetLogger.debug("->[]")
 	if GameManager.game_state == GameManager.GameState.BUILDING:
 		set_move_handle_enabled(true)
 		
 func _ready() -> void:
 	SweetLogger.debug("->[]")
 	if not station:
-		push_error("StationMovement is missing referece to station")
+		SweetLogger.warning("{0} missing station reference", [name])
 	if not move_handle:
-		push_error("StationMovement is missing reference to move_handle")
+		SweetLogger.warning("{0} missing move_handle reference", [name])
 	if not move_ghost:
-		push_error("StationMovement is missing reference to move_ghost")
+		SweetLogger.warning("{0} missing move_ghost reference", [name])
 
 	move_handle_rigid = move_handle as RigidBody3D
 	original_collision_layer = station.collision_layer
@@ -107,7 +107,7 @@ func _apply_visibility_state(ghost_visible: bool, station_visible: bool) -> void
 func _handle_pickup(_by: Node) -> void:
 	SweetLogger.debug("->[]")
 	if move_handle.get_picked_up_by() and move_handle.get_picked_up_by() is XRToolsSnapZone:
-		SweetLogger.info("handle pickup by snap zone, dropping and resetting position")
+		SweetLogger.info("Handle pickup by snap zone, dropping and resetting position")
 		move_handle.drop()
 		move_handle.global_position = station.global_position + Vector3(0, original_handle_y_pos, 0)
 		move_handle.rotation = station.rotation
@@ -121,7 +121,7 @@ func _handle_pickup(_by: Node) -> void:
 
 
 func _handle_drop(_by: Node) -> void:
-	SweetLogger.info("handle drop")
+	SweetLogger.info("Handle drop")
 	is_moving = false
 	_apply_visibility_state(false, true)
 	station.collision_layer = original_collision_layer
@@ -134,11 +134,11 @@ func _handle_drop(_by: Node) -> void:
 		if is_valid:
 			station.global_transform = move_ghost.global_transform
 			move_handle.global_transform = move_ghost.global_transform.translated(Vector3(0, original_handle_y_pos, 0))
-			SweetLogger.debug("handle drop (local apply), station authority: {0} move_handle authority: {1}", [station.get_multiplayer_authority(), move_handle.get_multiplayer_authority()])
+			SweetLogger.debug("Handle drop (local apply), station authority: {0} move_handle authority: {1}", [station.get_multiplayer_authority(), move_handle.get_multiplayer_authority()])
 		else:
 			station.global_transform = original_station_transform
 			move_handle.global_transform = original_station_transform.translated(Vector3(0, original_handle_y_pos, 0))
-			SweetLogger.debug("handle drop (local reject), restoring original position", [])
+			SweetLogger.debug("Handle drop (local reject), restoring original position")
 
 
 func _process(_delta: float) -> void:
@@ -198,7 +198,7 @@ func server_handle_drop(new_transform: Transform3D, client_thinks_valid: bool):
 		if not _was_last_pos_valid: # Edge case
 			server_update_visibility.rpc(false, true)
 			SweetLogger.warning("Can not not reset visibility to normal when the last pos was invalid")
-		SweetLogger.debug("transform rejected (invalid)")
+		SweetLogger.debug("Transform rejected (invalid)")
 		_was_last_pos_valid = false
 		return
 
@@ -208,7 +208,7 @@ func server_handle_drop(new_transform: Transform3D, client_thinks_valid: bool):
 	server_update_visibility.rpc(false, true)
 	_was_last_pos_valid = true
 
-	SweetLogger.debug("transform applied")
+	SweetLogger.debug("Transform applied")
 
 
 @rpc("any_peer", "call_local", "reliable") # Server updates clients

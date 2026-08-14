@@ -43,7 +43,7 @@ func _set_effects_playing(playing: bool) -> void:
 
 func _ready() -> void:
 	if not progress_bar or progress_bar is not ProgressBar3D:
-		push_error("Sink missing reference to progressbar, or wrong type:", progress_bar)
+		SweetLogger.warning("{0} missing progress_bar reference", [name])
 
 	snap_zone.has_picked_up.connect(_on_object_picked_up)
 	snap_zone.has_dropped.connect(_on_object_dropped)
@@ -59,7 +59,7 @@ func _refresh_progress_bar() -> void:
 
 
 func _on_object_picked_up(_item) -> void:
-	SweetLogger.debug("object picked up: {0}", [_item])
+	SweetLogger.debug("Object picked up: {0}", [_item])
 	plate = _item.get_node_or_null("PlateController") as PlateController
 	if plate:
 		# The setter starts the effects and shows the bar, here and on clients.
@@ -67,7 +67,7 @@ func _on_object_picked_up(_item) -> void:
 
 
 func _on_object_dropped(_item) -> void:
-	SweetLogger.debug("object drop")
+	SweetLogger.debug("Object drop")
 	_reset_sink()
 
 
@@ -81,14 +81,14 @@ func complete_washing():
 			return
 		plate.is_dirty = false
 		_reset_sink()
-		SweetLogger.debug("washing complete!")
+		SweetLogger.debug("Washing complete")
 
 
 func _process(delta: float) -> void:
 	if is_washing:
 		time_washed += wash_speed * delta
 		_refresh_progress_bar()
-		SweetLogger.debug("washing plate: {0}", [time_washed])
+		SweetLogger.debug("Washing plate: {0}", [time_washed])
 
 	if time_washed >= plate_wash_time:
 		complete_washing()

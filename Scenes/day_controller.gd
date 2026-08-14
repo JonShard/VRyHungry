@@ -30,14 +30,14 @@ func _reset_values() -> void:
 
 
 func start_next_day() -> void:
-	SweetLogger.info("starting next day")
+	SweetLogger.info("Starting next day")
 	_reset_values()
 	GameManager.set_customers_per_day(GameManager.customers_per_day + GameManager.customers_count_increase_per_day)
 	GameManager.set_day_number(GameManager.day_number + 1)
 	
 	
 func finish_current_day() -> void:
-	SweetLogger.info("finishing current day")
+	SweetLogger.info("Finishing current day")
 	_reset_values()
 
 
@@ -50,9 +50,9 @@ func _process(delta: float) -> void:
 	#print("DayController: customers_at_this_time: ", customers_at_this_time)
 	if customers_spawned < customers_at_this_time:
 		customers_spawned += 1
-		SweetLogger.debug("spawning customer")
+		SweetLogger.debug("Spawning customer")
 		Signals.request_customer_spawn.emit()
 	# If day complete
 	if GameManager.customers_per_day == customers_served and customers_spawned == GameManager.customers_per_day:
-		SweetLogger.info("day complete")
+		SweetLogger.info("Day complete")
 		finish_current_day()

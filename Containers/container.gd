@@ -19,9 +19,9 @@ var contained_items: Array[FoodItem] # Expose nice list of others to read
 func _ready() -> void:
 	area_3d.body_entered.connect(_on_body_entered)
 	if not area_3d:
-		push_error("Area3D node not found in container.gd")
+		SweetLogger.warning("{0} missing area_3d reference", [name])
 	if not xr_pickable:
-		push_error("XRPickable node not found in container.gd")
+		SweetLogger.warning("{0} missing xr_pickable reference", [name])
 
 
 # Absorbing items is a server decision (the container's holder is server-
@@ -29,13 +29,13 @@ func _ready() -> void:
 func _on_body_entered(body: Node3D) -> void:
 	if not NetworkManager.owns_world():
 		return
-	SweetLogger.debug("enabled: {0}", [enabled])
+	SweetLogger.debug("Enabled: {0}", [enabled])
 	if not enabled:
-		SweetLogger.debug("disabled in _on_body_entered body")
+		SweetLogger.debug("Disabled in _on_body_entered body")
 		return
 	if not body.is_in_group(target_group):
 		return
-	SweetLogger.debug("body: {0}", [body])
+	SweetLogger.debug("Body: {0}", [body])
 
 
 	# If one of us is in a station
@@ -46,14 +46,14 @@ func _on_body_entered(body: Node3D) -> void:
 
 		# If enough space, add item
 		var food_item = body.get_node("FoodItem")
-		SweetLogger.debug("in station found {0} of type {1}: {2}", [target_group, FoodItem.Type.keys()[food_item.type], body.name], "container.gd", "_on_body_entered")
+		SweetLogger.debug("In station found {0} of type {1}: {2}", [target_group, FoodItem.Type.keys()[food_item.type], body.name], "container.gd", "_on_body_entered")
 		var meal_count := contained_items.filter(func(f): return f.type == FoodItem.Type.MEAL).size()
 		var side_count := contained_items.filter(func(f): return f.type == FoodItem.Type.SIDE).size()
 		if food_item.type == FoodItem.Type.MEAL and meal_count < meal_positions.size():
-			SweetLogger.debug("adding meal")
+			SweetLogger.debug("Adding meal")
 			_add_item(body)
 		if food_item.type == FoodItem.Type.SIDE and side_count < side_positions.size():
-			SweetLogger.debug("adding side")
+			SweetLogger.debug("Adding side")
 			_add_item(body)
 
 
@@ -93,7 +93,7 @@ func _add_item(item: Node3D) -> void:
 	NetworkManager.despawn_item(item)
 	# In case the container is on a table that needs to register this addition,
 	# ask all table in scene to absorb any new items.
-	SweetLogger.debug("group call absorb_items()")
+	SweetLogger.debug("Group call absorb_items()")
 	get_tree().call_group("table", "absorb_items") 
 
 

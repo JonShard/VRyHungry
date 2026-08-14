@@ -10,16 +10,16 @@ var _food_item: FoodItem
 
 
 func _ready() -> void:
-	SweetLogger.debug("_ready(): {0}", [_pickable.name])
+	SweetLogger.debug("{0} ready", [_pickable.name])
 	_food_item = get_parent().get_node_or_null("FoodItem") as FoodItem
 	if not _food_item:
-		push_error("CombinableItem is missing FoodItem reference. must be a sibling of a FoodItem on ", get_parent().name, ".")
+		SweetLogger.warning("{0} missing FoodItem reference, must be a sibling of a FoodItem", [get_parent().name])
 
 	if not _pickable:
-		push_error("CombineZone must be a grand child of an XRToolsPickable.")
+		SweetLogger.error("{0} must be a grandchild of an XRToolsPickable", [get_parent().name])
 		return
 	if not _food_item:
-		push_error("CombineZone requires a FoodItem sibling on ", _pickable.name, ".")
+		SweetLogger.warning("{0} requires a FoodItem sibling", [_pickable.name])
 		return
 
 	# Detect items whether held (layer 17 "Held Objects") or loose
@@ -52,12 +52,12 @@ func _on_body_entered(body: Node3D) -> void:
 	if not NetworkManager.owns_world():
 		return
 	if _combining or body == _pickable:
-		SweetLogger.debug("other is our own pickable")
+		SweetLogger.debug("Other is our own pickable")
 		return
 
 	var other := Helper.find_food_item(body)
 	if not other:
-		SweetLogger.debug("other is not a foodItem")
+		SweetLogger.debug("Other is not a FoodItem")
 		return
 
 	var result: PackedScene = RecipeManager.get_combination_result(_food_item.id, other.id)
@@ -69,7 +69,7 @@ func _on_body_entered(body: Node3D) -> void:
 
 # Instantiate the result of combination and free the two ingredient items
 func _combine(other_body: Node3D, result: PackedScene) -> void:
-	SweetLogger.debug("combining {0} + {1} into {2}", [_food_item.id, Helper.find_food_item(other_body).id, result.resource_path])
+	SweetLogger.debug("Combining {0} + {1} into {2}", [_food_item.id, Helper.find_food_item(other_body).id, result.resource_path])
 
 	# Get Snapzone
 	var snap_zone := _pickable.get_picked_up_by()

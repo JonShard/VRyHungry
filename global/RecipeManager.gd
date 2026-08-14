@@ -16,7 +16,7 @@ static func load_recipes() -> void:
 
 	var recipe_path := "res://recipes.yaml"
 	if not FileAccess.file_exists(recipe_path):
-		push_error("RecipeManager: recipes.yaml was not found at %s" % recipe_path)
+		SweetLogger.error("Recipes.yaml was not found at {0}", [recipe_path])
 		return
 
 	var yaml_available := ClassDB.class_exists("YAML")
@@ -25,7 +25,7 @@ static func load_recipes() -> void:
 		if result != null and not result.has_error():
 			var data = result.get_data()
 			if typeof(data) != TYPE_DICTIONARY:
-				push_warning("RecipeManager: YAML addon parsed recipes.yaml but returned an unsupported structure")
+				SweetLogger.warning("YAML addon parsed recipes.yaml but returned an unsupported structure")
 			
 			_recipes = data
 			_build_scene_paths()
@@ -98,12 +98,12 @@ static func get_item_scene(item_id: StringName) -> PackedScene:
 	load_recipes()
 	var scene_path = _scene_paths.get(str(item_id), "")
 	if typeof(scene_path) != TYPE_STRING or scene_path.is_empty():
-		push_error("RecipeManager: no scene mapping found for item id '%s'" % item_id)
+		SweetLogger.error("No scene mapping found for item id '{0}'", [item_id])
 		return null
 
 	var scene = ResourceLoader.load(scene_path)
 	if not scene:
-		push_error("RecipeManager: failed to load scene '%s' for item '%s'" % [scene_path, item_id])
+		SweetLogger.error("Failed to load scene '{0}' for item '{1}'", [scene_path, item_id])
 		return null
 	return scene as PackedScene
 
@@ -111,14 +111,14 @@ static func get_item_scene(item_id: StringName) -> PackedScene:
 static func print_all_recipes() -> void:
 	load_recipes()
 	if not _loaded:
-		SweetLogger.warning("could not load recipes.yaml; no recipes printed.")
+		SweetLogger.warning("Could not load recipes.yaml; no recipes printed")
 		return
 
 	if _combining_map.is_empty():
-		SweetLogger.warning("no combining recipes found")
+		SweetLogger.warning("No combining recipes found")
 		return
 
-	SweetLogger.info("#### RecipeManager: Loaded recipes ####")
+	SweetLogger.info("#### Loaded recipes ####")
 	_print_combining_recipes()
 	SweetLogger.info("")
 	_print_cooking_recipes()
@@ -135,7 +135,7 @@ static func _print_combining_recipes() -> void:
 		var key_str = str(pair_key)
 		var separator_index = key_str.find("|")
 		if separator_index == -1:
-			SweetLogger.warning("invalid combining map key '{0}'", [key_str])
+			SweetLogger.warning("Invalid combining map key '{0}'", [key_str])
 			continue
 
 		var first = key_str.substr(0, separator_index)
@@ -198,7 +198,7 @@ static func _build_combining_map() -> void:
 	for result_id in combining.keys():
 		var recipe_entries = _get_recipe_entries(combining[result_id])
 		if recipe_entries.is_empty():
-			push_error("RecipeManager: combining recipe '%s' must contain at least one valid recipe" % result_id)
+			SweetLogger.error("Combining recipe '{0}' must contain at least one valid recipe", [result_id])
 			continue
 		for recipe in recipe_entries:
 			var first = StringName(recipe[0])
@@ -251,24 +251,24 @@ static func _build_cooking_map() -> void:
 		if typeof(cook_val) == TYPE_ARRAY:
 			for entry in cook_val:
 				if typeof(entry) != TYPE_DICTIONARY:
-					push_error("RecipeManager: cooking recipe for '%s' contains a non-dictionary entry" % cooked_id)
+					SweetLogger.error("Cooking recipe for '{0}' contains a non-dictionary entry", [cooked_id])
 					continue
 				entries.append(entry)
 		elif typeof(cook_val) == TYPE_DICTIONARY:
 			entries.append(cook_val)
 		else:
-			push_error("RecipeManager: cooking recipe for '%s' must be a dictionary or array of dictionaries" % cooked_id)
+			SweetLogger.error("Cooking recipe for '{0}' must be a dictionary or array of dictionaries", [cooked_id])
 			continue
 
 		var parsed_entries: Array = []
 		for cook_def in entries:
 			var ingredient = cook_def.get("ingredient", "")
 			if typeof(ingredient) != TYPE_STRING or str(ingredient).is_empty():
-				push_error("RecipeManager: cooking recipe '%s' missing a valid 'ingredient' field" % cooked_id)
+				SweetLogger.error("Cooking recipe '{0}' missing a valid 'ingredient' field", [cooked_id])
 				continue
 			var time_val = cook_def.get("time", null)
 			if typeof(time_val) != TYPE_INT and typeof(time_val) != TYPE_FLOAT:
-				push_error("RecipeManager: cooking recipe '%s' missing a valid 'time' field" % cooked_id)
+				SweetLogger.error("Cooking recipe '{0}' missing a valid 'time' field", [cooked_id])
 				continue
 			parsed_entries.append({"ingredient": StringName(str(ingredient)), "time": float(time_val)})
 
@@ -289,15 +289,15 @@ static func _build_chopping_map() -> void:
 	for chopped_id in chopping.keys():
 		var chop_def = chopping[chopped_id]
 		if typeof(chop_def) != TYPE_DICTIONARY:
-			push_error("RecipeManager: chopping recipe for '%s' must be a dictionary" % chopped_id)
+			SweetLogger.error("Chopping recipe for '{0}' must be a dictionary", [chopped_id])
 			continue
 		var ingredient = chop_def.get("ingredient", "")
 		if typeof(ingredient) != TYPE_STRING or str(ingredient).is_empty():
-			push_error("RecipeManager: chopping recipe '%s' missing a valid 'ingredient' field" % chopped_id)
+			SweetLogger.error("Chopping recipe '{0}' missing a valid 'ingredient' field", [chopped_id])
 			continue
 		var work_val = chop_def.get("work", null)
 		if typeof(work_val) != TYPE_INT and typeof(work_val) != TYPE_FLOAT:
-			push_error("RecipeManager: chopping recipe '%s' missing a valid 'work' field" % chopped_id)
+			SweetLogger.error("Chopping recipe '{0}' missing a valid 'work' field", [chopped_id])
 			continue
 		# store chopped item -> { ingredient: StringName, work: float }
 		_chopping_map[StringName(chopped_id)] = {"ingredient": StringName(str(ingredient)), "work": float(work_val)}
@@ -316,15 +316,15 @@ static func _build_rolling_map() -> void:
 	for rolled_id in rolling.keys():
 		var roll_def = rolling[rolled_id]
 		if typeof(roll_def) != TYPE_DICTIONARY:
-			push_error("RecipeManager: rolling recipe for '%s' must be a dictionary" % rolled_id)
+			SweetLogger.error("Rolling recipe for '{0}' must be a dictionary", [rolled_id])
 			continue
 		var ingredient = roll_def.get("ingredient", "")
 		if typeof(ingredient) != TYPE_STRING or str(ingredient).is_empty():
-			push_error("RecipeManager: rolling recipe '%s' missing a valid 'ingredient' field" % rolled_id)
+			SweetLogger.error("Rolling recipe '{0}' missing a valid 'ingredient' field", [rolled_id])
 			continue
 		var work_val = roll_def.get("work", null)
 		if typeof(work_val) != TYPE_INT and typeof(work_val) != TYPE_FLOAT:
-			push_error("RecipeManager: rolling recipe '%s' missing a valid 'work' field" % rolled_id)
+			SweetLogger.error("Rolling recipe '{0}' missing a valid 'work' field", [rolled_id])
 			continue
 		# store rolled item -> { ingredient: StringName, work: float }
 		_rolling_map[StringName(rolled_id)] = {"ingredient": StringName(str(ingredient)), "work": float(work_val)}
@@ -343,13 +343,13 @@ static func _build_augmenting_map() -> void:
 	for target_id in augmenting.keys():
 		var augment_def = augmenting[target_id]
 		if typeof(augment_def) != TYPE_DICTIONARY:
-			push_error("RecipeManager: augmenting recipe for '%s' must be a dictionary" % target_id)
+			SweetLogger.error("Augmenting recipe for '{0}' must be a dictionary", [target_id])
 			continue
 		var map: Dictionary = {}
 		for attr_key in augment_def.keys():
 			var ingredient = augment_def[attr_key]
 			if typeof(ingredient) != TYPE_STRING or str(ingredient).is_empty():
-				push_error("RecipeManager: augmenting recipe '%s' has invalid ingredient for '%s'" % [target_id, attr_key])
+				SweetLogger.error("Augmenting recipe '{0}' has invalid ingredient for '{1}'", [target_id, attr_key])
 				continue
 			# store ingredient -> attribute_key (e.g. sliced_tomato -> has_tomato)
 			map[StringName(str(ingredient))] = StringName(str(attr_key))

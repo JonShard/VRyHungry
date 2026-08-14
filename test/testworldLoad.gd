@@ -3,8 +3,8 @@ extends Node
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	SweetLogger.debug("stations: {0}", [get_stations()])
-	SweetLogger.debug("items: {0}", [get_items()])
+	SweetLogger.debug("Stations: {0}", [get_stations()])
+	SweetLogger.debug("Items: {0}", [get_items()])
 
 
 

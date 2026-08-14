@@ -42,17 +42,17 @@ func _run() -> void:
 	_clear_previous_results(logs_dir)
 
 	print_rich("[b]Running the multiplayer test suite...[/b]")
-	SweetLogger.info("the editor will be unresponsive until it finishes (~2 minutes)")
+	SweetLogger.info("The editor will be unresponsive until it finishes (~2 minutes)")
 
 	var server_pid := _launch(exe, project_dir, ["--server"], SERVER_SCENE)
 	if server_pid <= 0:
-		push_error("Could not start the server instance")
+		SweetLogger.error("Could not start the server instance")
 		return
 	# Give the host time to come up and open its port before the client dials in.
 	OS.delay_msec(5000)
 	var client_pid := _launch(exe, project_dir, ["--join", "127.0.0.1"], CLIENT_SCENE)
 	if client_pid <= 0:
-		push_error("Could not start the client instance")
+		SweetLogger.error("Could not start the client instance")
 		OS.kill(server_pid)
 		return
 
@@ -61,7 +61,7 @@ func _run() -> void:
 		OS.delay_msec(500)
 		waited += 0.5
 	if OS.is_process_running(server_pid):
-		SweetLogger.warning("timed out after {0}s, stopping the instances", [TIMEOUT_SEC])
+		SweetLogger.warning("Timed out after {0}s, stopping the instances", [TIMEOUT_SEC])
 		OS.kill(server_pid)
 	if OS.is_process_running(client_pid):
 		OS.kill(client_pid)
@@ -105,7 +105,7 @@ func _clear_previous_results(logs_dir: String) -> void:
 func _print_report(logs_dir: String) -> void:
 	var path := logs_dir.path_join("mptest_report.txt")
 	if not FileAccess.file_exists(path):
-		push_error("No report at %s — the run did not finish. Check logs/mptest_server.log" % path)
+		SweetLogger.error("No report at {0}, the run did not finish, check logs/mptest_server.log", [path])
 		return
 	var text := FileAccess.get_file_as_string(path)
 	SweetLogger.info("")
@@ -119,7 +119,7 @@ func _print_report(logs_dir: String) -> void:
 			print_rich("[color=gray]%s[/color]" % line)
 		else:
 			SweetLogger.info("{0}", [line])
-	SweetLogger.info("report: {0}", [path])
+	SweetLogger.info("Report: {0}", [path])
 
 
 func _build_gif(project_dir: String, logs_dir: String) -> void:
@@ -129,9 +129,9 @@ func _build_gif(project_dir: String, logs_dir: String) -> void:
 		"-ExecutionPolicy", "Bypass", "-File", script,
 	], out, true)
 	for line in out:
-		print(line)
+		SweetLogger.debug("{0}", [line])
 	var gif := logs_dir.path_join("mptest_run.gif")
 	if code == 0 and FileAccess.file_exists(gif):
 		print_rich("[b]gif:[/b] %s" % gif)
 	else:
-		push_warning("GIF was not produced (is ffmpeg on PATH?). See the output above.")
+		SweetLogger.warning("GIF was not produced (is ffmpeg on PATH?), see the output above")

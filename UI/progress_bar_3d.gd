@@ -10,7 +10,7 @@ class_name ProgressBar3D
 
 func _ready() -> void:
 	if not progress_bar:
-		push_error("Progressbar3D missing reference to ProgressBar")
+		SweetLogger.warning("{0} missing progress_bar reference", [name])
 	if y_billboard:
 		$Sprite3D.billboard = BaseMaterial3D.BillboardMode.BILLBOARD_FIXED_Y
 

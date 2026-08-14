@@ -154,7 +154,7 @@ func _despawn_static_item(path: NodePath) -> void:
 func _spawn_item_from_data(data: Variant) -> Node:
 	var scene: PackedScene = load(data["scene"])
 	if not scene:
-		push_error("spawn_item: could not load scene %s" % str(data.get("scene")))
+		SweetLogger.error("Could not load scene {0}", [str(data.get("scene"))])
 		return null
 	var inst := scene.instantiate()
 	if inst is Node3D:
@@ -474,7 +474,7 @@ func _on_player_absent(peer_id: int) -> void:
 # --- Command-line driven test bootstrap -----------------------------------
 
 func _handle_cmdline() -> void:
-	SweetLogger.info("Networkmanager _handle_cmdline()")
+	SweetLogger.debug("->[]")
 	var args := OS.get_cmdline_args()
 	if args.has("--server"):
 		log_line("cmdline: --server")

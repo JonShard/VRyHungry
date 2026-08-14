@@ -33,7 +33,7 @@ var _grab_race_logged := false
 func _ready() -> void:
 	_pickable = get_parent() as XRToolsPickable
 	if not _pickable:
-		push_error("NetPickable must be a child of an XRToolsPickable")
+		SweetLogger.error("{0} must be a child of an XRToolsPickable", [name])
 		return
 	_original_freeze_mode = _pickable.freeze_mode
 	_original_enabled = _pickable.enabled

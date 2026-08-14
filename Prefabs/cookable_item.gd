@@ -6,4 +6,4 @@ extends Node
 
 func _ready() -> void:
 	if not turns_into:
-		push_error("Cooking Error: 'turns_into' PackedScene is missing on ", name, ". Please assign a scene in the Inspector.")
+		SweetLogger.warning("{0} missing turns_into reference", [name])

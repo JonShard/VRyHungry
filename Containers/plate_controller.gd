@@ -18,7 +18,7 @@ func get_food_items() -> Array[FoodItem]:
 
 func _ready() -> void:
 	if not dirty_node:
-		push_error("Plate is missing its dirty_node")
+		SweetLogger.warning("{0} missing dirty_node reference", [name])
 	dirty_node.visible = is_dirty
 
 

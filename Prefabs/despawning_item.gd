@@ -15,10 +15,10 @@ var _time_left: float = time_to_despawn
 
 func _ready() -> void:
 	if not _pickable:
-			push_error("DespawningItem must be a grand child of an XRToolsPickable.")
+			SweetLogger.error("{0} must be a grandchild of an XRToolsPickable", [name])
 			return
 	if not _rigid:
-			push_error("DespawningItem must be a grand child of an RigidBody3D.")
+			SweetLogger.error("{0} must be a grandchild of a RigidBody3D", [name])
 			return
 		
 
@@ -41,7 +41,7 @@ func _process(delta: float) -> void:
 	# Count down to zero and despawn
 	_time_left -= delta
 	if _time_left <= 0:
-		SweetLogger.debug("despawning {0}", [get_parent()])
+		SweetLogger.debug("Despawning {0}", [get_parent()])
 		NetworkManager.despawn_item(get_parent())
 		# Stop counting: despawn_item() only queues the free, so without this we
 		# keep re-reporting the same item every frame until it actually goes.

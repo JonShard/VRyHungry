@@ -7,7 +7,7 @@ func _ready() -> void:
 
 
 func _on_game_state_changed(new_state: GameManager.GameState) -> void:
-	SweetLogger.info("game_state_changed to {0}", [GameManager.GameState.keys()[new_state]], "build_mode_controller.gd", "_on_game_state_changed")
+	SweetLogger.info("Game state changed to {0}", [GameManager.GameState.keys()[new_state]], "build_mode_controller.gd", "_on_game_state_changed")
 	if new_state == GameManager.GameState.BUILDING:
 		despawn_unheld_pickables()
 
@@ -25,7 +25,7 @@ func despawn_unheld_pickables():
 			NetworkManager.despawn_item(pickable)
 			continue
 		if not held_by.is_in_group("persistent_inventory"):
-			SweetLogger.debug("despawn_unheld_pickables held_by: {0}, pickable: {1}", [held_by, pickable])
+			SweetLogger.debug("Despawn unheld pickable held_by: {0}, pickable: {1}", [held_by, pickable])
 			NetworkManager.despawn_item(pickable)
 			
 

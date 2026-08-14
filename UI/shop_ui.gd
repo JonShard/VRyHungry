@@ -22,7 +22,7 @@ func _ready() -> void:
 	Signals.station_bought.connect(_on_station_bought)
 	viewport = get_parent().get_parent() as XRToolsViewport2DIn3D
 	if not viewport:
-		push_error("Shop UI could not find XRToolsViewport2DIn3D grand parent")
+		SweetLogger.error("{0} could not find XRToolsViewport2DIn3D grandparent", [name])
 	enabled = false
 	
 	
@@ -32,9 +32,9 @@ func _process(_delta: float) -> void:
 
 func toggle_shop():
 	if GameManager.game_state == GameManager.GameState.BUILDING:
-		SweetLogger.debug("toggle shop")
+		SweetLogger.debug("Toggle shop")
 		enabled = !enabled
-		SweetLogger.debug("_process: money={0} label text={1}", [GameManager.money, money_label.text])
+		SweetLogger.debug("Money={0} label text={1}", [GameManager.money, money_label.text])
 
 
 
@@ -54,11 +54,11 @@ func _set_poke_enabled_for_controller(controller_node: XRController3D, value: bo
 
 	var poke_node = Helper.find_first_child_of_type(controller_node, XRToolsPoke)
 	if poke_node:
-		SweetLogger.debug("_set_poke_enabled_for_controller: {0} poke enabled: {1}", [poke_node.name, value])
+		SweetLogger.debug("Poke enabled: {0} on {1}", [value, poke_node.name])
 		poke_node.enabled = value
 		poke_node.visible = value
 	else:
-		SweetLogger.debug("_set_poke_enabled_for_controller: {0} poke not found", [controller_node.name])
+		SweetLogger.debug("Poke not found on {0}", [controller_node.name])
 
 # For some reason, this is called every frame the button is down. So we need our own timer.
 func _on_controller_button_pressed(button_name: String) -> void:
@@ -80,13 +80,13 @@ func _on_other_controller_button_pressed(button_name: String) -> void:
 func _on_station_bought(_instance) -> void:
 	enabled = false
 	money_label.text = str(GameManager.money) + "$"
-	SweetLogger.debug("_on_station_bought: new money: {0}", [GameManager.money])
+	SweetLogger.debug("New money: {0}", [GameManager.money])
 
 
 func detect_hand_from_xr_ancestor() -> void:
 	controller = XRHelpers.get_xr_controller(self)
 	if not controller:
-		push_error("Shop UI could not find XRController3D ancestor")
+		SweetLogger.error("{0} could not find XRController3D ancestor", [name])
 		return
 
 	var left_controller := XRHelpers.get_left_controller(self)
@@ -96,4 +96,4 @@ func detect_hand_from_xr_ancestor() -> void:
 		other_controller = right_controller
 	elif controller == right_controller:
 		other_controller = left_controller
-	SweetLogger.debug("detected hand: {0}", [controller.get_tracker_hand()])
+	SweetLogger.debug("Detected hand: {0}", [controller.get_tracker_hand()])

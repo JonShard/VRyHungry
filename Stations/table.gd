@@ -47,7 +47,7 @@ var _players_count: int = 0
 
 
 func place_order() -> void:
-	SweetLogger.debug("place_order()")
+	SweetLogger.debug("->[]")
 	var new_orders: Array[String] = _unsatisfied_orders.duplicate()
 	# for _i in range(0, randi_range(1, 2)):
 	# 	new_orders.append(GameManager.get_random_meal())
@@ -64,7 +64,7 @@ func server_place_order() -> void:
 
 
 func absorb_items():
-	SweetLogger.debug("absorb_items()")
+	SweetLogger.debug("->[]")
 	for snap_zone_node in snap_zones:
 		var held_object = snap_zone_node.picked_up_object
 		if not held_object:
@@ -74,7 +74,7 @@ func absorb_items():
 		
 		
 func satisfyAllOrders() -> void:
-	SweetLogger.debug("satisfyAllOrders()")
+	SweetLogger.debug("->[]")
 	_unsatisfied_orders.clear()
 	_original_orders.clear()
 	clearAllFood()
@@ -82,7 +82,7 @@ func satisfyAllOrders() -> void:
 
 
 func clearAllFood() -> void:
-	SweetLogger.debug("clearAllFood()")
+	SweetLogger.debug("->[]")
 	for zone in snap_zones:
 		var held_object = zone.picked_up_object
 		if not held_object:
@@ -103,7 +103,7 @@ func clearAllFood() -> void:
 # Group called from Queue when trying to assign customers to tables
 func try_consume_customer() -> bool:
 	if _state == TableState.EMPTY:
-		SweetLogger.debug("try_consume_customer, consumed a customer")
+		SweetLogger.debug("Try consume customer, consumed a customer")
 		_state_end(TableState.EMPTY)
 		return true
 	return false
@@ -111,18 +111,18 @@ func try_consume_customer() -> bool:
 
 func _ready() -> void:
 	if not label_3d:
-		push_error("Table is missing reference to Label3D")
+		SweetLogger.warning("{0} missing label_3d reference", [name])
 	if not label_3d_time:
-		push_error("Table is missing reference to Label3DTime")
+		SweetLogger.warning("{0} missing label_3d_time reference", [name])
 	if not progress_bar or progress_bar is not ProgressBar3D:
-		push_error("Table missing reference to progressbar, or wrong type:", progress_bar)
+		SweetLogger.warning("{0} missing progress_bar reference", [name])
 	progress_bar.y_billboard = true
 	progress_bar.exponential = true
 	# Render whatever state already arrived from the server before we were in
 	# the tree (see the guard in _refresh_display).
 	_refresh_display.call_deferred()
 	if not audio_player:
-		push_error("Table is missing reference to AudioStreamPlayer3D")
+		SweetLogger.warning("{0} missing audio_player reference", [name])
 		
 	# Get snap_zones for plates, store in array snap_zones
 	for child in get_children():
@@ -131,7 +131,7 @@ func _ready() -> void:
 			snap_zones.append(snap_zone_node)
 
 	if snap_zones.is_empty():
-		push_error("Table is missing XRToolsSnapZone children")
+		SweetLogger.warning("{0} missing XRToolsSnapZone children", [name])
 		return
 
 	for snap_zone_node in snap_zones:
@@ -148,14 +148,14 @@ func _ready() -> void:
 
 
 func _on_object_picked_up(_item) -> void:
-	SweetLogger.debug("object picked up: {0}", [_item])
+	SweetLogger.debug("Object picked up: {0}", [_item])
 	if _state == TableState.EATING:
 		return
 	_absorb_item_if_correct(_item)
 
 
 func _on_object_dropped(_item) -> void:
-	SweetLogger.debug("object dropped, item: {0}", [_item])
+	SweetLogger.debug("Object dropped, item: {0}", [_item])
 	# If then player picks up a food_item (side) the table has already registerd, unregister
 	var food_item: FoodItem = Helper.find_food_item(_item)
 	if food_item and food_item.type == FoodItem.Type.SIDE:
@@ -172,12 +172,12 @@ func _on_object_dropped(_item) -> void:
 # There is no on_stay signal, we have to track player with bool
 func _on_player_enter(_body):
 	_players_count += 1
-	SweetLogger.debug("_on_player_enter() players_count: {0}", [_players_count])
+	SweetLogger.debug("Player enter, players_count: {0}", [_players_count])
 
 
 func _on_player_exit(_body):
 	_players_count -= 1
-	SweetLogger.debug("_on_player_exit() players_count: {0}", [_players_count])
+	SweetLogger.debug("Player exit, players_count: {0}", [_players_count])
 
 
 func _place_order_if_player():
@@ -194,20 +194,20 @@ func _place_order_if_player():
 
 func _get_plate_controller_from_item(_item: Node) -> PlateController:
 	if not _item:
-		SweetLogger.debug("_item is null")
+		SweetLogger.debug("Item is null")
 		return null
 
 	for child in _item.get_children():
 		if child is PlateController:
-			SweetLogger.debug("found child")
+			SweetLogger.debug("Found child")
 			return child
 	
-	SweetLogger.debug("no match")
+	SweetLogger.debug("No match")
 	return null
 
 
 func _absorb_item_if_correct(_item: Node) -> void:
-	SweetLogger.debug("_absorb_item_if_correct, item: {0}", [_item])
+	SweetLogger.debug("Absorb item if correct, item: {0}", [_item])
 	if not _item:
 		return
 	if not (_state == TableState.WAITING_PRIMARY or _state == TableState.WAITING_FRIEND):
@@ -215,14 +215,14 @@ func _absorb_item_if_correct(_item: Node) -> void:
 
 	# Plate: Get plate controller in child of _item (hopefully a plate XRpickable)
 	var plate_controller = _get_plate_controller_from_item(_item)
-	SweetLogger.debug("_absorb_item_if_correct plate_controller ref: {0}", [plate_controller])
+	SweetLogger.debug("Plate_controller ref: {0}", [plate_controller])
 	_item.print_tree_pretty()
 	
 	if plate_controller:
 		# Absorm items from the plate we want
 		for food_item: FoodItem in plate_controller.container.contained_items: # TOOD: handle registering the meal again when a side is added to the plate
 			if food_item.id in _unsatisfied_orders and not food_item.is_absorbed:
-				SweetLogger.debug("_absorb_item_if_correct held a plate with FoodItem that is in unsatisfied orders, removing it")
+				SweetLogger.debug("Held a plate with FoodItem that is in unsatisfied orders, removing it")
 				(plate_controller.get_parent() as XRToolsPickable).get_picked_up_by().enabled = false # Lock meal that is deliverd
 				_unsatisfied_orders.erase(food_item.id)
 				food_item.is_absorbed = true
@@ -232,17 +232,17 @@ func _absorb_item_if_correct(_item: Node) -> void:
 	# Side pickable item, no container
 	var food_item: FoodItem = Helper.find_food_item(_item)
 	if food_item and food_item.type == FoodItem.Type.SIDE:
-		SweetLogger.debug("_absorb_item_if_correct held a side that is in unsatisfied orders, removing it")
+		SweetLogger.debug("Held a side that is in unsatisfied orders, removing it")
 		# Do not lock snap zone here. Problem if table want many meals, but to many sides have filled up slots, so can't place plates.
 		_unsatisfied_orders.erase(food_item.id)
 		_update_state_from_orders()
 		return
 
-	SweetLogger.debug("absorb_item_if_correct() held object is not a Plate or Side")
+	SweetLogger.debug("Held object is not a Plate or Side")
 
 
 func _update_state_from_orders():
-	SweetLogger.debug("_update_state_from_orders: unsatisfied_orders: {0}", [_unsatisfied_orders])
+	SweetLogger.debug("Unsatisfied_orders: {0}", [_unsatisfied_orders])
 	if _unsatisfied_orders.size() > 0 and _state != TableState.EATING:
 		_set_state(TableState.WAITING_FRIEND)
 
@@ -265,7 +265,7 @@ func _collect_money_from_food():
 		elif food_item:
 			GameManager.set_money(GameManager.money + food_item.sell_value)
 
-	SweetLogger.debug("_collect_money_from_food(), money: {0}", [GameManager.money])
+	SweetLogger.debug("Money: {0}", [GameManager.money])
 
 
 func _set_snap_zones_enabled(value: bool) -> void:
@@ -349,7 +349,7 @@ func _refresh_display() -> void:
 	# null. Bail out until _ready() has resolved them; _ready() calls back in
 	# once it has, so nothing that arrived early is lost.
 	if not progress_bar or not label_3d or not label_3d_time:
-		push_error("Table missing progress bar or label")
+		SweetLogger.warning("{0} missing progress_bar or label reference", [name])
 		return
 	match _state:
 		TableState.IDLE:
@@ -388,7 +388,7 @@ func _process(delta: float) -> void:
 	#SweetLogger.error("State {0} time: {1} duration: {2}", [TableState.keys()[_state], _state_time, _state_duration])
 
 	if not NetworkManager.owns_world():
-		SweetLogger.error("Is not server, return")
+		SweetLogger.debug("Not server, skipping state update")
 		return
 
 	if GameManager.game_state == GameManager.GameState.GAME_OVER:
