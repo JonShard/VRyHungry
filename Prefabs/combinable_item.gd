@@ -1,6 +1,8 @@
 class_name CombinableItem
 extends Node
 
+@export var enabled: bool = true
+
 @onready var combine_area_3d: Area3D = $Area3d
 @onready var _pickable: XRToolsPickable = get_parent() as XRToolsPickable
 
@@ -20,6 +22,8 @@ func _ready() -> void:
 		return
 	if not _food_item:
 		SweetLogger.warning("{0} requires a FoodItem sibling", [_pickable.name])
+		return
+	if not enabled:
 		return
 
 	# Detect items whether held (layer 17 "Held Objects") or loose

@@ -1,6 +1,8 @@
 extends Node
 class_name DespawningItem
 
+@export var enabled: bool = true
+
 @export var time_to_despawn: float = 8
 
 # The minimum speed required to reset despawn timer.
@@ -20,9 +22,12 @@ func _ready() -> void:
 	if not _rigid:
 			SweetLogger.error("{0} must be a grandchild of a RigidBody3D", [name])
 			return
-		
+
 
 func _process(delta: float) -> void:
+	if not enabled:
+		return
+
 	# Despawning is a world decision, so only the owner of world logic runs the
 	# clock. Every peer used to run its own copy: the countdown drifted between
 	# them and the blink below toggled `visible` locally, so the same item was

@@ -25,13 +25,16 @@ func _set_stations_enabled(value: bool) -> void:
 			station.enabled = value
 
 
-# Despawn all food_items unless it's in a "persistent_inventory" snap_zone
+# Despawn all despawnable pickables unless it's in a "persistent_inventory"
+# snap_zone. Permanent fixtures (e.g. a station's knife) opt out entirely by
+# having no DespawningItem child, or a disabled one.
 func despawn_unheld_pickables():
 	var root = get_tree().get_root()
 	var pickables: Array[Node] = []
 	_collect_pickables(root, pickables)
 	for pickable in pickables:
-		if not Helper.find_food_item(pickable):
+		var despawning_item := pickable.get_node_or_null("DespawningItem") as DespawningItem
+		if not despawning_item or not despawning_item.enabled:
 			continue
 		var held_by: Node = pickable.get_picked_up_by()
 		if not held_by:

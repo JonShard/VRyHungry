@@ -41,6 +41,22 @@ func _ready() -> void:
 	if not _pickable:
 		SweetLogger.error("{0} must be a child of an XRToolsPickable", [name])
 		return
+
+	# Configure Multiplayer Synchronizer
+	# This overwrites any changes made in the inspector.
+	replication_config = SceneReplicationConfig.new()
+	var properties: Array[NodePath] = [".:position", ".:quaternion", ".:enabled"]
+	for property_path in properties:
+		replication_config.add_property(property_path)
+		replication_config.property_set_replication_mode(property_path, SceneReplicationConfig.REPLICATION_MODE_ALWAYS)
+		replication_config.property_set_spawn(property_path, false)
+	# Unlike the properties above, this one is replicated at spawn too, so a
+	# late joiner sees the current holder immediately.
+	var held_by_path := NodePath("NetPickable:net_held_by")
+	replication_config.add_property(held_by_path)
+	replication_config.property_set_replication_mode(held_by_path, SceneReplicationConfig.REPLICATION_MODE_ALWAYS)
+	replication_config.property_set_spawn(held_by_path, true)
+
 	_original_freeze_mode = _pickable.freeze_mode
 	_original_enabled = _pickable.enabled
 	_pickable.picked_up.connect(_on_picked_up)
