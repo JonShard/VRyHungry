@@ -24,6 +24,12 @@ var _original_freeze_mode: RigidBody3D.FreezeMode
 # branch of apply_held_state() clears while someone else is holding the item.
 var _original_enabled: bool
 
+# Intent set by external game logic (e.g. a station enabling/disabling a tool),
+# independent of hold state. apply_held_state() is the sole writer of the
+# pickable's actual `enabled` property, so this is how other systems express
+# "should be enabled" without fighting that reconciliation every tick.
+var _tool_enabled: bool = true
+
 # Whether the "our own hand still holds this" guard has already been logged for
 # the current grab. apply_held_state() runs every network tick, so without this
 # the guard message repeats for as long as you hold the item.
@@ -45,6 +51,17 @@ func _ready() -> void:
 	# synchronously here would freeze/mask the item before that capture runs,
 	# permanently corrupting the "restore on drop" values.
 	apply_held_state.call_deferred()
+
+
+## Called by external game logic (e.g. Counter._enable_tool/_disable_tool) to
+## express whether this item should be usable right now, independent of hold
+## state. Reapplies immediately so the change takes effect without waiting for
+## the next net_held_by tick.
+func set_tool_enabled(value: bool) -> void:
+	if _tool_enabled == value:
+		return
+	_tool_enabled = value
+	apply_held_state()
 
 
 func _set_net_held_by(value: int) -> void:
@@ -95,10 +112,11 @@ func apply_held_state() -> void:
 		# e.g. a plate still got marked dirty) while pick_up() bailed out on
 		# the disabled item, leaving the zone holding an item with no grab
 		# driver that then fell out of the station.
-		if _pickable.enabled != _original_enabled:
+		var want_enabled_authority := _original_enabled and _tool_enabled
+		if _pickable.enabled != want_enabled_authority:
 			if NetworkManager.is_online():
-				SweetLogger.debug("{0}: reclaiming ownership, restoring enabled {1}->{2}", [_pickable.name, _pickable.enabled, _original_enabled])
-			_pickable.enabled = _original_enabled
+				SweetLogger.debug("{0}: reclaiming ownership, restoring enabled {1}->{2}", [_pickable.name, _pickable.enabled, want_enabled_authority])
+			_pickable.enabled = want_enabled_authority
 		return
 	# A net_held_by/position sync update can race ahead of the
 	# authority-handoff RPC that's about to confirm a grab we just made
@@ -125,7 +143,7 @@ func apply_held_state() -> void:
 	# physics-property writes per item per tick. The comparison also means we
 	# still re-apply if something else perturbs the state (e.g. let_go()
 	# restoring the collision mask after a force-drop).
-	var want_enabled := (net_held_by == 0)
+	var want_enabled := (net_held_by == 0) and _tool_enabled
 	if _pickable.freeze \
 			and _pickable.freeze_mode == RigidBody3D.FREEZE_MODE_KINEMATIC \
 			and _pickable.collision_mask == 0 \

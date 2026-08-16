@@ -35,6 +35,9 @@ properties/1/replication_mode = 1
 properties/2/path = NodePath("NetPickable:net_held_by")
 properties/2/spawn = true
 properties/2/replication_mode = 1
+properties/3/path = NodePath(".:enabled")
+properties/3/spawn = false
+properties/3/replication_mode = 1
 
 [sub_resource type="Gradient" id="Gradient_s6exe"]
 interpolation_mode = 2

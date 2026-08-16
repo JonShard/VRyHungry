@@ -18,7 +18,7 @@ func _ready() -> void:
 		SweetLogger.warning("{0} missing chop_audio reference", [name])
 	if not knife:
 		SweetLogger.warning("{0} missing knife reference", [name])
-	_hide_all_tools()
+	_disable_all_tools()
 
 
 func _start_chopping(id: String, work: float) -> void:
@@ -33,12 +33,20 @@ func _process(delta: float) -> void:
 	super.process(delta)
 
 
+func _enable_tool(_item: XRToolsPickable):
+	SweetLogger.debug("Enable tool {0} on {1}", [_item.name, name])
+	_item.visible = true
+	_item.get_node("NetPickable").set_tool_enabled(true)
 
-func _hide_all_tools():
-	knife.visible = false
-	knife.enabled = false
 
+func _disable_tool(_item: XRToolsPickable):
+	SweetLogger.debug("Disable tool {0} on {1}", [_item.name, name])
+	_item.visible = false
+	_item.get_node("NetPickable").set_tool_enabled(false)
 
+func _disable_all_tools():
+	SweetLogger.debug("Disable all tools on {0}", [name])
+	_disable_tool(knife)
 
 
 func _on_gesture_area_body_entered(body: Node3D) -> void:
@@ -84,20 +92,19 @@ func on_food_item_picked_up(food_item: FoodItem) -> void:
 		SweetLogger.debug("Held a FoodItem that is not choppable, id: {0} result: {1}", [food_item.id, result])
 		return
 
-	knife.visible = true
-	knife.enabled = true
+	_enable_tool(knife)
 	_start_chopping(result, RecipeManager.get_chopping_work(food_item.id))
 
 
 # Called from Station base class
 func on_object_dropped(_item: Node3D) -> void:
 	SweetLogger.debug("->[]")
-	_hide_all_tools()
+	_disable_all_tools()
 	reset()
 
 
 # Called from Station base class
 func on_work_complete():
 	SweetLogger.debug("->[]")
-	_hide_all_tools()
+	_disable_all_tools()
 	convert_item()
