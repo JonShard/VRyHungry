@@ -1,3 +1,25 @@
+### Full game systems                           (hardest part)
+- Star day modifiers
+- research unlock
+- Mess and cleaning                             (How it works in VR?)
+- Automation basic logistics                    (SharedInventories)
+- Player charaters and customization            (Hat Selection and mirror)
+- Sound effects and music                      
+- Animated customers                            (Pathfinding)
+- Acheivements                                  (Statisticsmanager)
+- Level generation
+- Proper 3D models                              (Git gud @ blender)
+**[Undecided]**
+- Automation logic, wireing
+- Decorations
+- Win condition / across games reward / progression
+- Fire
+- Arms (Inverse Kinematics)
+**[Scopecreep]**
+- Freshness
+- Fullbody tracking                             (Height calibration)
+
+
 ### Station inheritence suggestion
 Station
   WorkStation (performs work on a food item to convert it)
