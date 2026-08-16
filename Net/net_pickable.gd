@@ -45,7 +45,7 @@ func _ready() -> void:
 	# Configure Multiplayer Synchronizer
 	# This overwrites any changes made in the inspector.
 	replication_config = SceneReplicationConfig.new()
-	var properties: Array[NodePath] = [".:position", ".:quaternion", ".:enabled"]
+	var properties: Array[NodePath] = [".:position", ".:quaternion", ".:enabled", ".:visible"]
 	for property_path in properties:
 		replication_config.add_property(property_path)
 		replication_config.property_set_replication_mode(property_path, SceneReplicationConfig.REPLICATION_MODE_ALWAYS)

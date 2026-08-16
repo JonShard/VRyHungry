@@ -58,11 +58,7 @@ func _process(delta: float) -> void:
 		_set_visible(int(_time_left * 5.0) % 2 == 0)
 
 
-# `visible` is not a replicated property, so a blink driven only here would make
-# the item flicker on the host and stay solid on clients. Until it is synced,
-# only warn when there is nobody else to disagree with.
 func _set_visible(value: bool) -> void:
-	if NetworkManager.is_online():
-		get_parent().visible = true
+	if not NetworkManager.owns_world():
 		return
 	get_parent().visible = value
