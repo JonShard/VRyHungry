@@ -1,12 +1,10 @@
 [gd_scene format=3 uid="uid://c6rift56ql3f8"]
 
-[ext_resource type="PackedScene" uid="uid://cbs8jiqe8rcmn" path="res://abstract/station.tscn" id="1_station"]
 [ext_resource type="Script" uid="uid://0y6wnjcsum6" path="res://stations/item_dispenser.gd" id="1_myl3s"]
+[ext_resource type="PackedScene" uid="uid://cbs8jiqe8rcmn" path="res://abstract/station.tscn" id="1_station"]
 [ext_resource type="PackedScene" uid="uid://c0lknik4noobs" path="res://items/BurgerBuns.tscn" id="2_1q74o"]
 [ext_resource type="PackedScene" uid="uid://mpapt5mkbuao" path="res://prefabs/slide_off_dome.tscn" id="4_rf1b2"]
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_xmbo2"]
-radius = 0.3
+[ext_resource type="AudioStream" uid="uid://dmyuqe5058sv3" path="res://sounds/220197__gameaudio__click-basic.wav" id="4_u2p81"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_24d3s"]
 height = 1.0
@@ -26,49 +24,49 @@ collision_layer = 65536
 collision_mask = 65536
 snap_mode = 1
 
-[node name="CollisionShape3D" parent="SnapZone" index="0"]
-shape = SubResource("SphereShape3D_xmbo2")
-
-[node name="BurgerBunsDispenser" type="StaticBody3D" parent="." index="6" unique_id=1720683779 node_paths=PackedStringArray("snap_zone", "synchronizer") groups=["station"]]
+[node name="BurgerBunsDispenser" type="StaticBody3D" parent="." index="6" unique_id=1720683779 node_paths=PackedStringArray("notification_audio", "ambient_audio", "snap_zone", "synchronizer") groups=["station"]]
 script = ExtResource("1_myl3s")
 item_scene = ExtResource("2_1q74o")
+pickup_sound = ExtResource("4_u2p81")
+notification_audio = NodePath("../AudioStreamPlayer3DNotification")
+ambient_audio = NodePath("../AudioStreamPlayer3DAmbient")
 snap_zone = NodePath("../SnapZone")
 synchronizer = NodePath("../MultiplayerSynchronizer")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BurgerBunsDispenser" unique_id=1470079357]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BurgerBunsDispenser" index="0" unique_id=1470079357]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("CylinderShape3D_24d3s")
 
-[node name="SlideOffDome" parent="BurgerBunsDispenser" unique_id=1427609426 instance=ExtResource("4_rf1b2")]
+[node name="SlideOffDome" parent="BurgerBunsDispenser" index="1" unique_id=1427609426 instance=ExtResource("4_rf1b2")]
 
-[node name="CSGCombiner3D" type="CSGCombiner3D" parent="BurgerBunsDispenser" unique_id=1746426494]
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="BurgerBunsDispenser" index="2" unique_id=1746426494]
 
-[node name="CSGCylinder3D" type="CSGCylinder3D" parent="BurgerBunsDispenser/CSGCombiner3D" unique_id=858311379]
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="BurgerBunsDispenser/CSGCombiner3D" index="0" unique_id=858311379]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 radius = 0.3
 height = 1.0
 sides = 32
 
-[node name="CSGCombiner3DBuns" type="CSGCombiner3D" parent="BurgerBunsDispenser/CSGCombiner3D" unique_id=1459017790]
+[node name="CSGCombiner3DBuns" type="CSGCombiner3D" parent="BurgerBunsDispenser/CSGCombiner3D" index="1" unique_id=1459017790]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.16038476, 1.0341886, -0.09012994)
 autosmooth = true
 smoothing_angle = 138.9
 
-[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="BurgerBunsDispenser/CSGCombiner3D/CSGCombiner3DBuns" unique_id=1328221793]
+[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="BurgerBunsDispenser/CSGCombiner3D/CSGCombiner3DBuns" index="0" unique_id=1328221793]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.004122257, 0)
 radius = 0.085
 height = 0.04
 sides = 16
 material = SubResource("StandardMaterial3D_vlqg6")
 
-[node name="CSGCylinder3D3" type="CSGCylinder3D" parent="BurgerBunsDispenser/CSGCombiner3D/CSGCombiner3DBuns" unique_id=686624728]
+[node name="CSGCylinder3D3" type="CSGCylinder3D" parent="BurgerBunsDispenser/CSGCombiner3D/CSGCombiner3DBuns" index="1" unique_id=686624728]
 transform = Transform3D(0.82770383, -0.5611652, 0, 0.5611652, 0.82770383, 0, 0, 0, 1, -0.048392475, 0.029736161, 0)
 radius = 0.085
 height = 0.04
 sides = 16
 material = SubResource("StandardMaterial3D_vlqg6")
 
-[node name="CSGCylinder3D4" type="CSGCylinder3D" parent="BurgerBunsDispenser/CSGCombiner3D/CSGCombiner3DBuns/CSGCylinder3D3" unique_id=1113894081]
+[node name="CSGCylinder3D4" type="CSGCylinder3D" parent="BurgerBunsDispenser/CSGCombiner3D/CSGCombiner3DBuns/CSGCylinder3D3" index="0" unique_id=1113894081]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9604645e-08, 0.040259957, 0)
 radius = 0.085
 height = 0.04
@@ -76,26 +74,26 @@ sides = 16
 cone = true
 material = SubResource("StandardMaterial3D_vlqg6")
 
-[node name="CSGCombiner3DBuns2" type="CSGCombiner3D" parent="BurgerBunsDispenser/CSGCombiner3D" unique_id=1636439623]
+[node name="CSGCombiner3DBuns2" type="CSGCombiner3D" parent="BurgerBunsDispenser/CSGCombiner3D" index="2" unique_id=1636439623]
 transform = Transform3D(0.42896286, 0, -0.90332216, 0, 1, 0, 0.90332216, 0, 0.42896286, 0.13564643, 1.0341886, 0.20497215)
 autosmooth = true
 smoothing_angle = 138.9
 
-[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="BurgerBunsDispenser/CSGCombiner3D/CSGCombiner3DBuns2" unique_id=190780737]
+[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="BurgerBunsDispenser/CSGCombiner3D/CSGCombiner3DBuns2" index="0" unique_id=190780737]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.004122257, 0)
 radius = 0.085
 height = 0.04
 sides = 16
 material = SubResource("StandardMaterial3D_vlqg6")
 
-[node name="CSGCylinder3D3" type="CSGCylinder3D" parent="BurgerBunsDispenser/CSGCombiner3D/CSGCombiner3DBuns2" unique_id=557804311]
+[node name="CSGCylinder3D3" type="CSGCylinder3D" parent="BurgerBunsDispenser/CSGCombiner3D/CSGCombiner3DBuns2" index="1" unique_id=557804311]
 transform = Transform3D(0.82770383, -0.5611652, 0, 0.5611652, 0.82770383, 0, 0, 0, 1, -0.048392475, 0.029736161, 0)
 radius = 0.085
 height = 0.04
 sides = 16
 material = SubResource("StandardMaterial3D_vlqg6")
 
-[node name="CSGCylinder3D4" type="CSGCylinder3D" parent="BurgerBunsDispenser/CSGCombiner3D/CSGCombiner3DBuns2/CSGCylinder3D3" unique_id=605379447]
+[node name="CSGCylinder3D4" type="CSGCylinder3D" parent="BurgerBunsDispenser/CSGCombiner3D/CSGCombiner3DBuns2/CSGCylinder3D3" index="0" unique_id=605379447]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9604645e-08, 0.040259957, 0)
 radius = 0.085
 height = 0.04
@@ -103,26 +101,26 @@ sides = 16
 cone = true
 material = SubResource("StandardMaterial3D_vlqg6")
 
-[node name="CSGCombiner3DBuns3" type="CSGCombiner3D" parent="BurgerBunsDispenser/CSGCombiner3D" unique_id=1594575583]
+[node name="CSGCombiner3DBuns3" type="CSGCombiner3D" parent="BurgerBunsDispenser/CSGCombiner3D" index="3" unique_id=1594575583]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.17070979, 1.0341885, 0.07147646)
 autosmooth = true
 smoothing_angle = 138.9
 
-[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="BurgerBunsDispenser/CSGCombiner3D/CSGCombiner3DBuns3" unique_id=1686142490]
+[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="BurgerBunsDispenser/CSGCombiner3D/CSGCombiner3DBuns3" index="0" unique_id=1686142490]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.004122257, 0)
 radius = 0.085
 height = 0.04
 sides = 16
 material = SubResource("StandardMaterial3D_vlqg6")
 
-[node name="CSGCylinder3D3" type="CSGCylinder3D" parent="BurgerBunsDispenser/CSGCombiner3D/CSGCombiner3DBuns3" unique_id=1773290691]
+[node name="CSGCylinder3D3" type="CSGCylinder3D" parent="BurgerBunsDispenser/CSGCombiner3D/CSGCombiner3DBuns3" index="1" unique_id=1773290691]
 transform = Transform3D(0.82770383, -0.5611652, 0, 0.5611652, 0.82770383, 0, 0, 0, 1, -0.048392475, 0.029736161, 0)
 radius = 0.085
 height = 0.04
 sides = 16
 material = SubResource("StandardMaterial3D_vlqg6")
 
-[node name="CSGCylinder3D4" type="CSGCylinder3D" parent="BurgerBunsDispenser/CSGCombiner3D/CSGCombiner3DBuns3/CSGCylinder3D3" unique_id=801922493]
+[node name="CSGCylinder3D4" type="CSGCylinder3D" parent="BurgerBunsDispenser/CSGCombiner3D/CSGCombiner3DBuns3/CSGCylinder3D3" index="0" unique_id=801922493]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9604645e-08, 0.040259957, 0)
 radius = 0.085
 height = 0.04
@@ -130,26 +128,26 @@ sides = 16
 cone = true
 material = SubResource("StandardMaterial3D_vlqg6")
 
-[node name="CSGCombiner3DBuns4" type="CSGCombiner3D" parent="BurgerBunsDispenser/CSGCombiner3D" unique_id=2055085730]
+[node name="CSGCombiner3DBuns4" type="CSGCombiner3D" parent="BurgerBunsDispenser/CSGCombiner3D" index="4" unique_id=2055085730]
 transform = Transform3D(0.95670986, 0, 0.29104328, 0, 1, 0, -0.29104328, 0, 0.95670986, -0.08665481, 1.0341886, -0.10344604)
 autosmooth = true
 smoothing_angle = 138.9
 
-[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="BurgerBunsDispenser/CSGCombiner3D/CSGCombiner3DBuns4" unique_id=547208858]
+[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="BurgerBunsDispenser/CSGCombiner3D/CSGCombiner3DBuns4" index="0" unique_id=547208858]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.004122257, 0)
 radius = 0.085
 height = 0.04
 sides = 16
 material = SubResource("StandardMaterial3D_vlqg6")
 
-[node name="CSGCylinder3D3" type="CSGCylinder3D" parent="BurgerBunsDispenser/CSGCombiner3D/CSGCombiner3DBuns4" unique_id=185898007]
+[node name="CSGCylinder3D3" type="CSGCylinder3D" parent="BurgerBunsDispenser/CSGCombiner3D/CSGCombiner3DBuns4" index="1" unique_id=185898007]
 transform = Transform3D(0.82770383, -0.5611652, 0, 0.5611652, 0.82770383, 0, 0, 0, 1, -0.048392475, 0.029736161, 0)
 radius = 0.085
 height = 0.04
 sides = 16
 material = SubResource("StandardMaterial3D_vlqg6")
 
-[node name="CSGCylinder3D4" type="CSGCylinder3D" parent="BurgerBunsDispenser/CSGCombiner3D/CSGCombiner3DBuns4/CSGCylinder3D3" unique_id=2117029178]
+[node name="CSGCylinder3D4" type="CSGCylinder3D" parent="BurgerBunsDispenser/CSGCombiner3D/CSGCombiner3DBuns4/CSGCylinder3D3" index="0" unique_id=2117029178]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9604645e-08, 0.040259957, 0)
 radius = 0.085
 height = 0.04
@@ -157,26 +155,26 @@ sides = 16
 cone = true
 material = SubResource("StandardMaterial3D_vlqg6")
 
-[node name="CSGCombiner3DBuns5" type="CSGCombiner3D" parent="BurgerBunsDispenser/CSGCombiner3D" unique_id=546748728]
+[node name="CSGCombiner3DBuns5" type="CSGCombiner3D" parent="BurgerBunsDispenser/CSGCombiner3D" index="5" unique_id=546748728]
 transform = Transform3D(0.20608562, 0, -0.978534, 0, 1, 0, 0.978534, 0, 0.20608562, -0.047733016, 1.0341886, 0.19433105)
 autosmooth = true
 smoothing_angle = 138.9
 
-[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="BurgerBunsDispenser/CSGCombiner3D/CSGCombiner3DBuns5" unique_id=102374914]
+[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="BurgerBunsDispenser/CSGCombiner3D/CSGCombiner3DBuns5" index="0" unique_id=102374914]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.004122257, 0)
 radius = 0.085
 height = 0.04
 sides = 16
 material = SubResource("StandardMaterial3D_vlqg6")
 
-[node name="CSGCylinder3D3" type="CSGCylinder3D" parent="BurgerBunsDispenser/CSGCombiner3D/CSGCombiner3DBuns5" unique_id=189923990]
+[node name="CSGCylinder3D3" type="CSGCylinder3D" parent="BurgerBunsDispenser/CSGCombiner3D/CSGCombiner3DBuns5" index="1" unique_id=189923990]
 transform = Transform3D(0.82770383, -0.5611652, 0, 0.5611652, 0.82770383, 0, 0, 0, 1, -0.048392475, 0.029736161, 0)
 radius = 0.085
 height = 0.04
 sides = 16
 material = SubResource("StandardMaterial3D_vlqg6")
 
-[node name="CSGCylinder3D4" type="CSGCylinder3D" parent="BurgerBunsDispenser/CSGCombiner3D/CSGCombiner3DBuns5/CSGCylinder3D3" unique_id=1980594001]
+[node name="CSGCylinder3D4" type="CSGCylinder3D" parent="BurgerBunsDispenser/CSGCombiner3D/CSGCombiner3DBuns5/CSGCylinder3D3" index="0" unique_id=1980594001]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9604645e-08, 0.040259957, 0)
 radius = 0.085
 height = 0.04

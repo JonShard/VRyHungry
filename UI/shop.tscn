@@ -4,8 +4,8 @@
 [ext_resource type="PackedScene" uid="uid://u7rpukx5ebqo" path="res://UI/shop_station_panel.tscn" id="1_pogqh"]
 [ext_resource type="PackedScene" uid="uid://efaec6ymgabo" path="res://stations/Counter.tscn" id="2_35otv"]
 [ext_resource type="Texture2D" uid="uid://dhja7i8tgb3ao" path="res://textures/shop/counter.png" id="3_74fni"]
-[ext_resource type="PackedScene" uid="uid://j7caslh27nor" path="res://stations/Hob_old.tscn" id="4_l3qkl"]
 [ext_resource type="Texture2D" uid="uid://br4ytiocwouqh" path="res://textures/shop/hob.png" id="5_2k6ie"]
+[ext_resource type="PackedScene" uid="uid://b052o1fgwq5bw" path="res://stations/Hob.tscn" id="5_6lkkh"]
 [ext_resource type="PackedScene" uid="uid://dvrk268s7gkxh" path="res://stations/sink.tscn" id="6_rktus"]
 [ext_resource type="Texture2D" uid="uid://gi6bksvs8ybx" path="res://textures/shop/sink.png" id="7_4titf"]
 [ext_resource type="PackedScene" uid="uid://caf0xanmxbshy" path="res://stations/table.tscn" id="9_84wnh"]
@@ -59,10 +59,9 @@ offset_left = 20.0
 offset_top = 80.0
 offset_right = -20.0
 offset_bottom = -20.0
-current_tab = 1
+current_tab = 0
 
 [node name="Stations" type="GridContainer" parent="TabContainer" unique_id=189446761]
-visible = false
 layout_mode = 2
 columns = 6
 metadata/_tab_index = 0
@@ -76,7 +75,7 @@ cost = 30
 
 [node name="Panel2" parent="TabContainer/Stations" unique_id=467593590 instance=ExtResource("1_pogqh")]
 layout_mode = 2
-station_scene = ExtResource("4_l3qkl")
+station_scene = ExtResource("5_6lkkh")
 icon_texture = ExtResource("5_2k6ie")
 station_name = "Hob"
 cost = 60
@@ -103,6 +102,7 @@ station_name = "Plates"
 cost = 80
 
 [node name="Food" type="GridContainer" parent="TabContainer" unique_id=422899445]
+visible = false
 layout_mode = 2
 columns = 6
 metadata/_tab_index = 1

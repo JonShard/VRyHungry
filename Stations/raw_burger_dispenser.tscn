@@ -1,13 +1,11 @@
 [gd_scene format=3 uid="uid://cwnwo4i28upap"]
 
-[ext_resource type="PackedScene" uid="uid://cbs8jiqe8rcmn" path="res://abstract/station.tscn" id="1_station"]
 [ext_resource type="Script" uid="uid://0y6wnjcsum6" path="res://stations/item_dispenser.gd" id="1_gkb3v"]
+[ext_resource type="PackedScene" uid="uid://cbs8jiqe8rcmn" path="res://abstract/station.tscn" id="1_station"]
 [ext_resource type="PackedScene" uid="uid://dpot5qie20vf6" path="res://items/burger.tscn" id="2_mep2a"]
-[ext_resource type="Texture2D" uid="uid://cexxfyw03hr81" path="res://textures/1.png" id="4_1f5le"]
+[ext_resource type="Texture2D" uid="uid://7jt8macx4f5m" path="res://textures/1.png" id="4_1f5le"]
+[ext_resource type="AudioStream" uid="uid://dmyuqe5058sv3" path="res://sounds/220197__gameaudio__click-basic.wav" id="4_8ou8n"]
 [ext_resource type="PackedScene" uid="uid://mpapt5mkbuao" path="res://prefabs/slide_off_dome.tscn" id="5_mep2a"]
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_xmbo2"]
-radius = 0.3
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_24d3s"]
 height = 1.0
@@ -27,79 +25,79 @@ collision_layer = 65536
 collision_mask = 65536
 snap_mode = 1
 
-[node name="CollisionShape3D" parent="SnapZone" index="0"]
-shape = SubResource("SphereShape3D_xmbo2")
-
-[node name="RawBurgerDispenser" type="StaticBody3D" parent="." index="6" unique_id=235630131 node_paths=PackedStringArray("snap_zone", "synchronizer") groups=["station"]]
+[node name="RawBurgerDispenser" type="StaticBody3D" parent="." index="6" unique_id=235630131 node_paths=PackedStringArray("notification_audio", "ambient_audio", "snap_zone", "synchronizer") groups=["station"]]
 script = ExtResource("1_gkb3v")
 item_scene = ExtResource("2_mep2a")
+pickup_sound = ExtResource("4_8ou8n")
+notification_audio = NodePath("../AudioStreamPlayer3DNotification")
+ambient_audio = NodePath("../AudioStreamPlayer3DAmbient")
 snap_zone = NodePath("../SnapZone")
 synchronizer = NodePath("../MultiplayerSynchronizer")
 
-[node name="SlideOffDome" parent="RawBurgerDispenser" unique_id=1427609426 instance=ExtResource("5_mep2a")]
+[node name="SlideOffDome" parent="RawBurgerDispenser" index="0" unique_id=1427609426 instance=ExtResource("5_mep2a")]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="RawBurgerDispenser" unique_id=378049928]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RawBurgerDispenser" index="1" unique_id=378049928]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("CylinderShape3D_24d3s")
 
-[node name="CSGCombiner3D" type="CSGCombiner3D" parent="RawBurgerDispenser" unique_id=1275577257]
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="RawBurgerDispenser" index="2" unique_id=1275577257]
 
-[node name="CSGCylinder3D" type="CSGCylinder3D" parent="RawBurgerDispenser/CSGCombiner3D" unique_id=1973748218]
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="RawBurgerDispenser/CSGCombiner3D" index="0" unique_id=1973748218]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 radius = 0.3
 height = 1.0
 sides = 32
 
-[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="RawBurgerDispenser/CSGCombiner3D" unique_id=590219609]
+[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="RawBurgerDispenser/CSGCombiner3D" index="1" unique_id=590219609]
 transform = Transform3D(1, 0, 0, 0, 0.9532462, 0.30219492, 0, -0.30219492, 0.9532462, -0.1276815, 1.0521446, -0.052202225)
 radius = 0.08300781
 height = 0.028435059
 sides = 16
 material = SubResource("StandardMaterial3D_di04w")
 
-[node name="CSGCylinder3D3" type="CSGCylinder3D" parent="RawBurgerDispenser/CSGCombiner3D" unique_id=177377476]
+[node name="CSGCylinder3D3" type="CSGCylinder3D" parent="RawBurgerDispenser/CSGCombiner3D" index="2" unique_id=177377476]
 transform = Transform3D(1, 0, 0, 0, 0.9694763, 0.245185, 0, -0.245185, 0.9694763, 0.08106685, 1.0391599, -0.119440794)
 radius = 0.08300781
 height = 0.03
 sides = 16
 material = SubResource("StandardMaterial3D_di04w")
 
-[node name="CSGCylinder3D4" type="CSGCylinder3D" parent="RawBurgerDispenser/CSGCombiner3D" unique_id=622291452]
+[node name="CSGCylinder3D4" type="CSGCylinder3D" parent="RawBurgerDispenser/CSGCombiner3D" index="3" unique_id=622291452]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.19005477, 1.0198405, 0.049397707)
 radius = 0.08300781
 height = 0.03
 sides = 16
 material = SubResource("StandardMaterial3D_di04w")
 
-[node name="CSGCylinder3D5" type="CSGCylinder3D" parent="RawBurgerDispenser/CSGCombiner3D" unique_id=703594207]
+[node name="CSGCylinder3D5" type="CSGCylinder3D" parent="RawBurgerDispenser/CSGCombiner3D" index="4" unique_id=703594207]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.026051283, 1.0175319, 0.0042250156)
 radius = 0.08300781
 height = 0.03
 sides = 16
 material = SubResource("StandardMaterial3D_di04w")
 
-[node name="CSGCylinder3D6" type="CSGCylinder3D" parent="RawBurgerDispenser/CSGCombiner3D" unique_id=955808722]
+[node name="CSGCylinder3D6" type="CSGCylinder3D" parent="RawBurgerDispenser/CSGCombiner3D" index="5" unique_id=955808722]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.05739355, 1.0197641, 0.13219571)
 radius = 0.08300781
 height = 0.03
 sides = 16
 material = SubResource("StandardMaterial3D_di04w")
 
-[node name="CSGCylinder3D7" type="CSGCylinder3D" parent="RawBurgerDispenser/CSGCombiner3D" unique_id=1066788957]
+[node name="CSGCylinder3D7" type="CSGCylinder3D" parent="RawBurgerDispenser/CSGCombiner3D" index="6" unique_id=1066788957]
 transform = Transform3D(0.9111114, 0.40515354, 0.075673, -0.41123694, 0.8813372, 0.2326565, 0.027568169, -0.24309555, 0.9696106, 0.14799988, 1.0345665, 0.11710405)
 radius = 0.08300781
 height = 0.03
 sides = 16
 material = SubResource("StandardMaterial3D_di04w")
 
-[node name="CSGCylinder3D8" type="CSGCylinder3D" parent="RawBurgerDispenser/CSGCombiner3D" unique_id=553053058]
+[node name="CSGCylinder3D8" type="CSGCylinder3D" parent="RawBurgerDispenser/CSGCombiner3D" index="7" unique_id=553053058]
 transform = Transform3D(0.9541017, 0.29948288, 0, -0.29948288, 0.9541017, 0, 0, 0, 1, 0.041060925, 1.0337045, 0.18304396)
 radius = 0.08300781
 height = 0.03
 sides = 16
 material = SubResource("StandardMaterial3D_di04w")
 
-[node name="CSGCylinder3D9" type="CSGCylinder3D" parent="RawBurgerDispenser/CSGCombiner3D" unique_id=980376661]
+[node name="CSGCylinder3D9" type="CSGCylinder3D" parent="RawBurgerDispenser/CSGCombiner3D" index="8" unique_id=980376661]
 transform = Transform3D(0.8510151, 0.22759955, 0.47325662, -0.16729629, 0.97174567, -0.16649997, -0.49778044, 0.06251989, 0.8650468, 0.2036674, 1.0335208, -0.024382353)
 radius = 0.08300781
 height = 0.03

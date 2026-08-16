@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://cbs8jiqe8rcmn" path="res://abstract/station.tscn" id="1_2p1q6"]
 [ext_resource type="Script" uid="uid://bsn8vhv5adxdo" path="res://stations/hob.gd" id="1_7jc4g"]
+[ext_resource type="AudioStream" uid="uid://dmyuqe5058sv3" path="res://sounds/220197__gameaudio__click-basic.wav" id="3_l0sax"]
 [ext_resource type="Material" uid="uid://d1djvskv4n4m3" path="res://textures/hob_off.tres" id="4_8qpxk"]
 [ext_resource type="Material" uid="uid://db7c7w4apwti7" path="res://textures/hob_on.tres" id="6_m7l4u"]
 
@@ -155,12 +156,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -0.18)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.048892, 0)
 snap_mode = 1
 
-[node name="Hob" type="StaticBody3D" parent="." index="6" unique_id=732560156 node_paths=PackedStringArray("animation_player", "notification_audio", "ambient_audio", "progress_bar", "snap_zone", "synchronizer") groups=["station"]]
+[node name="Hob" type="StaticBody3D" parent="." index="6" unique_id=732560156 node_paths=PackedStringArray("animation_player", "progress_bar", "notification_audio", "ambient_audio", "snap_zone", "synchronizer") groups=["station"]]
 script = ExtResource("1_7jc4g")
 animation_player = NodePath("AnimationPlayer")
-notification_audio = NodePath("../AudioStreamPlayer3DPulse")
-ambient_audio = NodePath("../AudioStreamPlayer3DContinous")
 progress_bar = NodePath("../ProgressBar3D")
+pickup_sound = ExtResource("3_l0sax")
+drop_sound = ExtResource("3_l0sax")
+notification_audio = NodePath("../AudioStreamPlayer3DNotification")
+ambient_audio = NodePath("../AudioStreamPlayer3DAmbient")
 snap_zone = NodePath("../SnapZone")
 synchronizer = NodePath("../MultiplayerSynchronizer")
 

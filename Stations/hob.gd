@@ -40,7 +40,7 @@ func refresh_display() -> void:
 # Called from Station base class
 func on_food_item_picked_up(food_item: FoodItem) -> void:
 	SweetLogger.debug("Object picked up: {0}", [food_item])
-
+	
 	if not food_item:
 		SweetLogger.debug("Held object is not a FoodItem")
 		return

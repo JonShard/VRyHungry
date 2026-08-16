@@ -11,8 +11,6 @@ extends Station
 @export var complete_sound: AudioStream
 
 ## Node references. These are all required snd should be set in the inspector
-@export var notification_audio: AudioStreamPlayer3D # Short sounds like pickup or complete
-@export var ambient_audio: AudioStreamPlayer3D # Releating sounds like a cooking noise
 @export var progress_bar: ProgressBar3D
 
 
@@ -24,10 +22,6 @@ var result_id: String # Station active if not empty. What FoodItem id the conver
 # The child station has to call super.ready() for this to be called
 func ready() -> void:
 	super.ready()
-	if not notification_audio:
-		SweetLogger.warning("{0} missing notification_audio reference", [name])
-	if not ambient_audio:
-		SweetLogger.warning("{0} missing ambient_audio reference", [name])
 	if not progress_bar:
 		SweetLogger.warning("{0} missing progress_bar reference", [name])
 

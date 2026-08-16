@@ -13,9 +13,9 @@
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1536666704]
 replication_config = SubResource("SceneReplicationConfig_0o2ds")
 
-[node name="AudioStreamPlayer3DPulse" type="AudioStreamPlayer3D" parent="." unique_id=1976975302]
+[node name="AudioStreamPlayer3DNotification" type="AudioStreamPlayer3D" parent="." unique_id=1976975302]
 
-[node name="AudioStreamPlayer3DContinous" type="AudioStreamPlayer3D" parent="." unique_id=925832848]
+[node name="AudioStreamPlayer3DAmbient" type="AudioStreamPlayer3D" parent="." unique_id=925832848]
 
 [node name="ProgressBar3D" parent="." unique_id=654673176 instance=ExtResource("2_be8yi")]
 

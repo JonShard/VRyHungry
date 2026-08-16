@@ -10,6 +10,8 @@ extends Node3D
 @export var drop_sound: AudioStream
 
 ## Node references. These are all required snd should be set in the inspector
+@export var notification_audio: AudioStreamPlayer3D # Short sounds like pickup or complete
+@export var ambient_audio: AudioStreamPlayer3D # Releating sounds like a cooking noise
 @export var snap_zone: XRToolsSnapZone
 @export var synchronizer: MultiplayerSynchronizer
 
@@ -26,6 +28,10 @@ var enabled: bool: # When disabled the station only updated display and sounds.
 # The child station has to call super.ready() for this to be called
 func ready() -> void:
 	SweetLogger.debug("Station {0} ready", [name])
+	if not notification_audio:
+		SweetLogger.warning("{0} missing notification_audio reference", [name])
+	if not ambient_audio:
+		SweetLogger.warning("{0} missing ambient_audio reference", [name])
 	if not snap_zone:
 		SweetLogger.warning("{0} missing snap_zone reference", [name])
 	if not synchronizer:
@@ -65,6 +71,7 @@ func _on_object_dropped_handler(item: Node3D) -> void:
 
 func _apply_object_picked_up(item: Node3D) -> void:
 	SweetLogger.debug("Pickup: {0}", [item.name])
+	Helper.play_sound(notification_audio, pickup_sound)
 	on_object_picked_up(item)
 	var food_item = Helper.find_food_item(item)
 	if food_item:
@@ -72,6 +79,7 @@ func _apply_object_picked_up(item: Node3D) -> void:
 
 
 func _apply_object_dropped(item: Node3D) -> void:
+	Helper.play_sound(notification_audio, drop_sound, 0.8)
 	SweetLogger.debug("Drop: {0}", [item.name])
 	on_object_dropped(item)
 	var food_item = Helper.find_food_item(item)
@@ -99,17 +107,16 @@ func _clients_on_object_dropped_handler(item_path: NodePath):
 ## Virutal methods
 # The child station implements these if it cares about them.
 func on_object_picked_up(_item: Node3D) -> void:
-	SweetLogger.debug("Not implemented in {0}", [name])
+	pass
 
 func on_object_dropped(_item: Node3D) -> void:
-	SweetLogger.debug("Not implemented in {0}", [name])
+	pass
 
 func on_food_item_picked_up(_food_item: FoodItem) -> void:
-	SweetLogger.debug("Not implemented in {0}", [name])
+	pass
 
 func on_food_item_dropped(_food_item: FoodItem) -> void:
-	SweetLogger.debug("Not implemented in {0}", [name])
-
+	pass
 
 func refresh_display() -> void:
 	pass

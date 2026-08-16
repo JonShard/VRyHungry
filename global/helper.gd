@@ -53,3 +53,17 @@ static func get_node_from_path(from: Node, node_path: NodePath) -> Node3D:
 		SweetLogger.warning("Could not resolve node from node_path: {0}, are the trees in sync?", [node_path])
 		return null
 	return item
+
+
+
+static func play_sound(player: AudioStreamPlayer3D, stream: AudioStream, pitch_scale: float = 1):
+	if not player:
+		SweetLogger.warning("AudioStreamPlayer3D is null, can not play sound")
+		return
+	if not stream:
+		SweetLogger.warning("AudioStream is null, can not play sound")
+		return
+	player.pitch_scale = pitch_scale
+	player.stream = stream
+	player.play()
+	SweetLogger.debug("Play sound: {0} with pitch_scale: {1} on {2}", [stream.resource_path, pitch_scale, player.get_parent().name])

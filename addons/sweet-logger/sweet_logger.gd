@@ -102,11 +102,11 @@ const LOG_TYPE_COLUMN_WIDTH = 13
 ## Default mm:ss:ms; with SHOW_TIMESTAMP_HOURS, hh:mm:ss:ms
 const TIMESTAMP_COLUMN_WIDTH_MMSSMS = 9
 const TIMESTAMP_COLUMN_WIDTH_HHMMSSMS = 12
-const SCRIPT_FUNCTION_COLUMN_WIDTH = 50
+const SCRIPT_FUNCTION_COLUMN_WIDTH = 46
 
 const TRUNCATE_PEER_NAME = 6
 const TRUNCATE_SCRIPT_NAME = 20
-const TRUNCATE_FUNCTION_NAME = 30
+const TRUNCATE_FUNCTION_NAME = 26
 #===================================================================================#
 
 # CONFIGURATION
@@ -229,7 +229,7 @@ func _print_rich_log(peer_id_str: String, log_type: String, message: String, scr
 	var peer_padded = _truncate_text(_pad_text(peer_label, PEER_ID_COLUMN_WIDTH), TRUNCATE_PEER_NAME)
 
 	# Format peer ID with its background color
-	var peer_formatted = _format_rich_text(peer_padded, peer_color.bg_color, peer_color.text_color)
+	var peer_formatted = _format_rich_text(peer_padded + " ", peer_color.bg_color, peer_color.text_color)
 
 	# Format log type with its background color
 	var log_type_padded = _pad_text(log_type_label, LOG_TYPE_COLUMN_WIDTH)

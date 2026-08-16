@@ -1,7 +1,8 @@
 [gd_scene format=3 uid="uid://cnjwtnhwh0i8q"]
 
-[ext_resource type="PackedScene" uid="uid://cbs8jiqe8rcmn" path="res://abstract/station.tscn" id="1_station"]
 [ext_resource type="Script" uid="uid://q7tpwmrbmu1m" path="res://stations/dirt_station.gd" id="1_hc1d4"]
+[ext_resource type="PackedScene" uid="uid://cbs8jiqe8rcmn" path="res://abstract/station.tscn" id="1_station"]
+[ext_resource type="AudioStream" uid="uid://dmyuqe5058sv3" path="res://sounds/220197__gameaudio__click-basic.wav" id="3_ucg2q"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_24d3s"]
 size = Vector3(0.5, 1, 0.5)
@@ -13,9 +14,6 @@ albedo_color = Color(0.45262197, 0.26770625, 0.2601587, 1)
 material = SubResource("StandardMaterial3D_qn1ku")
 size = Vector3(0.5, 1, 0.5)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_mep2a"]
-size = Vector3(0.81640625, 0.5635376, 0.79351807)
-
 [node name="DirtStation" unique_id=707500902 instance=ExtResource("1_station")]
 
 [node name="StationMovement" parent="." index="0" unique_id=946873975 node_paths=PackedStringArray("station")]
@@ -24,27 +22,25 @@ station = NodePath("../DirtStation")
 [node name="SnapZone" parent="." index="5" unique_id=1315859105]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0313971, 0)
 collision_layer = 65536
-collision_mask = 65540
 snap_mode = 1
 
-[node name="CollisionShape3D" parent="SnapZone" index="0"]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.008666992, -0.11009073, -0.009353638)
-shape = SubResource("BoxShape3D_mep2a")
-
-[node name="DirtStation" type="StaticBody3D" parent="." index="6" unique_id=160842153 node_paths=PackedStringArray("snap_zone", "synchronizer") groups=["station"]]
+[node name="DirtStation" type="StaticBody3D" parent="." index="6" unique_id=160842153 node_paths=PackedStringArray("notification_audio", "ambient_audio", "snap_zone", "synchronizer") groups=["station"]]
 script = ExtResource("1_hc1d4")
+pickup_sound = ExtResource("3_ucg2q")
+drop_sound = ExtResource("3_ucg2q")
+notification_audio = NodePath("../AudioStreamPlayer3DNotification")
+ambient_audio = NodePath("../AudioStreamPlayer3DAmbient")
 snap_zone = NodePath("../SnapZone")
 synchronizer = NodePath("../MultiplayerSynchronizer")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="DirtStation" unique_id=1400366312]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DirtStation" index="0" unique_id=1400366312]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("BoxShape3D_24d3s")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="DirtStation/CollisionShape3D" unique_id=55726639]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="DirtStation/CollisionShape3D" index="0" unique_id=55726639]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.008318901, 0, -0.022509098)
 mesh = SubResource("BoxMesh_ay2w6")
 
-[node name="Label3D" type="Label3D" parent="DirtStation/CollisionShape3D" unique_id=1251766743]
+[node name="Label3D" type="Label3D" parent="DirtStation/CollisionShape3D" index="1" unique_id=1251766743]
 transform = Transform3D(0.9999992, 0, 0, 0, 0.99999946, 0, 0, 0, 0.9999992, 0.002797456, 0.6309581, -0.2812457)
 text = "Dirt"
-

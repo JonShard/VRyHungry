@@ -1,12 +1,10 @@
 [gd_scene format=3 uid="uid://bbg7dwsbxxh1t"]
 
-[ext_resource type="PackedScene" uid="uid://cbs8jiqe8rcmn" path="res://abstract/station.tscn" id="1_station"]
 [ext_resource type="Script" uid="uid://0y6wnjcsum6" path="res://stations/item_dispenser.gd" id="1_4m60m"]
+[ext_resource type="PackedScene" uid="uid://cbs8jiqe8rcmn" path="res://abstract/station.tscn" id="1_station"]
 [ext_resource type="PackedScene" uid="uid://e4i6o5oriecx" path="res://items/PickupCube.tscn" id="2_nn8tr"]
+[ext_resource type="AudioStream" uid="uid://dmyuqe5058sv3" path="res://sounds/220197__gameaudio__click-basic.wav" id="4_0wtc7"]
 [ext_resource type="PackedScene" uid="uid://mpapt5mkbuao" path="res://prefabs/slide_off_dome.tscn" id="4_nn8tr"]
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_xmbo2"]
-radius = 0.3
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_24d3s"]
 height = 1.0
@@ -30,52 +28,51 @@ collision_layer = 65536
 collision_mask = 65536
 snap_mode = 1
 
-[node name="CollisionShape3D" parent="SnapZone" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.15291119, 0)
-shape = SubResource("SphereShape3D_xmbo2")
-
-[node name="CubeSideDispenser" type="StaticBody3D" parent="." index="6" unique_id=200950572 node_paths=PackedStringArray("snap_zone", "synchronizer") groups=["station"]]
+[node name="CubeSideDispenser" type="StaticBody3D" parent="." index="6" unique_id=200950572 node_paths=PackedStringArray("notification_audio", "ambient_audio", "snap_zone", "synchronizer") groups=["station"]]
 script = ExtResource("1_4m60m")
 item_scene = ExtResource("2_nn8tr")
+pickup_sound = ExtResource("4_0wtc7")
+notification_audio = NodePath("../AudioStreamPlayer3DNotification")
+ambient_audio = NodePath("../AudioStreamPlayer3DAmbient")
 snap_zone = NodePath("../SnapZone")
 synchronizer = NodePath("../MultiplayerSynchronizer")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CubeSideDispenser" unique_id=1974757539]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CubeSideDispenser" index="0" unique_id=1974757539]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("CylinderShape3D_24d3s")
 
-[node name="SlideOffDome" parent="CubeSideDispenser" unique_id=1427609426 instance=ExtResource("4_nn8tr")]
+[node name="SlideOffDome" parent="CubeSideDispenser" index="1" unique_id=1427609426 instance=ExtResource("4_nn8tr")]
 
-[node name="CSGCombiner3D" type="CSGCombiner3D" parent="CubeSideDispenser" unique_id=1172420592]
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="CubeSideDispenser" index="2" unique_id=1172420592]
 
-[node name="CSGCylinder3D" type="CSGCylinder3D" parent="CubeSideDispenser/CSGCombiner3D" unique_id=1073546772]
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="CubeSideDispenser/CSGCombiner3D" index="0" unique_id=1073546772]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 radius = 0.3
 height = 1.0
 sides = 32
 
-[node name="Cubes" type="Node3D" parent="CubeSideDispenser" unique_id=100532970]
+[node name="Cubes" type="Node3D" parent="CubeSideDispenser" index="3" unique_id=100532970]
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="CubeSideDispenser/Cubes" unique_id=2040729886]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CubeSideDispenser/Cubes" index="0" unique_id=2040729886]
 transform = Transform3D(0.9709369, 0, 0.23933554, 0, 1, 0, -0.23933554, 0, 0.9709369, -0.0038359165, 1.0421022, -0.1349423)
 mesh = SubResource("BoxMesh_irf4n")
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="CubeSideDispenser/Cubes" unique_id=2119335322]
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="CubeSideDispenser/Cubes" index="1" unique_id=2119335322]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1336323, 1.0421022, 0.049409628)
 mesh = SubResource("BoxMesh_irf4n")
 
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="CubeSideDispenser/Cubes" unique_id=896999260]
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="CubeSideDispenser/Cubes" index="2" unique_id=896999260]
 transform = Transform3D(0.94914126, 0, -0.31485054, 0, 1, 0, 0.31485054, 0, 0.94914126, 0.021345377, 1.0421022, 0.13508391)
 mesh = SubResource("BoxMesh_irf4n")
 
-[node name="MeshInstance3D4" type="MeshInstance3D" parent="CubeSideDispenser/Cubes" unique_id=1055210121]
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="CubeSideDispenser/Cubes" index="3" unique_id=1055210121]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.14830339, 1.0421022, 0.054090023)
 mesh = SubResource("BoxMesh_irf4n")
 
-[node name="MeshInstance3D5" type="MeshInstance3D" parent="CubeSideDispenser/Cubes" unique_id=1800524097]
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="CubeSideDispenser/Cubes" index="4" unique_id=1800524097]
 transform = Transform3D(0.966823, 0, -0.2554472, 0, 1, 0, 0.2554472, 0, 0.966823, 0.12695658, 1.0421022, -0.07926583)
 mesh = SubResource("BoxMesh_irf4n")
 
-[node name="MeshInstance3D6" type="MeshInstance3D" parent="CubeSideDispenser/Cubes" unique_id=192094054]
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="CubeSideDispenser/Cubes" index="5" unique_id=192094054]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.11111963, 1.0421022, -0.094003916)
 mesh = SubResource("BoxMesh_irf4n")
