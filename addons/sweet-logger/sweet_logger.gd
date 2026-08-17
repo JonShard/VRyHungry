@@ -98,7 +98,7 @@ const TIMESTAMP_BG_COLOR = "#1e3a5f"
 #===================================================================================#
 ## Column widths for alignment (in characters)
 const PEER_ID_COLUMN_WIDTH = 6
-const LOG_TYPE_COLUMN_WIDTH = 13
+const LOG_TYPE_COLUMN_WIDTH = 10
 ## Default mm:ss:ms; with SHOW_TIMESTAMP_HOURS, hh:mm:ss:ms
 const TIMESTAMP_COLUMN_WIDTH_MMSSMS = 9
 const TIMESTAMP_COLUMN_WIDTH_HHMMSSMS = 12
@@ -223,13 +223,13 @@ func _print_rich_log(peer_id_str: String, log_type: String, message: String, scr
 
 	# Use peer ID directly without "Peer" prefix
 	var peer_label = peer_id_str
-	var log_type_label = str(frame_count) + " - " + log_type.to_upper()
+	var log_type_label = str(frame_count) + "-" + log_type.to_upper()
 
 	# Pad peer ID column for alignment
 	var peer_padded = _truncate_text(_pad_text(peer_label, PEER_ID_COLUMN_WIDTH), TRUNCATE_PEER_NAME)
 
 	# Format peer ID with its background color
-	var peer_formatted = _format_rich_text(peer_padded + " ", peer_color.bg_color, peer_color.text_color)
+	var peer_formatted = _format_rich_text(" " + peer_padded, peer_color.bg_color, peer_color.text_color)
 
 	# Format log type with its background color
 	var log_type_padded = _pad_text(log_type_label, LOG_TYPE_COLUMN_WIDTH)

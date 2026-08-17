@@ -208,18 +208,13 @@ func _on_object_dropped(_item) -> void:
 func _on_player_enter(_body):
 	_players_count += 1
 	SweetLogger.debug("Player enter, players_count: {0}", [_players_count])
+	if _is_leader and _state == TableState.ORDERING:
+		place_order()
 
 
 func _on_player_exit(_body):
 	_players_count -= 1
 	SweetLogger.debug("Player exit, players_count: {0}", [_players_count])
-
-
-func _place_order_if_player():
-	if _state != TableState.ORDERING:
-		return
-	if _players_count > 0:
-		place_order()
 
 
 func _get_plate_controller_from_item(_item: Node) -> PlateController:
@@ -418,7 +413,6 @@ func _process(delta: float) -> void:
 	_refresh_display()
 	if not _is_leader:
 		return # Follower: the group leader orchestrates the FSM, we just mirror its synced state.
-	_place_order_if_player()
 
 	if not NetworkManager.owns_world():
 		# SweetLogger.debug("Not server, skipping state update")
