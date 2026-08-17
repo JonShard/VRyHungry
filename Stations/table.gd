@@ -1,5 +1,5 @@
 class_name Table
-extends StaticBody3D
+extends SharedInventoryStation
 
 @export var thinking_duration: float = 3.0
 @export var ordering_duration: float = 50.0
@@ -32,22 +32,22 @@ enum TableState {
 	EATING
 }
 
-## State is server-authoritative and synced (see table.tscn's Sync node);
-## state transitions only ever run where NetworkManager.owns_world() is true
-## (the whole station's _process is gated off elsewhere for non-owners, see
-## NetworkManager._gate_station). The setters below just refresh the display,
-## so both the server (via _set_state) and clients (via incoming sync) show
-## the same text. Use _set_state(), never assign _state directly.
-@export var _state: TableState = TableState.EMPTY
-@export var _state_time: float = 0.0
-@export var _state_duration: float = 0.0 # set in _set_state_time
+
+var _state: TableState = TableState.EMPTY
+var _state_time: float = 0.0
+var _state_duration: float = 0.0
 var _original_orders: Array[String] = []
-@export var _unsatisfied_orders: Array[String] = []
+var _unsatisfied_orders: Array[String] = []
 var _players_count: int = 0
+var _is_leader: bool = true # Only the group leader orchestrates the state and shows its own visuals; see _on_group_changed().
 
 
 func place_order() -> void:
 	SweetLogger.debug("->[]")
+	if not NetworkManager.owns_world():
+		server_place_order.rpc_id(1)
+		SweetLogger.debug("  []-> rpc")
+		return
 	var new_orders: Array[String] = _unsatisfied_orders.duplicate()
 	# for _i in range(0, randi_range(1, 2)):
 	# 	new_orders.append(GameManager.get_random_meal())
@@ -56,9 +56,12 @@ func place_order() -> void:
 	new_orders.append(GameManager.get_random_meal())
 	_unsatisfied_orders = new_orders
 	_original_orders = _unsatisfied_orders.duplicate()
+	_set_state(TableState.WAITING_PRIMARY)
+	SweetLogger.info("Placed order, orders: {0}", [_unsatisfied_orders])
 
 @rpc("any_peer", "call_remote", "reliable")
 func server_place_order() -> void:
+	SweetLogger.debug("->[]")
 	if NetworkManager.owns_world():
 		place_order()
 
@@ -71,8 +74,36 @@ func absorb_items():
 			continue
 
 		_absorb_item_if_correct(held_object)
-		
-		
+
+
+# Flattens items held across all of this table's snap zones
+func get_exposed_food_items() -> Array[FoodItem]:
+	var items: Array[FoodItem] = []
+	for zone in snap_zones:
+		var held_object = zone.picked_up_object
+		if not held_object:
+			continue
+		var plate: PlateController = _get_plate_controller_from_item(held_object)
+		if plate:
+			items.append_array(plate.container.contained_items)
+			continue
+		var food_item: FoodItem = Helper.find_food_item(held_object)
+		if food_item:
+			items.append(food_item)
+	return items
+
+
+# Only the group leader orchestrates the FSM and shows its visuals
+func _on_group_changed() -> void:
+	_is_leader = is_group_leader()
+	if label_3d:
+		label_3d.visible = _is_leader
+	if label_3d_time:
+		label_3d_time.visible = _is_leader
+	if progress_bar:
+		progress_bar.set_bar_visible(_is_leader and progress_bar.is_bar_visible())
+
+
 func satisfyAllOrders() -> void:
 	SweetLogger.debug("->[]")
 	_unsatisfied_orders.clear()
@@ -109,7 +140,18 @@ func try_consume_customer() -> bool:
 	return false
 
 
+func _enter_tree() -> void:
+	super._enter_tree()
+	var properties: Array[NodePath] = [".:_state_duration", ".:_state", ".:_state_time", ".:_unsatisfied_orders", "Customers:visible"]
+	for property_path in properties:
+		sync_config.add_property(property_path)
+		sync_config.property_set_spawn(property_path, false)
+		sync_config.property_set_replication_mode(property_path, SceneReplicationConfig.REPLICATION_MODE_ON_CHANGE)
+	SweetLogger.info("DEBUG sync_config properties: {0} | root_path: {1} | authority: {2} | peer: {3}", [sync_config.get_properties(), synchronizer.root_path, get_multiplayer_authority(), multiplayer.get_unique_id()]) # temp diagnostic
+
+
 func _ready() -> void:
+	super.ready()
 	if not label_3d:
 		SweetLogger.warning("{0} missing label_3d reference", [name])
 	if not label_3d_time:
@@ -137,13 +179,6 @@ func _ready() -> void:
 	for snap_zone_node in snap_zones:
 		snap_zone_node.has_picked_up.connect(_on_object_picked_up)
 		snap_zone_node.has_dropped.connect(_on_object_dropped)
-	# Never on a client: the state machine is server-authoritative and _state is
-	# synced down. NetworkManager._gate_station() already turned processing off,
-	# but a spawned station is gated BEFORE its _ready() runs, so an unconditional
-	# set_process(true) here would quietly re-arm the FSM on every client — and
-	# _state_end(EATING) re-enables the snap zones, which then fight the server
-	# for items sitting on the table.
-	set_process(NetworkManager.owns_world())
 	_set_state(TableState.EMPTY)
 
 
@@ -185,11 +220,6 @@ func _place_order_if_player():
 		return
 	if _players_count > 0:
 		place_order()
-		_set_state(TableState.WAITING_PRIMARY)
-
-
-# func _get_plate_controller_from_item(_item: Node) -> PlateController:
-# 	return _item.get_children().filter(func(c): return c is PlateController).front() as PlateController
 
 
 func _get_plate_controller_from_item(_item: Node) -> PlateController:
@@ -271,9 +301,9 @@ func _collect_money_from_food():
 func _set_snap_zones_enabled(value: bool) -> void:
 	# Enabling is the world owner's call only — a client's zones stay gated no
 	# matter what state its copy of the FSM thinks it is in.
-	var enabled := value and NetworkManager.owns_world()
+	var is_enabled := value and NetworkManager.owns_world()
 	for zone in snap_zones:
-		zone.enabled = enabled
+		zone.enabled = is_enabled
 
 
 ## Server-only state transition: sets the new state's timer and assigns
@@ -302,8 +332,8 @@ func _set_state(newState: TableState) -> void:
 			_state_time = primary_duration
 			_state_duration = primary_duration
 			_state = newState
-			# Absorm meals that were already in the table when the state starts
-			for zone in snap_zones:
+			# Absorm meals that were already in the table when the state starts (We missed the pickup event)
+			for zone in snap_zones: 
 				_absorb_item_if_correct(zone.picked_up_object)
 		TableState.WAITING_FRIEND:
 			_state_time = friend_duration
@@ -383,12 +413,15 @@ func _refresh_display() -> void:
 
 
 func _process(delta: float) -> void:
+	super.process(delta)
+	#SweetLogger.debug("State {0} time: {1} duration: {2} is_leader: {3}", [TableState.keys()[_state], _state_time, _state_duration, _is_leader])
 	_refresh_display()
+	if not _is_leader:
+		return # Follower: the group leader orchestrates the FSM, we just mirror its synced state.
 	_place_order_if_player()
-	#SweetLogger.error("State {0} time: {1} duration: {2}", [TableState.keys()[_state], _state_time, _state_duration])
 
 	if not NetworkManager.owns_world():
-		SweetLogger.debug("Not server, skipping state update")
+		# SweetLogger.debug("Not server, skipping state update")
 		return
 
 	if GameManager.game_state == GameManager.GameState.GAME_OVER:

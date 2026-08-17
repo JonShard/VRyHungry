@@ -103,10 +103,14 @@ func _populate_world_if_owner() -> void:
 	layout.queue_free()
 	_remove_authored(authored)
 	NetworkManager.log_line("Populating world: %d stations, %d items" % [stations.size(), items.size()])
+	# One frame between spawns - MultiplayerSpawner corrupts replication when
+	# several nodes register for sync in the same frame (godotengine/godot#96914).
 	for d in stations:
 		NetworkManager.spawn_item(d["scene"], d["xform"], d["name"], d["props"])
+		await get_tree().process_frame
 	for d in items:
 		NetworkManager.spawn_item(d["scene"], d["xform"], d["name"], d["props"])
+		await get_tree().process_frame
 	NetworkManager.log_line("World populated")
 
 

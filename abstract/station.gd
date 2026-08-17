@@ -25,6 +25,17 @@ var enabled: bool: # When disabled the station only updated display and sounds.
 		snap_zone.set_process(p_enabled)
 
 
+# Godot requires replication_config to be fully built before _ready. So in _enter_tree
+# The child station has to call super._enter_tree() for this to be called.
+func _enter_tree() -> void:
+	# Always a fresh config - abstract/station.tscn's config sub-resource is shared
+	# in memory across every station scene that instances it, so reusing it here
+	# would pile every station type's properties onto the same shared object.
+	synchronizer.root_path = get_path()
+	synchronizer.replication_config = SceneReplicationConfig.new()
+	sync_config = synchronizer.replication_config
+
+
 # The child station has to call super.ready() for this to be called
 func ready() -> void:
 	SweetLogger.debug("Station {0} ready", [name])
@@ -36,18 +47,12 @@ func ready() -> void:
 		SweetLogger.warning("{0} missing snap_zone reference", [name])
 	if not synchronizer:
 		SweetLogger.warning("{0} missing synchronizer reference", [name])
-	# Disable if we're not the server. 
+	# Disable if we're not the server.
 	if not NetworkManager.owns_world():
 		enabled = false
 
 	snap_zone.has_picked_up.connect(_on_object_picked_up_handler)
 	snap_zone.has_dropped.connect(_on_object_dropped_handler)
-	
-	# Configure Multiplayer Syncronizer
-	# This overwrites any changes made in the inspector.
-	synchronizer.root_path = get_path()
-	synchronizer.replication_config = SceneReplicationConfig.new()
-	sync_config = synchronizer.replication_config
 
 # The child station has to call super.process(delta) for this to be called
 func process(_delta: float) -> void:

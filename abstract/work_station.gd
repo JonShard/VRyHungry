@@ -19,21 +19,22 @@ var current_work: float # How far a FoodItem conversion is toward completion
 var max_work: float     # How much work has to be acheived to trigger conversion
 var result_id: String # Station active if not empty. What FoodItem id the conversion turns the current FoodItem into.
 
+# The child station has to call super._enter_tree() for this to be called
+func _enter_tree() -> void:
+	super._enter_tree()
+	var properties: Array[NodePath] = [".:current_work", ".:max_work", ".:result_id"]
+	for property_path in properties:
+		sync_config.add_property(property_path)
+		sync_config.property_set_spawn(property_path, false)
+		sync_config.property_set_replication_mode(property_path, SceneReplicationConfig.REPLICATION_MODE_ON_CHANGE)
+
+
 # The child station has to call super.ready() for this to be called
 func ready() -> void:
 	super.ready()
 	if not progress_bar:
 		SweetLogger.warning("{0} missing progress_bar reference", [name])
 
-	# Configure Multiplayer Syncronizer
-	# Base Station creates the config, here we append to it:
-	var properties: Array[NodePath] = [ ".:current_work", ".:max_work", ".:result_id"]
-	for property_path in properties:
-		sync_config.add_property(property_path)
-		sync_config.property_set_spawn(property_path, false)
-		sync_config.property_set_replication_mode(property_path, SceneReplicationConfig.REPLICATION_MODE_ON_CHANGE)
-
-	
 
 # The child station has to call super.process(delta) for this to be called
 func process(delta: float) -> void:

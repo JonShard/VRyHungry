@@ -18,10 +18,14 @@ func _on_game_state_changed(new_state: GameManager.GameState) -> void:
 		_set_stations_enabled(true)
 
 
-# Only Station-derived stations expose `enabled` (Table runs its own FSM).
+# Only single-snap_zone Station-derived stations use the generic `enabled`
+# toggle here. Table is Station-derived too now (SharedInventoryStation), but
+# it has multiple snap_zones and manages their enabling itself via its own
+# FSM (_set_snap_zones_enabled) - toggling only the base `snap_zone` here
+# would desync it from the rest of Table's zones, so it's excluded.
 func _set_stations_enabled(value: bool) -> void:
 	for station in get_tree().get_nodes_in_group("station"):
-		if station is Station:
+		if station is Station and not station is Table:
 			station.enabled = value
 
 
