@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://3i1xb74cfsh5"]
+
+[ext_resource type="Script" uid="uid://c4y0yigqv7355" path="res://test/vr_spectator_camera.gd" id="1_6xorv"]
+
+[node name="VRSpectatorCamera" type="Node" unique_id=310823561]
+script = ExtResource("1_6xorv")
