@@ -10,6 +10,8 @@ extends Node
 
 const DEFAULT_PORT := 24565
 const MAX_CLIENTS := 7
+## Godot's fixed peer id for the server.
+const SERVER_PEER_ID := 1
 
 ## Emitted on every peer (including the server for its own local player) when a
 ## player peer joins. On the server this fires for each remote peer; the server
@@ -194,7 +196,7 @@ func _grant_or_reject_item_authority(item_path: NodePath, sender: int) -> void:
 	var item := get_node_or_null(item_path)
 	if item:
 		var np := item.get_node_or_null("NetPickable")
-		if np and np.net_held_by != 0 and np.net_held_by != sender:
+		if np and np.net_held_by != NetPickable.NOT_HELD and np.net_held_by != sender:
 			# Already legitimately held by a different live peer: reject the
 			# requester's optimistic client-side grab instead of stealing it.
 			log_line("request_item_authority: DENIED %s to peer %d (already held by %d)" % [item.name, sender, np.net_held_by])
@@ -320,9 +322,18 @@ func _set_item_authority(item_path: NodePath, peer: int) -> void:
 		return
 	log_line("_set_item_authority: %s -> peer %d" % [item.name, peer])
 	item.set_multiplayer_authority(peer)  # recursive: item + synchronizer + NetPickable
+	# ...except an ItemContainer under it. Deciding what a plate absorbs stays a
+	# server call, broadcast with an "authority" RPC — and Godot only lets a
+	# node's current authority send those. Letting the recursion above hand the
+	# container to whichever client is holding the plate made the client reject
+	# the server's own everyone_absorb_item, so the food was absorbed on the
+	# server only and stayed loose (and grabbable, at its old path) on the client.
+	var container := Helper.find_first_child_of_type(item, ItemContainer)
+	if container:
+		container.set_multiplayer_authority(SERVER_PEER_ID)
 	var np := item.get_node_or_null("NetPickable")
 	if np:
-		np.net_held_by = 0 if peer == 1 else peer
+		np.net_held_by = NetPickable.NOT_HELD if peer == SERVER_PEER_ID else peer
 		np.apply_held_state()
 
 

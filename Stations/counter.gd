@@ -36,13 +36,13 @@ func _process(delta: float) -> void:
 func _enable_tool(_item: XRToolsPickable):
 	SweetLogger.debug("Enable tool {0} on {1}", [_item.name, name])
 	_item.visible = true
-	_item.get_node("NetPickable").set_tool_enabled(true)
+	_item.get_node("NetPickable").grabbable = true
 
 
 func _disable_tool(_item: XRToolsPickable):
 	SweetLogger.debug("Disable tool {0} on {1}", [_item.name, name])
 	_item.visible = false
-	_item.get_node("NetPickable").set_tool_enabled(false)
+	_item.get_node("NetPickable").grabbable = false
 
 func _disable_all_tools():
 	SweetLogger.debug("Disable all tools on {0}", [name])

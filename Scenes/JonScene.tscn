@@ -11,7 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://dlw5geheupgpt" path="res://stations/hatch.tscn" id="12_dpf3b"]
 [ext_resource type="PackedScene" uid="uid://e4i6o5oriecx" path="res://items/PickupCube.tscn" id="13_1f3bw"]
 [ext_resource type="PackedScene" uid="uid://caf0xanmxbshy" path="res://stations/table.tscn" id="13_yjosk"]
-[ext_resource type="PackedScene" uid="uid://j7caslh27nor" path="res://stations/Hob_old.tscn" id="14_2ndvi"]
+[ext_resource type="PackedScene" uid="uid://b052o1fgwq5bw" path="res://stations/Hob.tscn" id="14_2ndvi"]
 [ext_resource type="PackedScene" uid="uid://clujaf3u776a3" path="res://addons/godot-xr-tools/objects/viewport_2d_in_3d.tscn" id="14_di04w"]
 [ext_resource type="PackedScene" uid="uid://efaec6ymgabo" path="res://stations/Counter.tscn" id="15_di04w"]
 [ext_resource type="PackedScene" uid="uid://xtcei2uvd5li" path="res://UI/game_over_panel.tscn" id="15_eoxxy"]

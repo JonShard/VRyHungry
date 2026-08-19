@@ -11,11 +11,16 @@ extends Node3D
 
 @onready var _meal_container: Node3D = $MealContainer
 @onready var _side_container: Node3D = $SidesContainer
-
 var contained_items: Array[FoodItem] # Expose nice list of others to read
 
+# Item roots the server has promised a slot to but whose absorb RPC hasn't run
+# yet. body_entered fires again for a body already inside the area whenever its
+# collision_mask is rewritten — which apply_held_state() does the moment item
+# authority moves back to the server, i.e. exactly when a client drops food on a
+# plate. Both calls would otherwise see the same free slot and absorb twice.
+# Keyed on the item root / pickable.
+var _pending_absorb: Array[Node3D] = []
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	area_3d.body_entered.connect(_on_body_entered)
 	if not area_3d:
@@ -29,14 +34,13 @@ func _ready() -> void:
 func _on_body_entered(body: Node3D) -> void:
 	if not NetworkManager.owns_world():
 		return
-	SweetLogger.debug("Enabled: {0}", [enabled])
 	if not enabled:
 		SweetLogger.debug("Disabled in _on_body_entered body")
 		return
 	if not body.is_in_group(target_group):
+		SweetLogger.debug("{0} is not in group {1}", [body.name, target_group])
 		return
 	SweetLogger.debug("Body: {0}", [body])
-
 
 	# If one of us is in a station
 	var picked_by = xr_pickable.get_picked_up_by()
@@ -45,179 +49,175 @@ func _on_body_entered(body: Node3D) -> void:
 	if (picked_by and picked_by.is_in_group("station_zone")) or (body_picked_by and body_picked_by.is_in_group("station_zone")):
 
 		# If enough space, add item
-		var food_item = body.get_node("FoodItem")
+		var food_item = Helper.find_food_item(body) as FoodItem
 		SweetLogger.debug("In station found {0} of type {1}: {2}", [target_group, FoodItem.Type.keys()[food_item.type], body.name], "container.gd", "_on_body_entered")
-		var meal_count := contained_items.filter(func(f): return f.type == FoodItem.Type.MEAL).size()
-		var side_count := contained_items.filter(func(f): return f.type == FoodItem.Type.SIDE).size()
-		if food_item.type == FoodItem.Type.MEAL and meal_count < meal_positions.size():
-			SweetLogger.debug("Adding meal")
-			_add_item(body)
-		if food_item.type == FoodItem.Type.SIDE and side_count < side_positions.size():
-			SweetLogger.debug("Adding side")
-			_add_item(body)
+		SweetLogger.debug("{0} pending={1} contained={2}", [get_path(), _pending_absorb.size(), contained_items.size()])
+		if body in _pending_absorb or _is_contained(body):
+			SweetLogger.debug("{0} is already in {1}", [body.name, get_parent().name])
+			return
+		if food_item.type == FoodItem.Type.MEAL and _free_slots(FoodItem.Type.MEAL) > 0:
+			SweetLogger.info("{0}, Adding meal", [name])
+			_add_item(body, food_item)
+		if food_item.type == FoodItem.Type.SIDE and _free_slots(FoodItem.Type.SIDE) > 0:
+			SweetLogger.info("{0}, Adding side", [name])
+			_add_item(body, food_item)
 
 
+# Already sitting in one of this container's slots.
+func _is_contained(item: Node3D) -> bool:
+	return item.get_parent() == _meal_container or item.get_parent() == _side_container
 
-# Contents are synced as data (ids on the plate's PlateController), not
-# reparented nodes: reparenting a MultiplayerSpawner-tracked item out of
-# WorldContent would despawn it on every client the instant it happened.
-func _add_item(item: Node3D) -> void:
-	var pickable = item as XRToolsPickable
-	if pickable and pickable.is_picked_up():
-		pickable.drop()
 
-	var food_node := item.get_node_or_null("FoodItem") as FoodItem
-	if not food_node:
-		return
+# Room left for [param type], counting slots already promised to items whose
+# absorb RPC hasn't landed yet.
+func _free_slots(type: FoodItem.Type) -> int:
+	var is_meal := type == FoodItem.Type.MEAL
+	var used := (_meal_container if is_meal else _side_container).get_child_count()
+	for item in _pending_absorb:
+		var food_item := Helper.find_food_item(item)
+		if food_item and food_item.type == type:
+			used += 1
+	return (meal_positions if is_meal else side_positions).size() - used
 
-	# Copy the data out before despawning the real item.
-	var data := FoodItem.new()
-	data.id = food_node.id
-	data.type = food_node.type
-	data.sell_value = food_node.sell_value
-	contained_items.append(data)
 
-	var plate_controller := xr_pickable.get_node_or_null("PlateController") as PlateController
-	if plate_controller:
-		# Reassign rather than append in place. contained_ids has a setter that
-		# rebuilds the plate's visuals, and mutating the array never triggers it —
-		# so the peer that actually added the food was the one peer that never
-		# redrew the plate. Remote peers looked right (the synchronizer assigns
-		# the value there, which does fire the setter), and the stale peer only
-		# caught up if someone else took the plate and sent the value back.
-		# duplicate() keeps the Array[String] typing that the property requires.
-		var updated := plate_controller.contained_ids.duplicate()
-		updated.append(food_node.id)
-		plate_controller.contained_ids = updated
+func _add_item(item: Node3D, food_item: FoodItem) -> void:
+	SweetLogger.debug("->[]")
+	# Claim the slot now: the RPC below only runs once the current frame's
+	# signal handlers have all had their turn.
+	_pending_absorb.append(item)
+	everyone_absorb_item.rpc(item.get_path())
 
-	NetworkManager.despawn_item(item)
 	# In case the container is on a table that needs to register this addition,
 	# ask all table in scene to absorb any new items.
 	SweetLogger.debug("Group call absorb_items()")
-	get_tree().call_group("table", "absorb_items") 
+	get_tree().call_group("table", "absorb_items")
 
 
+## Runs on every peer: the item stops being an independent networked object and
+## becomes a child of this container, carried by the container's transform.
+@rpc("authority", "call_local", "reliable")
+func everyone_absorb_item(item_path: NodePath) -> void:
+	var item := Helper.get_node_from_path(self, item_path) as Node3D
+	if not item:
+		SweetLogger.error("Container cant find item")
+		return
+	var food_item := Helper.find_first_child_of_type(item, FoodItem) as FoodItem
+	if not food_item:
+		SweetLogger.error("Container cant find food item")
+		return
+	# The reservation is now being honoured (or is about to be refused); either way it
+	# stops holding a slot from here on.
+	_pending_absorb.erase(item)
+	if _is_contained(item):
+		SweetLogger.warning("{0} is already in {1}", [item.name, get_parent().name])
+		return
+
+	# Pick the slot 
+	var target: Node3D
+	var slot: Node3D
+	if food_item.type == FoodItem.Type.MEAL and _meal_container.get_child_count() < meal_positions.size():
+		target = _meal_container
+		slot = meal_positions[_meal_container.get_child_count()]
+	elif food_item.type == FoodItem.Type.SIDE and _side_container.get_child_count() < side_positions.size():
+		target = _side_container
+		slot = side_positions[_side_container.get_child_count()]
+	else:
+		SweetLogger.error("{0}: no free slot for {1}", [name, item.name])
+		return
+
+	_hand_over_to_container(item)
+	item.reparent(target, false) # keep_global_transform=false: the slot is expressed in container-local space
+	item.position = slot.position
+	item.rotation = slot.rotation
+	# After the reparent, not before: re-entering the tree puts the body back
+	# into the physics space, so it can only be taken out again once it's there.
+	_remove_from_physics(item)
+
+	contained_items.append(food_item)
+	_publish_contained_ids()
+	SweetLogger.info("{0} absorbed {1}, contained_items: {2}", [get_parent().name, item.name, contained_items.size()])
+
+
+## Server decision, mirrored to every peer.
 func erase_item(item: FoodItem) -> void:
-	contained_items.erase(item)
-	var plate_controller := xr_pickable.get_node_or_null("PlateController") as PlateController
-	if plate_controller:
-		# Same reason as _add_item: assign so the visuals actually refresh.
-		var remaining := plate_controller.contained_ids.duplicate()
-		remaining.erase(item.id)
-		plate_controller.contained_ids = remaining
+	if not NetworkManager.owns_world():
+		return
+	everyone_erase_item.rpc(item.get_parent().get_path())
 
 
+@rpc("authority", "call_local", "reliable")
+func everyone_erase_item(item_path: NodePath) -> void:
+	var item := Helper.get_node_from_path(self, item_path) as Node3D
+	if not item:
+		return
+	contained_items.erase(Helper.find_first_child_of_type(item, FoodItem))
+	item.queue_free()
+	_publish_contained_ids()
+
+
+## Server decision, mirrored to every peer.
 func clear() -> void:
+	if not NetworkManager.owns_world():
+		return
+	everyone_clear.rpc()
+
+
+@rpc("authority", "call_local", "reliable")
+func everyone_clear() -> void:
+	for child in _meal_container.get_children() + _side_container.get_children():
+		child.queue_free()
 	contained_items.clear()
-	var plate_controller := xr_pickable.get_node_or_null("PlateController") as PlateController
-	if plate_controller:
-		plate_controller.contained_ids = []
+	_publish_contained_ids()
 
 
-## Rebuilds the purely-cosmetic visual representation of the plate's contents
-## from a synced id list. Runs on every peer (called from PlateController
-## whenever contained_ids changes, whether set locally or by the network).
-func refresh_visuals(ids: Array[String]) -> void:
-	for child in _meal_container.get_children():
-		child.queue_free()
-	for child in _side_container.get_children():
-		child.queue_free()
-
-	var meal_idx := 0
-	var side_idx := 0
-	for id in ids:
-		var scene := RecipeManager.get_item_scene(id)
-		if not scene:
-			continue
-		var visual := scene.instantiate()
-		var food_node := visual.get_node_or_null("FoodItem") as FoodItem
-
-		var container_root: Node3D
-		var positions: Array[Node3D]
-		var idx: int
-		if food_node and food_node.type == FoodItem.Type.MEAL and meal_idx < meal_positions.size():
-			container_root = _meal_container
-			positions = meal_positions
-			idx = meal_idx
-			meal_idx += 1
-		elif food_node and food_node.type == FoodItem.Type.SIDE and side_idx < side_positions.size():
-			container_root = _side_container
-			positions = side_positions
-			idx = side_idx
-			side_idx += 1
-		else:
-			visual.queue_free()
-			continue
-
-		_make_cosmetic(visual)
-		container_root.add_child(visual)
-		# Must happen after add_child: entering the world is what puts the body
-		# into the physics space, so it can only be taken out again afterwards.
-		_remove_from_physics(visual)
-		visual.position = positions[idx].position
-		visual.rotation = positions[idx].rotation
-
-
-# Strip interactivity/networking from a display-only copy: it's not spawned
-# through NetworkManager, so it must never try to sync (its NetPickable child,
-# if any, would have no corresponding replicated identity on other peers) or
-# be grabbable/collidable.
-func _make_cosmetic(visual: Node3D) -> void:
-	var net_pickable := visual.get_node_or_null("NetPickable")
+# Hand the item over to the container: from here on the container's parent (e.g.
+# a plate a client is carrying with local authority) is the only thing that
+# decides where the item is, so it must stop behaving as a pickable and stop
+# replicating a transform of its own.
+func _hand_over_to_container(item: Node3D) -> void:
+	var pickable := item as XRToolsPickable
+	if pickable:
+		if pickable.is_picked_up():
+			pickable.drop()
+		pickable.enabled = false
+	var net_pickable := item.get_node_or_null("NetPickable") as NetPickable
 	if net_pickable:
-		# Detach and free it outright rather than queue_free(): this runs before
-		# `visual` is added to the tree, and a merely-queued node still enters the
-		# tree with its parent and runs _ready() (which starts syncing and logging)
-		# before the queued deletion lands at the end of the frame.
-		visual.remove_child(net_pickable)
-		net_pickable.free()
-	if visual is RigidBody3D:
-		visual.freeze = true
-		# STATIC, not KINEMATIC: a kinematic body is still driven by the physics
-		# engine (see _remove_from_physics), and "static decoration" is what this
-		# actually is.
-		visual.freeze_mode = RigidBody3D.FREEZE_MODE_STATIC
-		visual.collision_layer = 0
-		visual.collision_mask = 0
-	if visual is XRToolsPickable:
-		visual.enabled = false
-	visual.set_process(false)
-	visual.set_physics_process(false)
+		net_pickable.transform_owned = false
+	else:
+		SweetLogger.error("{0}: {1} has no NetPickable", [name, item.name])
+	var despawning := Helper.find_first_child_of_type(item, DespawningItem) as DespawningItem
+	if despawning:
+		despawning.enabled = false
 
 
-# Take a display-only copy out of the physics simulation completely.
+# Take the item out of the physics simulation entirely so it simply follows its
+# new parent.
 #
 # Freezing is not enough. Under Jolt (this project's physics engine) a frozen
 # KINEMATIC RigidBody3D is still simulated: it is driven toward its target
 # transform by velocity rather than being teleported. Parented to a plate that
-# gets picked up and carried, it therefore lags behind, keeps its velocity, and
-# overshoots — so the food visibly slid off the plate and ended up metres away,
-# differently on each peer since each simulates its own copy. A body with no
-# space is never touched by the engine, so it simply follows its parent.
-func _remove_from_physics(visual: Node3D) -> void:
-	if visual is RigidBody3D:
-		PhysicsServer3D.body_set_space((visual as RigidBody3D).get_rid(), RID())
-		var despawning_item = visual.get_node_or_null("DespawningItem")
-		if despawning_item:
-			NetworkManager.despawn_item(despawning_item)
+# gets picked up and carried, it therefore lags behind, keeps its velocity and
+# overshoots — the food visibly slid off the plate, differently on each peer.
+# A body with no space is never touched by the engine.
+func _remove_from_physics(item: Node3D) -> void:
+	var body := item as RigidBody3D
+	if not body:
+		return
+	body.freeze_mode = RigidBody3D.FREEZE_MODE_STATIC
+	body.freeze = true
+	body.collision_layer = 0
+	body.collision_mask = 0
+	PhysicsServer3D.body_set_space(body.get_rid(), RID())
 
 
-#plate (Pickalbe)
-	#XRGrapPoints
-	#container (script) (meal positions[1], side positions[4])
-		#area
-		#meals
-			#meal - burger
-			#sides
-				#side - chips
-				#side - onion rings
-
-#tray (Pickalbe)
-	#XRGrapPoints
-	#container (script) (meal positions[4], side positions[0])
-		#food items
-		#meals
-			#meal - cookie
-			#meal - cookie
-			#meal - cookie
-			#meal - cookie
+# The contents are real child nodes now; contained_ids is just the synced
+# summary that the plate's UI and the multiplayer tests read.
+func _publish_contained_ids() -> void:
+	var plate_controller := xr_pickable.get_node_or_null("PlateController") as PlateController
+	if not plate_controller:
+		return
+	var ids: Array[String] = []
+	for food_item in contained_items:
+		ids.append(food_item.id)
+	plate_controller.contained_ids = ids
+	SweetLogger.debug("{0} now contains: {1}", [get_parent().name, ids])

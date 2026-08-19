@@ -9,11 +9,17 @@
 [ext_resource type="PackedScene" uid="uid://caf0xanmxbshy" path="res://stations/table.tscn" id="7_0342k"]
 [ext_resource type="PackedScene" uid="uid://cnjwtnhwh0i8q" path="res://stations/dirt_station.tscn" id="8_b5gb1"]
 [ext_resource type="PackedScene" uid="uid://sc6i0i1f0o48" path="res://stations/potato_dispenser.tscn" id="9_ok0xr"]
+[ext_resource type="PackedScene" uid="uid://b3m2ag8g5rj4r" path="res://items/hamburger.tscn" id="10_ay2lk"]
+[ext_resource type="PackedScene" uid="uid://duwrbvwcqcuk3" path="res://items/chips.tscn" id="11_m7v4h"]
+[ext_resource type="PackedScene" uid="uid://bp3v1jl8pctro" path="res://Containers/plate.tscn" id="12_h4a0y"]
 
 [node name="SmallLine" type="Node3D" unique_id=1844128818]
 
 [node name="Counter" parent="." unique_id=1487893288 instance=ExtResource("2_3qwcq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0, 0)
+
+[node name="Counter2" parent="." unique_id=707500902 instance=ExtResource("2_3qwcq")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.8000001, 0, 1.8000001)
 
 [node name="Sink" parent="." unique_id=2055277359 instance=ExtResource("3_3qwcq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, 0, 0)
@@ -30,12 +36,21 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8000001, 0, 0)
 [node name="Table" parent="." unique_id=987495548 instance=ExtResource("7_0342k")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 0, 1.2)
 
-[node name="Hob" parent="." unique_id=707500902 instance=ExtResource("1_1wuvq")]
+[node name="Hob" parent="." unique_id=484464865 instance=ExtResource("1_1wuvq")]
 
 [node name="DirtStation" parent="." unique_id=784427347 instance=ExtResource("8_b5gb1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8000001, 0, 0)
 
 [node name="PotatoDispenser" parent="." unique_id=522124817 instance=ExtResource("9_ok0xr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8000001, 0, 0.6)
+
+[node name="Hamburger" parent="." unique_id=1675596942 instance=ExtResource("10_ay2lk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+
+[node name="Chips" parent="." unique_id=740493636 instance=ExtResource("11_m7v4h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8000001, 1.2, 1.8000001)
+
+[node name="Plate" parent="." unique_id=190487773 instance=ExtResource("12_h4a0y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 1.2, 0)
 
 [editable path="Table"]

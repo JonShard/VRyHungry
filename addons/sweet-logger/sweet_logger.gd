@@ -98,7 +98,7 @@ const TIMESTAMP_BG_COLOR = "#1e3a5f"
 #===================================================================================#
 ## Column widths for alignment (in characters)
 const PEER_ID_COLUMN_WIDTH = 6
-const LOG_TYPE_COLUMN_WIDTH = 10
+const LOG_TYPE_COLUMN_WIDTH = 12
 ## Default mm:ss:ms; with SHOW_TIMESTAMP_HOURS, hh:mm:ss:ms
 const TIMESTAMP_COLUMN_WIDTH_MMSSMS = 9
 const TIMESTAMP_COLUMN_WIDTH_HHMMSSMS = 12

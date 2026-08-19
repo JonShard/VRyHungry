@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://bnwb7imcotkod" path="res://prefabs/build_mode_controller.tscn" id="10_464r1"]
 [ext_resource type="PackedScene" uid="uid://3i1xb74cfsh5" path="res://test/vr_spectator_camera.tscn" id="11_5wx0o"]
 [ext_resource type="PackedScene" uid="uid://dxe05wp60jg3l" path="res://scenes/queue_controller.tscn" id="11_de1dy"]
+[ext_resource type="PackedScene" uid="uid://b052o1fgwq5bw" path="res://stations/Hob.tscn" id="12_hob"]
 [ext_resource type="Script" uid="uid://biu4qr3nr1eny" path="res://test/mp_test_driver.gd" id="99_mptst"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vlqg6"]
@@ -30,9 +31,6 @@ sdfgi_enabled = true
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_arao0"]
 size = Vector3(15, 20, 0.1)
-
-[sub_resource type="Resource" id="Resource_464r1"]
-metadata/__load_path__ = "res://stations/Hob_old.tscn"
 
 [node name="Main" type="Node3D" unique_id=1312265607 node_paths=PackedStringArray("items_spawner", "players_spawner")]
 script = ExtResource("1_kdan8")
@@ -94,7 +92,7 @@ script = ExtResource("99_mptst")
 transform = Transform3D(1, 0, -1.7484555e-07, 0, 1, 0, 1.7484555e-07, 0, 1, 0, 0, -1.2)
 script = ExtResource("6_pw2j5")
 kitchen_scene = ExtResource("7_0sjqq")
-hob_scene = SubResource("Resource_464r1")
+hob_scene = ExtResource("12_hob")
 
 [node name="DayController" parent="." unique_id=1418639156 instance=ExtResource("9_5wx0o")]
 

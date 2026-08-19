@@ -1,28 +1,10 @@
 [gd_scene format=3 uid="uid://b3m2ag8g5rj4r"]
 
-[ext_resource type="PackedScene" uid="uid://c8l60rnugru40" path="res://addons/godot-xr-tools/objects/pickable.tscn" id="1_3gf3l"]
-[ext_resource type="PackedScene" uid="uid://c25yxb0vt53vc" path="res://addons/godot-xr-tools/objects/grab_points/grab_point_hand_left.tscn" id="2_0mkco"]
-[ext_resource type="Animation" uid="uid://db62hs5s4n2b3" path="res://addons/godot-xr-tools/hands/animations/left/Grip 4.res" id="3_6tnvi"]
-[ext_resource type="Script" uid="uid://dvobm6vcfnqe8" path="res://addons/godot-xr-tools/hands/poses/hand_pose_settings.gd" id="4_cljtj"]
-[ext_resource type="PackedScene" uid="uid://ctw7nbntd5pcj" path="res://addons/godot-xr-tools/objects/grab_points/grab_point_hand_right.tscn" id="5_dunns"]
-[ext_resource type="Animation" uid="uid://d1xnpyc08njjx" path="res://addons/godot-xr-tools/hands/animations/right/Grip 4.res" id="6_fh0f6"]
-[ext_resource type="PackedScene" uid="uid://bfj80jh13t6e5" path="res://prefabs/food_item.tscn" id="7_yy3y8"]
-[ext_resource type="PackedScene" uid="uid://b5ukku8i0hilb" path="res://prefabs/despawning_item.tscn" id="9_ej8jm"]
-[ext_resource type="Script" uid="uid://bwd0pe2udb5xo" path="res://Net/net_pickable.gd" id="20_netpk"]
+[ext_resource type="PackedScene" uid="uid://d8jo0402pgl6" path="res://abstract/food_item.tscn" id="1_food_item"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_fco8w"]
 height = 0.10392761
 radius = 0.096191406
-
-[sub_resource type="Resource" id="Resource_lc22d"]
-script = ExtResource("4_cljtj")
-closed_pose = ExtResource("3_6tnvi")
-metadata/_custom_type_script = "uid://dvobm6vcfnqe8"
-
-[sub_resource type="Resource" id="Resource_qyiot"]
-script = ExtResource("4_cljtj")
-closed_pose = ExtResource("6_fh0f6")
-metadata/_custom_type_script = "uid://dvobm6vcfnqe8"
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3gf3l"]
 albedo_color = Color(0.6784191, 0.54546416, 0.016760282, 1)
@@ -30,53 +12,41 @@ albedo_color = Color(0.6784191, 0.54546416, 0.016760282, 1)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6l01i"]
 albedo_color = Color(0.29, 0.101500005, 0, 1)
 
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_np_hamburger"]
-properties/0/path = NodePath(".:position")
-properties/0/spawn = false
-properties/0/replication_mode = 1
-properties/1/path = NodePath(".:quaternion")
-properties/1/spawn = false
-properties/1/replication_mode = 1
-properties/2/path = NodePath("NetPickable:net_held_by")
-properties/2/spawn = true
-properties/2/replication_mode = 1
-
-[node name="Hamburger" unique_id=1675596942 groups=["platalbe_item"] instance=ExtResource("1_3gf3l")]
+[node name="Hamburger" unique_id=779551583 groups=["platalbe_item"] instance=ExtResource("1_food_item")]
 gravity_scale = 0.04
-second_hand_grab = 1
 
 [node name="CollisionShape3D" parent="." index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.02, 0.02, 0)
 shape = SubResource("CylinderShape3D_fco8w")
 
-[node name="GrabPointHandLeft" parent="." index="1" unique_id=1571481674 instance=ExtResource("2_0mkco")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.067650706, 0.04601878, -0.08606844)
-hand_pose = SubResource("Resource_lc22d")
+[node name="FoodItem" parent="." index="5" unique_id=63948206]
+id = "hamburger"
+type = 0
+sell_value = 4
 
-[node name="GrabPointHandRight" parent="." index="2" unique_id=514404634 instance=ExtResource("5_dunns")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06531982, 0.042291984, -0.08604182)
-hand_pose = SubResource("Resource_qyiot")
+[node name="CombinableItem" parent="." index="7" unique_id=996936271]
+enabled = false
 
-[node name="CSGCombiner3DBuns" type="CSGCombiner3D" parent="." index="3" unique_id=678881053]
+[node name="CSGCombiner3DBuns" type="CSGCombiner3D" parent="Model" parent_id_path=PackedInt32Array(1015960306) index="0" unique_id=678881053]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.021904588, 0.025076538, -0.0044593215)
 autosmooth = true
 smoothing_angle = 138.9
 
-[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="CSGCombiner3DBuns" index="0" unique_id=776920274]
+[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="Model/CSGCombiner3DBuns" index="0" unique_id=776920274]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.022625268, -0.03479519, 0.0027926378)
 radius = 0.085
 height = 0.04
 sides = 16
 material = SubResource("StandardMaterial3D_3gf3l")
 
-[node name="CSGCylinder3D3" type="CSGCylinder3D" parent="CSGCombiner3DBuns" index="1" unique_id=448728548]
+[node name="CSGCylinder3D3" type="CSGCylinder3D" parent="Model/CSGCombiner3DBuns" index="1" unique_id=448728548]
 transform = Transform3D(0.82770383, -0.5611652, 0, 0.5611652, 0.82770383, 0, 0, 0, 1, -0.07384333, 0.015895892, 0)
 radius = 0.085
 height = 0.04
 sides = 16
 material = SubResource("StandardMaterial3D_3gf3l")
 
-[node name="CSGCylinder3D4" type="CSGCylinder3D" parent="CSGCombiner3DBuns/CSGCylinder3D3" index="0" unique_id=837229235]
+[node name="CSGCylinder3D4" type="CSGCylinder3D" parent="Model/CSGCombiner3DBuns/CSGCylinder3D3" index="0" unique_id=837229235]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9604645e-08, 0.040259957, 0)
 radius = 0.085
 height = 0.04
@@ -84,20 +54,9 @@ sides = 16
 cone = true
 material = SubResource("StandardMaterial3D_3gf3l")
 
-[node name="CSGCylinder3D" type="CSGCylinder3D" parent="." index="4" unique_id=59319982]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02356495, 0)
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="Model/CSGCombiner3DBuns" index="2" unique_id=59319982]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.021904588, -0.0015115887, 0.0044593215)
 radius = 0.08300781
 height = 0.03
 sides = 16
 material = SubResource("StandardMaterial3D_6l01i")
-
-[node name="FoodItem" parent="." index="5" unique_id=63948206 instance=ExtResource("7_yy3y8")]
-id = "hamburger"
-type = 0
-sell_value = 4
-
-[node name="NetPickable" type="MultiplayerSynchronizer" parent="." index="6" unique_id=56164120]
-replication_config = SubResource("SceneReplicationConfig_np_hamburger")
-script = ExtResource("20_netpk")
-
-[node name="DespawningItem" parent="." index="7" unique_id=303090111 instance=ExtResource("9_ej8jm")]

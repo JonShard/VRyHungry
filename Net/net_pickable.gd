@@ -1,3 +1,4 @@
+class_name NetPickable
 extends MultiplayerSynchronizer
 
 ## Networked sync component for a pickable item. Added as a child literally
@@ -8,33 +9,37 @@ extends MultiplayerSynchronizer
 ## every other peer freezes their local copy and just follows the synced
 ## transform.
 
-## 0 = loose/server-simulated; otherwise the peer id currently holding it.
+## Nobody is holding the item, so it is loose and simulated by the server. Not
+## the same as "the server holds it" — that would be the server's peer id.
+const NOT_HELD := 0
+
+## NOT_HELD, or the peer id currently holding it.
 ## Replicated at spawn and on change so a late joiner sees the current holder.
-var net_held_by: int = 0: set = _set_net_held_by
+var net_held_by: int = NOT_HELD: set = _set_net_held_by
+
+## Transform properties, kept apart from the rest of the replicated set because
+## set_transform_owned() drops them while something else drives the item.
+const TRANSFORM_PROPERTIES: Array[String] = [".:position", ".:quaternion"]
+
+## False while something else drives this item's transform — e.g. it has been
+## reparented into a container and is carried by its new parent. See set_transform_owned().
+var transform_owned: bool = true: set = set_transform_owned
 
 var _pickable: XRToolsPickable
 
 # This item's own baked freeze_mode (e.g. plate.tscn bakes KINEMATIC, not the
-# RigidBody3D default of STATIC) — captured once so it can be restored when
-# this peer regains ownership, instead of getting stuck on whatever
-# apply_held_state() last forced it to while non-authority.
+# RigidBody3D default of STATIC) — captured once so it can be restored.
 var _original_freeze_mode: RigidBody3D.FreezeMode
 
 # Same idea for the pickable's authored `enabled` flag, which the non-authority
 # branch of apply_held_state() clears while someone else is holding the item.
 var _original_enabled: bool
 
-# Intent set by external game logic (e.g. a station enabling/disabling a tool),
-# independent of hold state. apply_held_state() is the sole writer of the
-# pickable's actual `enabled` property, so this is how other systems express
-# "should be enabled" without fighting that reconciliation every tick.
-var _tool_enabled: bool = true
-
-# Whether the "our own hand still holds this" guard has already been logged for
-# the current grab. apply_held_state() runs every network tick, so without this
-# the guard message repeats for as long as you hold the item.
-var _grab_race_logged := false
-
+## Intent set by external game logic (e.g. a station enabling/disabling a tool),
+## independent of hold state. apply_held_state() is the sole writer of the
+## pickable's actual `enabled` property, so this is how other systems express
+## "should be enabled" without fighting that reconciliation every tick.
+var grabbable: bool = true: set = set_grabbable
 
 func _ready() -> void:
 	_pickable = get_parent() as XRToolsPickable
@@ -45,11 +50,8 @@ func _ready() -> void:
 	# Configure Multiplayer Synchronizer
 	# This overwrites any changes made in the inspector.
 	replication_config = SceneReplicationConfig.new()
-	var properties: Array[NodePath] = [".:position", ".:quaternion", ".:enabled", ".:visible"]
-	for property_path in properties:
-		replication_config.add_property(property_path)
-		replication_config.property_set_replication_mode(property_path, SceneReplicationConfig.REPLICATION_MODE_ALWAYS)
-		replication_config.property_set_spawn(property_path, false)
+	for property_path in TRANSFORM_PROPERTIES + [".:enabled", ".:visible"]:
+		_add_always_property(property_path)
 	# Unlike the properties above, this one is replicated at spawn too, so a
 	# late joiner sees the current holder immediately.
 	var held_by_path := NodePath("NetPickable:net_held_by")
@@ -69,14 +71,38 @@ func _ready() -> void:
 	apply_held_state.call_deferred()
 
 
-## Called by external game logic (e.g. Counter._enable_tool/_disable_tool) to
+func _add_always_property(property_path: String) -> void:
+	replication_config.add_property(property_path)
+	replication_config.property_set_replication_mode(property_path, SceneReplicationConfig.REPLICATION_MODE_ALWAYS)
+	replication_config.property_set_spawn(property_path, false)
+
+
+## Set false by whatever takes over driving this item's transform (e.g. an
+## ItemContainer reparenting it onto a plate). Disables apply_held_state()
+## Without this net_held_by tick and would keep restoring `enabled`, `freeze` and the
+## collision mask.
+func set_transform_owned(value: bool) -> void:
+	if transform_owned == value:
+		return
+	transform_owned = value
+	for property_path in TRANSFORM_PROPERTIES:
+		if value:
+			_add_always_property(property_path)
+		else:
+			replication_config.remove_property(property_path)
+	# Ours again: re-derive the physics state we stopped maintaining.
+	if value:
+		apply_held_state()
+
+
+## Set by external game logic (e.g. Counter._enable_tool/_disable_tool) to
 ## express whether this item should be usable right now, independent of hold
 ## state. Reapplies immediately so the change takes effect without waiting for
 ## the next net_held_by tick.
-func set_tool_enabled(value: bool) -> void:
-	if _tool_enabled == value:
+func set_grabbable(value: bool) -> void:
+	if grabbable == value:
 		return
-	_tool_enabled = value
+	grabbable = value
 	apply_held_state()
 
 
@@ -91,19 +117,12 @@ func _set_net_held_by(value: int) -> void:
 ## Puts the item in the right physics state for whether this peer currently
 ## owns it. Called locally after net_held_by changes, and directly by
 ## NetworkManager._set_item_authority right after an authority handoff.
-##
-## IMPORTANT: this runs on every network tick, not just on a real change.
-## net_held_by is replicated in ALWAYS mode, so the synchronizer assigns it every
-## tick on non-authority peers — unchanged value included — and that assignment
-## lands in _set_net_held_by(), which calls this. So every branch here has to be
-## idempotent and silent when there is nothing to do: otherwise each item logs a
-## line and rewrites four physics properties every tick on every peer that
-## doesn't own it.
 func apply_held_state() -> void:
 	if not _pickable:
 		return
+	if not transform_owned: # We don't own it.
+		return
 	if not NetworkManager.is_online() or (is_inside_tree() and is_multiplayer_authority()) :
-		_grab_race_logged = false
 		# We own this item's simulation (offline, loose+server, or currently
 		# holding it). If it's not actively in our own hand right now, make
 		# sure it isn't still left frozen/collision-less from a previous
@@ -128,7 +147,7 @@ func apply_held_state() -> void:
 		# e.g. a plate still got marked dirty) while pick_up() bailed out on
 		# the disabled item, leaving the zone holding an item with no grab
 		# driver that then fell out of the station.
-		var want_enabled_authority := _original_enabled and _tool_enabled
+		var want_enabled_authority := _original_enabled and grabbable
 		if _pickable.enabled != want_enabled_authority:
 			if NetworkManager.is_online():
 				SweetLogger.debug("{0}: reclaiming ownership, restoring enabled {1}->{2}", [_pickable.name, _pickable.enabled, want_enabled_authority])
@@ -141,12 +160,7 @@ func apply_held_state() -> void:
 	# hand mid-grab — only an explicit force_release_item rejection, or
 	# actually losing authority for real, should end a grab we initiated.
 	if _pickable.is_picked_up() and _pickable.get_picked_up_by() is XRToolsFunctionPickup:
-		# Log once per grab, not once per tick.
-		if NetworkManager.is_online() and not _grab_race_logged:
-			_grab_race_logged = true
-			SweetLogger.debug("{0}: ignoring non-authority sync (net_held_by={1}) — still actively held by our own hand (grab-race guard)", [_pickable.name, net_held_by])
 		return
-	_grab_race_logged = false
 	# Someone else owns it: stop simulating locally, just follow the sync.
 	if _pickable.is_picked_up():
 		if NetworkManager.is_online():
@@ -159,14 +173,14 @@ func apply_held_state() -> void:
 	# physics-property writes per item per tick. The comparison also means we
 	# still re-apply if something else perturbs the state (e.g. let_go()
 	# restoring the collision mask after a force-drop).
-	var want_enabled := (net_held_by == 0) and _tool_enabled
+	var want_enabled := (net_held_by == NOT_HELD) and grabbable
 	if _pickable.freeze \
 			and _pickable.freeze_mode == RigidBody3D.FREEZE_MODE_KINEMATIC \
 			and _pickable.collision_mask == 0 \
 			and _pickable.enabled == want_enabled:
 		return
-	# if NetworkManager.is_online(): # This was spamming that Knife was frozen every frame.
-	# 	print("%s: freezing (non-authority, owner=peer %d)" % [_pickable.name, net_held_by])
+	if NetworkManager.is_online(): # This was spamming that Knife was frozen every frame.
+		SweetLogger.debug("{0}: freezing (non-authority, owner=peer {1})", [_pickable.name, net_held_by])
 	_pickable.freeze = true
 	_pickable.freeze_mode = RigidBody3D.FREEZE_MODE_KINEMATIC
 	_pickable.collision_mask = 0
@@ -177,8 +191,7 @@ func apply_held_state() -> void:
 ## authority immediately so the throw/drop can be reconciled, but let the grab
 ## happen instantly here rather than waiting on the round trip.
 func _on_picked_up(_p) -> void:
-	var by := _pickable.get_picked_up_by()
-	if not (by is XRToolsFunctionPickup):
+	if not (_pickable.get_picked_up_by() is XRToolsFunctionPickup):
 		# e.g. a station snap zone grabbed it (server-side auto-snap, or the
 		# addon's own "grab out of a snap zone" shortcut mid-cascade) — not a
 		# player-initiated hand grab, so no authority request from here.
