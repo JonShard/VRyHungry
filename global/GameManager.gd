@@ -21,7 +21,7 @@ func server_set_money(value: int) -> void: set_money(value)
 func client_sync_money(value: int) -> void: money = value
 
 
-var day_number: int = 1:
+var day_number: int = 0:
 	get:
 		return day_number
 
@@ -110,7 +110,7 @@ func client_sync_day_length_seconds(value: float) -> void:
 	day_length_seconds = value
 
 
-var customers_per_day: float = 5.0:
+var customers_per_day: float = 3.0:
 	get:
 		return customers_per_day
 

@@ -200,10 +200,6 @@ func _on_object_dropped(_item) -> void:
 			_unsatisfied_orders.append(food_item.id)
 
 
-# original 		: burger cube, cube
-# unsatisfied 	: burger cube
-# table			: 
-
 # There is no on_stay signal, we have to track player with bool
 func _on_player_enter(_body):
 	_players_count += 1
@@ -358,6 +354,8 @@ func _state_end(oldState: TableState):
 			clearAllFood()
 			_set_snap_zones_enabled(true)
 			_set_state(TableState.EMPTY)
+			SweetLogger.info("Table satisfied, emitting signal")
+			Signals.table_satisfied.emit(self)
 
 		TableState.ORDERING, TableState.WAITING_PRIMARY, TableState.WAITING_FRIEND:
 			SweetLogger.info("{0}: order timed out in state {1}, game over", [name, TableState.keys()[oldState]])

@@ -1,6 +1,6 @@
 extends Node
 
-const enable_debug = true
+const enable_debug = false
 var frame_count = 0
 # Inside SweetLogger or a static helper class:
 static func get_current_function_name() -> String:
@@ -98,7 +98,7 @@ const TIMESTAMP_BG_COLOR = "#1e3a5f"
 #===================================================================================#
 ## Column widths for alignment (in characters)
 const PEER_ID_COLUMN_WIDTH = 6
-const LOG_TYPE_COLUMN_WIDTH = 12
+const LOG_TYPE_COLUMN_WIDTH = 13
 ## Default mm:ss:ms; with SHOW_TIMESTAMP_HOURS, hh:mm:ss:ms
 const TIMESTAMP_COLUMN_WIDTH_MMSSMS = 9
 const TIMESTAMP_COLUMN_WIDTH_HHMMSSMS = 12

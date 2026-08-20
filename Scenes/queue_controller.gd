@@ -6,9 +6,9 @@ extends Node3D
 @export var progress_bar_3d: ProgressBar3D
 @export var label_3d: Label3D
 
-
 var _customers: Array[float] = [] # Temp. Array of their patience
 var _tables: Array[Node3D] = []
+
 
 func _ready() -> void:
 	progress_bar_3d.override_fill_color(Color.YELLOW)
@@ -20,6 +20,7 @@ func _ready() -> void:
 func _on_game_state_changed(new_state: GameManager.GameState) -> void:
 	if new_state == GameManager.GameState.RUNNING:
 		_rebuild_table_list()
+
 
 func _on_request_customer_spawn() -> void:
 	spawn_customer()
@@ -44,20 +45,27 @@ func _try_to_assign_customers() -> void:
 				break
 
 
+func _update_clients_display() -> void:
+	if not _customers.is_empty():
+		everyone_set_queue_info.rpc("Customers in queue: " +  str(_customers.size()), _customers.front() / queue_patience)
+	else:
+		everyone_set_queue_info.rpc("No Customers", 0)
+
+		
+@rpc("authority", "call_local", "unreliable")
+func everyone_set_queue_info(label_text: String, progress: float) -> void:
+	label_3d.text = label_text
+	progress_bar_3d.set_progress(progress)
+
+
 func _process(delta: float) -> void:
+	if not NetworkManager.owns_world():
+		return
 	# Process customers patience
 	for i in range(0, _customers.size()):
 		_customers[i] -= delta
 		if _customers[i] <= 0:
+			SweetLogger.info("Customer patience ran out, game over")
 			GameManager.game_over()
-
 	_try_to_assign_customers()
-
-	# Update visuals
-	if not _customers.is_empty():
-		label_3d.text = "Customers in queue: " +  str(_customers.size())
-		progress_bar_3d.set_progress(_customers.front() / queue_patience)
-	else:
-		progress_bar_3d.set_progress(0)
-		label_3d.text = "No Customers"
-		
+	_update_clients_display()

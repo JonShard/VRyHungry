@@ -19,6 +19,10 @@
 - Freshness
 - Fullbody tracking                             (Height calibration)
 
+### Bugs
+- Plate not locked on clinets by table
+- Rare times, plate not cleared / has buger on it after table eaten. New customer didn't accept it, so must have been empty, but server and client visuals had burger on plate.
+- Table does not accept clinet that was already in player detect zone
 
 ### Station inheritence suggestion
 Station
