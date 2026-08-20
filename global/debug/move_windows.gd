@@ -1,20 +1,20 @@
 extends Node
 
+## Nudge down from the screen top so the window's title bar/menu stays visible.
+const SERVER_Y_OFFSET := 45
+
 func _ready() -> void:
-	if OS.has_feature("editor"):
-		# Force subwindows to be native OS windows instead of embedded viewports
+	# Only the (non-VR) server window needs positioning; the VR instance's
+	# window is left wherever the OS/editor puts it.
+	if OS.has_feature("editor") and OS.get_cmdline_args().has("--server"):
 		get_tree().root.gui_embed_subwindows = false
 		get_tree().create_timer(0.05).timeout.connect(_position_window)
 
 func _position_window() -> void:
-	var is_server: bool = OS.get_cmdline_args().has("--server")
 	var screen_rect: Rect2i = DisplayServer.screen_get_usable_rect(DisplayServer.window_get_current_screen())
-	
+
 	@warning_ignore("integer_division")
 	var window_width: int = screen_rect.size.x / 2
-	var window_height: int = int(screen_rect.size.y * (2.0 / 3.0))
-	
-	DisplayServer.window_set_size(Vector2i(window_width - 10, window_height))
-	if is_server:
-		var x_pos: int = screen_rect.position.x + window_width
-		DisplayServer.window_set_position(Vector2i(x_pos, screen_rect.position.y))
+	var x_pos: int = screen_rect.position.x + window_width
+	var y_pos: int = screen_rect.position.y + SERVER_Y_OFFSET
+	DisplayServer.window_set_position(Vector2i(x_pos, y_pos))

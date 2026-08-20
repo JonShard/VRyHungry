@@ -12,7 +12,7 @@ var _camera: Camera3D
 func _ready() -> void:
 	var xr_interface := XRServer.find_interface("OpenXR")
 	if xr_interface and xr_interface.is_initialized():
-		SweetLogger.warning("{0} disabled - this instance is the VR client", [name])
+		SweetLogger.debug("{0} disabled - this instance is the VR client", [name])
 		return
 	if not _players:
 		SweetLogger.warning("{0} could not resolve players_path {1}", [name, players_path])

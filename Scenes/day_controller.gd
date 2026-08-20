@@ -9,7 +9,8 @@ var customers_served: int = 0
 
 
 func _ready() -> void:
-	GameManager.set_game_state(GameManager.GameState.BUILDING)
+	if NetworkManager.owns_world():
+		GameManager.set_game_state(GameManager.GameState.BUILDING)
 	Signals.game_state_changed.connect(_on_game_state_changed)
 	Signals.table_satisfied.connect(_on_table_statisfied)
 

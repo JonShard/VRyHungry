@@ -431,6 +431,8 @@ func request_join(ip: String) -> void:
 	pending_ip = ip
 
 func consume_pending_session() -> void:
+	if is_online():
+		return
 	if pending_action == "host":
 		pending_action = ""
 		host()
