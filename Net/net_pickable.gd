@@ -179,8 +179,6 @@ func apply_held_state() -> void:
 			and _pickable.collision_mask == 0 \
 			and _pickable.enabled == want_enabled:
 		return
-	if NetworkManager.is_online(): # This was spamming that Knife was frozen every frame.
-		SweetLogger.debug("{0}: freezing (non-authority, owner=peer {1})", [_pickable.name, net_held_by])
 	_pickable.freeze = true
 	_pickable.freeze_mode = RigidBody3D.FREEZE_MODE_KINEMATIC
 	_pickable.collision_mask = 0
