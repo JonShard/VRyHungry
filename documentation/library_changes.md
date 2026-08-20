@@ -19,3 +19,22 @@ Add (what) to singal dropped in snap_zone
 		picked_up_object.let_go(self, Vector3.ZERO, Vector3.ZERO)
 		picked_up_object = null
 		highlight_updated.emit(self, enabled)
+
+
+viewport_2d_in_3d.tscn:
+	Removed the baked ViewportTexture sub-resource (no viewport_path set, genuinely
+	invalid) that was the default material on the Screen mesh. The script always
+	builds and swaps in its own material at _ready(), so the baked one only
+	existed to be briefly invalid before being discarded, printing a spurious
+	"Viewport Texture must be set to use it" error on every instance (MainMenuPanel3D
+	at boot, the player's shop_menu_3d on avatar spawn).
+	Removed:
+		[sub_resource type="ViewportTexture" id="ViewportTexture_ufe4n"]
+
+		[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fvml0"]
+		transparency = 1
+		cull_mode = 2
+		albedo_texture = SubResource("ViewportTexture_ufe4n")
+		texture_filter = 1
+	And the reference to it on the Screen node:
+		surface_material_override/0 = SubResource("StandardMaterial3D_fvml0")

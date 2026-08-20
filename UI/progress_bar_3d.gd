@@ -10,6 +10,8 @@ class_name ProgressBar3D
 
 func _ready() -> void:
 	Helper.check_reference(self, progress_bar, ProgressBar)
+	# Rebind now that SubViewport is guaranteed live, avoiding a stale ViewportTexture.
+	sprite_3d.texture = sprite_3d.get_node(^"SubViewport").get_texture()
 	if y_billboard:
 		$Sprite3D.billboard = BaseMaterial3D.BillboardMode.BILLBOARD_FIXED_Y
 

@@ -24,10 +24,10 @@ size = Vector3(15, 0.1, 15)
 background_mode = 2
 sky = ExtResource("4_081u3")
 reflected_light_source = 2
-ssr_enabled = true
+ssr_enabled = false
 ssao_enabled = true
-ssil_enabled = true
-sdfgi_enabled = true
+ssil_enabled = false
+sdfgi_enabled = false
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_arao0"]
 size = Vector3(15, 20, 0.1)
