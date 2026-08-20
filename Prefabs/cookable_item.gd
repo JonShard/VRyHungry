@@ -5,5 +5,4 @@ extends Node
 @export var turns_into: PackedScene
 
 func _ready() -> void:
-	if not turns_into:
-		SweetLogger.warning("{0} missing turns_into reference", [name])
+	Helper.check_reference(self, turns_into, PackedScene)

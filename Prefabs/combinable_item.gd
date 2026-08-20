@@ -14,14 +14,11 @@ var _food_item: FoodItem
 func _ready() -> void:
 	SweetLogger.debug("{0} ready", [_pickable.name])
 	_food_item = get_parent().get_node_or_null("FoodItem") as FoodItem
-	if not _food_item:
-		SweetLogger.warning("{0} missing FoodItem reference, must be a sibling of a FoodItem", [get_parent().name])
 
 	if not _pickable:
 		SweetLogger.error("{0} must be a grandchild of an XRToolsPickable", [get_parent().name])
 		return
-	if not _food_item:
-		SweetLogger.warning("{0} requires a FoodItem sibling", [_pickable.name])
+	if not Helper.check_reference(get_parent(), _food_item, FoodItem):
 		return
 	if not enabled:
 		return

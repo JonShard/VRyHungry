@@ -72,6 +72,22 @@ static func get_node_from_path(from: Node, node_path: NodePath) -> Node3D:
 
 
 
+static func check_reference(node: Node, ref: Variant, type: Variant) -> bool:
+	if is_instance_valid(ref) and is_instance_of(ref, type):
+		return true
+	var type_name: String
+	if type is Script:
+		type_name = type.get_global_name()
+	else:
+		var probe: Object = type.new()
+		type_name = probe.get_class()
+		if not (probe is RefCounted):
+			probe.free()
+	SweetLogger.warning("{0} missing reference {1} ({2})", [node.name, type_name, _get_caller_label()])
+	return false
+
+
+
 static func play_sound(player: AudioStreamPlayer3D, stream: AudioStream, pitch_scale: float = 1):
 	if not player:
 		SweetLogger.warning("{0}: AudioStreamPlayer3D is null, can not play sound", [_get_caller_label()])

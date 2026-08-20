@@ -12,12 +12,9 @@ extends WorkStation
 func _ready() -> void:
 	super.ready()
 	SweetLogger.debug("Counter {0} _ready", [name])
-	if not audio:
-		SweetLogger.warning("{0} missing audio reference", [name])
-	if not chop_audio:
-		SweetLogger.warning("{0} missing chop_audio reference", [name])
-	if not knife:
-		SweetLogger.warning("{0} missing knife reference", [name])
+	Helper.check_reference(self, audio, AudioStreamPlayer3D)
+	Helper.check_reference(self, chop_audio, AudioStream)
+	Helper.check_reference(self, knife, XRToolsPickable)
 	_disable_all_tools()
 
 

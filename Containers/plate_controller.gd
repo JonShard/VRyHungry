@@ -29,5 +29,4 @@ func get_food_items() -> Array[FoodItem]:
 	return container.contained_items
 
 func _ready() -> void:
-	if not dirty_node:
-		SweetLogger.warning("{0} missing dirty_node reference", [name])
+	Helper.check_reference(self, dirty_node, Node3D)

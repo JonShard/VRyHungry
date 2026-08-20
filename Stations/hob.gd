@@ -9,9 +9,8 @@ extends WorkStation
 func _ready() -> void:
 	super.ready()
 	SweetLogger.debug("Hob {0} _ready", [name])
-	if not animation_player:
-		SweetLogger.warning("{0} missing animation_player reference", [name])
-	
+	Helper.check_reference(self, animation_player, AnimationPlayer)
+
 func _start_cooking(id: String, work: float) -> void:
 	animation_player.play("hob")
 	if not enabled:

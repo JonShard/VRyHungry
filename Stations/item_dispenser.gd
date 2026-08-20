@@ -7,8 +7,7 @@ extends Station
 func _ready() -> void:
 	super.ready()
 	SweetLogger.debug("ItemDispenser {0} _ready", [name])
-	if not item_scene:
-		SweetLogger.warning("{0} missing item_scene reference", [name])
+	Helper.check_reference(self, item_scene, PackedScene)
 
 
 func _process(delta: float) -> void:

@@ -23,10 +23,8 @@ var _pending_absorb: Array[Node3D] = []
 
 func _ready() -> void:
 	area_3d.body_entered.connect(_on_body_entered)
-	if not area_3d:
-		SweetLogger.warning("{0} missing area_3d reference", [name])
-	if not xr_pickable:
-		SweetLogger.warning("{0} missing xr_pickable reference", [name])
+	Helper.check_reference(self, area_3d, Area3D)
+	Helper.check_reference(self, xr_pickable, XRToolsPickable)
 
 
 # Absorbing items is a server decision (the container's holder is server-

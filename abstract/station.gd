@@ -39,14 +39,10 @@ func _enter_tree() -> void:
 # The child station has to call super.ready() for this to be called
 func ready() -> void:
 	SweetLogger.debug("Station {0} ready", [name])
-	if not notification_audio:
-		SweetLogger.warning("{0} missing notification_audio reference", [name])
-	if not ambient_audio:
-		SweetLogger.warning("{0} missing ambient_audio reference", [name])
-	if not snap_zone:
-		SweetLogger.warning("{0} missing snap_zone reference", [name])
-	if not synchronizer:
-		SweetLogger.warning("{0} missing synchronizer reference", [name])
+	Helper.check_reference(self, notification_audio, AudioStreamPlayer3D)
+	Helper.check_reference(self, ambient_audio, AudioStreamPlayer3D)
+	Helper.check_reference(self, snap_zone, XRToolsSnapZone)
+	Helper.check_reference(self, synchronizer, MultiplayerSynchronizer)
 	# Disable if we're not the server.
 	if not NetworkManager.owns_world():
 		enabled = false

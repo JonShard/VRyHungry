@@ -32,8 +32,7 @@ func _enter_tree() -> void:
 # The child station has to call super.ready() for this to be called
 func ready() -> void:
 	super.ready()
-	if not progress_bar:
-		SweetLogger.warning("{0} missing progress_bar reference", [name])
+	Helper.check_reference(self, progress_bar, ProgressBar3D)
 
 
 # The child station has to call super.process(delta) for this to be called

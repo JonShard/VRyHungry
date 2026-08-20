@@ -38,12 +38,9 @@ func _on_station_bought(_instance: Node3D):
 		
 func _ready() -> void:
 	SweetLogger.debug("->[]")
-	if not station:
-		SweetLogger.warning("{0} missing station reference", [name])
-	if not move_handle:
-		SweetLogger.warning("{0} missing move_handle reference", [name])
-	if not move_ghost:
-		SweetLogger.warning("{0} missing move_ghost reference", [name])
+	Helper.check_reference(self, station, StaticBody3D)
+	Helper.check_reference(self, move_handle, XRToolsPickable)
+	Helper.check_reference(self, move_ghost, Area3D)
 
 	move_handle_rigid = move_handle as RigidBody3D
 	original_collision_layer = station.collision_layer

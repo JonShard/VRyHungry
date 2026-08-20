@@ -152,19 +152,15 @@ func _enter_tree() -> void:
 
 func _ready() -> void:
 	super.ready()
-	if not label_3d:
-		SweetLogger.warning("{0} missing label_3d reference", [name])
-	if not label_3d_time:
-		SweetLogger.warning("{0} missing label_3d_time reference", [name])
-	if not progress_bar or progress_bar is not ProgressBar3D:
-		SweetLogger.warning("{0} missing progress_bar reference", [name])
+	Helper.check_reference(self, label_3d, Label3D)
+	Helper.check_reference(self, label_3d_time, Label3D)
+	Helper.check_reference(self, progress_bar, ProgressBar3D)
 	progress_bar.y_billboard = true
 	progress_bar.exponential = true
 	# Render whatever state already arrived from the server before we were in
 	# the tree (see the guard in _refresh_display).
 	_refresh_display.call_deferred()
-	if not audio_player:
-		SweetLogger.warning("{0} missing audio_player reference", [name])
+	Helper.check_reference(self, audio_player, AudioStreamPlayer3D)
 		
 	# Get snap_zones for plates, store in array snap_zones
 	for child in get_children():
@@ -371,8 +367,10 @@ func _refresh_display() -> void:
 	# tree — so these setters fire while the @onready children below are still
 	# null. Bail out until _ready() has resolved them; _ready() calls back in
 	# once it has, so nothing that arrived early is lost.
-	if not progress_bar or not label_3d or not label_3d_time:
-		SweetLogger.warning("{0} missing progress_bar or label reference", [name])
+	var a := Helper.check_reference(self, progress_bar, ProgressBar3D)
+	var b := Helper.check_reference(self, label_3d, Label3D)
+	var c := Helper.check_reference(self, label_3d_time, Label3D)
+	if not (a and b and c):
 		return
 	match _state:
 		TableState.IDLE:

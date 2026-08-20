@@ -5,9 +5,7 @@ extends Node3D
 
 
 func _ready() -> void:
-
-	if not kitchen_scene:
-		SweetLogger.warning("{0} missing kitchen_scene reference", [name])
+	Helper.check_reference(self, kitchen_scene, PackedScene)
 
 	SweetLogger.debug("->[]")
 
