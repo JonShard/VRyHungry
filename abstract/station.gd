@@ -20,7 +20,7 @@ var sync_config: SceneReplicationConfig
 var enabled: bool: # When disabled the station only updated display and sounds.
 	get: return snap_zone.enabled
 	set(p_enabled):
-		SweetLogger.info("Set enabled {0} on station {1} on client {2}", [p_enabled, name, multiplayer.get_unique_id()])
+		SweetLogger.debug("Set enabled {0} on station {1} on client {2}", [p_enabled, name, multiplayer.get_unique_id()])
 		snap_zone.enabled = p_enabled
 		snap_zone.set_process(p_enabled)
 
@@ -75,7 +75,7 @@ func _on_object_dropped_handler(item: Node3D) -> void:
 
 
 func _apply_object_picked_up(item: Node3D) -> void:
-	SweetLogger.debug("Pickup: {0}", [item.name])
+	SweetLogger.info("{0}: Pickup: {1}", [name, item.name])
 	Helper.play_sound(notification_audio, pickup_sound)
 	on_object_picked_up(item)
 	var food_item = Helper.find_food_item(item)
@@ -85,7 +85,7 @@ func _apply_object_picked_up(item: Node3D) -> void:
 
 func _apply_object_dropped(item: Node3D) -> void:
 	Helper.play_sound(notification_audio, drop_sound, 0.8)
-	SweetLogger.debug("Drop: {0}", [item.name])
+	SweetLogger.info("{0}: Drop: {1}", [name, item.name])
 	on_object_dropped(item)
 	var food_item = Helper.find_food_item(item)
 	if food_item:

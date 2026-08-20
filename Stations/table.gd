@@ -147,7 +147,7 @@ func _enter_tree() -> void:
 		sync_config.add_property(property_path)
 		sync_config.property_set_spawn(property_path, false)
 		sync_config.property_set_replication_mode(property_path, SceneReplicationConfig.REPLICATION_MODE_ON_CHANGE)
-	SweetLogger.info("DEBUG sync_config properties: {0} | root_path: {1} | authority: {2} | peer: {3}", [sync_config.get_properties(), synchronizer.root_path, get_multiplayer_authority(), multiplayer.get_unique_id()]) # temp diagnostic
+	SweetLogger.debug("sync_config properties: {0} | root_path: {1} | authority: {2} | peer: {3}", [sync_config.get_properties(), synchronizer.root_path, get_multiplayer_authority(), multiplayer.get_unique_id()])
 
 
 func _ready() -> void:
@@ -241,7 +241,6 @@ func _absorb_item_if_correct(_item: Node) -> void:
 	# Plate: Get plate controller in child of _item (hopefully a plate XRpickable)
 	var plate_controller = _get_plate_controller_from_item(_item)
 	SweetLogger.debug("Plate_controller ref: {0}", [plate_controller])
-	_item.print_tree_pretty()
 	
 	if plate_controller:
 		# Absorm items from the plate we want
@@ -361,6 +360,7 @@ func _state_end(oldState: TableState):
 			_set_state(TableState.EMPTY)
 
 		TableState.ORDERING, TableState.WAITING_PRIMARY, TableState.WAITING_FRIEND:
+			SweetLogger.info("{0}: order timed out in state {1}, game over", [name, TableState.keys()[oldState]])
 			label_3d.text = lbl_gameover
 			GameManager.game_over()
 

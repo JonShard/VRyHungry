@@ -20,22 +20,28 @@ static func load_recipes() -> void:
 		return
 
 	var yaml_available := ClassDB.class_exists("YAML")
-	if yaml_available:
-		var result = ClassDB.class_call_static("YAML", "load_file", recipe_path)
-		if result != null and not result.has_error():
-			var data = result.get_data()
-			if typeof(data) != TYPE_DICTIONARY:
-				SweetLogger.warning("YAML addon parsed recipes.yaml but returned an unsupported structure")
-			
-			_recipes = data
-			_build_scene_paths()
-			_build_combining_map()
-			_build_cooking_map()
-			_build_chopping_map()
-			_build_rolling_map()
-			_build_augmenting_map()
-			_loaded = true
-			
+	if not yaml_available:
+		SweetLogger.error("YAML addon is not available, recipes.yaml can not be loaded")
+		return
+
+	var result = ClassDB.class_call_static("YAML", "load_file", recipe_path)
+	if result == null or result.has_error():
+		SweetLogger.error("Failed to parse recipes.yaml: {0}", [result.get_error_message() if result else "null result"])
+		return
+
+	var data = result.get_data()
+	if typeof(data) != TYPE_DICTIONARY:
+		SweetLogger.warning("YAML addon parsed recipes.yaml but returned an unsupported structure")
+
+	_recipes = data
+	_build_scene_paths()
+	_build_combining_map()
+	_build_cooking_map()
+	_build_chopping_map()
+	_build_rolling_map()
+	_build_augmenting_map()
+	_loaded = true
+	#print_all_recipes()
 
 static func get_combination_result(first_id: StringName, second_id: StringName) -> PackedScene:
 	load_recipes()

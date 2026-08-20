@@ -50,7 +50,7 @@ func _process(delta: float) -> void:
 	#print("DayController: customers_at_this_time: ", customers_at_this_time)
 	if customers_spawned < customers_at_this_time:
 		customers_spawned += 1
-		SweetLogger.debug("Spawning customer")
+		SweetLogger.info("Spawning customer")
 		Signals.request_customer_spawn.emit()
 	# If day complete
 	if GameManager.customers_per_day == customers_served and customers_spawned == GameManager.customers_per_day:

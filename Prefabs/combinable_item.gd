@@ -73,11 +73,12 @@ func _on_body_entered(body: Node3D) -> void:
 
 # Instantiate the result of combination and free the two ingredient items
 func _combine(other_body: Node3D, result: PackedScene) -> void:
-	SweetLogger.debug("Combining {0} + {1} into {2}", [_food_item.id, Helper.find_food_item(other_body).id, result.resource_path])
+	SweetLogger.info("Combining {0} + {1} into {2}", [_food_item.id, Helper.find_food_item(other_body).id, result.resource_path])
 
 	# Get Snapzone
 	var snap_zone := _pickable.get_picked_up_by()
 	if not snap_zone or not snap_zone.has_method("pick_up_object"):
+		SweetLogger.warning("{0}: combine triggered but base item is not in a snap zone, aborting", [_pickable.name])
 		return
 
 	# Spawn the result through the server (so it replicates to every peer,

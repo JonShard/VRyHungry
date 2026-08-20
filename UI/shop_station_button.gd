@@ -21,7 +21,7 @@ func _process(_delta: float) -> void:
 
 
 func _on_button_pressed() -> void:
-	SweetLogger.debug("Buy {0}", [station_name])
+	SweetLogger.info("Buy {0}", [station_name])
 	_buy_station()
 
 
