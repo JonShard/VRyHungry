@@ -33,13 +33,13 @@ var _original_freeze_mode: RigidBody3D.FreezeMode
 
 # Same idea for the pickable's authored `enabled` flag, which the non-authority
 # branch of apply_held_state() clears while someone else is holding the item.
-var _original_enabled: bool
+@export var _original_enabled: bool
 
 ## Intent set by external game logic (e.g. a station enabling/disabling a tool),
 ## independent of hold state. apply_held_state() is the sole writer of the
 ## pickable's actual `enabled` property, so this is how other systems express
 ## "should be enabled" without fighting that reconciliation every tick.
-var grabbable: bool = true: set = set_grabbable
+@export var grabbable: bool = true: set = set_grabbable
 
 func _ready() -> void:
 	_pickable = get_parent() as XRToolsPickable

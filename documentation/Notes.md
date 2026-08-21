@@ -1,4 +1,4 @@
-### Full game systems                           (hardest part)
+### Scope - Full game systems                           (hardest part)
 - Star day modifiers
 - research unlock
 - Mess and cleaning                             (How it works in VR?)
@@ -19,29 +19,18 @@
 - Freshness
 - Fullbody tracking                             (Height calibration)
 
+
+### Todo
+- Complete SharedInventory
+- Investigate Table::_absorb_item_if_correct # TOOD: handle registering the meal again when a side is added to the plate
+
 ### Bugs
 - Plate not locked on clinets by table
 - Rare times, plate not cleared / has buger on it after table eaten. New customer didn't accept it, so must have been empty, but server and client visuals had burger on plate.
 - Table does not accept clinet that was already in player detect zone
-
-### Station inheritence suggestion
-Station
-  WorkStation (performs work on a food item to convert it)
-    Hob
-    Sink
-    Counter
-  StorageStation (one snap zone and list of positions, FILO item dispenser, like a gun magazine)
-    Shelf
-    PlateRak
-    Dishwasher
-  SharedInventoryStation (one snap zone, shares a list of connected stations with which items exist in each of them)
-    Table
-    Belt
-  Dispenser
-
+- A hamburger in a station in build mode stays but becomes kinematic when entering build mode again, from build mode.
 
 ### Multiplayer bugs
-- despan flicker for clien broken
 - client keep autorityu of thrown object until lands
 - in build mode, snap zones off, stations disabled
 - players can steal from each others hands
@@ -63,7 +52,7 @@ extre rolling pin
 mop
 bin
 
-## Food dispensers
+### Food dispensers
 burger
 buns
 potato
@@ -74,7 +63,7 @@ pasta plates
 meat
 cheese
 
-## Automation
+### Automation
 belt
 inserter
 splitter
@@ -83,12 +72,12 @@ blender
 dishwasher
 flinger / catapult
 
-## Storage
+### Storage
 shelf
 freezer
 frozen prep station equivilant
 
-## Control
+### Control
 Phone
 Napkins (no mess consumable)
 sharp cutlery (eat faster consumable)
@@ -121,12 +110,8 @@ Shared INventory
 - On new table available, QueueController tells front customer in queue to sit at table
 
 
-
-
-
 ## Modifiers
 - Disposable plates. no washing. much less money
-
 
 
 ## Weird ideas
@@ -136,14 +121,3 @@ Shared INventory
 ## Research
 - Reasearch is its own currency. 
 - You unlock items in shop with reseach points. Then you can buy them. You "buy" the same tile twice.
-
-
-
-
-
-## NEtwork TOTO
-- Make gamemanager a node with syncroniser
-- All stations need syncronizers
-- Pickable not synced cooked burger on hob example
-- Client purchases don't spawn items from shop. RPC adventure
-- Client can not move stations including hobs, on_move handle drop is called, network pickable authority is given. but station not moved

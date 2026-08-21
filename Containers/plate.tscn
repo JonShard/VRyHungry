@@ -43,6 +43,9 @@ properties/3/replication_mode = 2
 properties/4/path = NodePath("PlateController:is_dirty")
 properties/4/spawn = false
 properties/4/replication_mode = 1
+properties/5/path = NodePath("NetPickable:grabbable")
+properties/5/spawn = false
+properties/5/replication_mode = 1
 
 [node name="Plate" type="RigidBody3D" unique_id=190487773]
 collision_layer = 4
@@ -51,8 +54,11 @@ freeze_mode = 1
 script = ExtResource("1_nq5sa")
 second_hand_grab = 1
 
-[node name="PlateController" type="Node" parent="." unique_id=1503264193]
+[node name="PlateController" type="Node" parent="." unique_id=1503264193 node_paths=PackedStringArray("net_pickable", "dirty_node", "container")]
 script = ExtResource("1_vjsmi")
+net_pickable = NodePath("../NetPickable")
+dirty_node = NodePath("../Dirty")
+container = NodePath("../Container")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1365637864]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.007171631, 0)

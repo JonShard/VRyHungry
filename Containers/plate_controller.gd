@@ -1,14 +1,31 @@
 class_name PlateController
 extends Node
 
-@onready var dirty_node: Node3D = $"../Dirty"
-@onready var container: ItemContainer = $"../Container"
+@export var net_pickable: NetPickable
+@export var dirty_node: Node3D
+@export var container: ItemContainer
+
 
 ## Synced summary of the plate's contents (item ids). The contents themselves
 ## are the real item nodes ItemContainer reparents under the plate; this is only
 ## what other systems read to ask "what is on this plate" without walking them.
 @export var contained_ids: Array[String] = []
+@export var enabled = true:
+	get:
+		return enabled
+	set(value):
+		if NetworkManager.owns_world():
+			clients_set_enabled.rpc(value)
+		enabled = value
+		container.enabled = not is_dirty
+		net_pickable.grabbable = value
+		SweetLogger.info("Set plate enabled: {0}", [value])
 
+@rpc("authority", "call_remote", "reliable")
+func clients_set_enabled(value: bool) -> void:
+	enabled = value
+
+	
 @export var is_dirty: bool = false:
 	get:
 		return is_dirty
@@ -30,3 +47,5 @@ func get_food_items() -> Array[FoodItem]:
 
 func _ready() -> void:
 	Helper.check_reference(self, dirty_node, Node3D)
+	Helper.check_reference(self, net_pickable, NetPickable)
+	Helper.check_reference(self, container, ItemContainer)

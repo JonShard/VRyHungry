@@ -8,13 +8,13 @@ extends SharedInventoryStation
 @export var eating_duration: float = 5.0
 @export var money_sound: AudioStream 
 
-@onready var label_3d: Label3D = $Label3D
-@onready var label_3d_time: Label3D = $Label3DTime
-@onready var snap_zones: Array[XRToolsSnapZone] = []
-@onready var progress_bar: ProgressBar3D = $ProgressBar3D
-@onready var audio_player: AudioStreamPlayer3D = $AudioStreamPlayer3D
-@onready var customers: Node3D = $Customers
-@onready var player_detect_area_3d: Area3D = $PlayerDetectArea3D
+@export var label_3d: Label3D
+@export var label_3d_time: Label3D
+@export var snap_zones: Array[XRToolsSnapZone]
+@export var progress_bar: ProgressBar3D
+@export var audio_player: AudioStreamPlayer3D
+@export var customers: Node3D
+@export var player_detect_area_3d: Area3D
 
 const lbl_thinking: String = "..."
 const lbl_ordering: String = "!"
@@ -66,16 +66,6 @@ func server_place_order() -> void:
 		place_order()
 
 
-func absorb_items():
-	SweetLogger.debug("->[]")
-	for snap_zone_node in snap_zones:
-		var held_object = snap_zone_node.picked_up_object
-		if not held_object:
-			continue
-
-		_absorb_item_if_correct(held_object)
-
-
 # Flattens items held across all of this table's snap zones
 func get_exposed_food_items() -> Array[FoodItem]:
 	var items: Array[FoodItem] = []
@@ -83,7 +73,7 @@ func get_exposed_food_items() -> Array[FoodItem]:
 		var held_object = zone.picked_up_object
 		if not held_object:
 			continue
-		var plate: PlateController = _get_plate_controller_from_item(held_object)
+		var plate: PlateController = Helper.find_first_child_of_type(held_object, PlateController)
 		if plate:
 			items.append_array(plate.container.contained_items)
 			continue
@@ -119,10 +109,11 @@ func clearAllFood() -> void:
 		if not held_object:
 			continue
 
-		var plate: PlateController = _get_plate_controller_from_item(held_object)
+		var plate: PlateController = Helper.find_first_child_of_type(held_object, PlateController)
 		var food_item: FoodItem = Helper.find_food_item(held_object)
 		if plate:
 			plate.container.clear()
+			plate.enabled = true
 			plate.is_dirty = true
 
 		# Side or other food item directly on table
@@ -157,9 +148,6 @@ func _ready() -> void:
 	Helper.check_reference(self, progress_bar, ProgressBar3D)
 	progress_bar.y_billboard = true
 	progress_bar.exponential = true
-	# Render whatever state already arrived from the server before we were in
-	# the tree (see the guard in _refresh_display).
-	_refresh_display.call_deferred()
 	Helper.check_reference(self, audio_player, AudioStreamPlayer3D)
 		
 	# Get snap_zones for plates, store in array snap_zones
@@ -209,20 +197,6 @@ func _on_player_exit(_body):
 	SweetLogger.debug("Player exit, players_count: {0}", [_players_count])
 
 
-func _get_plate_controller_from_item(_item: Node) -> PlateController:
-	if not _item:
-		SweetLogger.debug("Item is null")
-		return null
-
-	for child in _item.get_children():
-		if child is PlateController:
-			SweetLogger.debug("Found child")
-			return child
-	
-	SweetLogger.debug("No match")
-	return null
-
-
 func _absorb_item_if_correct(_item: Node) -> void:
 	SweetLogger.debug("Absorb item if correct, item: {0}", [_item])
 	if not _item:
@@ -231,7 +205,7 @@ func _absorb_item_if_correct(_item: Node) -> void:
 		return
 
 	# Plate: Get plate controller in child of _item (hopefully a plate XRpickable)
-	var plate_controller = _get_plate_controller_from_item(_item)
+	var plate_controller: PlateController = Helper.find_first_child_of_type(_item, PlateController)
 	SweetLogger.debug("Plate_controller ref: {0}", [plate_controller])
 	
 	if plate_controller:
@@ -239,7 +213,7 @@ func _absorb_item_if_correct(_item: Node) -> void:
 		for food_item: FoodItem in plate_controller.container.contained_items: # TOOD: handle registering the meal again when a side is added to the plate
 			if food_item.id in _unsatisfied_orders and not food_item.is_absorbed:
 				SweetLogger.debug("Held a plate with FoodItem that is in unsatisfied orders, removing it")
-				(plate_controller.get_parent() as XRToolsPickable).get_picked_up_by().enabled = false # Lock meal that is deliverd
+				plate_controller.enabled = false # Lock plate
 				_unsatisfied_orders.erase(food_item.id)
 				food_item.is_absorbed = true
 				_update_state_from_orders()
@@ -273,7 +247,7 @@ func _collect_money_from_food():
 		if not held_object:
 			continue
 
-		var plate: PlateController = _get_plate_controller_from_item(held_object)
+		var plate: PlateController = Helper.find_first_child_of_type(held_object, PlateController)
 		var food_item: FoodItem = Helper.find_food_item(held_object)
 		if plate:
 			for fi: FoodItem in plate.get_food_items():
@@ -359,19 +333,7 @@ func _state_end(oldState: TableState):
 			GameManager.game_over()
 
 
-## Pure presentation, driven off the current (locally authoritative or
-## synced-from-server) state. Runs on every peer.
 func _refresh_display() -> void:
-	# _state, _state_time and _unsatisfied_orders are replicated with spawn=true,
-	# and MultiplayerSpawner applies a spawn payload BEFORE the node enters the
-	# tree — so these setters fire while the @onready children below are still
-	# null. Bail out until _ready() has resolved them; _ready() calls back in
-	# once it has, so nothing that arrived early is lost.
-	var a := Helper.check_reference(self, progress_bar, ProgressBar3D)
-	var b := Helper.check_reference(self, label_3d, Label3D)
-	var c := Helper.check_reference(self, label_3d_time, Label3D)
-	if not (a and b and c):
-		return
 	match _state:
 		TableState.IDLE:
 			progress_bar.set_bar_visible(false)

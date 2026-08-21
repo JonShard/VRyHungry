@@ -33,9 +33,16 @@ visible = false
 [node name="SnapZone" parent="." index="5" unique_id=1315859105]
 enabled = false
 
-[node name="Table" type="StaticBody3D" parent="." index="6" unique_id=1863572470 node_paths=PackedStringArray("notification_audio", "ambient_audio", "snap_zone", "synchronizer") groups=["station", "table"]]
+[node name="Table" type="StaticBody3D" parent="." index="6" unique_id=1863572470 node_paths=PackedStringArray("label_3d", "label_3d_time", "snap_zones", "progress_bar", "audio_player", "customers", "player_detect_area_3d", "notification_audio", "ambient_audio", "snap_zone", "synchronizer") groups=["station", "table"]]
 script = ExtResource("1_2vcpj")
 money_sound = ExtResource("2_jslhm")
+label_3d = NodePath("Label3D")
+label_3d_time = NodePath("Label3DTime")
+snap_zones = [NodePath("XRToolsSnapZone")]
+progress_bar = NodePath("ProgressBar3D")
+audio_player = NodePath("AudioStreamPlayer3D")
+customers = NodePath("Customers")
+player_detect_area_3d = NodePath("PlayerDetectArea3D")
 probe_paths = Array[NodePath]([NodePath("ProbeForward"), NodePath("ProbeRight"), NodePath("ProbeBack"), NodePath("ProbeLeft")])
 pickup_sound = ExtResource("3_0s6ir")
 drop_sound = ExtResource("3_0s6ir")
