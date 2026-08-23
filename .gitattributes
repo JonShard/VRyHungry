@@ -1,5 +1,11 @@
 # Normalize EOL for all files that Git considers text files.
 * text=auto eol=lf
+Textures/sky/*.exr filter=lfs diff=lfs merge=lfs -text
+Textures/sky/*.jpg filter=lfs diff=lfs merge=lfs -text
+Textures/sky/DaySkyHDRI055B_16K_HDR.exr filter=lfs diff=lfs merge=lfs -text
+Textures/sky/Textures/sky/NightSkyHDRI009_16K_HDR.exr filter=lfs diff=lfs merge=lfs -text
+Textures/sky/Textures/sky/NightSkyHDRI009_16K_TONEMAPPED.jpg filter=lfs diff=lfs merge=lfs -text
+Textures/sky/Textures/sky/DaySkyHDRI055B_16K_HDR.exr filter=lfs diff=lfs merge=lfs -text
 *.exr filter=lfs diff=lfs merge=lfs -text
 *.jpg filter=lfs diff=lfs merge=lfs -text
 *.hdr filter=lfs diff=lfs merge=lfs -text

@@ -20,16 +20,6 @@
 - Fullbody tracking                             (Height calibration)
 
 
-### Todo
-- Complete SharedInventory
-- Investigate Table::_absorb_item_if_correct # TOOD: handle registering the meal again when a side is added to the plate
-
-### Bugs
-- Plate not locked on clinets by table
-- Rare times, plate not cleared / has buger on it after table eaten. New customer didn't accept it, so must have been empty, but server and client visuals had burger on plate.
-- Table does not accept clinet that was already in player detect zone
-- A hamburger in a station in build mode stays but becomes kinematic when entering build mode again, from build mode.
-
 ### Multiplayer bugs
 - client keep autorityu of thrown object until lands
 - in build mode, snap zones off, stations disabled
